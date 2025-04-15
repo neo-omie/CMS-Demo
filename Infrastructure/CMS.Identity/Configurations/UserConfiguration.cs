@@ -32,7 +32,7 @@ namespace CMS.Identity.Configurations
                     Email = "sarthak@neosoft.com",
                     NormalizedEmail = "SARTHAK@NEOSOFT.COM",
                     PasswordHash = hasher.HashPassword(null, "Sarthak@12"),
-                    Department = Departments.Admin
+                    //Department = Departments.Admin
                 }
             );
         }

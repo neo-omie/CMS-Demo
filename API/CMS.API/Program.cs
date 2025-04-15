@@ -1,3 +1,4 @@
+using CMS.Identity;
 
 namespace CMS.API
 {
@@ -8,6 +9,7 @@ namespace CMS.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddIdentityServices(builder.Configuration);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
