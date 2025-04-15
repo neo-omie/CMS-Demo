@@ -10,7 +10,7 @@ namespace CMS.API.Controllers
         [HttpGet]
         public IActionResult test()
         {
-            return Ok("Mukesh");
+            return Ok("Mukesh bhai");
         }
     }
 }
