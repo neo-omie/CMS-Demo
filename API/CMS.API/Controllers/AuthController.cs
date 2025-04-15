@@ -7,5 +7,10 @@ namespace CMS.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        [HttpGet]
+        public IActionResult test()
+        {
+            return Ok("Test");
+        }
     }
 }
