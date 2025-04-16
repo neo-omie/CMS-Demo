@@ -1,0 +1,8 @@
+#login-screen{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #5F5FEE;
+    background: linear-gradient(164deg,rgba(95, 95, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+}

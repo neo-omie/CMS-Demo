@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using CMS.Application.Contracts.Identity;
+using CMS.Application.DTOs;
+using CMS.Application.Features.Auth.Login;
+using CMS.Application.Models.Identity;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
@@ -7,10 +13,19 @@ namespace CMS.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult test()
+
+        readonly IMediator _mediatR;
+        public AuthController(IMediator mediatR)
         {
-            return Ok("Mukesh bhaiiii!!");
+            _mediatR = mediatR;
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
+        {
+            var resp = await _mediatR.Send(new LoginCommand(loginDto));
+            return Ok(resp);
+        }
+       
     }
 }

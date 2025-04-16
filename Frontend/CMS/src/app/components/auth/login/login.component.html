@@ -1,1 +1,10 @@
-<p>login works!</p>
+<div>
+    <form id="form" #loginForm = "ngForm" (ngSubmit)="loginUser(loginForm)">
+        <label id="label">Login</label>
+        <input class="fields" #email = "ngModel" name="email" type="email" placeholder="Email" required [(ngModel)] = loginModel.email>
+        <span class="fields-error" *ngIf="email.invalid && email.touched">Email is required</span>
+        <input class="fields" #password = "ngModel" name="password" type="password" placeholder="Password" required [(ngModel)] = loginModel.password>
+        <span class="fields-error" *ngIf="password.invalid && password.touched">Password is required</span>
+        <input class="button" type="submit" value="Login">
+    </form>
+</div>
