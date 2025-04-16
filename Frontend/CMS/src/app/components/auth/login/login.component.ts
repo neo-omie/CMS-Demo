@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   loginModel:Login = new Login('','');
   errorMsg = '';
+  loginPasswordEyeOpen = false;
   constructor(private userService:UserService) {}
   ngonInit() {}
   loginUser(loginForm:NgForm) {
@@ -38,5 +39,8 @@ export class LoginComponent {
         alert(this.errorMsg);
       }
     });
+  }
+  loginPasswordEyeToggle(){
+    this.loginPasswordEyeOpen = !this.loginPasswordEyeOpen;
   }
 }
