@@ -23,8 +23,8 @@ namespace CMS.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
         {
-            var response = await _mediatR.Send(new LoginCommand(loginDto));
-            return Ok(response);
+            var resp = await _mediatR.Send(new LoginCommand(loginDto));
+            return Ok(resp);
         }
        
     }
