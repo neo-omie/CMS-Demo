@@ -1,4 +1,10 @@
-﻿namespace CMS.Application.Models.Identity
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CMS.Application.DTOs
 {
     public class AuthResponse
     {

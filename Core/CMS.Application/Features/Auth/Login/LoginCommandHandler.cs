@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using CMS.Application.Contracts.Identity;
+using CMS.Application.DTOs;
 
 namespace CMS.Application.Features.Auth.Login
 {
@@ -19,7 +15,8 @@ namespace CMS.Application.Features.Auth.Login
 
         public async Task<AuthResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _authservice.Login(request.Auth);
+            var userSignin = await _authservice.Login(request.user);
+            return userSignin;
         }
     }
 }
