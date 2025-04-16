@@ -8,15 +8,17 @@ export class Login {
     }
 }
 export class AuthResponse {
-    id:string;
+    userId:string;
     email:string;
     name:string;
     token:string;
-    constructor(id:string, email:string, name:string, token:string)
+    role:string;
+    constructor(userId:string, email:string, name:string, token:string, role:string)
     {
-        this.id = id;
+        this.userId = userId;
         this.email = email;
         this.name = name;
         this.token = token;
+        this.role = role;
     }
 }
