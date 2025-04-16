@@ -29,7 +29,12 @@ export class LoginComponent {
         
       }, error:(error) => {
         console.error('Login Failed :(', error);
-        this.errorMsg = JSON.stringify(error.error.message);
+        if(error.message !== undefined){
+          this.errorMsg = JSON.stringify(error.message);
+        }
+        else{
+          this.errorMsg = JSON.stringify(error.error.message);
+        }
         alert(this.errorMsg);
       }
     });
