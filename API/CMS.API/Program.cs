@@ -1,3 +1,4 @@
+using CMS.API.Middlewares;
 using CMS.Application;
 using CMS.Application.Models.Identity;
 using CMS.Identity;
@@ -33,6 +34,7 @@ namespace CMS.API
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseCors(x => x
                         .AllowAnyOrigin()

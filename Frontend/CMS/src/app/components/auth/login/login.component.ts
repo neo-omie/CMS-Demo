@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   loginModel:Login = new Login('','');
   errorMsg = '';
+  loginPasswordEyeOpen = false;
   constructor(private userService:UserService) {}
   ngonInit() {}
   loginUser(loginForm:NgForm) {
@@ -29,9 +30,17 @@ export class LoginComponent {
         
       }, error:(error) => {
         console.error('Login Failed :(', error);
-        this.errorMsg = JSON.stringify(error.error.message);
+        if(error.message !== undefined){
+          this.errorMsg = JSON.stringify(error.message);
+        }
+        else{
+          this.errorMsg = JSON.stringify(error.error.message);
+        }
         alert(this.errorMsg);
       }
     });
+  }
+  loginPasswordEyeToggle(){
+    this.loginPasswordEyeOpen = !this.loginPasswordEyeOpen;
   }
 }
