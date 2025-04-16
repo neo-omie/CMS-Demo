@@ -1,6 +1,9 @@
 ﻿
 using CMS.Application.Contracts.Identity;
+using CMS.Application.DTOs;
+using CMS.Application.Features.Auth.Login;
 using CMS.Application.Models.Identity;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,17 +14,17 @@ namespace CMS.API.Controllers
     public class AuthController : ControllerBase
     {
 
-        readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        readonly IMediator _mediatR;
+        public AuthController(IMediator mediatR)
         {
-            _authService = authService;
+            _mediatR = mediatR;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponse>> Login(LoginDTO loginDto)
+        public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
         {
-            var response = await _authService.Login(loginDto);
-            return Ok(response);
+            var resp = await _mediatR.Send(new LoginCommand(loginDto));
+            return Ok(resp);
         }
        
     }
