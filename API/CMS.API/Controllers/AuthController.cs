@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using CMS.Application.Contracts.Identity;
+using CMS.Application.Models.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
@@ -7,10 +10,19 @@ namespace CMS.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult test()
+
+        readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
         {
-            return Ok("Mukesh bhaiiii!!");
+            _authService = authService;
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthResponse>> Login(LoginDTO loginDto)
+        {
+            var response = await _authService.Login(loginDto);
+            return Ok(response);
+        }
+       
     }
 }
