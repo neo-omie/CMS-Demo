@@ -18,6 +18,7 @@ export class LoginComponent {
   ngonInit() {}
   loginUser(loginForm:NgForm) {
     this.loginModel = loginForm.value;
+    console.log(loginForm.value)
     this.userService.login(this.loginModel).subscribe({
       next:(response:AuthResponse) => {
         console.log('Login Successful!', response);

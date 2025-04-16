@@ -11,6 +11,7 @@
     justify-content: space-around;
     border-radius: 1rem;
     background-color: whitesmoke;
+    padding: 0.5rem;
 }
 #label{
     font-size: clamp(2rem, -1.5rem + 4vw, 7rem);
@@ -27,6 +28,10 @@
 }
 .fields:focus{
     outline: none;
+}
+.fields-error{
+    font-size: clamp(1.2rem, -1rem + 2vw, 3rem);
+    color: red;
 }
 .button{
     display: block;
