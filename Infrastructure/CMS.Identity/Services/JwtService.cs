@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CMS.Identity.Services
 {
-    public class AuthService
+    public class JwtService
     {
-        
+
     }
 }
