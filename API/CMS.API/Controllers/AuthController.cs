@@ -1,6 +1,6 @@
 ﻿
 using CMS.Application.Contracts.Identity;
-using CMS.Application.Models.Identity;
+using CMS.Application.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
