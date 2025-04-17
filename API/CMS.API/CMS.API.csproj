@@ -17,7 +17,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\CMS.Application\CMS.Application.csproj" />
+    <ProjectReference Include="..\..\Core\CMS.Domain\CMS.Domain.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CMS.Identity\CMS.Identity.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CMS.Persistence\CMS.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

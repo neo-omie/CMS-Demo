@@ -11,4 +11,13 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\MasterEmployee\Commands\" />
+    <Folder Include="Features\MasterEmployee\Queries\" />
+  </ItemGroup>
+
 </Project>
