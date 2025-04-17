@@ -7,7 +7,7 @@ using CMS.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using CMS.Identity.Models.Constants;
+//using CMS.Identity.Models.Constants;
 
 namespace CMS.Identity.Configurations
 {
