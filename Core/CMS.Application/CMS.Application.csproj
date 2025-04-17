@@ -11,16 +11,4 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Document\Command\AddDocument\" />
-    <Folder Include="Features\Document\Command\EditDocument\" />
-    <Folder Include="Features\Document\Command\DeleteDocument\" />
-    <Folder Include="Features\Document\Queries\GetAllDocuments\" />
-    <Folder Include="Features\Document\Queries\GetDocumentById\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj" />
-  </ItemGroup>
-
 </Project>
