@@ -3,6 +3,8 @@ import { AuthResponse, Login } from '../../../models/auth/login';
 import { UserService } from '../../../services/auth/user.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TYPE } from './values.constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -26,19 +28,32 @@ export class LoginComponent {
         localStorage.setItem('token', response.token);
         localStorage.setItem('email', response.email);
         localStorage.setItem('name', response.name);
-        alert('You are successfully logged in!');
+        // alert('You are successfully logged in!');
+        this.toast(TYPE.SUCCESS, true, 'Signed in successfully');
         
       }, error:(error) => {
         console.error('Login Failed :(', error);
         if(error.message !== undefined){
-          this.errorMsg = JSON.stringify(error.error.message);
+          this.errorMsg = JSON.stringify(error.message);
         }
         else{
-          this.errorMsg = JSON.stringify(error.error.message);
+          this.errorMsg = JSON.stringify(error.message);
+          this.toast(TYPE.ERROR, true, error.message);
         }
-        alert(this.errorMsg);
+        // alert(this.errorMsg);
       }
     });
+  }
+  toast(typeIcon = TYPE.SUCCESS, timerProgressBar: boolean = false, op:string = "") {
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      showConfirmButton: false,
+      icon: typeIcon,
+      timerProgressBar,
+      timer: 5000,
+      title: op
+    })
   }
   loginPasswordEyeToggle(){
     this.loginPasswordEyeOpen = !this.loginPasswordEyeOpen;
