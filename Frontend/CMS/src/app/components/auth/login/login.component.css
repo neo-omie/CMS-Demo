@@ -1,47 +1,16 @@
-#form{
-    height: 40vh;
-    max-height: 600px;
-    min-width: 270px;
-    width: 30vw;
-    max-width: 800px;
+.login-form-card{
     box-shadow: 5px 5px 15px rgb(126, 126, 221);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    border-radius: 1rem;
-    background-color: whitesmoke;
-    padding: 0.5rem;
 }
-#label{
-    font-size: clamp(2rem, -1.5rem + 4vw, 7rem);
+.login-title{
+    text-align: center;
     color: rgb(95, 95, 238);
-}
-.fields{
-    display: block;
-    width: 90%;
-    padding: 0.5rem 0;
-    margin: 0.5rem 0;
-    border-width: 0 0 2px 0;
-    font-size: clamp(1.2rem, -1rem + 2vw, 7rem);
-    background-color: whitesmoke;
-}
-.fields:focus{
-    outline: none;
 }
 .fields-error{
     font-size: clamp(1.2rem, -1rem + 2vw, 3rem);
     color: red;
 }
 .button{
-    display: block;
-    width: 90%;
-    margin: 0.5rem;
-    font-size: clamp(1.5rem, -1rem + 2vw, 7rem);
-    min-height: 2rem;
-    height: 5vh;
-    max-height: 7rem;
-    border-radius: 0.5rem;
+    width: 100%;
     background-color: #5f5fee;
     color: whitesmoke;
 }
@@ -49,3 +18,29 @@
     background-color: rgb(136, 136, 243);
     color: whitesmoke;
 }
+.login-password-field-container{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Hide the default "show password" icon in Edge */
+input[type="password"]::-ms-reveal {
+    display: none;
+  }
+  
+  /* Hide the default "show password" icon in other browsers */
+  input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+  }
+  
+  /* Hide the default icon on Firefox */
+  input[type="password"]::-moz-placeholder {
+    display: none;
+  }
+  input[type="checkbox"]:checked{
+    background-color: #5f5fee;
+  }
+  input:focus{
+    box-shadow: 0 0 5px #5f5fee;
+  }

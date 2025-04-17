@@ -4,3 +4,6 @@
     padding: 0;
     box-sizing: border-box;
 }
+.swal2-timer-progress-bar {
+    background-color: rgba(95, 95, 238, 1);
+}

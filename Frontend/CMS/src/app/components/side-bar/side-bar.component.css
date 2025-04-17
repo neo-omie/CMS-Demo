@@ -1,0 +1,25 @@
+.offcanvas-width {
+    width: 100%;
+  }
+  
+@media (min-width: 320px) {
+.offcanvas-width {
+    width: 300px;
+}
+}
+.sidebar-toggle-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.sideBar-nav-links{
+display: block;
+text-decoration: none;
+border: 2px solid rgb(95, 95, 238);
+color: rgba(95, 95, 238, 1);
+width: 100%;
+}
+.sideBar-nav-links:hover{
+    color: whitesmoke;
+    background-color: rgba(95, 95, 238, 1);
+}
