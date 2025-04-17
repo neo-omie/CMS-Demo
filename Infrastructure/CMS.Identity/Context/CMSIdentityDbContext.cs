@@ -13,8 +13,7 @@ namespace CMS.Identity.Context
     public class CMSIdentityDbContext: IdentityDbContext<ApplicationUser>
     {
         public CMSIdentityDbContext(DbContextOptions<CMSIdentityDbContext> options) :base(options)
-        {
-            
+        {           
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -7,5 +7,6 @@ namespace CMS.API.Controllers
     [ApiController]
     public class MouController : ControllerBase
     {
+
     }
 }

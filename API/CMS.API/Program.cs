@@ -2,6 +2,7 @@ using CMS.API.Middlewares;
 using CMS.Application;
 using CMS.Application.Models.Identity;
 using CMS.Identity;
+using CMS.Persistence;
 
 
 namespace CMS.API
@@ -15,6 +16,7 @@ namespace CMS.API
             // Add services to the container.
             builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddApplicationServices();
+            builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
             builder.Services.AddControllers();
