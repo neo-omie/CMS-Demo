@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMS.Domain.Entities
+namespace CMS.Domain.Constants
 {
-    public class Demo
+    public enum Status
     {
+        Inactive,
+        Active 
     }
 }
