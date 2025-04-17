@@ -15,7 +15,7 @@
 .sideBar-nav-links{
 display: block;
 text-decoration: none;
-border: 2px solid rgba(95, 95, 238, 1);
+border: 2px solid rgb(95, 95, 238);
 color: rgba(95, 95, 238, 1);
 width: 100%;
 }
