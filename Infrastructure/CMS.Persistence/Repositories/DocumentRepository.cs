@@ -5,35 +5,51 @@ using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
+using CMS.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Persistence.Repositories
 {
     public class DocumentRepository : IDocumentRepository
     {
-        private readonly 
+        private readonly CMSDbContext _context;
+
+        public DocumentRepository(CMSDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<IEnumerable<MasterDocument>> GetAllDocuments()
         {
-            return await _context.MasterDocument.ToListAsync();
+            return await _context.MasterDocuments.ToListAsync();
         }
 
-        public Task<MasterDocument> GetDocumentById(int id)
+        public async Task<MasterDocument> GetDocumentById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.MasterDocuments.FirstOrDefaultAsync(x => x.ValueId == id);
         }
-        public Task<int> AddDocument(MasterDocument masterDocument)
+        public async Task<int> AddDocument(MasterDocument masterDocument)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DeleteDocument(int id, MasterDocument masterDocument)
-        {
-            throw new NotImplementedException();
+            await _context.MasterDocuments.AddAsync(masterDocument);
+            return _context.SaveChanges();
         }
 
-
-        public Task<int> UpdateDocument(MasterDocument masterDocument)
+        public async Task<int> DeleteDocument(int id)
         {
-            throw new NotImplementedException();
+            var document = await GetDocumentById(id);
+            document.IsDeleted = true;
+            return _context.SaveChanges();
+        }
+
+
+        public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
+        {
+            var document = await GetDocumentById(id);
+            document.DocumentName = masterDocument.DocumentName;
+            document.status = masterDocument.status;
+
+            return _context.SaveChanges();
+
         }
     }
 }

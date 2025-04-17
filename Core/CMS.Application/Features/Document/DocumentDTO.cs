@@ -9,7 +9,7 @@ namespace CMS.Application.Features.Document
 {
     public class DocumentDTO
     {
-        public string  DoccumentName { get; set; }
+        public string DoccumentName { get; set; }
 
         public Status status { get; set; }
     }
