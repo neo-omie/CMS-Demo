@@ -9,8 +9,15 @@
 }
 .sidebar-toggle-btn {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 1%;
+    left: 1%;
+    background-color: transparent;
+    border-color: whitesmoke;
+    border-radius: 5px;
+}
+.sidebar-toggle-btn:hover {
+    color: rgba(95, 95, 238, 1);
+    background-color: whitesmoke;
 }
 .sideBar-nav-links{
 display: block;
