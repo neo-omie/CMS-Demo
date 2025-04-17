@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/Frontend/CMS/src/app/components/auth/login/login.component.ts
+/Frontend/CMS/angular.json
+/.gitignore

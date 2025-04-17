@@ -1,5 +1,4 @@
 #form{
-    min-height: 220px;
     height: 40vh;
     max-height: 600px;
     min-width: 270px;
@@ -34,12 +33,6 @@
     font-size: clamp(1.2rem, -1rem + 2vw, 3rem);
     color: red;
 }
-.login-password-field-container{
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .button{
     display: block;
     width: 90%;
@@ -56,17 +49,3 @@
     background-color: rgb(136, 136, 243);
     color: whitesmoke;
 }
-/* Hide the default "show password" icon in Edge */
-input[type="password"]::-ms-reveal {
-    display: none;
-  }
-  
-  /* Hide the default "show password" icon in other browsers */
-  input[type="password"]::-webkit-credentials-auto-fill-button {
-    display: none;
-  }
-  
-  /* Hide the default icon on Firefox */
-  input[type="password"]::-moz-placeholder {
-    display: none;
-  }
