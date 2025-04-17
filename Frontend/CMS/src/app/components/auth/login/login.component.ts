@@ -34,7 +34,8 @@ export class LoginComponent {
       }, error:(error) => {
         console.error('Login Failed :(', error);
         if(error.message !== undefined){
-          this.errorMsg = JSON.stringify(error.message);
+          this.errorMsg = JSON.stringify(error.error.message);
+          this.toast(TYPE.ERROR, true, error.error.message);
         }
         else{
           this.errorMsg = JSON.stringify(error.message);
