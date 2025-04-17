@@ -3,7 +3,11 @@
         <label id="label">Login</label>
         <input class="fields" #email = "ngModel" name="email" type="email" placeholder="Email" required [(ngModel)] = loginModel.email>
         <span class="fields-error" *ngIf="email.invalid && email.touched">Email is required</span>
-        <input class="fields" #password = "ngModel" name="password" type="password" placeholder="Password" required [(ngModel)] = loginModel.password>
+        <div class="login-password-field-container">
+            <input class="fields" #password = "ngModel" name="password" [type]="loginPasswordEyeOpen ? 'text' : 'password'" placeholder="Password" required [(ngModel)] = loginModel.password>
+            <i *ngIf="loginPasswordEyeOpen" (click)="loginPasswordEyeToggle()" class="fa-solid fa-eye"></i>
+            <i *ngIf="!loginPasswordEyeOpen" (click)="loginPasswordEyeToggle()" class="fa-solid fa-eye-slash"></i>
+        </div>
         <span class="fields-error" *ngIf="password.invalid && password.touched">Password is required</span>
         <input class="button" type="submit" value="Login">
     </form>
