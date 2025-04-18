@@ -8,7 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Commands.UpdateEmployee
 {
-    public class UpdateEmployeeCommand:IRequest<UpdateEmployeeDto>
-    {
-    }
+    public record UpdateEmployeeCommand(EmployeeDto empDTO):IRequest<UpdateEmployeeDto>;
 }
