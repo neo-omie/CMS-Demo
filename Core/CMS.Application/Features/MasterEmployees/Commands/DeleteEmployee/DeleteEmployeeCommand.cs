@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CMS.Domain.Entities;
 using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Commands.DeleteEmployee
 {
-    public class DeleteEmployeeCommand:IRequest
-    {
-        public string Id { get; set; }
-    }
-}
+    public record DeleteEmployeeCommand(int ValueId):IRequest<bool>;
+ }

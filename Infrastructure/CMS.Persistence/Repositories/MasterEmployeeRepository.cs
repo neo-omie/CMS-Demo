@@ -14,7 +14,7 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit, string searchTerm, int pageNumber, int pageSize)
+        public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit = "All", string searchTerm = "", int pageNumber = 1, int pageSize = 10)
         {
             var query = _context.MasterEmployees.AsQueryable();
             if(!string.IsNullOrEmpty(unit) && unit != "All")
@@ -23,7 +23,7 @@ namespace CMS.Persistence.Repositories
             }
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(e => e.ValueId.Contains(searchTerm) || e.EmployeeName.Contains(searchTerm));
+                query = query.Where(e => e.ValueId == Convert.ToInt32(searchTerm) || e.EmployeeName.Contains(searchTerm));
             }
 
             return await query
@@ -32,7 +32,7 @@ namespace CMS.Persistence.Repositories
             .ToListAsync();
         }
 
-        public async Task<MasterEmployee> GetEmployeeByIdAsync(string id)
+        public async Task<MasterEmployee> GetEmployeeByIdAsync(int id)
         {
             return await _context.MasterEmployees.FindAsync(id);
         }
@@ -50,8 +50,13 @@ namespace CMS.Persistence.Repositories
             }
         }
 
-        public async Task<bool> DeleteEmployeeAsync(MasterEmployee employee)
+        public async Task<bool> DeleteEmployeeAsync(int id)
         {
+            var employee = await _context.MasterEmployees.FirstOrDefaultAsync(m => m.ValueId == id);
+            if (employee == null)
+            {
+                throw new Exception("Employee not Found. :(");
+            }
             employee.IsDeleted = true;
             _context.MasterEmployees.Update(employee);
             if (await _context.SaveChangesAsync() > 0)
@@ -64,8 +69,13 @@ namespace CMS.Persistence.Repositories
             }
         }
 
-        public async Task<MasterEmployee> UpdateEmployeeAsync(MasterEmployee employee)
+        public async Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee)
         {
+            var checkEmp = await _context.MasterEmployees.FirstOrDefaultAsync(m => m.ValueId == id);
+            if (checkEmp == null)
+            {
+                throw new Exception("Employee not Found. :(");
+            }
             _context.Entry(employee).State = EntityState.Modified;
             if (await _context.SaveChangesAsync() > 0)
             {
