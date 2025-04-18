@@ -14,7 +14,9 @@ namespace CMS.Application
         {
             service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-            
+            // Register AutoMapper
+            service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // Automatically scans all profiles in the assemblies
+
             return service;
         }
     }

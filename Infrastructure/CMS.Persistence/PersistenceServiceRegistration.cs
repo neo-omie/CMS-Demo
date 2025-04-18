@@ -1,5 +1,7 @@
 ﻿using System;
+using CMS.Application.Contracts.Persistence;
 using CMS.Persistence.Context;
+using CMS.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +14,8 @@ namespace CMS.Persistence
         {
             services.AddDbContext<CMSDbContext>(options =>
                    options.UseSqlServer(configuration.GetConnectionString("CMSConnectionString")));
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IMasterEmployeeRepository, MasterEmployeeRepository>();
             return services;
         }
     }

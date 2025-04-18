@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityDbMigration : Migration
+    public partial class initialIdentityMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace CMS.Identity.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastPasswordChanged = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -174,11 +175,11 @@ namespace CMS.Identity.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LastPasswordChanged", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "41776062 - 1111 - 1aba - a111 - 2879a6680b9a", 0, "1166b6c0-a5a4-4918-a805-1158f274e8e0", "admin@cms.com", false, false, null, "Admin", "ADMIN@CMS.COM", null, "AQAAAAIAAYagAAAAEMhwhomBnbDU9s3sp1jR/QDW03oXQbhztcYjg3VYP5w21hWaa11F+Q26r9q59Ns8eA==", null, false, "083bf322-42ff-49d4-a80c-c9c154290835", false, null },
-                    { "41776062 - 1111 - 1abb- a111 - 2879a6680b9a", 0, "567d6264-59f6-4665-a60f-05e4a6a43517", "sarthak@neosoft.com", false, false, null, "Sarthak", "SARTHAK@NEOSOFT.COM", null, "AQAAAAIAAYagAAAAEGHWsqm2dROu0LWNJ6yIYGVy1am8SxwVVzshoTEKZfnWBB2byGBUOjNQzGAmOMNMzQ==", null, false, "1cc7f980-db95-42aa-8303-772cc5fad52d", false, null }
+                    { "41776062 - 1111 - 1aba - a111 - 2879a6680b9a", 0, "ac920a80-3acd-4784-9fd4-3c673881415b", "admin@cms.com", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "Admin", "ADMIN@CMS.COM", null, "AQAAAAIAAYagAAAAEB4YSJrHdRowUy5ya1pbPp3e+e9ORJPlwh7YUNsZP4kf1xPDo+4zp3MSqKbz+j32rg==", null, false, "7278a9ce-3ae0-44bd-abaa-1510cbf5a5a3", false, null },
+                    { "41776062 - 1111 - 1abb- a111 - 2879a6680b9a", 0, "dc495edd-cc0e-431f-b119-a598d2ba408a", "sarthak@neosoft.com", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "Sarthak", "SARTHAK@NEOSOFT.COM", null, "AQAAAAIAAYagAAAAEL4BwfsMXJKEl+6o7HcpYd8yFMEORYGEAuWW40a56lTRRnoppCcsBNs8KhxCvrr0xA==", null, false, "1a9a0ff6-d55f-4f00-b9f4-3cf058d0a970", false, null }
                 });
 
             migrationBuilder.InsertData(

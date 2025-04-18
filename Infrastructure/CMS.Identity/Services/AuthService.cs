@@ -32,12 +32,18 @@ namespace CMS.Identity.Services
             if (user == null)
             {
                 throw new UserNotFoundException("Invalid email or password.");
-            }
+            }  
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!result.Succeeded)
             {
                 throw new UserNotFoundException("Invalid email or password.");
+            }
+
+            var lastPswdChanged = user.LastPasswordChanged.AddMonths(3);
+            if (lastPswdChanged < DateTime.Now)
+            {
+                throw new PasswordRenewalException("Your password hasn't been renewed since last 3 months. Please renew it first and sign in.");
             }
 
             var roles = await _userManager.GetRolesAsync(user);

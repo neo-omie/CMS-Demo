@@ -23,7 +23,8 @@ namespace CMS.Identity.Configurations
                     Name = "Admin",
                     Email = "admin@cms.com",
                     NormalizedEmail = "ADMIN@CMS.COM",
-                    PasswordHash = hasher.HashPassword(null, "Admin@123")
+                    PasswordHash = hasher.HashPassword(null, "Admin@123"),
+                    LastPasswordChanged = new DateTime(2025, 04, 15)
                 },
                 new ApplicationUser
                 {
@@ -32,7 +33,7 @@ namespace CMS.Identity.Configurations
                     Email = "sarthak@neosoft.com",
                     NormalizedEmail = "SARTHAK@NEOSOFT.COM",
                     PasswordHash = hasher.HashPassword(null, "Sarthak@12"),
-                    //Department = Departments.Admin
+                    LastPasswordChanged = new DateTime(2025, 01, 10)
                 }
             );
         }
