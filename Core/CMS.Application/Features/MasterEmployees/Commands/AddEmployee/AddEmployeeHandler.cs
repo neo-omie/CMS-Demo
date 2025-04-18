@@ -19,7 +19,7 @@ namespace CMS.Application.Features.MasterEmployees.Commands.AddEmployee
         }
         public Task<MasterEmployee> Handle(AddEmployeeCommand request, CancellationToken cancellationToken)
         {
-            
+
         }
     }
 }
