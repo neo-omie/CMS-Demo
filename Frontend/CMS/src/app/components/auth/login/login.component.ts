@@ -28,7 +28,6 @@ export class LoginComponent {
         localStorage.setItem('token', response.token);
         localStorage.setItem('email', response.email);
         localStorage.setItem('name', response.name);
-        // alert('You are successfully logged in!');
         this.toast(TYPE.SUCCESS, true, 'Signed in successfully');
         
       }, error:(error) => {
@@ -41,7 +40,6 @@ export class LoginComponent {
           this.errorMsg = JSON.stringify(error.message);
           this.toast(TYPE.ERROR, true, error.message);
         }
-        // alert(this.errorMsg);
       }
     });
   }
