@@ -7,17 +7,19 @@
     width: 300px;
 }
 }
-.sidebar-toggle-btn {
-    position: absolute;
-    top: 1%;
-    left: 1%;
-    background-color: transparent;
+.navbar{
+    box-shadow: 0 1px 5px #5f5fee;
+}
+.sidebar-toggle-btn:hover{
+    background-color: #5f5fee;
     border-color: whitesmoke;
+    color: whitesmoke;
     border-radius: 5px;
 }
-.sidebar-toggle-btn:hover {
-    color: rgba(95, 95, 238, 1);
+.sidebar-toggle-btn {
+    color: rgba(95, 95, 238);
     background-color: whitesmoke;
+    border-color: #5f5fee;
 }
 .sideBar-nav-links{
 display: block;

@@ -23,6 +23,7 @@ namespace CMS.Identity
             services.AddDbContext<CMSIdentityDbContext>(options =>
                    options.UseSqlServer(configuration.GetConnectionString("CMSConnectionString")));
 
+
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<JwtService>();
 

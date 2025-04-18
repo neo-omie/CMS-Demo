@@ -23,7 +23,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.AddDocument
         }
         public Task<int> Handle(AddDocumentCommand request, CancellationToken cancellationToken)
         {
-            var document = _mapper.Map<MasterDocument>(request);
+           var document =  _mapper.Map<MasterDocument>(request.documentDTO);
             return _documentRepository.AddDocument(document);
         }
     }

@@ -1,10 +1,8 @@
 ﻿using CMS.Application.Features.MasterEmployees.EmployeeDtos;
+using CMS.Domain.Entities;
 using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Queries.GetEmployeeById
 {
-    public class GetEmployeeByIdQuery:IRequest<EmployeeDto>
-    {
-        public string Id { get; set; }
-    }
+    public record GetEmployeeByIdQuery(int id):IRequest<MasterEmployee>;
 }

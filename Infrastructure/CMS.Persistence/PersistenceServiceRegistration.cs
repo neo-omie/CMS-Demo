@@ -13,12 +13,9 @@ namespace CMS.Persistence
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<CMSDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("CMSConnectionString"));
-            });
-
-            services.AddScoped< IDocumentRepository , DocumentRepository>();
-            
+                   options.UseSqlServer(configuration.GetConnectionString("CMSConnectionString")));
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IMasterEmployeeRepository, MasterEmployeeRepository>();
             return services;
         }
     }

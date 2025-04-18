@@ -10,11 +10,12 @@
 }
 .button{
     width: 100%;
-    background-color: #5f5fee;
-    color: whitesmoke;
+    color: #5f5fee;
+    border-color: #5f5fee;
 }
 .button:hover{
-    background-color: rgb(136, 136, 243);
+    /* background-color: rgb(136, 136, 243); */
+    background-color: #5f5fee;
     color: whitesmoke;
 }
 .login-password-field-container{
