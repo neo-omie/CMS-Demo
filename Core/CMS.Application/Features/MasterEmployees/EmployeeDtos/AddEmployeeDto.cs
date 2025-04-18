@@ -5,10 +5,9 @@
         public string EmployeeName { get; set; }
         public string EmployeeCode { get; set; }
         public string Unit { get; set; }
-        public string Department { get; set; }
+        public int DepartmentId { get; set; }
         public string EmployeeMobile { get; set; }
-        public string EmployeeEmail { get; set; }
+        public string Email { get; set; }
         public string EmployeeExtension { get; set; }
-        public List<string> Roles { get; set; }
     }
 }

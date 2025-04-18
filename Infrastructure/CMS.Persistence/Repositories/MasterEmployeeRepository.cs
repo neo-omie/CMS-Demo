@@ -1,5 +1,6 @@
 ﻿using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
+using CMS.Identity.Context;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,22 +9,26 @@ namespace CMS.Persistence.Repositories
    
     public class MasterEmployeeRepository : IMasterEmployeeRepository
     {
-        private readonly CMSDbContext _context;
-        public MasterEmployeeRepository(CMSDbContext context)
+        private readonly CMSIdentityDbContext _idbContext;
+        public MasterEmployeeRepository(CMSIdentityDbContext idbContext)
         {
-            _context = context;
+            _idbContext = idbContext;
         }
 
         public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit, string searchTerm, int pageNumber, int pageSize)
         {
-            var query = _context.MasterEmployees.AsQueryable();
+            var query = _idbContext.Users.AsQueryable();
             if(!string.IsNullOrEmpty(unit) && unit != "All")
             {
                 query = query.Where(e => e.Unit == unit);
             }
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(e => e.ValueId == Convert.ToInt32(searchTerm) || e.EmployeeName.Contains(searchTerm));
+                var isInt = Int32.TryParse(searchTerm, out int checkID);
+                if (isInt)
+                    query = query.Where(e => e.ValueId == checkID);
+                else
+                    query = query.Where(e => e.EmployeeName.Contains(searchTerm));
             }
 
             return await query
@@ -34,13 +39,16 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> GetEmployeeByIdAsync(int id)
         {
-            return await _context.MasterEmployees.FindAsync(id);
+            var gotUser = await _idbContext.Users.FindAsync(id);
+            if(gotUser == null)
+                throw new Exception("Employee not found. Failed :(");
+            return gotUser;
         }
 
         public async Task<MasterEmployee> AddEmployeeAsync(MasterEmployee employee)
         {
-            await _context.MasterEmployees.AddAsync(employee);
-            if(await _context.SaveChangesAsync()>0)
+            await _idbContext.Users.AddAsync(employee);
+            if(await _idbContext.SaveChangesAsync() > 0)
             {
                 return employee;
             }
@@ -52,14 +60,14 @@ namespace CMS.Persistence.Repositories
 
         public async Task<bool> DeleteEmployeeAsync(int id)
         {
-            var employee = await _context.MasterEmployees.FirstOrDefaultAsync(m => m.ValueId == id);
+            var employee = await _idbContext.Users.FirstOrDefaultAsync(m => m.ValueId == id);
             if (employee == null)
             {
                 throw new Exception("Employee not Found. :(");
             }
             employee.IsDeleted = true;
-            _context.MasterEmployees.Update(employee);
-            if (await _context.SaveChangesAsync() > 0)
+            _idbContext.Users.Update(employee);
+            if (await _idbContext.SaveChangesAsync() > 0)
             {
                 return true;
             }
@@ -71,13 +79,13 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee)
         {
-            var checkEmp = await _context.MasterEmployees.FirstOrDefaultAsync(m => m.ValueId == id);
+            var checkEmp = await _idbContext.Users.FirstOrDefaultAsync(m => m.ValueId == id);
             if (checkEmp == null)
             {
                 throw new Exception("Employee not Found. :(");
             }
-            _context.Entry(employee).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
+            _idbContext.Entry(employee).State = EntityState.Modified;
+            if (await _idbContext.SaveChangesAsync() > 0)
             {
                 return employee;
             }

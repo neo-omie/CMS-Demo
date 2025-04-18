@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\CMS.Application\CMS.Application.csproj" />
+    <ProjectReference Include="..\CMS.Identity\CMS.Identity.csproj" />
   </ItemGroup>
 
 </Project>
