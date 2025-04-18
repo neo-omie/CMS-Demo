@@ -41,6 +41,9 @@ namespace CMS.Identity.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("LastPasswordChanged")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -95,30 +98,32 @@ namespace CMS.Identity.Migrations
                         {
                             Id = "41776062 - 1111 - 1aba - a111 - 2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1166b6c0-a5a4-4918-a805-1158f274e8e0",
+                            ConcurrencyStamp = "ac920a80-3acd-4784-9fd4-3c673881415b",
                             Email = "admin@cms.com",
                             EmailConfirmed = false,
+                            LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LockoutEnabled = false,
                             Name = "Admin",
                             NormalizedEmail = "ADMIN@CMS.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMhwhomBnbDU9s3sp1jR/QDW03oXQbhztcYjg3VYP5w21hWaa11F+Q26r9q59Ns8eA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB4YSJrHdRowUy5ya1pbPp3e+e9ORJPlwh7YUNsZP4kf1xPDo+4zp3MSqKbz+j32rg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "083bf322-42ff-49d4-a80c-c9c154290835",
+                            SecurityStamp = "7278a9ce-3ae0-44bd-abaa-1510cbf5a5a3",
                             TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = "41776062 - 1111 - 1abb- a111 - 2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "567d6264-59f6-4665-a60f-05e4a6a43517",
+                            ConcurrencyStamp = "dc495edd-cc0e-431f-b119-a598d2ba408a",
                             Email = "sarthak@neosoft.com",
                             EmailConfirmed = false,
+                            LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LockoutEnabled = false,
                             Name = "Sarthak",
                             NormalizedEmail = "SARTHAK@NEOSOFT.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGHWsqm2dROu0LWNJ6yIYGVy1am8SxwVVzshoTEKZfnWBB2byGBUOjNQzGAmOMNMzQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL4BwfsMXJKEl+6o7HcpYd8yFMEORYGEAuWW40a56lTRRnoppCcsBNs8KhxCvrr0xA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1cc7f980-db95-42aa-8303-772cc5fad52d",
+                            SecurityStamp = "1a9a0ff6-d55f-4f00-b9f4-3cf058d0a970",
                             TwoFactorEnabled = false
                         });
                 });

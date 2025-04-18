@@ -37,22 +37,44 @@ namespace CMS.Persistence.Repositories
             return await _context.MasterEmployees.FindAsync(id);
         }
 
-        public async Task AddEmployeeAsync(MasterEmployee employee)
+        public async Task<MasterEmployee> AddEmployeeAsync(MasterEmployee employee)
         {
             await _context.MasterEmployees.AddAsync(employee);
-            await _context.SaveChangesAsync();
+            if(await _context.SaveChangesAsync()>0)
+            {
+                return employee;
+            }
+            else
+            {
+                throw new Exception("Employee not added. Failed :(");
+            }
         }
 
-        public async Task DeleteEmployeeAsync(MasterEmployee employee)
+        public async Task<bool> DeleteEmployeeAsync(MasterEmployee employee)
         {
-            employee.IsDeleted = true; 
-            await _context.SaveChangesAsync();
+            employee.IsDeleted = true;
+            _context.MasterEmployees.Update(employee);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Employee not deleted. Failed :(");
+            }
         }
 
-        public async Task UpdateEmployeeAsync(MasterEmployee employee)
+        public async Task<MasterEmployee> UpdateEmployeeAsync(MasterEmployee employee)
         {
             _context.Entry(employee).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return employee;
+            }
+            else
+            {
+                throw new Exception("Employee not updated. Failed :(");
+            }
         }
     }
 }
