@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CMS.Application.Contracts.Identity;
 using CMS.Application.DTOs;
 using CMS.Application.Exceptions;
+using CMS.Domain.Entities;
 using CMS.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -15,11 +16,11 @@ namespace CMS.Identity.Services
 {
     public class AuthService:IAuthService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<MasterEmployee> _userManager;
+        private readonly SignInManager<MasterEmployee> _signInManager;
         private readonly JwtService _jwtService;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, JwtService jwtService)
+        public AuthService(UserManager<MasterEmployee> userManager, SignInManager<MasterEmployee> signInManager, JwtService jwtService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -54,7 +55,7 @@ namespace CMS.Identity.Services
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 UserId = user.Id,
                 Role = roles.FirstOrDefault(),
-                Name = user.Name,
+                Name = user.EmployeeName,
                 Email = user.Email
             };
         }

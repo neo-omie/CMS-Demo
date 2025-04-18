@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Identity;
+using CMS.Domain.Entities;
 using CMS.Identity.Context;
 using CMS.Identity.Models;
 using CMS.Identity.Services;
@@ -27,7 +28,7 @@ namespace CMS.Identity
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<JwtService>();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>().
+            services.AddIdentity<MasterEmployee, IdentityRole>().
                 AddEntityFrameworkStores<CMSIdentityDbContext>().AddDefaultTokenProviders();
             services.AddAuthentication(opt =>
             {
