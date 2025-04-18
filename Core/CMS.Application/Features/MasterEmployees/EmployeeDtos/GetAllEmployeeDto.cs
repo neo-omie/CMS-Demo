@@ -1,4 +1,4 @@
-﻿namespace CMS.Application.Features.MasterEmployee
+﻿namespace CMS.Application.Features.MasterEmployees.EmployeeDtos
 {
     public class GetAllEmployeeDto
     {
