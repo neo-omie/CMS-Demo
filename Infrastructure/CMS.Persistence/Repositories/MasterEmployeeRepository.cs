@@ -1,6 +1,5 @@
 ﻿using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
-using CMS.Identity.Context;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,15 +8,15 @@ namespace CMS.Persistence.Repositories
    
     public class MasterEmployeeRepository : IMasterEmployeeRepository
     {
-        private readonly CMSIdentityDbContext _idbContext;
-        public MasterEmployeeRepository(CMSIdentityDbContext idbContext)
+        private readonly CMSDbContext _context;
+        public MasterEmployeeRepository(CMSDbContext context)
         {
-            _idbContext = idbContext;
+            _context = context;
         }
 
         public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit, string searchTerm, int pageNumber, int pageSize)
         {
-            var query = _idbContext.Users.AsQueryable();
+            var query = _context.MasterEmployees.AsQueryable();
             if(!string.IsNullOrEmpty(unit) && unit != "All")
             {
                 query = query.Where(e => e.Unit == unit);
@@ -39,7 +38,7 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> GetEmployeeByIdAsync(int id)
         {
-            var gotUser = await _idbContext.Users.FindAsync(id);
+            var gotUser = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
             if(gotUser == null)
                 throw new Exception("Employee not found. Failed :(");
             return gotUser;
@@ -47,8 +46,8 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> AddEmployeeAsync(MasterEmployee employee)
         {
-            await _idbContext.Users.AddAsync(employee);
-            if(await _idbContext.SaveChangesAsync() > 0)
+            await _context.MasterEmployees.AddAsync(employee);
+            if(await _context.SaveChangesAsync() > 0)
             {
                 return employee;
             }
@@ -60,14 +59,14 @@ namespace CMS.Persistence.Repositories
 
         public async Task<bool> DeleteEmployeeAsync(int id)
         {
-            var employee = await _idbContext.Users.FirstOrDefaultAsync(m => m.ValueId == id);
+            var employee = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
             if (employee == null)
             {
                 throw new Exception("Employee not Found. :(");
             }
             employee.IsDeleted = true;
-            _idbContext.Users.Update(employee);
-            if (await _idbContext.SaveChangesAsync() > 0)
+            _context.MasterEmployees.Update(employee);
+            if (await _context.SaveChangesAsync() > 0)
             {
                 return true;
             }
@@ -79,13 +78,13 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee)
         {
-            var checkEmp = await _idbContext.Users.FirstOrDefaultAsync(m => m.ValueId == id);
+            var checkEmp = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
             if (checkEmp == null)
             {
                 throw new Exception("Employee not Found. :(");
             }
-            _idbContext.Entry(employee).State = EntityState.Modified;
-            if (await _idbContext.SaveChangesAsync() > 0)
+            _context.Entry(employee).State = EntityState.Modified;
+            if (await _context.SaveChangesAsync() > 0)
             {
                 return employee;
             }

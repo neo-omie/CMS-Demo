@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IdentityModel.Tokens.Jwt;
 using CMS.Application.Contracts.Identity;
 using CMS.Application.DTOs;
 using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
-using CMS.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CMS.Identity.Services
 {

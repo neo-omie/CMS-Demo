@@ -1,53 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CMS.Domain.Entities;
 using CMS.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using CMS.Domain.Entities;
-//using CMS.Identity.Models.Constants;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CMS.Identity.Configurations
+namespace CMS.Persistence.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<MasterEmployee>
+    public class MasterEmployeeConfiguration : IEntityTypeConfiguration<MasterEmployee>
     {
         public void Configure(EntityTypeBuilder<MasterEmployee> builder)
         {
-            var hasher = new PasswordHasher<ApplicationUser>();
+            var hasher = new PasswordHasher<MasterEmployee>();
             builder.HasData(
                 new MasterEmployee
                 {
-                    Id = "41776062-1111-1aba-a111-2879a6680b9a",
                     ValueId = 1,
                     EmployeeName = "Admin",
                     Email = "admin@cms.com",
-                    NormalizedEmail = "ADMIN@CMS.COM",
                     IsDeleted = false,
                     EmployeeCode = "NEO1",
                     Unit = "Dadar",
+                    Role = "Admin",
                     EmployeeMobile = 7777766666,
                     EmployeeExtension = "Main person",
                     DepartmentId = 100,
-                    PasswordHash = hasher.HashPassword(null, "Admin@123"),
+                    Password = hasher.HashPassword(null, "Admin@123"),
                     LastPasswordChanged = new DateTime(2025, 04, 15)
                 },
                 new MasterEmployee
                 {
-                    Id = "41776062-1111-1abb-a111-2879a6680b9a",
                     ValueId = 2,
                     EmployeeName = "Sarthak Lembhe",
                     Email = "sarthak@neosoft.com",
-                    NormalizedEmail = "SARTHAK@NEOSOFT.COM",
                     IsDeleted = false,
                     EmployeeCode = "NEO2",
                     Unit = "Dadar",
+                    Role = "MOU_User",
                     EmployeeMobile = 9999988888,
                     EmployeeExtension = "IT Smart",
                     DepartmentId = 101,
-                    PasswordHash = hasher.HashPassword(null, "Sarthak@12"),
+                    Password = hasher.HashPassword(null, "Sarthak@12"),
                     LastPasswordChanged = new DateTime(2025, 01, 10)
                 }
             );

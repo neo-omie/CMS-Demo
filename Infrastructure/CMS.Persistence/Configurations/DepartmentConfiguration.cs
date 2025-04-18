@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CMS.Domain.Entities;
+﻿using CMS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,27 +11,27 @@ namespace CMS.Persistence.Configurations
             builder.HasData(
                 new Department
                 {
-                    DepartmentId = 100,
+                    DepartmentId = 1,
                     DepartmentName = "Admin Support",
                 },
                 new Department
                 {
-                    DepartmentId = 101,
+                    DepartmentId = 2,
                     DepartmentName = "IT",
                 },
                 new Department
                 {
-                    DepartmentId = 102,
+                    DepartmentId = 3,
                     DepartmentName = "HR",
                 },
                 new Department
                 {
-                    DepartmentId = 103,
+                    DepartmentId = 4,
                     DepartmentName = "Finance",
                 },
                 new Department
                 {
-                    DepartmentId = 104,
+                    DepartmentId = 5,
                     DepartmentName = "Maintenance",
                 }
             );

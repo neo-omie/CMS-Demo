@@ -16,4 +16,8 @@
     <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ApprovalMatrixContract\Commands\" />
+  </ItemGroup>
+
 </Project>
