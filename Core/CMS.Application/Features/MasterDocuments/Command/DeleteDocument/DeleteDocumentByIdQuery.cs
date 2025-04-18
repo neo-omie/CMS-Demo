@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace CMS.Application.Features.Document.Command.AddDocument
+namespace CMS.Application.Features.MasterDocuments.Command.DeleteDocument
 {
-    public record AddDocumentCommand(DocumentDTO documentDTO):IRequest<int>;
+    public record DeleteDocumentByIdQuery (int id): IRequest<int>;
     
 }
