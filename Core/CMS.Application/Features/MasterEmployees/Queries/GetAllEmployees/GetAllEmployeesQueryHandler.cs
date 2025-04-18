@@ -18,7 +18,7 @@ namespace CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees
             _masterEmployeeRepository = masterEmployeeRepository;
         }
 
-        public async Task<IEnumerable<MasterEmployee>> IRequestHandler<GetAllEmployeesQuery, IEnumerable<MasterEmployee>>.Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<MasterEmployee>>Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
         {
             return await _masterEmployeeRepository.GetAllEmployeesAsync("All","",1,10);
         }
