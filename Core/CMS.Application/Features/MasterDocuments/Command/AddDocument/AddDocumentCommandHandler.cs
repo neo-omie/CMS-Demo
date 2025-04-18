@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CMS.Application.Contracts.Persistence;
-using CMS.Application.Features.Document.Command.AddDocument;
 using CMS.Domain.Entities;
 using MediatR;
 
-namespace CMS.Application.Features.Document.Command.AddDocument
+namespace CMS.Application.Features.MasterDocuments.Command.AddDocument
 {
     public class AddDocumentCommandHandler : IRequestHandler<AddDocumentCommand, int>
     {
