@@ -1,0 +1,29 @@
+#masters-screen{
+    display: flex;
+    flex-wrap: wrap;
+}
+a{
+    text-decoration: none;
+}
+.card:hover .icon{
+    color: #5f5fee;
+}
+.card:hover{
+    box-shadow: 0 0 5px #5f5fee;
+    scale: 1.03;
+    transition-duration: 0.2s;
+}
+.card-body{
+    position: relative;
+    background-color: whitesmoke;
+    min-height: 5rem;
+    z-index: 0;
+}
+.icon{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: rgb(136, 136, 243);
+    font-size: 3rem;
+    z-index: -1;
+}

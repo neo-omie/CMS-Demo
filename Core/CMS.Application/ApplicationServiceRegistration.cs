@@ -13,6 +13,8 @@ namespace CMS.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection service)
         {
             service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+            
             return service;
         }
     }
