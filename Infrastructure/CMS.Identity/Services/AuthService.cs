@@ -56,7 +56,8 @@ namespace CMS.Identity.Services
                 UserId = user.Id,
                 Role = roles.FirstOrDefault(),
                 Name = user.EmployeeName,
-                Email = user.Email
+                Email = user.Email,
+
             };
         }
     }

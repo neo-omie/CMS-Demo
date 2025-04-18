@@ -16,22 +16,27 @@ namespace CMS.Persistence.Configurations
             builder.HasData(
                 new Department
                 {
-                    DepartmentId = 1,
+                    DepartmentId = 100,
+                    DepartmentName = "Admin Support",
+                },
+                new Department
+                {
+                    DepartmentId = 101,
                     DepartmentName = "IT",
                 },
                 new Department
                 {
-                    DepartmentId = 2,
+                    DepartmentId = 102,
                     DepartmentName = "HR",
                 },
                 new Department
                 {
-                    DepartmentId = 3,
+                    DepartmentId = 103,
                     DepartmentName = "Finance",
                 },
                 new Department
                 {
-                    DepartmentId = 4,
+                    DepartmentId = 104,
                     DepartmentName = "Maintenance",
                 }
             );

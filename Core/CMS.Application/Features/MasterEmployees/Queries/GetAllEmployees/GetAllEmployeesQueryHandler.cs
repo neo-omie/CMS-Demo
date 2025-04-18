@@ -20,7 +20,7 @@ namespace CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees
 
         public async Task<IEnumerable<MasterEmployee>> Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
         {
-            return await _masterEmployeeRepository.GetAllEmployeesAsync("All","",1,10);
+            return await _masterEmployeeRepository.GetAllEmployeesAsync(request.unit, request.searchTerm, request.pageNumber, request.pageSize);
         }
     }
 }

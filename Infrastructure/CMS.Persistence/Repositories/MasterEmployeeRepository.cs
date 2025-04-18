@@ -14,12 +14,12 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit = "All", string searchTerm = "", int pageNumber = 1, int pageSize = 10)
+        public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit, string searchTerm, int pageNumber, int pageSize)
         {
             var query = _context.MasterEmployees.AsQueryable();
             if(!string.IsNullOrEmpty(unit) && unit != "All")
             {
-                query = query.Where(e => e.EmployeeLocation == unit);
+                query = query.Where(e => e.Unit == unit);
             }
             if (!string.IsNullOrEmpty(searchTerm))
             {

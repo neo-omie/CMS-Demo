@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Identity.Migrations
 {
     [DbContext(typeof(CMSIdentityDbContext))]
-    [Migration("20250418051911_initialIdentityMigration")]
-    partial class initialIdentityMigration
+    [Migration("20250418112442_initialDbContext")]
+    partial class initialDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace CMS.Identity.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CMS.Identity.Models.ApplicationUser", b =>
+            modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -37,11 +37,32 @@ namespace CMS.Identity.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("EmployeeMobile")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastPasswordChanged")
@@ -52,10 +73,6 @@ namespace CMS.Identity.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -80,9 +97,16 @@ namespace CMS.Identity.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("ValueId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -101,33 +125,47 @@ namespace CMS.Identity.Migrations
                         {
                             Id = "41776062 - 1111 - 1aba - a111 - 2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ac920a80-3acd-4784-9fd4-3c673881415b",
+                            ConcurrencyStamp = "0557e499-dfa6-469b-aad9-8f1125d84a4b",
+                            DepartmentId = 100,
                             Email = "admin@cms.com",
                             EmailConfirmed = false,
+                            EmployeeCode = "NEO1",
+                            EmployeeExtension = "Main person",
+                            EmployeeMobile = 7777766666L,
+                            EmployeeName = "Admin",
+                            IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LockoutEnabled = false,
-                            Name = "Admin",
                             NormalizedEmail = "ADMIN@CMS.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB4YSJrHdRowUy5ya1pbPp3e+e9ORJPlwh7YUNsZP4kf1xPDo+4zp3MSqKbz+j32rg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPdudUljP8QIbaNJiO37bn58vO7Xdax2dSwJlADbdhTk0QeI+9iWSVuHmf9J02XwjQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7278a9ce-3ae0-44bd-abaa-1510cbf5a5a3",
-                            TwoFactorEnabled = false
+                            SecurityStamp = "56bd61f5-e2ab-499e-864c-5cfa3d6ae45a",
+                            TwoFactorEnabled = false,
+                            Unit = "Dadar",
+                            ValueId = 13558
                         },
                         new
                         {
                             Id = "41776062 - 1111 - 1abb- a111 - 2879a6680b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dc495edd-cc0e-431f-b119-a598d2ba408a",
+                            ConcurrencyStamp = "f3dc92c8-740a-45cb-af46-1404d8fe839f",
+                            DepartmentId = 101,
                             Email = "sarthak@neosoft.com",
                             EmailConfirmed = false,
+                            EmployeeCode = "NEO1",
+                            EmployeeExtension = "Main person",
+                            EmployeeMobile = 7777766666L,
+                            EmployeeName = "Sarthak Lembhe",
+                            IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LockoutEnabled = false,
-                            Name = "Sarthak",
                             NormalizedEmail = "SARTHAK@NEOSOFT.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEL4BwfsMXJKEl+6o7HcpYd8yFMEORYGEAuWW40a56lTRRnoppCcsBNs8KhxCvrr0xA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIl4DSgWNtUrhk84CNfnU7rkFDisn27OB0b+Ma5YNzVstgV8tt+90XMWWxWNEkLQqg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1a9a0ff6-d55f-4f00-b9f4-3cf058d0a970",
-                            TwoFactorEnabled = false
+                            SecurityStamp = "f47432bb-00e1-4b3e-9ef7-e6e0cd1432bb",
+                            TwoFactorEnabled = false,
+                            Unit = "Dadar",
+                            ValueId = 13557
                         });
                 });
 
@@ -325,7 +363,7 @@ namespace CMS.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CMS.Identity.Models.ApplicationUser", null)
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,7 +372,7 @@ namespace CMS.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CMS.Identity.Models.ApplicationUser", null)
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -349,7 +387,7 @@ namespace CMS.Identity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CMS.Identity.Models.ApplicationUser", null)
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -358,7 +396,7 @@ namespace CMS.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CMS.Identity.Models.ApplicationUser", null)
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
