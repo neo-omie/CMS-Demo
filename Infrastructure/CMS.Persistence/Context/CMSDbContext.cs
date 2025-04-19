@@ -17,6 +17,7 @@ namespace CMS.Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentConfigurations());
 
         }
     }
