@@ -15,10 +15,17 @@ namespace CMS.API.Controllers
         }
         [Route("{pageNumber}/{pageSize}")]
         [HttpGet]
-        public async Task<IActionResult> GetApprovalMatrixContractController([FromRoute]int pageNumber, [FromRoute]int pageSize)
+        public async Task<IActionResult> GetApprovalMatrixContract([FromRoute]int pageNumber, [FromRoute]int pageSize)
         {
             IEnumerable<GetAllApprovalMatrixContractDTO> approvalMatrixContract = await _mediator.Send(new GetAllApprovalMatrixContractQuery(pageNumber, pageSize));
             return Ok(approvalMatrixContract);
         }
+        //[Route("{id}")]
+        //[HttpGet]
+        //public async Task<IActionResult> GetApprovalMatrixContractById([FromRoute]int id)
+        //{
+        //    IEnumerable<GetAllApprovalMatrixContractDTO> approvalMatrixContract = await _mediator.Send(new GetAllApprovalMatrixContractQuery(pageNumber, pageSize));
+        //    return Ok(approvalMatrixContract);
+        //}
     }
 }
