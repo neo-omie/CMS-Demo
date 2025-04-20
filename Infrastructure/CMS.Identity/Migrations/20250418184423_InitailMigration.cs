@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class initialIdentityMigration : Migration
+    public partial class InitailMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,14 @@ namespace CMS.Identity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ValueId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployeeMobile = table.Column<long>(type: "bigint", nullable: false),
+                    EmployeeExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
                     LastPasswordChanged = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -165,21 +172,21 @@ namespace CMS.Identity.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "41116008 - 6086 - 1aaa - b923 - 2879a6680b9a", null, "Administrator", "ADMINISTRATOR" },
-                    { "41116008 - 6086 - 1aab - b923 - 2879a6680b9a", null, "Management User", "MANAGEMENT USER" },
-                    { "41116008 - 6086 - 1bba - b923 - 2879a6680b9a", null, "MOU User", "MOU USER" },
-                    { "41116008 - 6086 - 1bbb - b923 - 2879a6680b9a", null, "MOU Approver", "MOU APPROVER" },
-                    { "41116008 - 6086 - 1cca - b923 - 2879a6680b9a", null, "Contract User", "CONTRACT USER" },
-                    { "41116008 - 6086 - 1ccb - b923 - 2879a6680b9a", null, "Contract Approver", "CONTRACT APPROVER" }
+                    { "41116008-6086-1aaa-b923-2879a6680b9a", null, "Administrator", "ADMINISTRATOR" },
+                    { "41116008-6086-1aab-b923-2879a6680b9a", null, "Management User", "MANAGEMENT USER" },
+                    { "41116008-6086-1bba-b923-2879a6680b9a", null, "MOU User", "MOU USER" },
+                    { "41116008-6086-1bbb-b923-2879a6680b9a", null, "MOU Approver", "MOU APPROVER" },
+                    { "41116008-6086-1cca-b923-2879a6680b9a", null, "Contract User", "CONTRACT USER" },
+                    { "41116008-6086-1ccb-b923-2879a6680b9a", null, "Contract Approver", "CONTRACT APPROVER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LastPasswordChanged", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DepartmentId", "Email", "EmailConfirmed", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "Unit", "UserName", "ValueId" },
                 values: new object[,]
                 {
-                    { "41776062 - 1111 - 1aba - a111 - 2879a6680b9a", 0, "ac920a80-3acd-4784-9fd4-3c673881415b", "admin@cms.com", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "Admin", "ADMIN@CMS.COM", null, "AQAAAAIAAYagAAAAEB4YSJrHdRowUy5ya1pbPp3e+e9ORJPlwh7YUNsZP4kf1xPDo+4zp3MSqKbz+j32rg==", null, false, "7278a9ce-3ae0-44bd-abaa-1510cbf5a5a3", false, null },
-                    { "41776062 - 1111 - 1abb- a111 - 2879a6680b9a", 0, "dc495edd-cc0e-431f-b119-a598d2ba408a", "sarthak@neosoft.com", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "Sarthak", "SARTHAK@NEOSOFT.COM", null, "AQAAAAIAAYagAAAAEL4BwfsMXJKEl+6o7HcpYd8yFMEORYGEAuWW40a56lTRRnoppCcsBNs8KhxCvrr0xA==", null, false, "1a9a0ff6-d55f-4f00-b9f4-3cf058d0a970", false, null }
+                    { "41776062-1111-1aba-a111-2879a6680b9a", 0, "746d5fae-82f7-4658-baec-c6fb13a6b785", 100, "admin@cms.com", false, "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "ADMIN@CMS.COM", null, "AQAAAAIAAYagAAAAEPJmNYUycOLnrrs/NGoifhLHSqMAke99gMwpRzhGkccc8+LRgvz4y4rWeqgpI3DijA==", null, false, "20f2ee51-32a4-45ca-b042-59356fdbefd8", false, "Dadar", null, 1 },
+                    { "41776062-1111-1abb-a111-2879a6680b9a", 0, "74d91334-93e2-4fca-ae74-96f28794ae24", 101, "sarthak@neosoft.com", false, "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "SARTHAK@NEOSOFT.COM", null, "AQAAAAIAAYagAAAAEKpsbMIgDIvtj289wth7QO9WpM1bNFIcnQTc15In2tbN8u4tk4WWjdo9uq3Qmq93yg==", null, false, "58f5437b-47ad-481a-bc79-f83f77044862", false, "Dadar", null, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -187,8 +194,8 @@ namespace CMS.Identity.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "41116008 - 6086 - 1aaa - b923 - 2879a6680b9a", "41776062 - 1111 - 1aba - a111 - 2879a6680b9a" },
-                    { "41116008 - 6086 - 1aab - b923 - 2879a6680b9a", "41776062 - 1111 - 1abb- a111 - 2879a6680b9a" }
+                    { "41116008-6086-1aaa-b923-2879a6680b9a", "41776062-1111-1aba-a111-2879a6680b9a" },
+                    { "41116008-6086-1aab-b923-2879a6680b9a", "41776062-1111-1abb-a111-2879a6680b9a" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -222,6 +229,18 @@ namespace CMS.Identity.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_EmployeeCode",
+                table: "AspNetUsers",
+                column: "EmployeeCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ValueId",
+                table: "AspNetUsers",
+                column: "ValueId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

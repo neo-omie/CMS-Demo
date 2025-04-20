@@ -4,6 +4,7 @@ using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418212026_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,29 +126,6 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterDocuments");
-
-                    b.HasData(
-                        new
-                        {
-                            ValueId = 1,
-                            DocumentName = "Doc 1",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 2,
-                            DocumentName = "Doc 2",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 3,
-                            DocumentName = "Doc 3",
-                            IsDeleted = false,
-                            status = 1
-                });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>

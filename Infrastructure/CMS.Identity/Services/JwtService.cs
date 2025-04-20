@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Models.Identity;
+using CMS.Domain.Entities;
 using CMS.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -15,15 +16,15 @@ namespace CMS.Identity.Services
 {
     public class JwtService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<MasterEmployee> _userManager;
         private readonly JwtSettings _jwtSettings;
 
-        public JwtService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtSettings)
+        public JwtService(UserManager<MasterEmployee> userManager, IOptions<JwtSettings> jwtSettings)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings.Value;
         }
-        public async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)
+        public async Task<JwtSecurityToken> GenerateToken(MasterEmployee user)
         {
             // Get user info from DB
             var userClaims = await _userManager.GetClaimsAsync(user);
@@ -34,7 +35,7 @@ namespace CMS.Identity.Services
             // Create Claims
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Name),
+                new Claim(JwtRegisteredClaimNames.Sub, user.EmployeeName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("UID", user.Id)
