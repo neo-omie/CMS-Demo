@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
 using MediatR;
 
@@ -16,12 +17,12 @@ namespace CMS.Application.Features.MasterDocuments.Queries.GetDocumentById
         {
             _documentRepository = documentRepository;
         }
-        public Task<MasterDocument> Handle(GetDocumentByIdQuery request, CancellationToken cancellationToken)
+        public async Task<MasterDocument> Handle(GetDocumentByIdQuery request, CancellationToken cancellationToken)
         {
-            var document = _documentRepository.GetDocumentById(request.id);
+            var document = await _documentRepository.GetDocumentById(request.id);
             if (document == null)
             {
-                //throw new DocumentNotFound($"Document not found");
+                throw new DocumentNotFoundException("Document not found");
             }
             return document;
         }

@@ -1,35 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
-import { ApprovalMatrixContract } from '../../models/approval-matrix-contract';
+import { MasterDocumentService } from '../../services/master-document.service';
+import { Router, RouterModule } from '@angular/router';
+import { MasterDocument, MasterDocumentDto } from '../../models/master-document';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
-  selector: 'app-approval-matrix-contract-screen',
+  selector: 'app-master-document',
   standalone: true,
-  imports: [CommonModule,LoaderComponent],
-  templateUrl: './approval-matrix-contract-screen.component.html',
-  styleUrl: './approval-matrix-contract-screen.component.css'
+  imports: [FormsModule, CommonModule, RouterModule,LoaderComponent],
+  templateUrl: './master-document.component.html',
+  styleUrl: './master-document.component.css'
 })
-export class ApprovalMatrixContractScreenComponent implements OnInit {
-  loading:boolean = true
-  pageNumbers:number[] = [1,1,2,3,4,5];
-  maxPage:number = 1;
-  approvalMatrixContracts:ApprovalMatrixContract[] = [];
-  errorMsg ?: string
-  constructor(private approverMatrixContractService : ApproverMatrixContractService){}
-  ngOnInit(){
-    this.GetApprovalMatrixContract(1 ,10);
+export class MasterDocumentComponent implements OnInit{
+  loading:boolean = true;
+  maxPage=1;
+  pageNumbers = [1,1,2,3,4,5];
+  masterDocuments?: MasterDocumentDto //= new MasterDocumentDto([]:MasterDocument[],0);
+  
+  ngOnInit(): void {
+    this.getDocuments(1,10);
   }
-  GetApprovalMatrixContract(pageNumber : number, pageSize : number){
-    this.approverMatrixContractService.GetApprovalMatrixContract(pageNumber, pageSize).subscribe({
-      next:(response:ApprovalMatrixContract[]) => {
-        this.loading = false;
-        this.approvalMatrixContracts = response;
-        this.pageNumbers[0] = pageNumber;
-        if(this.approvalMatrixContracts.length > 0){
+
+  constructor(private documentService:MasterDocumentService,private router:Router)
+{}
+getDocuments(pageNumber : number, pageSize : number):void{
+  this.documentService.getDocument(pageNumber , pageSize ).subscribe((res)=>{
+    this.loading = false;
+    this.masterDocuments=res;
+    this.pageNumbers[0] = pageNumber;
+        if(this.masterDocuments.documents.length > 0){
           if(pageNumber == 1){
-            this.maxPage = Math.floor(this.approvalMatrixContracts[0].totalRecords / 10);
+            this.maxPage = Math.floor(this.masterDocuments.totalCount/10);
           }
           let diff = this.maxPage - pageNumber;
           if(diff >= 0 && this.maxPage >= 5){
@@ -70,24 +73,12 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
             }
           }
         }
-      }, 
-      error:(error) => {
-        this.loading = false;
-        console.error('Error :(', error);
-        if(error.message !== undefined){
-          this.errorMsg = JSON.stringify(error.error.message);
-          console.log(this.errorMsg);
-        }
-        else{
-          this.errorMsg = JSON.stringify(error.message);
-          console.log(this.errorMsg);
-        }
       }
-    });
+  );
+}
+GetPage(pgNumber:number){
+  if(this.maxPage >= pgNumber && pgNumber >= 1){
+    this.getDocuments(pgNumber, 10);
   }
-  GetPage(pgNumber:number){
-    if(this.maxPage >= pgNumber && pgNumber >= 1){
-      this.GetApprovalMatrixContract(pgNumber, 10);
-    }
-  }
+}
 }

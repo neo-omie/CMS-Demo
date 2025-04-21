@@ -10,6 +10,8 @@ namespace CMS.Persistence.Context
         {
         }
         public DbSet<MasterApprovalMatrixContract> MasterApprovalMatrixContracts { get; set; }
+
+        public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<Department> Departments { get; set; }
