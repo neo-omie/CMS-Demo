@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
+using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +21,12 @@ namespace CMS.API.Controllers
             IEnumerable<GetAllApprovalMatrixContractDTO> approvalMatrixContract = await _mediator.Send(new GetAllApprovalMatrixContractQuery(pageNumber, pageSize));
             return Ok(approvalMatrixContract);
         }
-        //[Route("{id}")]
-        //[HttpGet]
-        //public async Task<IActionResult> GetApprovalMatrixContractById([FromRoute]int id)
-        //{
-        //    IEnumerable<GetAllApprovalMatrixContractDTO> approvalMatrixContract = await _mediator.Send(new GetAllApprovalMatrixContractQuery(pageNumber, pageSize));
-        //    return Ok(approvalMatrixContract);
-        //}
+        [Route("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetApprovalMatrixContractById([FromRoute] int id)
+        {
+            GetApprovalMatrixContractByIdDto approvalMatrixContract = await _mediator.Send(new GetApprovalMatrixContractByIdQuery(id));
+            return Ok(approvalMatrixContract);
+        }
     }
 }

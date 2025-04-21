@@ -1,4 +1,5 @@
-﻿using CMS.Application.DTOs;
+﻿using System.Text.Json;
+using CMS.Application.DTOs;
 using CMS.Application.Features.Auth.Login;
 using CMS.Application.Features.Auth.RefreshPassword;
 using MediatR;
@@ -28,7 +29,7 @@ namespace CMS.API.Controllers
         public async Task<ActionResult<string>> RefreshPassword(RefreshPasswordDto refreshPassword)
         {
             var resp = await _mediatR.Send(new RefreshPasswordCommand(refreshPassword));
-            return Ok(resp);
+            return Ok(JsonSerializer.Serialize(resp));
         }
        
     }
