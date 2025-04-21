@@ -19,7 +19,13 @@ namespace CMS.Persistence.Repositories
 
         public Task<MasterEscalationMatrixContract> GetEscalationMatrixContract(int valueId)
         {
-            //var contract = _context.
+
+            return null;
+
+        }
+        public Task<IEnumerable<MasterEscalationMatrixContract>> GetAllEscalationMatrixContract()
+        {
+            
             return null;
 
         }

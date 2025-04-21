@@ -29,7 +29,7 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
         this.pageNumbers[0] = pageNumber;
         if(this.approvalMatrixContracts.length > 0){
           if(pageNumber == 1){
-            this.maxPage = Math.floor(this.approvalMatrixContracts[0].totalRecords / 10);
+            this.maxPage = Math.ceil(this.approvalMatrixContracts[0].totalRecords / 10);
           }
           let diff = this.maxPage - pageNumber;
           if(diff >= 0 && this.maxPage >= 5){
