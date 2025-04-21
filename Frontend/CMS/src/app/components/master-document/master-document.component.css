@@ -1,0 +1,22 @@
+thead tr, thead tr th{
+    background-color: #5f5fee;
+}
+thead th{
+    color: whitesmoke;
+}
+td{
+    font-weight: 450;
+    color: rgb(61, 61, 61);
+}
+.page-link{
+    color: #5f5fee;
+    cursor: pointer;
+}
+.page-link:hover, .active{
+    background-color: rgb(136, 136, 243);
+    color: whitesmoke;
+}
+.active{
+    background-color: #5f5fee;
+    color: whitesmoke;
+}

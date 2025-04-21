@@ -10,6 +10,8 @@ namespace CMS.Persistence.Context
         {
         }
         public DbSet<MasterApprovalMatrixContract> MasterApprovalMatrixContracts { get; set; }
+
+        public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -23,6 +25,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver3).WithMany().HasForeignKey(mamc => mamc.ApproverId3).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentConfigurations());
+
         }
     }
 }

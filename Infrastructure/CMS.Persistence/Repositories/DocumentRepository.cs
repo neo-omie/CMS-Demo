@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +21,37 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MasterDocument>> GetAllDocuments()
+        //public async Task<IEnumerable<MasterDocument>> GetAllDocuments(int pageNumber, int pageSize)
+        //{
+        //    return await _context.MasterDocuments.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+        //        .ToListAsync();
+        //}
+
+        public async Task<(IEnumerable<MasterDocument> , int )> GetAllDocuments(int pageNumber, int pageSize)
         {
-            return await _context.MasterDocuments.ToListAsync();
+            
+            if (pageNumber < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
+            }
+
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
+            }
+
+            
+            var totalCount = await _context.MasterDocuments.CountAsync();
+
+
+            var documents = await _context.MasterDocuments
+                .Where(x => x.IsDeleted == false)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+                
+
+            return (documents, totalCount);
         }
 
         public async Task<MasterDocument> GetDocumentById(int id)
@@ -30,7 +59,7 @@ namespace CMS.Persistence.Repositories
             var document = await _context.MasterDocuments.FirstOrDefaultAsync(x => x.ValueId == id);
             if (document == null)
             {
-                //throw new DocumentNotFound($"Document not found");                
+                throw new DocumentNotFoundException("Document not found");
             }
             return document;
         }

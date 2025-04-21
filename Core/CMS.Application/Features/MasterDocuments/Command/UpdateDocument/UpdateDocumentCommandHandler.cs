@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
 using MediatR;
 
@@ -21,7 +22,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
             var document = _repository.GetDocumentById(request.id);
             if (document == null)
             {
-                //throw new DocumentNotFound($"Document not found");
+                throw new DocumentNotFoundException("Document not found");
             }
             var existingDocument = _mapper.Map<MasterDocument>(request.documentDTO);
             existingDocument.ValueId = request.id;
