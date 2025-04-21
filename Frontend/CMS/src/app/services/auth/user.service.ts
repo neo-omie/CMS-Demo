@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthResponse, Login } from '../../models/auth/login';
+import { AuthResponse, Login, PasswordRenewal } from '../../models/auth/login';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,5 +11,8 @@ export class UserService {
   constructor(private http:HttpClient) { }
   login(authReq:Login):Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, authReq);
+  }
+  refreshPassword(refPswd:PasswordRenewal):Observable<string> {
+    return this.http.post<string>(`${this.apiUrl}/refreshPassword`, refPswd);
   }
 }

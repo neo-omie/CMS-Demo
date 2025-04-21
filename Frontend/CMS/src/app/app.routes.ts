@@ -4,11 +4,13 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MastersScreenComponent } from './components/masters-screen/masters-screen.component';
 import { ApprovalMatrixContractScreenComponent } from './components/approval-matrix-contract-screen/approval-matrix-contract-screen.component';
 import { MasterDocumentComponent } from './components/master-document/master-document.component';
+import { RenewPasswordComponent } from './components/auth/renew-password/renew-password.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
     {path: 'dashboard', component: DashboardComponent},
     {path: 'masters', component: MastersScreenComponent}, 
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent},
-    {path: 'masters/documentMasters', component:MasterDocumentComponent}
+    {path: 'masters/documentMasters', component:MasterDocumentComponent},
+    {path: 'auth/renewPassword', component:RenewPasswordComponent}
 ];

@@ -38,7 +38,7 @@ namespace CMS.API.Middlewares
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 case PasswordRenewalException pswdRenew:
-                    statusCode = HttpStatusCode.Forbidden;
+                    statusCode = HttpStatusCode.Gone;
                     break;
 
                 //case BadRequestException BadReq:

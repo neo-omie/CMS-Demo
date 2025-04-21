@@ -1,7 +1,10 @@
 .offcanvas-width {
     width: 100%;
   }
-  
+.offcanvas-header{
+    display: flex;
+    justify-content: space-between;
+}
 @media (min-width: 320px) {
 .offcanvas-width {
     width: 300px;
