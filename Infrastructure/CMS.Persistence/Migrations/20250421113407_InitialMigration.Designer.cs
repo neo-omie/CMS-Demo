@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250418212026_InitialMigration")]
+    [Migration("20250421113407_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -69,6 +69,27 @@ namespace CMS.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CMS.Domain.Entities.MasterApostille", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<string>("ApostilleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ValueId");
+
+                    b.ToTable("MasterApostilles");
+                });
+
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixContract", b =>
                 {
                     b.Property<int>("MasterApprovalMatrixContractId")
@@ -90,6 +111,9 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
                     b.HasKey("MasterApprovalMatrixContractId");
@@ -126,6 +150,29 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterDocuments");
+
+                    b.HasData(
+                        new
+                        {
+                            ValueId = 1,
+                            DocumentName = "Doc 1",
+                            IsDeleted = false,
+                            status = 1
+                        },
+                        new
+                        {
+                            ValueId = 2,
+                            DocumentName = "Doc 2",
+                            IsDeleted = false,
+                            status = 1
+                        },
+                        new
+                        {
+                            ValueId = 3,
+                            DocumentName = "Doc 3",
+                            IsDeleted = false,
+                            status = 1
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>
@@ -192,7 +239,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEFmmYzRXEyTghAw2lAZyvoRdnBiTZTNNtsMLMACE0XCdS6dowDG+pSnhMNhEhVAucA==",
+                            Password = "AQAAAAIAAYagAAAAEAL5yhzRrL97Cy5gq+qz106Oz4gLVBZK3VihlAoWS6Z23cMIwTcuSx+yEH/LHI6ijA==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -207,10 +254,40 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEN6pfxG4NPIHW2RyOt8EDhnzwuHuZB47x0+nSkLUEmVp0j2/ocPvIO9fcMa1+eFacQ==",
+                            Password = "AQAAAAIAAYagAAAAEMv20OP6w/Mxhoa8aTyR019DKpy9vgSuzQ86owwajI+g/xa7H37303i2FdnObfE2KA==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterEscalationMatrixContract", b =>
+                {
+                    b.Property<int>("MatrixContractId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MatrixContractId"));
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Escalation1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MatrixContractId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("MasterEscalationMatrixContracts");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixContract", b =>
@@ -247,6 +324,17 @@ namespace CMS.Persistence.Migrations
                     b.Navigation("Approver2");
 
                     b.Navigation("Approver3");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterEscalationMatrixContract", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Department");
                 });
