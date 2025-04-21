@@ -18,12 +18,13 @@ public class EmployeeController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
+    
+    [HttpGet("{pageNumber}/{pageSize}")]
     public async Task<ActionResult<IEnumerable<MasterEmployee>>> GetEmployees(
         [FromQuery] string unit,
         [FromQuery] string searchTerm,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
+        [FromRoute] int pageNumber, 
+        [FromRoute] int pageSize)
     {
         var query = new GetAllEmployeesQuery
         (
