@@ -1,5 +1,4 @@
 ﻿using CMS.Domain.Entities;
-using CMS.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
