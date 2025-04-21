@@ -103,7 +103,11 @@ namespace CMS.Persistence.Repositories
                 string result = "Your password has been updated. You can now log in with your new password!";
                 return result;
             }
-            return "Some error occurred. Please enter correct credentials.";
+            else
+            {
+                string result = "Your password still has not been expired or some error occurred.";
+                return result;
+            }
         }
     }
 }
