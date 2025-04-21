@@ -1,6 +1,7 @@
 #masters-screen{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
 a{
     text-decoration: none;
