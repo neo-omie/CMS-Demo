@@ -20,8 +20,8 @@ namespace CMS.Identity.Configurations
             builder.HasData(
                 new MasterEmployee
                 {
-                    Id = "41776062 - 1111 - 1aba - a111 - 2879a6680b9a",
-                    ValueId = 13558,
+                    Id = "41776062-1111-1aba-a111-2879a6680b9a",
+                    ValueId = 1,
                     EmployeeName = "Admin",
                     Email = "admin@cms.com",
                     NormalizedEmail = "ADMIN@CMS.COM",
@@ -36,13 +36,13 @@ namespace CMS.Identity.Configurations
                 },
                 new MasterEmployee
                 {
-                    Id = "41776062 - 1111 - 1abb- a111 - 2879a6680b9a",
-                    ValueId = 13557,
+                    Id = "41776062-1111-1abb-a111-2879a6680b9a",
+                    ValueId = 2,
                     EmployeeName = "Sarthak Lembhe",
                     Email = "sarthak@neosoft.com",
                     NormalizedEmail = "SARTHAK@NEOSOFT.COM",
                     IsDeleted = false,
-                    EmployeeCode = "NEO1",
+                    EmployeeCode = "NEO2",
                     Unit = "Dadar",
                     EmployeeMobile = 9999988888,
                     EmployeeExtension = "IT Smart",

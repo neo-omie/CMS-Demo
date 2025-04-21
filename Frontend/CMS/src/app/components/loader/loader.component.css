@@ -1,0 +1,22 @@
+.loader-container{
+    position: absolute;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+}
+.black-screen{
+    background-color: black;
+    opacity: 0.2;
+    grid-row: 1;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+}
+.spinner-border{
+    grid-row: 1;
+    grid-column: 1;
+    color: #5f5fee;
+}

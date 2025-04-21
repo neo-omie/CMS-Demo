@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using CMS.Application.Contracts.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CMS.Application
@@ -13,7 +14,6 @@ namespace CMS.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection service)
         {
             service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
             // Register AutoMapper
             service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // Automatically scans all profiles in the assemblies
 

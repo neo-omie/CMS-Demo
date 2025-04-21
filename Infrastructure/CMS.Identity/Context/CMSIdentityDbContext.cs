@@ -20,6 +20,8 @@ namespace CMS.Identity.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<MasterEmployee>().HasIndex(u => u.EmployeeCode).IsUnique();
+            builder.Entity<MasterEmployee>().HasIndex(u => u.ValueId).IsUnique();
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new UserRoleConfiguration());
