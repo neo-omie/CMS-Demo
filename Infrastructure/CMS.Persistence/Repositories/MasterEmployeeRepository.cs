@@ -64,7 +64,7 @@ namespace CMS.Persistence.Repositories
             }
         }
 
-        public async Task<MasterEmployee> UpdateEmployeeAsync(MasterEmployee employee)
+        public async Task<MasterEmployee> UpdateEmployeeAsync(MasterEmployee empReloyee)
         {
             _context.Entry(employee).State = EntityState.Modified;
             if (await _context.SaveChangesAsync() > 0)
