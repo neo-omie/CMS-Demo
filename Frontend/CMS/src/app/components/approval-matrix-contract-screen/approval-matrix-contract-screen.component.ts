@@ -85,19 +85,9 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
       }
     });
   }
-  GetPreviousPage(){
-    if(this.maxPage >= this.pageNumbers[0] && this.pageNumbers[0] > 1){
-      this.GetApprovalMatrixContract(this.pageNumbers[0] - 1, 10);
-    }
-  }
   GetPage(pgNumber:number){
     if(this.maxPage >= pgNumber && pgNumber >= 1){
       this.GetApprovalMatrixContract(pgNumber, 10);
-    }
-  }
-  GetNextPage(){
-    if(this.pageNumbers[0] > 0 && this.maxPage > this.pageNumbers[0]){
-      this.GetApprovalMatrixContract(this.pageNumbers[0] + 1, 10);
     }
   }
 }
