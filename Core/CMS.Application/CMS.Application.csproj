@@ -16,4 +16,13 @@
     <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\MasterApostille\Commands\" />
+    <Folder Include="Features\MasterApostille\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Contracts\Persistence\IMasterApostilleRepository.cs" />
+  </ItemGroup>
+
 </Project>
