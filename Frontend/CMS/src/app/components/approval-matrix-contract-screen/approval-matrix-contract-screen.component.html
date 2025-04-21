@@ -1,4 +1,5 @@
-<div class="table-responsive p-3">
+<app-loader *ngIf="loading"></app-loader>
+<div *ngIf="!loading" class="table-responsive p-3">
     <table class="table align-middle table-bordered table-striped">
       <thead>
         <tr>
@@ -11,25 +12,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-            <td>1</td>
-            <td>Department</td>
-            <td>Approver 1</td>
-            <td>Approver 2</td>
-            <td>Approver 3</td>
-            <td><i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-edit"></i></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Department</td>
-            <td>Approver 1</td>
-            <td>Approver 2</td>
-            <td>Approver 3</td>
+        <tr *ngFor="let contract of approvalMatrixContracts">
+            <td>{{contract.masterApprovalMatrixContractId}}</td>
+            <td>{{contract.departmentName}}</td>
+            <td>{{contract.approverName1}}</td>
+            <td>{{contract.approverName2}}</td>
+            <td>{{contract.approverName3}}</td>
             <td><i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-edit"></i></td>
         </tr>
       </tbody>
     </table>
   </div>
+  <nav class="d-flex justify-content-center" *ngIf="approvalMatrixContracts.length > 0" aria-label="Page navigation example">
+    <ul *ngIf="maxPage > 1" class="pagination">
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link" aria-label="Previous">&lsaquo;</span></li>
+      <li class="page-item" (click)="GetPage(pageNumbers[1])"><span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
+      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
+      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link" aria-label="Next">&rsaquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
+    </ul>
+  </nav>
   <div class="modal fade" id="approval-matrix-contract-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
