@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -88,6 +88,9 @@ namespace CMS.Persistence.Migrations
                     Escalation1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Escalation2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Escalation3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TriggerDaysEscalation1 = table.Column<int>(type: "int", nullable: false),
+                    TriggerDaysEscalation2 = table.Column<int>(type: "int", nullable: false),
+                    TriggerDaysEscalation3 = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -97,8 +100,7 @@ namespace CMS.Persistence.Migrations
                         name: "FK_MasterEscalationMatrixContracts_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DepartmentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -138,6 +140,43 @@ namespace CMS.Persistence.Migrations
                         principalColumn: "EmployeeCode");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MasterApprovalMatrixMOUs",
+                columns: table => new
+                {
+                    MasterApprovalMatrixMOUId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    ApproverId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApproverId2 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApproverId3 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NumberOfDays = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterApprovalMatrixMOUs", x => x.MasterApprovalMatrixMOUId);
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId");
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId1",
+                        column: x => x.ApproverId1,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId2",
+                        column: x => x.ApproverId2,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId3",
+                        column: x => x.ApproverId3,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                });
+
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "DepartmentName" },
@@ -165,8 +204,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEAL5yhzRrL97Cy5gq+qz106Oz4gLVBZK3VihlAoWS6Z23cMIwTcuSx+yEH/LHI6ijA==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEMv20OP6w/Mxhoa8aTyR019DKpy9vgSuzQ86owwajI+g/xa7H37303i2FdnObfE2KA==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG9ywrIvkzCpc0WVwFAfor3sSxY/R5yg/nu/KYRvfnPljEDu8B9AD/+0azU3Lap2ag==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEM9ROyBN3gx5Fb2q6wGfSlyPZUlASaaYBM3CdOthVNa9eeOLSsvTD9vTHLDy0DmiKQ==", "MOU_User", "Dadar" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -190,6 +229,26 @@ namespace CMS.Persistence.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_ApproverId1",
+                table: "MasterApprovalMatrixMOUs",
+                column: "ApproverId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_ApproverId2",
+                table: "MasterApprovalMatrixMOUs",
+                column: "ApproverId2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_ApproverId3",
+                table: "MasterApprovalMatrixMOUs",
+                column: "ApproverId3");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_DepartmentId",
+                table: "MasterApprovalMatrixMOUs",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MasterEscalationMatrixContracts_DepartmentId",
                 table: "MasterEscalationMatrixContracts",
                 column: "DepartmentId");
@@ -203,6 +262,9 @@ namespace CMS.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "MasterApprovalMatrixContracts");
+
+            migrationBuilder.DropTable(
+                name: "MasterApprovalMatrixMOUs");
 
             migrationBuilder.DropTable(
                 name: "MasterDocuments");
