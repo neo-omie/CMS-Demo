@@ -9,18 +9,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace CMS.Persistence.Context
 {
-    //public class CMSDbContextFactory : IDesignTimeDbContextFactory<CMSDbContext>
-    //{
-    //    public CMSDbContext CreateDbContext(string[] args)
-    //    {
-    //        var configuration = new ConfigurationBuilder()
-    //            .SetBasePath(Directory.GetCurrentDirectory())
-    //            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    //            .Build();
-    //        var connStr = configuration.GetConnectionString("CMSConnectionString");
-    //        var optionsBuilder = new DbContextOptionsBuilder<CMSDbContext>();
-    //        optionsBuilder.UseSqlServer(connStr);
-    //        return new CMSDbContext(optionsBuilder.Options);
-    //    }
-    //}
+    public class CMSDbContextFactory : IDesignTimeDbContextFactory<CMSDbContext>
+    {
+        public CMSDbContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            var connStr = configuration.GetConnectionString("CMSConnectionString");
+            var optionsBuilder = new DbContextOptionsBuilder<CMSDbContext>();
+            optionsBuilder.UseSqlServer(connStr);
+            return new CMSDbContext(optionsBuilder.Options);
+        }
+    }
 }

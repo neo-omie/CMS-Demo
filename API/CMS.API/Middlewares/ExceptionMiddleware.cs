@@ -34,9 +34,13 @@ namespace CMS.API.Middlewares
                 case UserNotFoundException NotFound:
                     statusCode = HttpStatusCode.NotFound;
                     break;
-                case PasswordRenewalException pswdRenew:
-                    statusCode = HttpStatusCode.Forbidden;
+                case DocumentNotFoundException NotFound:
+                    statusCode = HttpStatusCode.NotFound;
                     break;
+                case PasswordRenewalException pswdRenew:
+                    statusCode = HttpStatusCode.Gone;
+                    break;
+
                 //case BadRequestException BadReq:
                 //    statusCode = HttpStatusCode.BadRequest;
                     //break;

@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Features.Document;
+using CMS.Application.Features.MasterDocuments;
 using CMS.Application.Features.MasterDocuments.Command.AddDocument;
 using CMS.Application.Features.MasterDocuments.Command.DeleteDocument;
 using CMS.Application.Features.MasterDocuments.Command.UpdateDocument;
@@ -21,12 +22,18 @@ namespace CMS.API.Controllers
         {
             _mediator = mediator;
         }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MasterDocument>>> GetAllDocs()
+        
+        [HttpGet("{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetAllDocs([FromRoute]int pageNumber, [FromRoute] int pageSize)
         {
 
-            var getDocs = _mediator.Send(new GetAllDocumentQuery());
+            var(documents, totalCount)  = await _mediator.Send(new GetAllDocumentQuery( pageNumber,  pageSize));
+
+            var getDocs = new DocumentResponse
+            {
+                Documents = documents,
+                TotalCount = totalCount
+            };
             return Ok(getDocs);
         }
 
@@ -35,7 +42,7 @@ namespace CMS.API.Controllers
         public async Task<ActionResult<MasterDocument>> GetDocumentbyId(int id)
         {
 
-            var getDocs = _mediator.Send(new GetDocumentByIdQuery(id));
+            var getDocs = await _mediator.Send(new GetDocumentByIdQuery(id));
             return Ok(getDocs);
         }
 

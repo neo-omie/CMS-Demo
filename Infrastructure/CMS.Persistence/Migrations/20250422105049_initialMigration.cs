@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,21 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.DepartmentId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MasterApostilles",
+                columns: table => new
+                {
+                    ValueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApostilleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterApostilles", x => x.ValueId);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,6 +81,30 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MasterEscalationMatrixContracts",
+                columns: table => new
+                {
+                    MatrixContractId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Escalation1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Escalation2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Escalation3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TriggerDaysEscalation1 = table.Column<int>(type: "int", nullable: false),
+                    TriggerDaysEscalation2 = table.Column<int>(type: "int", nullable: false),
+                    TriggerDaysEscalation3 = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterEscalationMatrixContracts", x => x.MatrixContractId);
+                    table.ForeignKey(
+                        name: "FK_MasterEscalationMatrixContracts_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MasterApprovalMatrixContracts",
                 columns: table => new
                 {
@@ -74,7 +113,8 @@ namespace CMS.Persistence.Migrations
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     ApproverId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ApproverId2 = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ApproverId3 = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ApproverId3 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NumberOfDays = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,6 +141,43 @@ namespace CMS.Persistence.Migrations
                         principalColumn: "EmployeeCode");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MasterApprovalMatrixMOUs",
+                columns: table => new
+                {
+                    MasterApprovalMatrixMOUId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    ApproverId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApproverId2 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApproverId3 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NumberOfDays = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterApprovalMatrixMOUs", x => x.MasterApprovalMatrixMOUId);
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId");
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId1",
+                        column: x => x.ApproverId1,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId2",
+                        column: x => x.ApproverId2,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                    table.ForeignKey(
+                        name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId3",
+                        column: x => x.ApproverId3,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                });
+
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "DepartmentName" },
@@ -114,12 +191,22 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "MasterDocuments",
+                columns: new[] { "ValueId", "DocumentName", "IsDeleted", "status" },
+                values: new object[,]
+                {
+                    { 1, "Doc 1", false, 1 },
+                    { 2, "Doc 2", false, 1 },
+                    { 3, "Doc 3", false, 1 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "MasterEmployees",
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEFmmYzRXEyTghAw2lAZyvoRdnBiTZTNNtsMLMACE0XCdS6dowDG+pSnhMNhEhVAucA==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEN6pfxG4NPIHW2RyOt8EDhnzwuHuZB47x0+nSkLUEmVp0j2/ocPvIO9fcMa1+eFacQ==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG1/T6tWLF9aNRu7sQEUdwfN1II4BeJviFGplZOp8TE/MMHJQfvnYaUoxzJcIOWa0g==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJ/cV+jKFWEVe7CU8EZlKq3VIKD7J/PgjG3IaaCEAh9QF3dOrCpdWmk2a9mD9L/6Nw==", "MOU_User", "Dadar" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -141,22 +228,56 @@ namespace CMS.Persistence.Migrations
                 name: "IX_MasterApprovalMatrixContracts_DepartmentId",
                 table: "MasterApprovalMatrixContracts",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_ApproverId1",
+                table: "MasterApprovalMatrixMOUs",
+                column: "ApproverId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_ApproverId2",
+                table: "MasterApprovalMatrixMOUs",
+                column: "ApproverId2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_ApproverId3",
+                table: "MasterApprovalMatrixMOUs",
+                column: "ApproverId3");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterApprovalMatrixMOUs_DepartmentId",
+                table: "MasterApprovalMatrixMOUs",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterEscalationMatrixContracts_DepartmentId",
+                table: "MasterEscalationMatrixContracts",
+                column: "DepartmentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "MasterApostilles");
+
+            migrationBuilder.DropTable(
                 name: "MasterApprovalMatrixContracts");
+
+            migrationBuilder.DropTable(
+                name: "MasterApprovalMatrixMOUs");
 
             migrationBuilder.DropTable(
                 name: "MasterDocuments");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "MasterEscalationMatrixContracts");
 
             migrationBuilder.DropTable(
                 name: "MasterEmployees");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
         }
     }
 }

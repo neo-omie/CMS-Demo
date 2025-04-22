@@ -1,4 +1,5 @@
 <app-loader *ngIf="loading"></app-loader>
+<h2 class="mt-3">Approval Matrix Master - Contracts</h2>
 <div *ngIf="!loading" class="table-responsive p-3">
     <table class="table align-middle table-bordered table-striped">
       <thead>
@@ -18,7 +19,10 @@
             <td>{{contract.approverName1}}</td>
             <td>{{contract.approverName2}}</td>
             <td>{{contract.approverName3}}</td>
-            <td><i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-edit"></i></td>
+            <td>
+              <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-edit" (click)="GetContract(contract.masterApprovalMatrixContractId)"></i>
+              <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-detail" (click)="GetContract(contract.masterApprovalMatrixContractId)"></i>
+            </td>
         </tr>
       </tbody>
     </table>
@@ -49,6 +53,44 @@
         <div class="modal-footer">
             <button type="button" class="btn">Save</button>
             <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="approval-matrix-contract-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Detail</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <h1 class="modal-title fs-6 mb-3">Approvers</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-user"></i><span class="fw-bolder">1</span></span>
+                <input type="text" name="approverName1" class="form-control" id="approverName1" [value]="approvalMatrixContract != undefined ? approvalMatrixContract.approverName1 : ''" disabled>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-user"></i><span class="fw-bolder">2</span></span>
+                <input type="text" name="approverName2" class="form-control" id="approverName2" [value]="approvalMatrixContract != undefined ? approvalMatrixContract.approverName2 : ''" disabled>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-user"></i><span class="fw-bolder">3</span></span>
+                <input type="text" name="approverName3" class="form-control" id="approverName3" [value]="approvalMatrixContract != undefined ? approvalMatrixContract.approverName3 : ''" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Skip Approval after no response for the number of days</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                <input type="text" name="approverName1" class="form-control" id="approverName1" [value]="approvalMatrixContract != undefined ? approvalMatrixContract.numberOfDays : ''" disabled>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\ApprovalMatrixContract\Commands\" />
+    <None Include="Contracts\Persistence\IMasterApostilleRepository.cs" />
   </ItemGroup>
 
 </Project>

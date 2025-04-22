@@ -22,3 +22,17 @@ export class AuthResponse {
         this.role = role;
     }
 }
+
+export class PasswordRenewal {
+    email:string;
+    oldPassword:string;
+    newPassword:string;
+    reenterNewPassword:string;
+    constructor(email:string, oldPassword:string, newPassword:string, reenterNewPassword:string)
+    {
+        this.email = email;
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+        this.reenterNewPassword = reenterNewPassword;
+    }
+}
