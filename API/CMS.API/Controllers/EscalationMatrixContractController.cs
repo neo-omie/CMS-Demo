@@ -18,8 +18,8 @@ namespace CMS.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllmatrixContracts(int pageNumber, int pageSize)
+        [HttpGet("{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetAllmatrixContracts([FromRoute]int pageNumber, [FromRoute]int pageSize)
         {
             var (contracts, totalcount) = await _mediator.Send(new GetAllEscalationMatrixContractQuery(pageNumber, pageSize));
             var matrixContract = new MatrixContractresponse

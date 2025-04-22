@@ -21,7 +21,6 @@ export class EscalationMatrixContractService {
   }
   getMatrixContractById(
     valueId: number
-   
   ): Observable<MasterEscalationMatrixContractDto> {
     return this.http.get<MasterEscalationMatrixContractDto>(
       `${this.apiUrl}/${valueId}`

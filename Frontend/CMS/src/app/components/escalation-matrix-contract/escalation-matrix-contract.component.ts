@@ -32,6 +32,8 @@ export class EscalationMatrixContractComponent implements OnInit {
       .getAllMatrixContract(pageNumber, pageSize)
       .subscribe((res) => {
         this.loading = false;
+        console.log(res);
+        
         this.matrixContracts = res;
         this.pageNumbers[0] = pageNumber;
         if (this.matrixContracts.matrixContract.length > 0) {
@@ -82,6 +84,9 @@ export class EscalationMatrixContractComponent implements OnInit {
     }
   }
   GetMatrixContractById(valueId:number){
-    this.escalationService.getMatrixContractById(valueId)
+    this.escalationService.getMatrixContractById(valueId).subscribe((res)=>{
+      this.loading = false;
+      this.matrixContracts = res;
+    })
   }
 }
