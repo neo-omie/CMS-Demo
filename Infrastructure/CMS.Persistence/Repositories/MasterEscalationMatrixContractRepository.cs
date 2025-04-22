@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.Features.EscalationMatrixContract;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 
@@ -19,7 +20,13 @@ namespace CMS.Persistence.Repositories
 
         public Task<MasterEscalationMatrixContract> GetEscalationMatrixContract(int valueId)
         {
-            //var contract = _context.
+
+            return null;
+
+        }
+        public Task<IEnumerable<GetEscalationMatrixContractDto>> GetAllEscalationMatrixContract(int pageNumber, int pageSize)
+        {
+            
             return null;
 
         }

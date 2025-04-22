@@ -12,4 +12,7 @@ export class ApproverMatrixContractService {
     GetApprovalMatrixContract(pageNumber : number, pageSize : number):Observable<ApprovalMatrixContract[]> {
       return this.http.get<ApprovalMatrixContract[]>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
     }
+    GetApprovalMatrixContractById(id : number):Observable<ApprovalMatrixContract> {
+      return this.http.get<ApprovalMatrixContract>(`${this.apiUrl}/${id}`);
+    }
 }

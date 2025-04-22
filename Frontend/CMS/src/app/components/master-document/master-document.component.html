@@ -1,5 +1,38 @@
 <app-loader *ngIf="loading"></app-loader>
+<!-- <a class="nav-link btn btn-success" routerLink="/masters/addDocument" >Add Product</a> -->
+<div class="modal fade" id="document-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5"><i class="fa-solid fa-file-circle-plus"></i> Add Document</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #documentForm="ngForm" (ngSubmit)="addDocument(documentForm)">
+          <div class="form-group">
+              <label for="documentName">Document Name</label>
+              <input type="text" class="form-control" id="documentName" name="documentName" [(ngModel)]="document.documentName" required />
+            </div>
+            <br>
+            <div class="form-group">
+              <label for="status">Document Status</label>
+              <select name="status" id="status" class="form-select" [(ngModel)]="document.status">
+                <option selected value="1">Active</option>
+                <option value="0">InActive</option>
+              </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="fa-solid fa-plus"></i> Add document</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="!loading" class="table-responsive p-3">
+  <button class="btn btn-outline-primary mb-2">
+    <a data-bs-toggle="modal" data-bs-target="#document-add"><i class="fa-solid fa-file-circle-plus"></i> Add document</a>
+  </button>
   <table class="table align-middle table-bordered table-striped">
     <thead>
       <tr>
@@ -13,7 +46,8 @@
         <tr  *ngFor="let doc of masterDocuments?.documents;">
             <td>{{doc.valueId}}</td>
             <td>{{doc.documentName}}</td>
-            <td>{{doc.status}}</td>
+            <td *ngIf="doc.status == 1">Active</td>
+            <td *ngIf="doc.status == 0">InActive</td>
             <td><i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#document-edit"></i></td>
         </tr>
     </tbody>
