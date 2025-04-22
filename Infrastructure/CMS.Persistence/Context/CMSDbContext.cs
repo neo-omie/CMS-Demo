@@ -10,6 +10,7 @@ namespace CMS.Persistence.Context
         {
         }
         public DbSet<MasterApprovalMatrixContract> MasterApprovalMatrixContracts { get; set; }
+        public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
 
         public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
@@ -23,9 +24,16 @@ namespace CMS.Persistence.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);
+
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver3).WithMany().HasForeignKey(mamc => mamc.ApproverId3).HasPrincipalKey(me => me.EmployeeCode);
+
+
+            modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
+            modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
+            modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Approver3).WithMany().HasForeignKey(mamc => mamc.ApproverId3).HasPrincipalKey(me => me.EmployeeCode);
+
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentConfigurations());

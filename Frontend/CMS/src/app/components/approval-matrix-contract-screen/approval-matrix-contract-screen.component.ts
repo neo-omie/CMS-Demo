@@ -16,6 +16,7 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   pageNumbers:number[] = [1,1,2,3,4,5];
   maxPage:number = 1;
   approvalMatrixContracts:ApprovalMatrixContract[] = [];
+  approvalMatrixContract?:ApprovalMatrixContract// = new ApprovalMatrixContract(-1,'',-1,'',-1,'',-1,'',-1,-1,0);
   errorMsg ?: string
   constructor(private approverMatrixContractService : ApproverMatrixContractService){}
   ngOnInit(){
@@ -89,5 +90,23 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     if(this.maxPage >= pgNumber && pgNumber >= 1){
       this.GetApprovalMatrixContract(pgNumber, 10);
     }
+  }
+  GetContract(id:number){
+    this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
+      next:(response:ApprovalMatrixContract) => {
+        this.approvalMatrixContract = response;
+        console.log(response)
+      }, 
+      error:(error) => {
+        console.error('Error :(', error);
+        if(error.message !== undefined){
+          this.errorMsg = JSON.stringify(error.error.message);
+          console.log(this.errorMsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(error.message);
+          console.log(this.errorMsg);
+        }
+    }});
   }
 }

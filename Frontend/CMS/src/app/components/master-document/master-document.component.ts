@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { DocumentStatus } from '../../constants';
 import Swal from 'sweetalert2';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
 
 @Component({
   selector: 'app-master-document',
@@ -92,23 +94,13 @@ GetPage(pgNumber:number){
     
     this.documentService.addDocument(this.document).subscribe({
       next: (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'document added successfully!',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
+        Alert.bigToast('Success!','Document added successfully.',TYPE.SUCCESS,'Ok');
         documentForm.resetForm();
         this.GetPage(this.maxPage);
       },
       error: (error) => {
         console.error('Error adding Document:', error);
-        Swal.fire({
-          title: 'Error!',
-          text: 'There was an error adding the Document.',
-          icon: 'error',
-          confirmButtonText: 'Try Again'
-        });
+        Alert.bigToast('Error!','There was an error adding the Document.',TYPE.ERROR,'Try Again');
       }
     });
  }
