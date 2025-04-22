@@ -31,6 +31,6 @@ namespace CMS.API.Controllers
             var resp = await _mediatR.Send(new RefreshPasswordCommand(refreshPassword));
             return Ok(JsonSerializer.Serialize(resp));
         }
-       
+
     }
 }

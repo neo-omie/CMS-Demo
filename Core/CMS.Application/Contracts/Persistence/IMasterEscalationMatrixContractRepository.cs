@@ -15,6 +15,6 @@ namespace CMS.Application.Contracts.Persistence
         Task<MasterEscalationMatrixContract> GetEscalationMatrixContract(int valueId);
 
 
-        Task<IEnumerable<GetEscalationMatrixContractDto>> GetAllEscalationMatrix( int pageNumber, int pageSize);
+        Task<IEnumerable<GetEscalationMatrixContractDto>> GetAllEscalationMatrixContract(int pageNumber, int pageSize);
     }
 }
