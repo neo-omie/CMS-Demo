@@ -12,4 +12,12 @@ export  class Alert{
        title: op
      })
    }
+   static bigToast(title:string, text:string,icon = TYPE.SUCCESS,confirmButtonText:string){
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: icon,
+      confirmButtonText: confirmButtonText
+    });
+   }
 }
