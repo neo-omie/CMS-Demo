@@ -8,6 +8,14 @@ td{
     font-weight: 400;
     color: rgb(61, 61, 61);
 }
+.icon{
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 1rem;
+}
+.icon:hover{
+    color: #5f5fee;
+}
 .page-link{
     color: #5f5fee;
     cursor: pointer;
@@ -19,4 +27,26 @@ td{
 .active{
     background-color: #5f5fee;
     color: whitesmoke;
+}
+.modal-header{
+    border-color: #5f5fee;
+    background-color: #5f5fee;
+}
+.modal-title{
+    color: #5f5fee;
+}
+.close-btn{
+    border-color: whitesmoke;
+    color: whitesmoke;
+}
+.close-btn:hover{
+    background-color: whitesmoke;
+    color: #5f5fee;
+}
+.form-control:focus{
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+.form-control:disabled{
+    background-color: white;
 }
