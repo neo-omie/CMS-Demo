@@ -8,6 +8,7 @@ using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CMS.Persistence.Repositories
 {
     public class DocumentRepository : IDocumentRepository
@@ -26,7 +27,12 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterDocument> GetDocumentById(int id)
         {
-            return await _context.MasterDocuments.FirstOrDefaultAsync(x => x.ValueId == id);
+            var document = await _context.MasterDocuments.FirstOrDefaultAsync(x => x.ValueId == id);
+            if (document == null)
+            {
+                //throw new DocumentNotFound($"Document not found");                
+            }
+            return document;
         }
         public async Task<int> AddDocument(MasterDocument masterDocument)
         {
@@ -38,17 +44,17 @@ namespace CMS.Persistence.Repositories
         {
             var document = await GetDocumentById(id);
             document.IsDeleted = true;
-            return _context.SaveChanges();
+            _context.MasterDocuments.Update(document);
+           return await _context.SaveChangesAsync();
+            //return _context.SaveChanges();
         }
 
 
-        public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
+        public async Task<int> UpdateDocument(MasterDocument masterDocument)
         {
-            var document = await GetDocumentById(id);
-            document.DocumentName = masterDocument.DocumentName;
-            document.status = masterDocument.status;
-
-            return _context.SaveChanges();
+           
+            _context.MasterDocuments.Update(masterDocument);
+            return await _context.SaveChangesAsync();
 
         }
     }

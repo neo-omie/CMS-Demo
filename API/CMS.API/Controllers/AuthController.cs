@@ -1,10 +1,6 @@
-﻿
-using CMS.Application.Contracts.Identity;
-using CMS.Application.DTOs;
+﻿using CMS.Application.DTOs;
 using CMS.Application.Features.Auth.Login;
-using CMS.Application.Models.Identity;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers

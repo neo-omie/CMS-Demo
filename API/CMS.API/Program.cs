@@ -1,7 +1,5 @@
 using CMS.API.Middlewares;
 using CMS.Application;
-using CMS.Application.Models.Identity;
-using CMS.Identity;
 using CMS.Persistence;
 
 
@@ -14,11 +12,8 @@ namespace CMS.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
-            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +21,8 @@ namespace CMS.API
 
             builder.Services.AddAuthentication(); // For Auth
             builder.Services.AddCors(); // For Angular Frontend joining
+
+
 
             var app = builder.Build();
 

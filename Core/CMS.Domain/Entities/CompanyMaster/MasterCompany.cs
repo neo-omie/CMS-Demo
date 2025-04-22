@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace CMS.Domain.Entities.CompanyMaster
 {
     public class MasterCompany
     {
+        [Key]
         public int ValueId { get; set; }
         public string CompanyName { get; set; }
 
@@ -48,6 +50,12 @@ namespace CMS.Domain.Entities.CompanyMaster
         public string IFSCCode { get; set; }
 
         public string PanNo { get; set; }
+
+
+        //for soft delete 
+        public bool IsDeleted { get; set; } = false;
+
+      
 
 
     }

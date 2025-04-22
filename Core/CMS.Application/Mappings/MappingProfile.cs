@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CMS.Application.Features.ContractTypeMaster;
+using CMS.Application.Features.Document;
+using CMS.Application.Features.MasterCompanies;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
 using CMS.Domain.Entities;
+using CMS.Domain.Entities.CompanyMaster;
 
 namespace CMS.Application.Mappings
 {
@@ -16,6 +20,9 @@ namespace CMS.Application.Mappings
             CreateMap<AddEmployeeDto, MasterEmployee>().ReverseMap();
             CreateMap<GetAllEmployeeDto, MasterEmployee>().ReverseMap();
             CreateMap<UpdateEmployeeDto, MasterEmployee>().ReverseMap();
+            CreateMap<MasterDocument,DocumentDTO>().ReverseMap();
+            CreateMap<MasterCompany, GetMastersDTO>().ReverseMap();
+            CreateMap<ContractTypeMasters, GetContractDTO>().ReverseMap();
         }
     }
 }

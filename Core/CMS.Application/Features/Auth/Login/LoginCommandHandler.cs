@@ -1,22 +1,22 @@
 ﻿using MediatR;
-using CMS.Application.Contracts.Identity;
+using CMS.Domain.Entities;
 using CMS.Application.DTOs;
+using CMS.Application.Contracts.Persistence;
 
 namespace CMS.Application.Features.Auth.Login
 {
     public class LoginCommandHandler:IRequestHandler<LoginCommand, AuthResponseDto>
     {
-        private readonly IAuthService _authservice;
+        private readonly IAuthRepository _authrepository;
 
-        public LoginCommandHandler(IAuthService authservice)
+        public LoginCommandHandler(IAuthRepository authrepository)
         {
-            _authservice = authservice;
+            _authrepository = authrepository;
         }
 
         public async Task<AuthResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var userSignin = await _authservice.Login(request.user);
-            return userSignin;
+            return await _authrepository.Login(request.user);
         }
     }
 }
