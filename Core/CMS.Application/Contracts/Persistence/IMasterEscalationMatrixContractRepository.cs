@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CMS.Application.Features.EscalationMatrixContract;
+using CMS.Application.Features.MasterEscalationMatrixContracts;
 using CMS.Domain.Entities;
 
 namespace CMS.Application.Contracts.Persistence
@@ -12,9 +12,9 @@ namespace CMS.Application.Contracts.Persistence
     {
         Task<int> UpdateMatrixContract(int valueId);
 
-        Task<MasterEscalationMatrixContract> GetEscalationMatrixContract(int valueId);
+        Task<GetEscalationMatrixContractDto> GetEscalationMatrixContract(int valueId);
 
 
-        Task<IEnumerable<GetEscalationMatrixContractDto>> GetAllEscalationMatrixContract(int pageNumber, int pageSize);
+        Task<(IEnumerable<GetEscalationMatrixContractDto>, int)> GetAllEscalationMatrixContract(int pageNumber, int pageSize);
     }
 }
