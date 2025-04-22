@@ -26,6 +26,7 @@ namespace CMS.Persistence
             services.AddScoped<IMasterApprovalMatrixMOURepository, MasterApprovalMatrixMOURepository>();
             services.AddScoped<IMasterApostilleRepository, MasterApostilleRepository>();
             services.AddScoped<IContractTypeMasterRepository, ContractTypeMasterRepository>();
+            services.AddScoped<ICompanyCascadeRepository, CompanyCascadeRepository>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<JwtSettings>>().Value);
             services.AddTransient<IAuthRepository, AuthRepository>();

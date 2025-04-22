@@ -19,16 +19,21 @@ namespace CMS.API.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("GetCountries")]
         public JsonResult GetCountries()
         {
             var countries = _mediator.Send(new GetCountriesQuery());
             return new JsonResult(countries);
         }
+
+        [HttpGet("GetStates")]
         public JsonResult GetStates(int countryId)
         {
             var states = _mediator.Send(new GetStatesQuery(countryId));
             return new JsonResult(states);
         }
+
+        [HttpGet("GetCities")]
         public JsonResult GetCities(int stateId)
         {
             var cities = _mediator.Send(new GetCitiesQuery(stateId));
