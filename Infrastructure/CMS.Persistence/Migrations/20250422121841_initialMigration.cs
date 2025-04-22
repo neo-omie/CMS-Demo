@@ -14,6 +14,34 @@ namespace CMS.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "contracts",
+                columns: table => new
+                {
+                    ValueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContractTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_contracts", x => x.ValueId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Countries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Countries = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
@@ -39,6 +67,37 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MasterApostilles", x => x.ValueId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MasterCompanies",
+                columns: table => new
+                {
+                    ValueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PocName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyStatus = table.Column<bool>(type: "bit", nullable: false),
+                    PocContactNumber = table.Column<int>(type: "int", nullable: false),
+                    PocEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyAddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyAddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyAddressLine3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Zipcode = table.Column<int>(type: "int", nullable: false),
+                    CompanyContactNo = table.Column<int>(type: "int", nullable: false),
+                    CompanyEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyWebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyBankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GSTno = table.Column<int>(type: "int", nullable: false),
+                    BankAccNo = table.Column<int>(type: "int", nullable: false),
+                    MSMERegistrationNo = table.Column<int>(type: "int", nullable: false),
+                    IFSCCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PanNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterCompanies", x => x.ValueId);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,6 +137,26 @@ namespace CMS.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_MasterEmployees", x => x.ValueId);
                     table.UniqueConstraint("AK_MasterEmployees_EmployeeCode", x => x.EmployeeCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "States",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    listofcountriesId = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_States", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_States_Countries_listofcountriesId",
+                        column: x => x.listofcountriesId,
+                        principalTable: "Countries",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -178,6 +257,26 @@ namespace CMS.Persistence.Migrations
                         principalColumn: "EmployeeCode");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    listofStatesId = table.Column<int>(type: "int", nullable: false),
+                    StateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cities_States_listofStatesId",
+                        column: x => x.listofStatesId,
+                        principalTable: "States",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "DepartmentName" },
@@ -205,9 +304,14 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG1/T6tWLF9aNRu7sQEUdwfN1II4BeJviFGplZOp8TE/MMHJQfvnYaUoxzJcIOWa0g==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJ/cV+jKFWEVe7CU8EZlKq3VIKD7J/PgjG3IaaCEAh9QF3dOrCpdWmk2a9mD9L/6Nw==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEI1LFllloPaFMZEzZu5ywLcTsL6LygeeuxRvQQXYb+DSWZl7rU4q9NIBFhGdIOO7Pw==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAECtu/el7XVz7kM0F21zpsO2kGOF7T2JtIGY6xi2e4D61yu3b0IfC/46lhiPATR8H9w==", "MOU_User", "Dadar" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cities_listofStatesId",
+                table: "Cities",
+                column: "listofStatesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MasterApprovalMatrixContracts_ApproverId1",
@@ -253,11 +357,22 @@ namespace CMS.Persistence.Migrations
                 name: "IX_MasterEscalationMatrixContracts_DepartmentId",
                 table: "MasterEscalationMatrixContracts",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_States_listofcountriesId",
+                table: "States",
+                column: "listofcountriesId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Cities");
+
+            migrationBuilder.DropTable(
+                name: "contracts");
+
             migrationBuilder.DropTable(
                 name: "MasterApostilles");
 
@@ -268,16 +383,25 @@ namespace CMS.Persistence.Migrations
                 name: "MasterApprovalMatrixMOUs");
 
             migrationBuilder.DropTable(
+                name: "MasterCompanies");
+
+            migrationBuilder.DropTable(
                 name: "MasterDocuments");
 
             migrationBuilder.DropTable(
                 name: "MasterEscalationMatrixContracts");
 
             migrationBuilder.DropTable(
+                name: "States");
+
+            migrationBuilder.DropTable(
                 name: "MasterEmployees");
 
             migrationBuilder.DropTable(
                 name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
         }
     }
 }
