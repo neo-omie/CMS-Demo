@@ -33,7 +33,8 @@ namespace CMS.Persistence.Migrations
                     ValueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApostilleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,8 +205,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG9ywrIvkzCpc0WVwFAfor3sSxY/R5yg/nu/KYRvfnPljEDu8B9AD/+0azU3Lap2ag==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEM9ROyBN3gx5Fb2q6wGfSlyPZUlASaaYBM3CdOthVNa9eeOLSsvTD9vTHLDy0DmiKQ==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG1/T6tWLF9aNRu7sQEUdwfN1II4BeJviFGplZOp8TE/MMHJQfvnYaUoxzJcIOWa0g==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJ/cV+jKFWEVe7CU8EZlKq3VIKD7J/PgjG3IaaCEAh9QF3dOrCpdWmk2a9mD9L/6Nw==", "MOU_User", "Dadar" }
                 });
 
             migrationBuilder.CreateIndex(

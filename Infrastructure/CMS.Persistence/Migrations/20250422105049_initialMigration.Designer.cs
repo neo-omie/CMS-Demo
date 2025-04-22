@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250422080506_EscalationMatrixAdded")]
-    partial class EscalationMatrixAdded
+    [Migration("20250422105049_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,9 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -127,6 +130,45 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("MasterApprovalMatrixContracts");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixMOU", b =>
+                {
+                    b.Property<int>("MasterApprovalMatrixMOUId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MasterApprovalMatrixMOUId"));
+
+                    b.Property<string>("ApproverId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApproverId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApproverId3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfDays")
+                        .HasColumnType("int");
+
+                    b.HasKey("MasterApprovalMatrixMOUId");
+
+                    b.HasIndex("ApproverId1");
+
+                    b.HasIndex("ApproverId2");
+
+                    b.HasIndex("ApproverId3");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("MasterApprovalMatrixMOUs");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterDocument", b =>
@@ -239,7 +281,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEDZKOIcdNRzK/SPp9MP4p44jpeDHdRkceBuwCLhh1AZ7dSDite7ZiLk4GRkCYOYotA==",
+                            Password = "AQAAAAIAAYagAAAAEG1/T6tWLF9aNRu7sQEUdwfN1II4BeJviFGplZOp8TE/MMHJQfvnYaUoxzJcIOWa0g==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -254,7 +296,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEGksgR+wpEFOqfIQYqHFREpnei4bh87Pd7uFoM71SElTbrkMlm5gxZTkLH54Ku/HEg==",
+                            Password = "AQAAAAIAAYagAAAAEJ/cV+jKFWEVe7CU8EZlKq3VIKD7J/PgjG3IaaCEAh9QF3dOrCpdWmk2a9mD9L/6Nw==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -300,6 +342,44 @@ namespace CMS.Persistence.Migrations
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixContract", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Approver1")
+                        .WithMany()
+                        .HasForeignKey("ApproverId1")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Approver2")
+                        .WithMany()
+                        .HasForeignKey("ApproverId2")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Approver3")
+                        .WithMany()
+                        .HasForeignKey("ApproverId3")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approver1");
+
+                    b.Navigation("Approver2");
+
+                    b.Navigation("Approver3");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixMOU", b =>
                 {
                     b.HasOne("CMS.Domain.Entities.MasterEmployee", "Approver1")
                         .WithMany()

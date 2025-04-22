@@ -78,6 +78,9 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -128,11 +131,11 @@ namespace CMS.Persistence.Migrations
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixMOU", b =>
                 {
-                    b.Property<int>("MasterApprovalMatrixContractId")
+                    b.Property<int>("MasterApprovalMatrixMOUId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MasterApprovalMatrixContractId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MasterApprovalMatrixMOUId"));
 
                     b.Property<string>("ApproverId1")
                         .IsRequired()
@@ -152,7 +155,7 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
-                    b.HasKey("MasterApprovalMatrixContractId");
+                    b.HasKey("MasterApprovalMatrixMOUId");
 
                     b.HasIndex("ApproverId1");
 
@@ -275,7 +278,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEG9ywrIvkzCpc0WVwFAfor3sSxY/R5yg/nu/KYRvfnPljEDu8B9AD/+0azU3Lap2ag==",
+                            Password = "AQAAAAIAAYagAAAAEG1/T6tWLF9aNRu7sQEUdwfN1II4BeJviFGplZOp8TE/MMHJQfvnYaUoxzJcIOWa0g==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -290,7 +293,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEM9ROyBN3gx5Fb2q6wGfSlyPZUlASaaYBM3CdOthVNa9eeOLSsvTD9vTHLDy0DmiKQ==",
+                            Password = "AQAAAAIAAYagAAAAEJ/cV+jKFWEVe7CU8EZlKq3VIKD7J/PgjG3IaaCEAh9QF3dOrCpdWmk2a9mD9L/6Nw==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
