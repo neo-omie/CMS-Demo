@@ -16,7 +16,7 @@ export const routes: Routes = [
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent},
     {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent},
     {path: 'masters/documentMasters', component:MasterDocumentComponent},
-    {path: '/masters/escalationContracts', component:EscalationMatrixContractComponent},
+    // {path: '/masters/escalationContracts', component:EscalationMatrixContractComponent},
     {path: 'auth/renewPassword', component:RenewPasswordComponent},
     {path: '404NotFound', component: NotFoundComponent}
 
