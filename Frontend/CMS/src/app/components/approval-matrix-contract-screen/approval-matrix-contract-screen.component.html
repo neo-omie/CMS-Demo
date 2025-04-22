@@ -18,7 +18,7 @@
             <td>{{contract.approverName1}}</td>
             <td>{{contract.approverName2}}</td>
             <td>{{contract.approverName3}}</td>
-            <td><i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-edit"></i></td>
+            <td><i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#approval-matrix-contract-edit" (click)="GetContract(contract.masterApprovalMatrixContractId)"></i></td>
         </tr>
       </tbody>
     </table>
