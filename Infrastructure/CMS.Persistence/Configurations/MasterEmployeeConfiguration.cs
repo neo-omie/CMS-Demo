@@ -40,7 +40,7 @@ namespace CMS.Persistence.Configurations
                     DepartmentId = 101,
                     Password = hasher.HashPassword(null, "Sarthak@12"),
                     LastPasswordChanged = new DateTime(2025, 01, 10)
-                }
+                }         
             );
         }
     }

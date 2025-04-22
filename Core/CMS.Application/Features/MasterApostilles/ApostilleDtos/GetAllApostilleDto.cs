@@ -1,4 +1,4 @@
-﻿namespace CMS.Application.Features.MasterApostille.ApostilleDtos
+﻿namespace CMS.Application.Features.MasterApostilles.ApostilleDtos
 {
     public class GetAllApostilleDto
     {

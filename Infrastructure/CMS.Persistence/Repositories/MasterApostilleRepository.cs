@@ -16,17 +16,7 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public Task<MasterApostille> AddMasterApositlleAsync(MasterApostille masterApostille)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteMasterApostilleAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<MasterApostille>> GetAllMasterApostilleAsync(string unit, string searchTerm, int pageNumber, int pageSize)
+        public async Task<IEnumerable<MasterApostille>> GetAllMasterApostilleAsync(string searchTerm, int pageNumber, int pageSize)
         {
             var query = _context.MasterApostilles.AsQueryable();
             if(!string.IsNullOrEmpty(searchTerm))
@@ -42,19 +32,65 @@ namespace CMS.Persistence.Repositories
                 }  
             }
             return await query
+            .Where(x => x.IsDeleted == false)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
         }
 
-        public Task<MasterApostille> GetMasterApostilleByIdAsync(int id)
+        public async Task<MasterApostille> GetMasterApostilleByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var query = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
+            if (query == null)
+                throw new Exception("Master Apostille not found. Failed :(");
+            return query;
         }
 
-        public Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille)
+        public async Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille)
         {
-            throw new NotImplementedException();
+            await _context.MasterApostilles.AddAsync(masterApostille);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return masterApostille;
+            }
+            else
+            {
+                throw new Exception("Master Apostille not added. Failed :(");
+            }
+        }
+
+        public async Task<bool> DeleteMasterApostilleAsync(int id)
+        {
+            var apostille = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
+            if (apostille == null)
+                throw new Exception("Apostille not found. Failed :(");
+
+            apostille.IsDeleted = true;
+            _context.MasterApostilles.Update(apostille);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Master Apostille not deleted. Failed :(");
+            }
+        }
+
+        public async Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille)
+        {
+            var checkApostille = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
+            if (checkApostille == null)
+                throw new Exception("Master Apostille not found. Failed :(");
+            _context.Entry(checkApostille).CurrentValues.SetValues(masterApostille);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return checkApostille;
+            }
+            else
+            {
+                throw new Exception("Master Apostille not updated. Failed :(");
+            }
         }
     }
 }

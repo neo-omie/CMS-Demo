@@ -3,6 +3,7 @@ using CMS.Application.Features.MasterEmployees.Commands.DeleteEmployee;
 using CMS.Application.Features.MasterEmployees.Commands.UpdateEmployee;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
 using CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees;
+using CMS.Application.Features.MasterEmployees.Queries.GetEmployeeById;
 using CMS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ public class EmployeeController : ControllerBase
 
     
     [HttpGet("{pageNumber}/{pageSize}")]
-    public async Task<ActionResult<IEnumerable<MasterEmployee>>> GetEmployees(
+    public async Task<ActionResult<IEnumerable<MasterEmployee>>> GetAllEmployees(
         [FromQuery] string unit,
         [FromQuery] string searchTerm,
         [FromRoute] int pageNumber, 
@@ -31,6 +32,13 @@ public class EmployeeController : ControllerBase
             unit, searchTerm, pageNumber, pageSize
         );
 
+        return Ok(await _mediator.Send(query));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<MasterEmployee>> GetEmployeeById(int id)
+    {
+        var query = new GetEmployeeByIdQuery(id);
         return Ok(await _mediator.Send(query));
     }
 
@@ -55,6 +63,6 @@ public class EmployeeController : ControllerBase
         var checkDelete= await _mediator.Send(command);
         if (checkDelete)
             return Ok("Successfully Deleted!!!");
-        return BadRequest();
+        return NotFound();
     }
 }

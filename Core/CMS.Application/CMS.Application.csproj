@@ -17,11 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\MasterApostille\Commands\" />
-    <Folder Include="Features\MasterApostille\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Contracts\Persistence\IMasterApostilleRepository.cs" />
   </ItemGroup>
 

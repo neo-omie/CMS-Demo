@@ -31,6 +31,7 @@ namespace CMS.Persistence.Repositories
             }
 
             return await query
+            .Where(x => x.IsDeleted == false)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
