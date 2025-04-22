@@ -75,4 +75,13 @@ export class EscalationMatrixContractComponent implements OnInit {
         }
       });
   }
+
+  GetPage(pgNumber:number){
+    if(this.maxPage >= pgNumber && pgNumber >= 1){
+      this.getMatrixContracts(pgNumber, 10);
+    }
+  }
+  GetMatrixContractById(valueId:number){
+    this.escalationService.getMatrixContractById(valueId)
+  }
 }

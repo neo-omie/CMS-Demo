@@ -19,4 +19,13 @@ export class EscalationMatrixContractService {
       `${this.apiUrl}/${pageNumber}/${pageSize}`
     );
   }
+  getMatrixContractById(
+    valueId: number
+   
+  ): Observable<MasterEscalationMatrixContractDto> {
+    return this.http.get<MasterEscalationMatrixContractDto>(
+      `${this.apiUrl}/${valueId}`
+    );
+  }
+
 }
