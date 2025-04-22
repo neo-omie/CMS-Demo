@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MasterDocumentService } from '../../services/master-document.service';
 import { Router, RouterModule } from '@angular/router';
-import { MasterDocument, MasterDocumentDto } from '../../models/master-document';
-import { FormsModule } from '@angular/forms';
+import { AddDocumentDto, MasterDocument, MasterDocumentDto } from '../../models/master-document';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
+import { DocumentStatus } from '../../constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-master-document',
@@ -18,7 +20,9 @@ export class MasterDocumentComponent implements OnInit{
   maxPage=1;
   pageNumbers = [1,1,2,3,4,5];
   masterDocuments?: MasterDocumentDto //= new MasterDocumentDto([]:MasterDocument[],0);
-  
+  documentStatus = DocumentStatus;
+  document:AddDocumentDto = new AddDocumentDto('',0);
+
   ngOnInit(): void {
     this.getDocuments(1,10);
   }
@@ -32,7 +36,7 @@ getDocuments(pageNumber : number, pageSize : number):void{
     this.pageNumbers[0] = pageNumber;
         if(this.masterDocuments.documents.length > 0){
           if(pageNumber == 1){
-            this.maxPage = Math.floor(this.masterDocuments.totalCount/10);
+            this.maxPage = Math.ceil(this.masterDocuments.totalCount/10);
           }
           let diff = this.maxPage - pageNumber;
           if(diff >= 0 && this.maxPage >= 5){
@@ -81,4 +85,32 @@ GetPage(pgNumber:number){
     this.getDocuments(pgNumber, 10);
   }
 }
+ addDocument(documentForm :NgForm){
+  this.document = documentForm.value;
+  this.document.status = Number(this.document.status);
+  console.log(documentForm);
+    
+    this.documentService.addDocument(this.document).subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'document added successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        documentForm.resetForm();
+        this.GetPage(this.maxPage);
+      },
+      error: (error) => {
+        console.error('Error adding Document:', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'There was an error adding the Document.',
+          icon: 'error',
+          confirmButtonText: 'Try Again'
+        });
+      }
+    });
+ }
+ 
 }

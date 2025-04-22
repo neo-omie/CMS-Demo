@@ -13,4 +13,7 @@ export class RouterService {
   goToDashboard() {
     this.route.navigate(['/dashboard']);
   }
+  notFoundPage() {
+    this.route.navigate(['/404NotFound']);
+  }
 }

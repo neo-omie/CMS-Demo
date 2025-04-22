@@ -15,7 +15,7 @@ import { RouterService } from '../../../services/router.service';
   styleUrl: './renew-password.component.css'
 })
 export class RenewPasswordComponent {
-  renewModel:PasswordRenewal = new PasswordRenewal('', '', '');
+  renewModel:PasswordRenewal = new PasswordRenewal('', '', '', '');
   errorMsg = '';
   loginPasswordEyeOpen = false;
   constructor(private userService:UserService, private route:RouterService) {}
@@ -26,24 +26,30 @@ export class RenewPasswordComponent {
   loginUser(renewForm:NgForm) {
       this.renewModel = renewForm.value;
       console.log(renewForm.value)
-      this.userService.refreshPassword(this.renewModel).subscribe({
-        next:(response:string) => {
-          console.log('Password renewal Successful!', response);
-          this.toast(TYPE.SUCCESS, true, 'Password renewed successfully');
-          this.route.goToLogin();
-          
-        }, error:(error) => {
-          console.error('Password renewal Failed :(', error);
-          if(error.message !== undefined){
-            this.errorMsg = JSON.stringify(error.error.message);
-            this.toast(TYPE.ERROR, true, error.error.message);
+      if(this.renewModel.reenterNewPassword == this.renewModel.newPassword)
+      {  
+        this.userService.refreshPassword(this.renewModel).subscribe({
+          next:(response:string) => {
+            console.log('Password renewal Successful!', response);
+            this.toast(TYPE.SUCCESS, true, 'Password renewed successfully');
+            this.route.goToLogin();
+            
+          }, error:(error) => {
+            console.error('Password renewal Failed :(', error);
+            if(error.message !== undefined){
+              this.errorMsg = JSON.stringify(error.error.message);
+              this.toast(TYPE.ERROR, true, error.error.message);
+            }
+            else{
+              this.errorMsg = JSON.stringify(error.message);
+              this.toast(TYPE.ERROR, true, error.message);
+            }
           }
-          else{
-            this.errorMsg = JSON.stringify(error.message);
-            this.toast(TYPE.ERROR, true, error.message);
-          }
-        }
-      });
+        }); 
+      }
+      else {
+        this.toast(TYPE.ERROR, true, "Password did not matched with above");
+      }
     }
     toast(typeIcon = TYPE.SUCCESS, timerProgressBar: boolean = false, op:string = "") {
       Swal.fire({
