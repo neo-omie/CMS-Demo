@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.ContractTypeMaster.Command.AddContract
 {
-    public record AddContractCommand(ContractTypeMasters ctp):IRequest<ContractTypeMasters>;
+    public record AddContractCommand(AddContractDTO ctp):IRequest<ContractTypeMasters>;
     
 }

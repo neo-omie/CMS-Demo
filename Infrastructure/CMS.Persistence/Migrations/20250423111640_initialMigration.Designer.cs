@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250422121841_initialMigration")]
+    [Migration("20250423111640_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -27,28 +27,28 @@ namespace CMS.Persistence.Migrations
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfCountries", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CountryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryId"));
 
                     b.Property<string>("Countries")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CountryId");
 
                     b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("StateId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StateId"));
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
@@ -57,23 +57,20 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("listofcountriesId")
-                        .HasColumnType("int");
+                    b.HasKey("StateId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("listofcountriesId");
+                    b.HasIndex("CountryId");
 
                     b.ToTable("States");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListofCity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CityId"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -82,12 +79,9 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("StateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("listofStatesId")
-                        .HasColumnType("int");
+                    b.HasKey("CityId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("listofStatesId");
+                    b.HasIndex("StateId");
 
                     b.ToTable("Cities");
                 });
@@ -101,6 +95,9 @@ namespace CMS.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
                     b.Property<int>("BankAccNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyAddressLine1")
@@ -137,6 +134,9 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GSTno")
                         .HasColumnType("int");
 
@@ -164,6 +164,9 @@ namespace CMS.Persistence.Migrations
                     b.Property<string>("PocName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Zipcode")
                         .HasColumnType("int");
@@ -452,7 +455,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEI1LFllloPaFMZEzZu5ywLcTsL6LygeeuxRvQQXYb+DSWZl7rU4q9NIBFhGdIOO7Pw==",
+                            Password = "AQAAAAIAAYagAAAAEAFOkpsyocABWhtONCzTfnylwSYfzT9T6y21boJu7cKP8YFXS8OMi4MdsesBRFiv2A==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -467,7 +470,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAECtu/el7XVz7kM0F21zpsO2kGOF7T2JtIGY6xi2e4D61yu3b0IfC/46lhiPATR8H9w==",
+                            Password = "AQAAAAIAAYagAAAAEB3pF1QFYOhMWMFcPwneVCpEisMWtPx91gw/4Iq0em0j9MUaQIICQ/VfsDejnJSD0w==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -516,7 +519,7 @@ namespace CMS.Persistence.Migrations
                 {
                     b.HasOne("CMS.Domain.Entities.CompanyMaster.ListOfCountries", "listofcountries")
                         .WithMany()
-                        .HasForeignKey("listofcountriesId")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -527,7 +530,7 @@ namespace CMS.Persistence.Migrations
                 {
                     b.HasOne("CMS.Domain.Entities.CompanyMaster.ListOfStates", "listofStates")
                         .WithMany()
-                        .HasForeignKey("listofStatesId")
+                        .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

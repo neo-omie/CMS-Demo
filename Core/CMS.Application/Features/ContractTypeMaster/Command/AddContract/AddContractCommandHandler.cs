@@ -1,4 +1,5 @@
-﻿using CMS.Application.Contracts.Persistence;
+﻿using AutoMapper;
+using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
 using MediatR;
 using System;
@@ -12,14 +13,16 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.AddContract
     public class AddContractCommandHandler : IRequestHandler<AddContractCommand, ContractTypeMasters>
     {
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
-
-        public AddContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository)
+        private readonly IMapper _Imapper;
+        public AddContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, IMapper Imapper)
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
+            _Imapper = Imapper;
         }
-        public Task<ContractTypeMasters> Handle(AddContractCommand request, CancellationToken cancellationToken)
+        public async Task<ContractTypeMasters> Handle(AddContractCommand request, CancellationToken cancellationToken)
         {
-            return _contractTypeMasterRepository.AddContractAsync(request.ctp);
+            var mapcontract =  _Imapper.Map<ContractTypeMasters>(request.ctp);
+            return await _contractTypeMasterRepository.AddContractAsync(mapcontract);
         }
     }
 }

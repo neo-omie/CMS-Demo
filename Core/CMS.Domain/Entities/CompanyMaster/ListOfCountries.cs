@@ -10,7 +10,7 @@ namespace CMS.Domain.Entities.CompanyMaster
     public class ListOfCountries
     {
         [Key]
-        public int Id { get; set; }
+        public int CountryId { get; set; }
 
         public string Countries { get; set; }
     }
