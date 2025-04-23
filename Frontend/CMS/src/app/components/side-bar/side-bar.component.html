@@ -1,21 +1,24 @@
-<nav class="navbar bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand sidebar-toggle-btn btn btn-primary" data-bs-toggle="offcanvas" href="#sideBar" role="button" aria-controls="offcanvasExample">
-            <i class="fa-solid fa-bars-staggered"></i> Menu
-        </a>
-    </div>
-</nav>
-  
-<aside class="offcanvas offcanvas-start offcanvas-width" tabindex="-1" id="sideBar" aria-labelledby="sideBarLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="sideBarLabel">Side Bar</h5>
-        <div class="d-flex align-items-center">
-            <button type="button" class="btn"><i class="fa-solid fa-bell"></i></button>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+@if(checkLogin()) {
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand sidebar-toggle-btn btn btn-primary" data-bs-toggle="offcanvas" href="#sideBar" role="button" aria-controls="offcanvasExample">
+                <i class="fa-solid fa-bars-staggered"></i> Menu
+            </a>
+            <a class="btn btn-outline-danger" (click)="logoutUser()"><i class="fa-solid fa-power-off"></i> Logout</a>
         </div>
-    </div>
-    <div class="offcanvas-body">
-        <a class="btn sideBar-nav-links" data-bs-dismiss="offcanvas" routerLink="/dashboard">Dashboard</a>
-        <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/masters">Masters</a>
-    </div>
-</aside>
+    </nav>
+    
+    <aside class="offcanvas offcanvas-start offcanvas-width" tabindex="-1" id="sideBar" aria-labelledby="sideBarLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sideBarLabel">Hello, {{username}}!</h5>
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn"><i class="fa-solid fa-bell"></i></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="offcanvas-body">
+            <a class="btn sideBar-nav-links" data-bs-dismiss="offcanvas" routerLink="/dashboard">Dashboard</a>
+            <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/masters">Masters</a>
+        </div>
+    </aside>
+}

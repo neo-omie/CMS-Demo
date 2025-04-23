@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Contracts.Persistence;
+using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -93,6 +94,17 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Employee not updated. Failed :(");
             }
+        }
+
+        public async Task<IEnumerable<MasterEmployee>> GetEmployeesByDepartmentIdAndEmployeeDetails(int departmentId, string inpQuery)
+        {
+            var checkEmployees = await _context.MasterEmployees.Where(me => me.DepartmentId == departmentId).ToListAsync();
+            if(checkEmployees == null)
+            {
+                throw new NotFoundException($"Employees not found. Probably department id is incorrect.");
+            }
+            var foundEmployees = await _context.MasterEmployees.Where(me => (me.DepartmentId == departmentId) && (me.EmployeeName.Contains(inpQuery) || me.EmployeeCode.Contains(inpQuery))).ToListAsync();
+            return foundEmployees;
         }
     }
 }

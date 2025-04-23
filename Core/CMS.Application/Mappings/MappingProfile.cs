@@ -21,6 +21,7 @@ namespace CMS.Application.Mappings
             CreateMap<AddEmployeeDto, MasterEmployee>().ReverseMap();
             CreateMap<GetAllEmployeeDto, MasterEmployee>().ReverseMap();
             CreateMap<UpdateEmployeeDto, MasterEmployee>().ReverseMap();
+            CreateMap<GetEmployeesByDepartmentIdAndEmpDetailsDto, MasterEmployee>().ReverseMap();
             CreateMap<MasterDocument,DocumentDTO>().ReverseMap();
             CreateMap<AddApostilleDto, MasterApostille>().ReverseMap();
             CreateMap<MasterApostille, GetAllApostilleDto>().ReverseMap();

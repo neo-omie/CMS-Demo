@@ -17,7 +17,8 @@ export class EscalationMatrixContractComponent implements OnInit {
   loading: boolean = true;
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
-  matrixContracts?: MasterEscalationMatrixContractDto;
+  // matrixContracts : MasterEscalationMatrixContractDto []=;
+  matrixContracts?: MasterEscalationMatrixContractDto ;
 
   ngOnInit(): void {
     this.getMatrixContracts(1, 10);
@@ -32,9 +33,11 @@ export class EscalationMatrixContractComponent implements OnInit {
       .getAllMatrixContract(pageNumber, pageSize)
       .subscribe((res) => {
         this.loading = false;
+        
         this.matrixContracts = res;
         this.pageNumbers[0] = pageNumber;
-        if (this.matrixContracts.matrixContract.length > 0) {
+        console.log(res.getEscalationMatrixContractDto);
+        if (this.matrixContracts != undefined && this.matrixContracts.getEscalationMatrixContractDto != undefined && this.matrixContracts.getEscalationMatrixContractDto.length > 0) {
           if (pageNumber == 1) {
             this.maxPage = Math.ceil(this.matrixContracts.totalCount / 10);
           }
@@ -74,5 +77,17 @@ export class EscalationMatrixContractComponent implements OnInit {
           }
         }
       });
+  }
+
+  GetPage(pgNumber:number){
+    if(this.maxPage >= pgNumber && pgNumber >= 1){
+      this.getMatrixContracts(pgNumber, 10);
+    }
+  }
+  GetMatrixContractById(valueId:number){
+    this.escalationService.getMatrixContractById(valueId).subscribe((res)=>{
+      this.loading = false;
+      this.matrixContracts = res;
+    })
   }
 }

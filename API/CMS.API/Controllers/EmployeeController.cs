@@ -4,6 +4,7 @@ using CMS.Application.Features.MasterEmployees.Commands.UpdateEmployee;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
 using CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees;
 using CMS.Application.Features.MasterEmployees.Queries.GetEmployeeById;
+using CMS.Application.Features.MasterEmployees.Queries.GetEmployeesByDepartmentIdAndEmployeeDetails;
 using CMS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -64,5 +65,13 @@ public class EmployeeController : ControllerBase
         if (checkDelete)
             return Ok("Successfully Deleted!!!");
         return NotFound();
+    }
+
+    [HttpGet("GetEmployeesByDepartmentIdAndEmployeeDetails")]
+    public async Task<IActionResult> GetEmployeesByDepartmentIdAndEmployeeDetails(int departmentId, string inpQuery)
+    {
+        var query = new GetEmployeeByDepartmentIdAndEmployeeDetailsQuery(departmentId, inpQuery);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 }
