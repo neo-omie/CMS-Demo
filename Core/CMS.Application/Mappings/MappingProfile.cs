@@ -28,6 +28,9 @@ namespace CMS.Application.Mappings
             CreateMap<MasterApostille, UpdateApostilleDto>().ReverseMap();
             CreateMap<MasterCompany, GetMastersDTO>().ReverseMap();
             CreateMap<ContractTypeMasters, GetContractDTO>().ReverseMap();
+            CreateMap<ContractTypeMasters, AddContractDTO>().ReverseMap();
+            CreateMap<ContractTypeMasters, UpdateContractDTO>().ReverseMap();
+
         }
     }
 }
