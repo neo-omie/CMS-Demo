@@ -13,9 +13,14 @@ namespace CMS.Domain.Entities
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MatrixContractId { get; set; }
  
-        public string Escalation1 { get; set; }
-        public string Escalation2 { get; set; }
-        public string Escalation3 { get; set; }
+        public string EscalationId1 { get; set; }
+        public string EscalationId2 { get; set; }
+        public string EscalationId3 { get; set; }
+        public MasterEmployee Escalation1 { get; set; }
+        public MasterEmployee Escalation2 { get; set; }
+        public MasterEmployee Escalation3 { get; set; }
+
+
         public int TriggerDaysEscalation1 { get; set; }
         public int TriggerDaysEscalation2 { get; set; }
         public int TriggerDaysEscalation3 { get; set; }

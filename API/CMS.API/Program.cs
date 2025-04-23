@@ -22,6 +22,8 @@ namespace CMS.API
             builder.Services.AddAuthentication(); // For Auth
             builder.Services.AddCors(); // For Angular Frontend joining
 
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

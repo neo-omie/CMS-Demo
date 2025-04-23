@@ -45,7 +45,7 @@ namespace CMS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<MasterApostille>> UpdateApostilleAsync(int id, UpdateApostilleDto apostille)
+        public async Task<ActionResult<MasterApostille>> UpdateApostilleAsync(int id, [FromBody] UpdateApostilleDto apostille)
         {
             var command= new UpdateApostilleCommand(id, apostille);
             return Ok(await _mediator.Send(command));

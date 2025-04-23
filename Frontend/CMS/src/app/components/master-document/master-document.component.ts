@@ -21,7 +21,7 @@ export class MasterDocumentComponent implements OnInit{
   loading:boolean = true;
   maxPage=1;
   pageNumbers = [1,1,2,3,4,5];
-  masterDocuments?: MasterDocumentDto //= new MasterDocumentDto([]:MasterDocument[],0);
+  masterDocuments?: MasterDocumentDto 
   documentStatus = DocumentStatus;
   document:AddDocumentDto = new AddDocumentDto('',0);
 
