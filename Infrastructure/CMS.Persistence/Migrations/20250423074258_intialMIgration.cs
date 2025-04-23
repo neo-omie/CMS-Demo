@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class intialMIgration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -160,30 +160,6 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MasterEscalationMatrixContracts",
-                columns: table => new
-                {
-                    MatrixContractId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Escalation1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Escalation2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Escalation3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TriggerDaysEscalation1 = table.Column<int>(type: "int", nullable: false),
-                    TriggerDaysEscalation2 = table.Column<int>(type: "int", nullable: false),
-                    TriggerDaysEscalation3 = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MasterEscalationMatrixContracts", x => x.MatrixContractId);
-                    table.ForeignKey(
-                        name: "FK_MasterEscalationMatrixContracts_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MasterApprovalMatrixContracts",
                 columns: table => new
                 {
@@ -258,6 +234,45 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MasterEscalationMatrixContracts",
+                columns: table => new
+                {
+                    MatrixContractId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EscalationId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EscalationId2 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EscalationId3 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TriggerDaysEscalation1 = table.Column<int>(type: "int", nullable: false),
+                    TriggerDaysEscalation2 = table.Column<int>(type: "int", nullable: false),
+                    TriggerDaysEscalation3 = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterEscalationMatrixContracts", x => x.MatrixContractId);
+                    table.ForeignKey(
+                        name: "FK_MasterEscalationMatrixContracts_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId");
+                    table.ForeignKey(
+                        name: "FK_MasterEscalationMatrixContracts_MasterEmployees_EscalationId1",
+                        column: x => x.EscalationId1,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                    table.ForeignKey(
+                        name: "FK_MasterEscalationMatrixContracts_MasterEmployees_EscalationId2",
+                        column: x => x.EscalationId2,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                    table.ForeignKey(
+                        name: "FK_MasterEscalationMatrixContracts_MasterEmployees_EscalationId3",
+                        column: x => x.EscalationId3,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "EmployeeCode");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
                 {
@@ -304,8 +319,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEI1LFllloPaFMZEzZu5ywLcTsL6LygeeuxRvQQXYb+DSWZl7rU4q9NIBFhGdIOO7Pw==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAECtu/el7XVz7kM0F21zpsO2kGOF7T2JtIGY6xi2e4D61yu3b0IfC/46lhiPATR8H9w==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEK4OhVwIiyQ96qNmZxeHJANN7JPtHhHO1UKBYYsOQ71RUZoHKDtpw0BdIW7jO9mtfw==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPkd88z8mS5SHCWlw89qoPPHCvTen2WaKL5kGy8cR3JyiKfHSNaKDIKC3nWCOiODHQ==", "MOU_User", "Dadar" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -359,6 +374,21 @@ namespace CMS.Persistence.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MasterEscalationMatrixContracts_EscalationId1",
+                table: "MasterEscalationMatrixContracts",
+                column: "EscalationId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterEscalationMatrixContracts_EscalationId2",
+                table: "MasterEscalationMatrixContracts",
+                column: "EscalationId2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterEscalationMatrixContracts_EscalationId3",
+                table: "MasterEscalationMatrixContracts",
+                column: "EscalationId3");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_States_listofcountriesId",
                 table: "States",
                 column: "listofcountriesId");
@@ -395,10 +425,10 @@ namespace CMS.Persistence.Migrations
                 name: "States");
 
             migrationBuilder.DropTable(
-                name: "MasterEmployees");
+                name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "MasterEmployees");
 
             migrationBuilder.DropTable(
                 name: "Countries");

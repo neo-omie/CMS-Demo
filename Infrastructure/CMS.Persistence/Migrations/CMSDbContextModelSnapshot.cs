@@ -449,7 +449,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEI1LFllloPaFMZEzZu5ywLcTsL6LygeeuxRvQQXYb+DSWZl7rU4q9NIBFhGdIOO7Pw==",
+                            Password = "AQAAAAIAAYagAAAAEK4OhVwIiyQ96qNmZxeHJANN7JPtHhHO1UKBYYsOQ71RUZoHKDtpw0BdIW7jO9mtfw==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -464,7 +464,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAECtu/el7XVz7kM0F21zpsO2kGOF7T2JtIGY6xi2e4D61yu3b0IfC/46lhiPATR8H9w==",
+                            Password = "AQAAAAIAAYagAAAAEPkd88z8mS5SHCWlw89qoPPHCvTen2WaKL5kGy8cR3JyiKfHSNaKDIKC3nWCOiODHQ==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -481,17 +481,17 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Escalation1")
+                    b.Property<string>("EscalationId1")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Escalation2")
+                    b.Property<string>("EscalationId2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Escalation3")
+                    b.Property<string>("EscalationId3")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TriggerDaysEscalation1")
                         .HasColumnType("int");
@@ -505,6 +505,12 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("MatrixContractId");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("EscalationId1");
+
+                    b.HasIndex("EscalationId2");
+
+                    b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixContracts");
                 });
@@ -615,7 +621,34 @@ namespace CMS.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation1")
+                        .WithMany()
+                        .HasForeignKey("EscalationId1")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation2")
+                        .WithMany()
+                        .HasForeignKey("EscalationId2")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation3")
+                        .WithMany()
+                        .HasForeignKey("EscalationId3")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Department");
+
+                    b.Navigation("Escalation1");
+
+                    b.Navigation("Escalation2");
+
+                    b.Navigation("Escalation3");
                 });
 #pragma warning restore 612, 618
         }
