@@ -452,7 +452,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEAFOkpsyocABWhtONCzTfnylwSYfzT9T6y21boJu7cKP8YFXS8OMi4MdsesBRFiv2A==",
+                            Password = "AQAAAAIAAYagAAAAEDnk/CJ5AkYoOssgYoHGZ8FiKX9U5r8Blr3IYNZx+jTPnxyp8iezBQsUdXit1bEuYA==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -467,7 +467,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEB3pF1QFYOhMWMFcPwneVCpEisMWtPx91gw/4Iq0em0j9MUaQIICQ/VfsDejnJSD0w==",
+                            Password = "AQAAAAIAAYagAAAAEAGbPOoZB6V1ozkhtTdePRzl3NHiSBHDSipX7jI5Vhp+/7HQTW1HcKxKawvSFOdG+w==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
