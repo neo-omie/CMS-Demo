@@ -41,19 +41,54 @@
   </nav>
   <div class="modal fade" id="approval-matrix-contract-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5">Edit</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <form class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Edit</h1>
+          <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="closeEditApproverCollapses()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
-          ...
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+              <input class="form-control edit-input dropdown-input" placeholder="Select approver 1" data-bs-toggle="collapse" data-bs-target="#approver1-dropdown" readonly/>
+              <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#approver1-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
+              </div>
+                <div #editApproverCollapse1 id="approver1-dropdown" class="collapse">
+                  <div class="card card-body">
+                    <input type="text" class="form-control" placeholder="Search.." id="myInput">
+                  </div>
+              </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+              <input class="form-control edit-input dropdown-input" placeholder="Select approver 2" data-bs-toggle="collapse" data-bs-target="#approver2-dropdown" aria-expanded="false"  readonly/>
+              <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#approver2-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
+            </div>
+                <div #editApproverCollapse2 id="approver2-dropdown" class="collapse">
+                  <div class="card card-body">
+                    <input type="text" class="form-control" placeholder="Search..">
+                  </div>
+              </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+              <input class="form-control edit-input dropdown-input" placeholder="Select approver 3" data-bs-toggle="collapse" data-bs-target="#approver3-dropdown" readonly/>
+              <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#approver3-dropdown"><i class="fa-solid fa-angle-down"></i></span>
+              </div>
+                <div #editApproverCollapse3 id="approver3-dropdown" class="collapse">
+                  <div class="card card-body">
+                    <input type="text" class="form-control" placeholder="Search..">
+                  </div>
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn">Save</button>
-            <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
+            <button type="reset" class="btn" data-bs-dismiss="modal" (click)="closeEditApproverCollapses()">Cancel</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
   <div class="modal fade" id="approval-matrix-contract-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApprovalMatrixContract } from '../models/approval-matrix-contract';
 import { Observable } from 'rxjs';
+import { MasterEmployee } from '../models/master-employee';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +15,8 @@ export class ApproverMatrixContractService {
     }
     GetApprovalMatrixContractById(id : number):Observable<ApprovalMatrixContract> {
       return this.http.get<ApprovalMatrixContract>(`${this.apiUrl}/${id}`);
+    }
+    GetApproversForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
+      return this.http.get<MasterEmployee[]>(`${this.apiUrl}/${departmentId}/${inputText}`)
     }
 }

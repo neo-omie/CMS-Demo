@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
 import { ApprovalMatrixContract } from '../../models/approval-matrix-contract';
 import { CommonModule } from '@angular/common';
@@ -12,15 +12,26 @@ import { LoaderComponent } from '../loader/loader.component';
   styleUrl: './approval-matrix-contract-screen.component.css'
 })
 export class ApprovalMatrixContractScreenComponent implements OnInit {
-  loading:boolean = true
+  approvers1:string[] = [];
+  approvers2:string[] = [];
+  approvers3:string[] = [];
+  loading:boolean = true;
   pageNumbers:number[] = [1,1,2,3,4,5];
   maxPage:number = 1;
   approvalMatrixContracts:ApprovalMatrixContract[] = [];
-  approvalMatrixContract?:ApprovalMatrixContract// = new ApprovalMatrixContract(-1,'',-1,'',-1,'',-1,'',-1,-1,0);
+  approvalMatrixContract?:ApprovalMatrixContract;
   errorMsg ?: string
-  constructor(private approverMatrixContractService : ApproverMatrixContractService){}
+  @ViewChild('editApproverCollapse1') editApproverCollapse1!: ElementRef;
+  @ViewChild('editApproverCollapse2') editApproverCollapse2!: ElementRef;
+  @ViewChild('editApproverCollapse3') editApproverCollapse3!: ElementRef;
+  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2){}
   ngOnInit(){
     this.GetApprovalMatrixContract(1 ,10);
+  }
+  closeEditApproverCollapses() {
+      this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');
+      this.renderer.removeClass(this.editApproverCollapse2.nativeElement,'show');
+      this.renderer.removeClass(this.editApproverCollapse3.nativeElement,'show');
   }
   GetApprovalMatrixContract(pageNumber : number, pageSize : number){
     this.approverMatrixContractService.GetApprovalMatrixContract(pageNumber, pageSize).subscribe({
@@ -108,5 +119,14 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
           console.log(this.errorMsg);
         }
     }});
+  }
+  textChangeApprover1(departmentId:number, input:string){
+
+  }
+  textChangeApprover2(departmentId:number, input:string){
+
+  }
+  textChangeApprover3(departmentId:number, input:string){
+
   }
 }

@@ -3,22 +3,22 @@ export class ApprovalMatrixContract {
     departmentName : string;
     departmentId : number;
     approverName1 : string;
-    approverId1 : number;
+    approverId1 : string;
     approverName2 : string;
-    approverId2 : number;
+    approverId2 : string;
     approverName3 : string;
-    approverId3 : number;
+    approverId3 : string;
     numberOfDays : number;
     totalRecords : number;
     constructor(masterApprovalMatrixContractId : number, 
         departmentName : string, 
         departmentId : number, 
         approverName1 : string, 
-        approverId1 : number, 
+        approverId1 : string, 
         approverName2 : string, 
-        approverId2 : number, 
+        approverId2 : string, 
         approverName3 : string, 
-        approverId3 : number, 
+        approverId3 : string, 
         numberOfDays : number,
         totalRecords : number){
         this.masterApprovalMatrixContractId = masterApprovalMatrixContractId;
