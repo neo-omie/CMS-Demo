@@ -1,5 +1,6 @@
 ﻿using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
 using CMS.Application.Features.MasterEscalationMatrixContracts;
+using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Queries.GetAllEscalationMatrixContracts;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Queries.GetEscalationMatrixContractById;
 using MediatR;
@@ -19,7 +20,7 @@ namespace CMS.API.Controllers
         }
 
         [HttpGet("{pageNumber}/{pageSize}")]
-        public async Task<IActionResult> GetAllmatrixContracts([FromRoute]int pageNumber, [FromRoute]int pageSize)
+        public async Task<IActionResult> GetAllmatrixContracts([FromRoute] int pageNumber, [FromRoute] int pageSize)
         {
             var (contracts, totalcount) = await _mediator.Send(new GetAllEscalationMatrixContractQuery(pageNumber, pageSize));
             var matrixContract = new MatrixContractresponse
@@ -36,5 +37,14 @@ namespace CMS.API.Controllers
             var contract = await _mediator.Send(new GetEscalationMatrixContractByIdQuery(id));
             return Ok(contract);
         }
+
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> UpdateMatrixContract( int id, [FromBody] UpdateEscalationMatrixContractDto updateDto)
+        {
+             await _mediator.Send(new UpdateEscalationMatrixContractCommand(id, updateDto));
+            return Ok(new {Message = "SuccessFully updated"});
+        }
+
     }
 }

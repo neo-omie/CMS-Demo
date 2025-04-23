@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MasterEscalationMatrixContractDto } from '../../models/escalation-matrix-contract';
+import { EscalationMatrixContract, GetMasterEscalationMatrixContractByIdDto, MasterEscalationMatrixContractDto, UpdateMatrixContractDto } from '../../models/escalation-matrix-contract';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
@@ -18,8 +18,9 @@ export class EscalationMatrixContractComponent implements OnInit {
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
   // matrixContracts : MasterEscalationMatrixContractDto []=;
-  matrixContracts?: MasterEscalationMatrixContractDto ;
-
+  matrixContracts?: MasterEscalationMatrixContractDto;
+  escalationMatrixContract? : GetMasterEscalationMatrixContractByIdDto;
+  // updateMatrixContract?: UpdateMatrixContractDto;
   ngOnInit(): void {
     this.getMatrixContracts(1, 10);
   }
@@ -87,7 +88,9 @@ export class EscalationMatrixContractComponent implements OnInit {
   GetMatrixContractById(valueId:number){
     this.escalationService.getMatrixContractById(valueId).subscribe((res)=>{
       this.loading = false;
-      this.matrixContracts = res;
+      this.escalationMatrixContract = res;
+      console.log(res);
+      
     })
   }
 }

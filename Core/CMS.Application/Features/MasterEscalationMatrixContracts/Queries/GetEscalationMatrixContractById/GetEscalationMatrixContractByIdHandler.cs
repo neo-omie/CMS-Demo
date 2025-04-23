@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
+using CMS.Domain.Entities;
 using MediatR;
 
 namespace CMS.Application.Features.MasterEscalationMatrixContracts.Queries.GetEscalationMatrixContractById
