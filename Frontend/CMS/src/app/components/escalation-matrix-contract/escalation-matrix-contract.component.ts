@@ -20,7 +20,9 @@ export class EscalationMatrixContractComponent implements OnInit {
   // matrixContracts : MasterEscalationMatrixContractDto []=;
   matrixContracts?: MasterEscalationMatrixContractDto;
   escalationMatrixContract? : GetMasterEscalationMatrixContractByIdDto;
-  // updateMatrixContract?: UpdateMatrixContractDto;
+  updateMatrixContract?: UpdateMatrixContractDto;
+  errorMsg ?: string
+
   ngOnInit(): void {
     this.getMatrixContracts(1, 10);
   }
@@ -86,11 +88,21 @@ export class EscalationMatrixContractComponent implements OnInit {
     }
   }
   GetMatrixContractById(valueId:number){
-    this.escalationService.getMatrixContractById(valueId).subscribe((res)=>{
-      this.loading = false;
-      this.escalationMatrixContract = res;
-      console.log(res);
-      
-    })
+    this.escalationService.getMatrixContractById(valueId).subscribe({
+          next:(response:GetMasterEscalationMatrixContractByIdDto) => {
+            this.escalationMatrixContract = response;
+            console.log(response)
+          }, 
+          error:(error) => {
+            console.error('Error :(', error);
+            if(error.message !== undefined){
+              this.errorMsg = JSON.stringify(error.error.message);
+              console.log(this.errorMsg);
+            }
+            else{
+              this.errorMsg = JSON.stringify(error.message);
+              console.log(this.errorMsg);
+            }
+        }});
   }
 }

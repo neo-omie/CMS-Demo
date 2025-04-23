@@ -46,9 +46,9 @@ export class UpdateMatrixContractDto{
   escalation1: string;
   escalation2: string;
   escalation3: string;
-  escalationId1: string;
-  escalationId2: string;
-  escalationId3: string;
+  // escalationId1: string;
+  // escalationId2: string;
+  // escalationId3: string;
   triggerDaysEscalation1 :number;
   triggerDaysEscalation2 :number;
   triggerDaysEscalation3 :number;
@@ -58,9 +58,9 @@ export class UpdateMatrixContractDto{
     escalation2: string,
     escalation3: string,
     departmentName: string,
-    escalationId1: string,
-    escalationId2: string,
-    escalationId3: string,
+    // escalationId1: string,
+    // escalationId2: string,
+    // escalationId3: string,
     triggerDaysEscalation1:number,
     triggerDaysEscalation2:number,
     triggerDaysEscalation3:number
@@ -70,9 +70,9 @@ export class UpdateMatrixContractDto{
     this.escalation1 = escalation1;
     this.escalation2 = escalation2;
     this.escalation3 = escalation3;
-    this.escalationId1 = escalationId1;
-    this.escalationId2 = escalationId2;
-    this.escalationId3 = escalationId3;
+    // this.escalationId1 = escalationId1;
+    // this.escalationId2 = escalationId2;
+    // this.escalationId3 = escalationId3;
     this.triggerDaysEscalation1 = triggerDaysEscalation1;
     this.triggerDaysEscalation2 = triggerDaysEscalation2;
     this.triggerDaysEscalation3 = triggerDaysEscalation3;
