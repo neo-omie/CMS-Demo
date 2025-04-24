@@ -3,18 +3,20 @@ import { ApproverMatrixContractService } from '../../services/approver-matrix-co
 import { ApprovalMatrixContract } from '../../models/approval-matrix-contract';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
+import { MasterEmployee } from '../../models/master-employee';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-approval-matrix-contract-screen',
   standalone: true,
-  imports: [CommonModule,LoaderComponent],
+  imports: [CommonModule,LoaderComponent,FormsModule],
   templateUrl: './approval-matrix-contract-screen.component.html',
   styleUrl: './approval-matrix-contract-screen.component.css'
 })
 export class ApprovalMatrixContractScreenComponent implements OnInit {
-  approvers1:string[] = [];
-  approvers2:string[] = [];
-  approvers3:string[] = [];
+  approvers1:MasterEmployee[] = [];
+  approvers2:MasterEmployee[] = [];
+  approvers3:MasterEmployee[] = [];
   loading:boolean = true;
   pageNumbers:number[] = [1,1,2,3,4,5];
   maxPage:number = 1;
@@ -32,6 +34,10 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
       this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');
       this.renderer.removeClass(this.editApproverCollapse2.nativeElement,'show');
       this.renderer.removeClass(this.editApproverCollapse3.nativeElement,'show');
+      this.approvalMatrixContract = undefined;
+      this.approvers1.length = 0;
+      this.approvers2.length = 0;
+      this.approvers3.length = 0;
   }
   GetApprovalMatrixContract(pageNumber : number, pageSize : number){
     this.approverMatrixContractService.GetApprovalMatrixContract(pageNumber, pageSize).subscribe({
@@ -120,13 +126,34 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
         }
     }});
   }
-  textChangeApprover1(departmentId:number, input:string){
-
-  }
-  textChangeApprover2(departmentId:number, input:string){
-
-  }
-  textChangeApprover3(departmentId:number, input:string){
-
+  textChangeApprover(departmentId:number, event:Event, approverNumber:number){
+    let input = event.target as HTMLInputElement;
+    this.approverMatrixContractService.GetApproversForInputText(departmentId,input.value).subscribe(
+      {
+        next:(response:MasterEmployee[]) => {
+          console.log(response);
+          if(approverNumber == 1){
+            this.approvers1 = response;
+          }
+          else if(approverNumber == 2){
+            this.approvers2 = response;
+          }
+          else if(approverNumber == 3){
+            this.approvers3 = response;
+          }
+        },
+        error:(error) => {
+          console.error('Error :(', error);
+          if(error.message !== undefined){
+            this.errorMsg = JSON.stringify(error.error.message);
+            console.log(this.errorMsg);
+          }
+          else{
+            this.errorMsg = JSON.stringify(error.message);
+            console.log(this.errorMsg);
+          }
+      }
+      }
+    )
   }
 }

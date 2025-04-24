@@ -51,39 +51,49 @@
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-              <input class="form-control edit-input dropdown-input" placeholder="Select approver 1" data-bs-toggle="collapse" data-bs-target="#approver1-dropdown" readonly/>
+              <input class="form-control edit-input dropdown-input" placeholder="Select approver 1" data-bs-toggle="collapse" data-bs-target="#approver1-dropdown" aria-expanded="false" value="{{approvalMatrixContract != undefined ? approvalMatrixContract.approverName1 : ''}}" readonly/>
               <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#approver1-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
               </div>
                 <div #editApproverCollapse1 id="approver1-dropdown" class="collapse">
                   <div class="card card-body">
-                    <input type="text" class="form-control" placeholder="Search.." id="myInput">
+                    <input type="text" class="form-control" placeholder="Search.." (input)="textChangeApprover(approvalMatrixContract != undefined ? approvalMatrixContract.departmentId : 0,$event,1)">
                   </div>
               </div>
           </div>
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-              <input class="form-control edit-input dropdown-input" placeholder="Select approver 2" data-bs-toggle="collapse" data-bs-target="#approver2-dropdown" aria-expanded="false"  readonly/>
+              <input class="form-control edit-input dropdown-input" placeholder="Select approver 2" data-bs-toggle="collapse" data-bs-target="#approver2-dropdown" aria-expanded="false" value="{{approvalMatrixContract != undefined ? approvalMatrixContract.approverName2 : ''}}"  readonly/>
               <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#approver2-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
             </div>
                 <div #editApproverCollapse2 id="approver2-dropdown" class="collapse">
                   <div class="card card-body">
-                    <input type="text" class="form-control" placeholder="Search..">
+                    <input type="text" class="form-control" placeholder="Search.." (input)="textChangeApprover(approvalMatrixContract != undefined ? approvalMatrixContract.departmentId : 0,$event,2)">
                   </div>
               </div>
           </div>
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-              <input class="form-control edit-input dropdown-input" placeholder="Select approver 3" data-bs-toggle="collapse" data-bs-target="#approver3-dropdown" readonly/>
+              <input class="form-control edit-input dropdown-input" placeholder="Select approver 3" data-bs-toggle="collapse" data-bs-target="#approver3-dropdown" value="{{approvalMatrixContract != undefined ? approvalMatrixContract.approverName3 : ''}}" readonly/>
               <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#approver3-dropdown"><i class="fa-solid fa-angle-down"></i></span>
               </div>
                 <div #editApproverCollapse3 id="approver3-dropdown" class="collapse">
                   <div class="card card-body">
-                    <input type="text" class="form-control" placeholder="Search..">
+                    <input type="text"  class="form-control" placeholder="Search.." (input)="textChangeApprover(approvalMatrixContract != undefined ? approvalMatrixContract.departmentId : 0,$event,3)">
+                    <button *ngFor="let approver of approvers3" class="dropdown-btn btn">({{approver.employeeCode}}) {{approver.employeeName}}</button>
                   </div>
               </div>
           </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+              <input type="hidden">
+              <input type="hidden">
+              <input type="hidden">
+              <input class="form-control" placeholder="Select number of days" value="{{approvalMatrixContract != undefined ? approvalMatrixContract.numberOfDays : ''}}"/>
+          </div>
+        </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn">Save</button>

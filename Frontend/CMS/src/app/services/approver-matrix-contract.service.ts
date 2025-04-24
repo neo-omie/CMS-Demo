@@ -17,6 +17,6 @@ export class ApproverMatrixContractService {
       return this.http.get<ApprovalMatrixContract>(`${this.apiUrl}/${id}`);
     }
     GetApproversForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
-      return this.http.get<MasterEmployee[]>(`${this.apiUrl}/${departmentId}/${inputText}`)
+      return this.http.get<MasterEmployee[]>(`https://localhost:7041/api/Employee/search/${departmentId}/${inputText}`)
     }
 }

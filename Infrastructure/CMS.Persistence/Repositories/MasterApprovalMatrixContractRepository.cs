@@ -43,6 +43,7 @@ namespace CMS.Persistence.Repositories
                 .Select(c => new GetApprovalMatrixContractByIdDto
                 {
                     MasterApprovalMatrixContractId = c.MasterApprovalMatrixContractId,
+                    DepartmentId = c.DepartmentId,
                     DepartmentName = c.Department.DepartmentName,
                     ApproverName1 = c.Approver1.EmployeeName,
                     ApproverName2 = c.Approver2.EmployeeName,

@@ -67,11 +67,16 @@ public class EmployeeController : ControllerBase
         return NotFound();
     }
 
-    [HttpGet("GetEmployeesByDepartmentIdAndEmployeeDetails")]
-    public async Task<IActionResult> GetEmployeesByDepartmentIdAndEmployeeDetails(int departmentId, string inpQuery)
+    [HttpGet("search/{departmentId}/{inpQuery?}")]
+    public async Task<IActionResult> GetEmployeesByDepartmentIdAndEmployeeDetails(int departmentId, string inpQuery = "")
     {
+        if(string.IsNullOrEmpty(inpQuery) || string.IsNullOrWhiteSpace(inpQuery.Trim()))
+        {
+            return Ok(new List<GetEmployeesByDepartmentIdAndEmpDetailsDto>());
+        }
         var query = new GetEmployeeByDepartmentIdAndEmployeeDetailsQuery(departmentId, inpQuery);
         var result = await _mediator.Send(query);
         return Ok(result);
+
     }
 }
