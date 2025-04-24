@@ -1,10 +1,13 @@
-import { Component, OnInit, QueryList, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
-import { ApprovalMatrixContract } from '../../models/approval-matrix-contract';
+import { ApprovalMatrixContract, EditApprovalMatrixContractDto } from '../../models/approval-matrix-contract';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { MasterEmployee } from '../../models/master-employee';
 import { FormsModule } from '@angular/forms';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
+import { Pagination } from '../../utils/pagination';
 
 @Component({
   selector: 'app-approval-matrix-contract-screen',
@@ -17,8 +20,8 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   approvers1:MasterEmployee[] = [];
   approvers2:MasterEmployee[] = [];
   approvers3:MasterEmployee[] = [];
+  pageNumbers:number[] = [];
   loading:boolean = true;
-  pageNumbers:number[] = [1,1,2,3,4,5];
   maxPage:number = 1;
   approvalMatrixContracts:ApprovalMatrixContract[] = [];
   approvalMatrixContract?:ApprovalMatrixContract;
@@ -26,6 +29,13 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   @ViewChild('editApproverCollapse1') editApproverCollapse1!: ElementRef;
   @ViewChild('editApproverCollapse2') editApproverCollapse2!: ElementRef;
   @ViewChild('editApproverCollapse3') editApproverCollapse3!: ElementRef;
+  @ViewChild('editApproverName1') editApproverName1!: ElementRef;
+  @ViewChild('editApproverName2') editApproverName2!: ElementRef;
+  @ViewChild('editApproverName3') editApproverName3!: ElementRef;
+  @ViewChild('editApproverId1') editApproverId1!: ElementRef;
+  @ViewChild('editApproverId2') editApproverId2!: ElementRef;
+  @ViewChild('editApproverId3') editApproverId3!: ElementRef;
+  @ViewChild('editNumberOfDays') editNumberOfDays!: ElementRef;
   constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2){}
   ngOnInit(){
     this.GetApprovalMatrixContract(1 ,10);
@@ -44,62 +54,17 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
       next:(response:ApprovalMatrixContract[]) => {
         this.loading = false;
         this.approvalMatrixContracts = response;
-        this.pageNumbers[0] = pageNumber;
-        if(this.approvalMatrixContracts.length > 0){
-          if(pageNumber == 1){
-            this.maxPage = Math.ceil(this.approvalMatrixContracts[0].totalRecords / 10);
-          }
-          let diff = this.maxPage - pageNumber;
-          if(diff >= 0 && this.maxPage >= 5){
-            if(this.pageNumbers[0] == 1){
-              this.pageNumbers[1] = pageNumber;
-              this.pageNumbers[2] = pageNumber + 1;
-              this.pageNumbers[3] = pageNumber + 2;
-              this.pageNumbers[4] = pageNumber + 3;
-              this.pageNumbers[5] = pageNumber + 4;
-            }
-            else if(this.pageNumbers[0] == 2){
-              this.pageNumbers[1] = pageNumber - 1;
-              this.pageNumbers[2] = pageNumber;
-              this.pageNumbers[3] = pageNumber + 1;
-              this.pageNumbers[4] = pageNumber + 2;
-              this.pageNumbers[5] = pageNumber + 3;
-            }
-            else if(diff == 0){
-              this.pageNumbers[1] = pageNumber - 4;
-              this.pageNumbers[2] = pageNumber - 3;
-              this.pageNumbers[3] = pageNumber - 2;
-              this.pageNumbers[4] = pageNumber - 1;
-              this.pageNumbers[5] = pageNumber;
-            }
-            else if(diff == 1){
-              this.pageNumbers[1] = pageNumber - 3;
-              this.pageNumbers[2] = pageNumber - 2;
-              this.pageNumbers[3] = pageNumber - 1;
-              this.pageNumbers[4] = pageNumber;
-              this.pageNumbers[5] = pageNumber + 1;
-            }
-            else{
-              this.pageNumbers[1] = pageNumber - 2;
-              this.pageNumbers[2] = pageNumber - 1;
-              this.pageNumbers[3] = pageNumber;
-              this.pageNumbers[4] = pageNumber + 1;
-              this.pageNumbers[5] = pageNumber + 2;
-            }
-          }
+        if(this.approvalMatrixContracts != undefined && this.approvalMatrixContracts.length > 0){
+          let result = Pagination.paginator(pageNumber,this.approvalMatrixContracts[0].totalRecords,pageSize)
+          this.maxPage = result.maxPage;
+          this.pageNumbers = result.pageNumbers;
         }
       }, 
       error:(error) => {
         this.loading = false;
         console.error('Error :(', error);
-        if(error.message !== undefined){
-          this.errorMsg = JSON.stringify(error.error.message);
-          console.log(this.errorMsg);
-        }
-        else{
-          this.errorMsg = JSON.stringify(error.message);
-          console.log(this.errorMsg);
-        }
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
       }
     });
   }
@@ -112,18 +77,12 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
       next:(response:ApprovalMatrixContract) => {
         this.approvalMatrixContract = response;
-        console.log(response)
+        console.log(this.approvalMatrixContract.numberOfDays);
       }, 
       error:(error) => {
         console.error('Error :(', error);
-        if(error.message !== undefined){
-          this.errorMsg = JSON.stringify(error.error.message);
-          console.log(this.errorMsg);
-        }
-        else{
-          this.errorMsg = JSON.stringify(error.message);
-          console.log(this.errorMsg);
-        }
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
     }});
   }
   textChangeApprover(departmentId:number, event:Event, approverNumber:number){
@@ -131,7 +90,6 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     this.approverMatrixContractService.GetApproversForInputText(departmentId,input.value).subscribe(
       {
         next:(response:MasterEmployee[]) => {
-          console.log(response);
           if(approverNumber == 1){
             this.approvers1 = response;
           }
@@ -144,16 +102,65 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
         },
         error:(error) => {
           console.error('Error :(', error);
-          if(error.message !== undefined){
-            this.errorMsg = JSON.stringify(error.error.message);
-            console.log(this.errorMsg);
-          }
-          else{
-            this.errorMsg = JSON.stringify(error.message);
-            console.log(this.errorMsg);
-          }
-      }
+          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        }
       }
     )
+  }
+  fillApprover(approverId:string, approverName:string, inputNumber:number){
+    if(inputNumber == 1){
+      const input = this.editApproverCollapse1.nativeElement.querySelector('input');
+      input.value = "";
+      this.approvers1.length = 0;
+      this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');
+      this.editApproverName1.nativeElement.value = approverName;
+      this.editApproverId1.nativeElement.value = approverId;
+    }
+    else if(inputNumber == 2){
+      const input = this.editApproverCollapse2.nativeElement.querySelector('input');
+      input.value = "";
+      this.approvers2.length = 0;
+      this.renderer.removeClass(this.editApproverCollapse2.nativeElement,'show');
+      this.editApproverName2.nativeElement.value = approverName;
+      this.editApproverId2.nativeElement.value = approverId;
+    }
+    else if(inputNumber == 3){
+      const input = this.editApproverCollapse3.nativeElement.querySelector('input');
+      input.value = "";
+      this.approvers3.length = 0;
+      this.renderer.removeClass(this.editApproverCollapse3.nativeElement,'show');
+      this.editApproverName3.nativeElement.value = approverName;
+      this.editApproverId3.nativeElement.value = approverId;
+    }
+  }
+  editApprovalMatrixContractDto:EditApprovalMatrixContractDto =new EditApprovalMatrixContractDto("","","",0);
+  editApproverMatrixContractSubmit(id:number){
+    let nod = this.editNumberOfDays.nativeElement.value;
+    if(nod !== "" && Number(nod) > 0){
+      console.log(nod);
+      this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1.nativeElement.value;
+      this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2.nativeElement.value;
+      this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3.nativeElement.value;
+      this.editApprovalMatrixContractDto.numberOfDays = nod;
+      this.approverMatrixContractService.EditApproverMatrixContract(id,this.editApprovalMatrixContractDto).subscribe({
+        next:(response:boolean)=>{
+          if(response){
+            Alert.toast(TYPE.SUCCESS,true,"Updated successfully");
+            this.GetApprovalMatrixContract(1, 10);
+          }
+  
+        },
+        error:(error)=>{
+          console.error('Error :(', error);
+          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        }
+      })
+    }
+    else{
+      Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
+    }
+    this.closeEditApproverCollapses();
   }
 }

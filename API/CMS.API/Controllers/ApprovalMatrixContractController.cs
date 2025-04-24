@@ -1,5 +1,7 @@
-﻿using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
+﻿using CMS.Application.Features.ApprovalMatrixContract.Commands;
+using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
+using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +29,13 @@ namespace CMS.API.Controllers
         {
             GetApprovalMatrixContractByIdDto approvalMatrixContract = await _mediator.Send(new GetApprovalMatrixContractByIdQuery(id));
             return Ok(approvalMatrixContract);
+        }
+        [Route("{id}")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateApprovalMatrixContract([FromRoute]int id,[FromBody]UpdateApprovalMatrixContractDto contract)
+        {
+            var updatedApprovalMatrixContract = await _mediator.Send(new UpdateApprovalMatrixContractCommand(id, contract));
+            return Ok(updatedApprovalMatrixContract);
         }
     }
 }

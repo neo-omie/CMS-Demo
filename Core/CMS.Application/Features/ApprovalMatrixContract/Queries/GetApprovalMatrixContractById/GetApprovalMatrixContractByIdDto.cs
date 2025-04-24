@@ -6,8 +6,11 @@
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public string ApproverName1 { get; set; }
+        public string ApproverId1 { get; set; }
         public string ApproverName2 { get; set; }
+        public string ApproverId2 { get; set; }
         public string ApproverName3 { get; set; }
+        public string ApproverId3 { get; set; }
         public int NumberOfDays {  get; set; }
     }
 }

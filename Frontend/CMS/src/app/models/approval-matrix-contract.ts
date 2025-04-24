@@ -34,3 +34,20 @@ export class ApprovalMatrixContract {
         this.totalRecords = totalRecords;
     }
 }
+export class EditApprovalMatrixContractDto {
+    approverId1 : string;
+    approverId2 : string;
+    approverId3 : string;
+    numberOfDays : number;
+    constructor(
+        approverId1 : string,
+        approverId2 : string,
+        approverId3 : string, 
+        numberOfDays : number){
+        this.approverId1 = approverId1;
+        this.approverId2 = approverId2;
+        this.approverId3 = approverId3;
+        this.numberOfDays = numberOfDays;
+    }
+}
+
