@@ -21,4 +21,6 @@ export class AddDocumentDto {
     this.documentName=documentName;
     this.status=status;
   }
+
+  
 }

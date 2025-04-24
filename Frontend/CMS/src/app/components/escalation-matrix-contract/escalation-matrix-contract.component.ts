@@ -105,4 +105,5 @@ export class EscalationMatrixContractComponent implements OnInit {
             }
         }});
   }
+  
 }
