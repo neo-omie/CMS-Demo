@@ -91,8 +91,8 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
-                    b.Property<int>("BankAccNo")
-                        .HasColumnType("int");
+                    b.Property<long>("BankAccNo")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("CityId")
                         .HasColumnType("int");
@@ -113,8 +113,8 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CompanyContactNo")
-                        .HasColumnType("int");
+                    b.Property<long>("CompanyContactNo")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CompanyEmailId")
                         .IsRequired()
@@ -134,8 +134,8 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GSTno")
-                        .HasColumnType("int");
+                    b.Property<long>("GSTno")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("IFSCCode")
                         .IsRequired()
@@ -144,15 +144,15 @@ namespace CMS.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MSMERegistrationNo")
-                        .HasColumnType("int");
+                    b.Property<long>("MSMERegistrationNo")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("PanNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PocContactNumber")
-                        .HasColumnType("int");
+                    b.Property<long>("PocContactNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("PocEmailId")
                         .IsRequired()
@@ -452,7 +452,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAELfAre9lvYdGbnrSB70I2vxVlLn/Dbleb/FB6cmPibnpGmPWM6+kox6LxKYh1b8WSQ==",
+                            Password = "AQAAAAIAAYagAAAAEJ3w+ROYveqrxz/Zyr5KBrXoeem44IMGuCyKX/vUF58W4Beuf24bCk2TmtP5O+p3mQ==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -467,7 +467,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEK0baBwtxN5pLiFk+aHqTQwIQmWwi0fNQqfwZj3rhuudZk5bemGDGnGwq1dQ3tIs3Q==",
+                            Password = "AQAAAAIAAYagAAAAEJy5+Og72I4l/miRVFJc8HnxFrxSoE4bkmlwyq9ahVvoGW+geRdnPnK4kTGR4qReqQ==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });

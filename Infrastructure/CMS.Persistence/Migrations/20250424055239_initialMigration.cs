@@ -78,19 +78,19 @@ namespace CMS.Persistence.Migrations
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PocName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyStatus = table.Column<bool>(type: "bit", nullable: false),
-                    PocContactNumber = table.Column<int>(type: "int", nullable: false),
+                    PocContactNumber = table.Column<long>(type: "bigint", nullable: false),
                     PocEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Zipcode = table.Column<int>(type: "int", nullable: false),
-                    CompanyContactNo = table.Column<int>(type: "int", nullable: false),
+                    CompanyContactNo = table.Column<long>(type: "bigint", nullable: false),
                     CompanyEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyWebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyBankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GSTno = table.Column<int>(type: "int", nullable: false),
-                    BankAccNo = table.Column<int>(type: "int", nullable: false),
-                    MSMERegistrationNo = table.Column<int>(type: "int", nullable: false),
+                    GSTno = table.Column<long>(type: "bigint", nullable: false),
+                    BankAccNo = table.Column<long>(type: "bigint", nullable: false),
+                    MSMERegistrationNo = table.Column<long>(type: "bigint", nullable: false),
                     IFSCCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PanNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -320,8 +320,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELfAre9lvYdGbnrSB70I2vxVlLn/Dbleb/FB6cmPibnpGmPWM6+kox6LxKYh1b8WSQ==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEK0baBwtxN5pLiFk+aHqTQwIQmWwi0fNQqfwZj3rhuudZk5bemGDGnGwq1dQ3tIs3Q==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJ3w+ROYveqrxz/Zyr5KBrXoeem44IMGuCyKX/vUF58W4Beuf24bCk2TmtP5O+p3mQ==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJy5+Og72I4l/miRVFJc8HnxFrxSoE4bkmlwyq9ahVvoGW+geRdnPnK4kTGR4qReqQ==", "MOU_User", "Dadar" }
                 });
 
             migrationBuilder.CreateIndex(

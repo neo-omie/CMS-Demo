@@ -18,7 +18,7 @@ namespace CMS.Domain.Entities.CompanyMaster
         
         public bool CompanyStatus { get; set; } = true;
 
-        public int PocContactNumber { get; set; }
+        public long PocContactNumber { get; set; }
 
         public string PocEmailId { get; set; }
 
@@ -30,7 +30,7 @@ namespace CMS.Domain.Entities.CompanyMaster
         public string CompanyAddressLine3 { get; set; }
 
         public int Zipcode { get; set; }
-        public int CompanyContactNo { get; set; }
+        public long CompanyContactNo { get; set; }
 
         public string CompanyEmailId { get; set; }
 
@@ -41,11 +41,11 @@ namespace CMS.Domain.Entities.CompanyMaster
 
         public string CompanyBankName { get; set; }
 
-        public int GSTno { get; set; }
+        public long GSTno { get; set; }
 
-        public int BankAccNo { get; set; }
+        public long BankAccNo { get; set; }
 
-        public int MSMERegistrationNo { get; set; }
+        public long MSMERegistrationNo { get; set; }
 
         public string IFSCCode { get; set; }
 
