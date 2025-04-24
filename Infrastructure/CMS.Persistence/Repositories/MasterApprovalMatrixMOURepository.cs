@@ -29,7 +29,7 @@ namespace CMS.Persistence.Repositories
                 {
                     MasterApprovalMatrixMOUId = a.MasterApprovalMatrixMOUId,
                     DepartmentName = a.Department.DepartmentName,
-                    ApproverName1 = a.Approver1.EmployeeName,
+                    ApproverName1 = a.Approver1.EmployeeName, 
                     ApproverName2 = a.Approver2.EmployeeName,
                     ApproverName3 = a.Approver3.EmployeeName,
                     TotalRecords = totalRecords
