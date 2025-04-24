@@ -14,7 +14,7 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MasterEmployee>> GetAllEmployeesAsync(string unit, string searchTerm, int pageNumber, int pageSize)
+        public async Task<(IEnumerable<MasterEmployee> Data, int TotalCount)> GetAllEmployeesAsync(int pageNumber, int pageSize, string? unit, string? searchTerm )
         {
             var query = _context.MasterEmployees.AsQueryable();
             if(!string.IsNullOrEmpty(unit) && unit != "All")
@@ -30,11 +30,17 @@ namespace CMS.Persistence.Repositories
                     query = query.Where(e => e.EmployeeName.Contains(searchTerm));
             }
 
-            return await query
+            query = query.Where(x => x.IsDeleted == false);
+
+            int totalCount = await query.CountAsync();
+
+            var data= await query
             .Where(x => x.IsDeleted == false)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+
+            return (data, totalCount);
         }
 
         public async Task<MasterEmployee> GetEmployeeByIdAsync(int id)

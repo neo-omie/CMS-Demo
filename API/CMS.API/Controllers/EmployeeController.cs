@@ -22,14 +22,15 @@ public class EmployeeController : ControllerBase
     
     [HttpGet("{pageNumber}/{pageSize}")]
     public async Task<ActionResult<IEnumerable<MasterEmployee>>> GetAllEmployees(
-        [FromQuery] string unit,
-        [FromQuery] string searchTerm,
-        [FromRoute] int pageNumber, 
-        [FromRoute] int pageSize)
+        [FromRoute] int pageNumber,
+        [FromRoute] int pageSize,
+        [FromQuery] string? unit,
+        [FromQuery] string? searchTerm
+        )
     {
         var query = new GetAllEmployeesQuery
         (
-            unit, searchTerm, pageNumber, pageSize
+             pageNumber, pageSize, unit, searchTerm
         );
 
         return Ok(await _mediator.Send(query));

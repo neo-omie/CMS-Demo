@@ -1,1 +1,68 @@
-<p>master-employee works!</p>
+<app-loader *ngIf="loading"></app-loader>  
+<div *ngIf="!loading" class="container">
+    <h2>List Of Employees</h2>
+
+    <!-- Filter Logic -->
+     <div class="filter-search">
+        <label for="unitFilter">
+            Unit:
+        </label>
+        <select id="unitFilter" [(ngModel)]="selectedUnit" (change)="onFilterChange()">
+            <option value="All">All</option>
+            <option value="Thane">Thane</option>
+            <option value="Pune">Pune</option>
+            <option value="Indore">Indore</option>
+        </select>
+
+        <input type="text" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
+        <button class="btn btn-primary" (click)="addEmployee()">Add New Employee</button>
+     </div>
+
+    <!-- Table  -->
+    <div  class="table-responsive p-3">
+        <table class="table align-middle table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ValueId</th>
+                    <th>Employee Name</th>
+                    <th>Employee Location</th>
+                    <th>Roles</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let employee of paginatedEmployees"> 
+                    <td>{{employee.valueId}}</td>
+                    <td>{{employee.employeeName}}</td>
+                    <td>{{employee.unit}}</td>
+                    <td>{{employee.role}}</td>
+                    <td>
+                        <i class="fa-solid fa-pen-to-square icon" title="Edit" (click)="editEmployee(employee)"></i>
+                        <i class="fa-solid fa-eye icon" title="View" (click)="viewEmployee(employee)"></i>
+                        <i class="fa-solid fa-trash icon" title="Delete" (click)="deleteEmployee(employee)"></i>
+                    </td>
+               </tr> 
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination -->
+    
+    <nav *ngIf="totalEmployees > 0" class="pagination-container">
+        <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage===1">
+                <a class="page-link" (click)="onPreviousPage()">Prev</a>
+            </li>
+
+            <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page===currentPage">
+                <a class="page-link" (click)="onPageChange(page)">{{page}}</a>
+            </li>
+
+            <li class="page-item" [class.disabled]="currentPage===totalPages">
+                <a class="page-link" (click)="onNextPage()">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Total Count -->
+  <p>Total Employees: {{ totalEmployees }}</p>
+</div>

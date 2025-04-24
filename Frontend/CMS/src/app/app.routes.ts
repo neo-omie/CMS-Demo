@@ -6,6 +6,7 @@ import { ApprovalMatrixContractScreenComponent } from './components/approval-mat
 import { MasterDocumentComponent } from './components/master-document/master-document.component';
 import { RenewPasswordComponent } from './components/auth/renew-password/renew-password.component';
 import { NotFoundComponent } from './components/misc/not-found/not-found.component';
+import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -13,6 +14,7 @@ export const routes: Routes = [
     {path: 'masters', component: MastersScreenComponent}, 
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent},
     {path: 'masters/documentMasters', component:MasterDocumentComponent},
+    {path: 'masters/employeeMasters', component:MasterEmployeeComponent},
     {path: 'auth/renewPassword', component:RenewPasswordComponent},
     {path: '404NotFound', component: NotFoundComponent}
 ];

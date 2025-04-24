@@ -9,7 +9,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees
 {
-    public class GetAllEmployeesQueryHandler : IRequestHandler<GetAllEmployeesQuery, IEnumerable<MasterEmployee>>
+    public class GetAllEmployeesQueryHandler : IRequestHandler<GetAllEmployeesQuery, object>
     {
         private readonly IMasterEmployeeRepository _masterEmployeeRepository;
 
@@ -18,9 +18,14 @@ namespace CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees
             _masterEmployeeRepository = masterEmployeeRepository;
         }
 
-        public async Task<IEnumerable<MasterEmployee>> Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
+        public async Task<object> Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
         {
-            return await _masterEmployeeRepository.GetAllEmployeesAsync(request.unit, request.searchTerm, request.pageNumber, request.pageSize);
+            var result = await _masterEmployeeRepository.GetAllEmployeesAsync(request.pageNumber, request.pageSize, request?.unit, request?.searchTerm);
+            return new
+            {
+                data = result.Data,
+                totalCount = result.TotalCount
+            };
         }
     }
 }
