@@ -1,4 +1,5 @@
-﻿using CMS.Application.Contracts.Persistence;
+﻿using AutoMapper;
+using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
 using MediatR;
 using System;
@@ -12,19 +13,22 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.UpdateContract
     public class UpdateContractCommandHandler : IRequestHandler<UpdateContractCommand, ContractTypeMasters>
     {
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
+        private readonly IMapper _Imapper;
 
-        public UpdateContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository)
+        public UpdateContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, IMapper Imapper)
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
+            _Imapper = Imapper;
         }
-        public Task<ContractTypeMasters> Handle(UpdateContractCommand request, CancellationToken cancellationToken)
+        public async Task<ContractTypeMasters> Handle(UpdateContractCommand request, CancellationToken cancellationToken)
         {
             var cont = _contractTypeMasterRepository.GetContractById(request.id);
             if (cont==null)
             {
                 throw new Exception($"Contract not found");
             }
-            return _contractTypeMasterRepository.UpdateContractAsync(request.id, request.ctp);
+            var mapcontract = _Imapper.Map<ContractTypeMasters>(request.ctp);
+            return await _contractTypeMasterRepository.UpdateContractAsync(request.id, mapcontract);
         }
     }
 }

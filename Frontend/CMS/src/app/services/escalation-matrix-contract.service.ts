@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EscalationMatrixContract, MasterEscalationMatrixContractDto } from '../models/escalation-matrix-contract';
+import { EscalationMatrixContract, GetMasterEscalationMatrixContractByIdDto, MasterEscalationMatrixContractDto } from '../models/escalation-matrix-contract';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +21,8 @@ export class EscalationMatrixContractService {
   }
   getMatrixContractById(
     valueId: number
-  ): Observable<MasterEscalationMatrixContractDto> {
-    return this.http.get<MasterEscalationMatrixContractDto>(
+  ): Observable<GetMasterEscalationMatrixContractByIdDto> {
+    return this.http.get<GetMasterEscalationMatrixContractByIdDto>(
       `${this.apiUrl}/${valueId}`
     );
   }

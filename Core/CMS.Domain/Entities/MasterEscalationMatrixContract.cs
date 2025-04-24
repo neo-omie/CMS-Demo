@@ -16,6 +16,7 @@ namespace CMS.Domain.Entities
         public string EscalationId1 { get; set; }
         public string EscalationId2 { get; set; }
         public string EscalationId3 { get; set; }
+        //public MasterEmployee MasterEmployees { get; set; }
         public MasterEmployee Escalation1 { get; set; }
         public MasterEmployee Escalation2 { get; set; }
         public MasterEmployee Escalation3 { get; set; }
