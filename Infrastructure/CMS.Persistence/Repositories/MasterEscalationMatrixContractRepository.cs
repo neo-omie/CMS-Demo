@@ -57,28 +57,32 @@ namespace CMS.Persistence.Repositories
             return (emContracts, totalCount);
         }
 
-        public Task<GetEscalationMatrixContractDto> GetEscalationMatrixContract(int valueId)
+        public async Task<GetEscalationMatrixContractDto> GetEscalationMatrixContract(int valueId)
         {
-            var contract = _context.MasterEscalationMatrixContracts
-                .Where(c => c.MatrixContractId == valueId)
-                .Select(
-                c => new GetEscalationMatrixContractDto
-                {
-                    MatrixContractId = c.MatrixContractId,
-                    DepartmentName = c.Department.DepartmentName,
-                    Escalation1 = c.Escalation1.EmployeeName,
-                    Escalation2 = c.Escalation2.EmployeeName,
-                    Escalation3 = c.Escalation3.EmployeeName
-                }
-                )
-                .FirstOrDefaultAsync();
-            return contract;
+            var contract =await _context.MasterEscalationMatrixContracts
+                .FirstOrDefaultAsync(x=>x.MatrixContractId == valueId);
+            if(contract == null)
+            {
+                throw new NotFoundException($"Escalation matrix contract with id {valueId} not found.");
+            }
+            return await _context.MasterEscalationMatrixContracts.Where(x => x.MatrixContractId == valueId).Select(x => new GetEscalationMatrixContractDto
+            {
+                MatrixContractId = x.MatrixContractId,
+                DepartmentName = x.Department.DepartmentName,
+                Escalation1 = x.Escalation1.EmployeeName,
+                Escalation2 = x.Escalation1.EmployeeName,
+                Escalation3 = x.Escalation1.EmployeeName,
+                TriggerDaysEscalation1 = x.TriggerDaysEscalation1,
+                TriggerDaysEscalation2 = x.TriggerDaysEscalation2,
+                TriggerDaysEscalation3 = x.TriggerDaysEscalation3
+
+            }).FirstOrDefaultAsync();
         }
 
         public async Task<int> UpdateMatrixContract(int valueId, UpdateEscalationMatrixContractDto updateDto)
         {
             var contract = await _context.MasterEscalationMatrixContracts.FirstOrDefaultAsync(x => x.MatrixContractId == valueId);
-            if (contract != null)
+            if (contract == null)
             {
                 throw new NotFoundException("Escalation Contract not Found");
             }

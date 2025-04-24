@@ -24,28 +24,28 @@ namespace CMS.Persistence.Migrations
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfCountries", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CountryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryId"));
 
                     b.Property<string>("Countries")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CountryId");
 
                     b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("StateId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StateId"));
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
@@ -54,23 +54,20 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("listofcountriesId")
-                        .HasColumnType("int");
+                    b.HasKey("StateId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("listofcountriesId");
+                    b.HasIndex("CountryId");
 
                     b.ToTable("States");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListofCity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CityId"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -79,12 +76,9 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("StateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("listofStatesId")
-                        .HasColumnType("int");
+                    b.HasKey("CityId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("listofStatesId");
+                    b.HasIndex("StateId");
 
                     b.ToTable("Cities");
                 });
@@ -98,6 +92,9 @@ namespace CMS.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
                     b.Property<int>("BankAccNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyAddressLine1")
@@ -134,6 +131,9 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GSTno")
                         .HasColumnType("int");
 
@@ -161,6 +161,9 @@ namespace CMS.Persistence.Migrations
                     b.Property<string>("PocName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Zipcode")
                         .HasColumnType("int");
@@ -449,7 +452,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEK4OhVwIiyQ96qNmZxeHJANN7JPtHhHO1UKBYYsOQ71RUZoHKDtpw0BdIW7jO9mtfw==",
+                            Password = "AQAAAAIAAYagAAAAEDnk/CJ5AkYoOssgYoHGZ8FiKX9U5r8Blr3IYNZx+jTPnxyp8iezBQsUdXit1bEuYA==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -464,7 +467,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEPkd88z8mS5SHCWlw89qoPPHCvTen2WaKL5kGy8cR3JyiKfHSNaKDIKC3nWCOiODHQ==",
+                            Password = "AQAAAAIAAYagAAAAEAGbPOoZB6V1ozkhtTdePRzl3NHiSBHDSipX7jI5Vhp+/7HQTW1HcKxKawvSFOdG+w==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -481,17 +484,17 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EscalationId1")
+                    b.Property<string>("Escalation1")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EscalationId2")
+                    b.Property<string>("Escalation2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EscalationId3")
+                    b.Property<string>("Escalation3")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TriggerDaysEscalation1")
                         .HasColumnType("int");
@@ -506,12 +509,6 @@ namespace CMS.Persistence.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("EscalationId1");
-
-                    b.HasIndex("EscalationId2");
-
-                    b.HasIndex("EscalationId3");
-
                     b.ToTable("MasterEscalationMatrixContracts");
                 });
 
@@ -519,7 +516,7 @@ namespace CMS.Persistence.Migrations
                 {
                     b.HasOne("CMS.Domain.Entities.CompanyMaster.ListOfCountries", "listofcountries")
                         .WithMany()
-                        .HasForeignKey("listofcountriesId")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -530,7 +527,7 @@ namespace CMS.Persistence.Migrations
                 {
                     b.HasOne("CMS.Domain.Entities.CompanyMaster.ListOfStates", "listofStates")
                         .WithMany()
-                        .HasForeignKey("listofStatesId")
+                        .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -621,34 +618,7 @@ namespace CMS.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation1")
-                        .WithMany()
-                        .HasForeignKey("EscalationId1")
-                        .HasPrincipalKey("EmployeeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation2")
-                        .WithMany()
-                        .HasForeignKey("EscalationId2")
-                        .HasPrincipalKey("EmployeeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation3")
-                        .WithMany()
-                        .HasForeignKey("EscalationId3")
-                        .HasPrincipalKey("EmployeeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Department");
-
-                    b.Navigation("Escalation1");
-
-                    b.Navigation("Escalation2");
-
-                    b.Navigation("Escalation3");
                 });
 #pragma warning restore 612, 618
         }

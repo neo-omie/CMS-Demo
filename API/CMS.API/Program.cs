@@ -1,6 +1,7 @@
 using CMS.API.Middlewares;
 using CMS.Application;
 using CMS.Persistence;
+using Serilog;
 
 
 namespace CMS.API
@@ -14,6 +15,24 @@ namespace CMS.API
             // Add services to the container.
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
+
+            //using serilog for loggin 
+            IConfiguration configurationBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(
+                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                    optional: true)
+                .Build();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configurationBuilder)
+                .CreateBootstrapLogger().Freeze();
+            new LoggerConfiguration()
+                .ReadFrom.Configuration(configurationBuilder)
+                .CreateLogger();
+
+            builder.Host.UseSerilog((ctx, lc) => lc
+                    .WriteTo.Console()
+                    .ReadFrom.Configuration(ctx.Configuration));
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

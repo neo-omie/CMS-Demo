@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.ContractTypeMaster.Command.UpdateContract
 {
-    public record UpdateContractCommand(int id, ContractTypeMasters ctp): IRequest<ContractTypeMasters>;
+    public record UpdateContractCommand(int id, UpdateContractDTO ctp): IRequest<ContractTypeMasters>;
  
 }

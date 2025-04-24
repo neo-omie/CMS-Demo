@@ -55,6 +55,18 @@ namespace CMS.Domain.Entities.CompanyMaster
         //for soft delete 
         public bool IsDeleted { get; set; } = false;
 
+        //
+        public ListOfCountries country;
+        public int CountryId { get; set; }
+
+       
+        public ListOfStates state;
+        public int StateId { get; set; }
+   
+
+        public ListofCity city;
+        public int CityId { get; set; }
+
       
 
 
