@@ -25,7 +25,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
                 throw new DocumentNotFoundException("Document not found");
             }
             var existingDocument = _mapper.Map<MasterDocument>(request.documentDTO);
-            existingDocument.ValueId = request.id;
+            //existingDocument.ValueId = request.id;
             return _repository.UpdateDocument(existingDocument);
 
         }

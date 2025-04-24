@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250422053545_initialMigration")]
+    [Migration("20250424055239_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,180 @@ namespace CMS.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfCountries", b =>
+                {
+                    b.Property<int>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryId"));
+
+                    b.Property<string>("Countries")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CountryId");
+
+                    b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
+                {
+                    b.Property<int>("StateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StateId"));
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StateId");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("States");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListofCity", b =>
+                {
+                    b.Property<int>("CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CityId"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CityId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.MasterCompany", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<long>("BankAccNo")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CompanyAddressLine1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyAddressLine2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyAddressLine3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyBankName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("CompanyContactNo")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CompanyEmailId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CompanyStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CompanyWebsiteUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("GSTno")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IFSCCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("MSMERegistrationNo")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PanNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("PocContactNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PocEmailId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PocName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Zipcode")
+                        .HasColumnType("int");
+
+                    b.HasKey("ValueId");
+
+                    b.ToTable("MasterCompanies");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.ContractTypeMasters", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<string>("ContractTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ValueId");
+
+                    b.ToTable("contracts");
+                });
 
             modelBuilder.Entity("CMS.Domain.Entities.Department", b =>
                 {
@@ -81,6 +255,9 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -131,11 +308,11 @@ namespace CMS.Persistence.Migrations
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixMOU", b =>
                 {
-                    b.Property<int>("MasterApprovalMatrixContractId")
+                    b.Property<int>("MasterApprovalMatrixMOUId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MasterApprovalMatrixContractId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MasterApprovalMatrixMOUId"));
 
                     b.Property<string>("ApproverId1")
                         .IsRequired()
@@ -155,7 +332,7 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
-                    b.HasKey("MasterApprovalMatrixContractId");
+                    b.HasKey("MasterApprovalMatrixMOUId");
 
                     b.HasIndex("ApproverId1");
 
@@ -278,7 +455,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEG9ywrIvkzCpc0WVwFAfor3sSxY/R5yg/nu/KYRvfnPljEDu8B9AD/+0azU3Lap2ag==",
+                            Password = "AQAAAAIAAYagAAAAEJ3w+ROYveqrxz/Zyr5KBrXoeem44IMGuCyKX/vUF58W4Beuf24bCk2TmtP5O+p3mQ==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -293,7 +470,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEM9ROyBN3gx5Fb2q6wGfSlyPZUlASaaYBM3CdOthVNa9eeOLSsvTD9vTHLDy0DmiKQ==",
+                            Password = "AQAAAAIAAYagAAAAEJy5+Og72I4l/miRVFJc8HnxFrxSoE4bkmlwyq9ahVvoGW+geRdnPnK4kTGR4qReqQ==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -310,17 +487,17 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Escalation1")
+                    b.Property<string>("EscalationId1")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Escalation2")
+                    b.Property<string>("EscalationId2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Escalation3")
+                    b.Property<string>("EscalationId3")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TriggerDaysEscalation1")
                         .HasColumnType("int");
@@ -335,7 +512,35 @@ namespace CMS.Persistence.Migrations
 
                     b.HasIndex("DepartmentId");
 
+                    b.HasIndex("EscalationId1");
+
+                    b.HasIndex("EscalationId2");
+
+                    b.HasIndex("EscalationId3");
+
                     b.ToTable("MasterEscalationMatrixContracts");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.CompanyMaster.ListOfCountries", "listofcountries")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("listofcountries");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListofCity", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.CompanyMaster.ListOfStates", "listofStates")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("listofStates");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixContract", b =>
@@ -422,7 +627,34 @@ namespace CMS.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation1")
+                        .WithMany()
+                        .HasForeignKey("EscalationId1")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation2")
+                        .WithMany()
+                        .HasForeignKey("EscalationId2")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation3")
+                        .WithMany()
+                        .HasForeignKey("EscalationId3")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Department");
+
+                    b.Navigation("Escalation1");
+
+                    b.Navigation("Escalation2");
+
+                    b.Navigation("Escalation3");
                 });
 #pragma warning restore 612, 618
         }

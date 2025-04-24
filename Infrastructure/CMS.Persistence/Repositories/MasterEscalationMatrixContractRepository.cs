@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
-using CMS.Application.Features.EscalationMatrixContract;
+using CMS.Application.Exceptions;
+using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
+
+using CMS.Application.Features.MasterEscalationMatrixContracts;
+using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Persistence.Repositories
 {
@@ -18,23 +23,80 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public Task<MasterEscalationMatrixContract> GetEscalationMatrixContract(int valueId)
+
+
+        public async Task<(IEnumerable<GetEscalationMatrixContractDto>, int)> GetAllEscalationMatrixContract(int pageNumber, int pageSize)
         {
 
-            return null;
+            if (pageNumber < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
+            }
 
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
+            }
+
+
+            var totalCount = await _context.MasterEscalationMatrixContracts.CountAsync();
+
+
+            var emContracts = _context.MasterEscalationMatrixContracts
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new GetEscalationMatrixContractDto
+                {
+                    MatrixContractId = a.MatrixContractId,
+                    DepartmentName = a.Department.DepartmentName,
+                    Escalation1 = a.Escalation1.EmployeeName,
+                    Escalation2 = a.Escalation2.EmployeeName,
+                    Escalation3 = a.Escalation3.EmployeeName,
+                });
+
+            return (emContracts, totalCount);
         }
-        public Task<IEnumerable<GetEscalationMatrixContractDto>> GetAllEscalationMatrixContract(int pageNumber, int pageSize)
-        {
-            
-            return null;
 
+        public async Task<GetEscalationMatrixContractDto> GetEscalationMatrixContract(int valueId)
+        {
+            var contract =await _context.MasterEscalationMatrixContracts
+                .FirstOrDefaultAsync(x=>x.MatrixContractId == valueId);
+            if(contract == null)
+            {
+                throw new NotFoundException($"Escalation matrix contract with id {valueId} not found.");
+            }
+            return await _context.MasterEscalationMatrixContracts.Where(x => x.MatrixContractId == valueId).Select(x => new GetEscalationMatrixContractDto
+            {
+                MatrixContractId = x.MatrixContractId,
+                DepartmentName = x.Department.DepartmentName,
+                Escalation1 = x.Escalation1.EmployeeName,
+                Escalation2 = x.Escalation1.EmployeeName,
+                Escalation3 = x.Escalation1.EmployeeName,
+                TriggerDaysEscalation1 = x.TriggerDaysEscalation1,
+                TriggerDaysEscalation2 = x.TriggerDaysEscalation2,
+                TriggerDaysEscalation3 = x.TriggerDaysEscalation3
+
+            }).FirstOrDefaultAsync();
         }
 
-        public Task<int> UpdateMatrixContract(int valueId)
+        public async Task<int> UpdateMatrixContract(int valueId, UpdateEscalationMatrixContractDto updateDto)
         {
+            var contract = await _context.MasterEscalationMatrixContracts.FirstOrDefaultAsync(x => x.MatrixContractId == valueId);
+            if (contract == null)
+            {
+                throw new NotFoundException("Escalation Contract not Found");
+            }
+            contract.EscalationId1 = updateDto.EscalationId1;
+            contract.EscalationId2 = updateDto.EscalationId2;
+            contract.EscalationId3 = updateDto.EscalationId3;
+            contract.TriggerDaysEscalation1 = updateDto.TriggerDaysEscalation1;
+            contract.TriggerDaysEscalation2 = updateDto.TriggerDaysEscalation2;
+            contract.TriggerDaysEscalation3 = updateDto.TriggerDaysEscalation3;
 
-            return null;
+            _context.MasterEscalationMatrixContracts.Update(contract);
+            return _context.SaveChanges();
+
+
         }
     }
 }

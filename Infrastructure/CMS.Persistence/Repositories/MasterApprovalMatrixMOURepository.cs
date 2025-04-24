@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
+using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
 using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU;
 using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOUById;
 using CMS.Domain.Entities;
@@ -28,7 +29,7 @@ namespace CMS.Persistence.Repositories
                 {
                     MasterApprovalMatrixMOUId = a.MasterApprovalMatrixMOUId,
                     DepartmentName = a.Department.DepartmentName,
-                    ApproverName1 = a.Approver1.EmployeeName,
+                    ApproverName1 = a.Approver1.EmployeeName, 
                     ApproverName2 = a.Approver2.EmployeeName,
                     ApproverName3 = a.Approver3.EmployeeName,
                     TotalRecords = totalRecords
@@ -53,6 +54,28 @@ namespace CMS.Persistence.Repositories
                     ApproverName3 = c.Approver3.EmployeeName,
                     NumberOfDays = c.NumberOfDays
                 }).FirstOrDefaultAsync();
+        }
+
+        public async Task<MasterApprovalMatrixMOU> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
+        {
+            var checkApprMatrMOU = await _context.MasterApprovalMatrixMOUs.FirstOrDefaultAsync(m => m.MasterApprovalMatrixMOUId == id);
+            if(checkApprMatrMOU == null)
+            {
+                throw new NotFoundException($"Approval Matrix MOU with value ID {id} not found.");
+            }
+            checkApprMatrMOU.ApproverId1 = mou.ApproverId1;
+            checkApprMatrMOU.ApproverId2 = mou.ApproverId2;
+            checkApprMatrMOU.ApproverId3 = mou.ApproverId3;
+            checkApprMatrMOU.NumberOfDays = mou.NumberOfDays;
+            _context.MasterApprovalMatrixMOUs.Update(checkApprMatrMOU);
+            if(await _context.SaveChangesAsync() > 0)
+            {
+                return checkApprMatrMOU;
+            }
+            else
+            {
+                throw new Exception("For some reasons, data has not been updated :/");
+            }
         }
     }
 }

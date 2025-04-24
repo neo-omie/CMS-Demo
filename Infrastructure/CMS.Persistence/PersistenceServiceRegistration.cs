@@ -20,10 +20,13 @@ namespace CMS.Persistence
                    options.UseSqlServer(configuration.GetConnectionString("CMSConnectionString")));
             services.AddScoped<IDocumentRepository, DocumentRepository>();
             services.AddScoped<IMasterEmployeeRepository, MasterEmployeeRepository>();
+            services.AddScoped<IMasterCompanyRepository, MasterCompanyRepository>();
             services.AddScoped<IMasterApprovalMatrixContractRepository, MasterApprovalMatrixContractRepository>();
             services.AddScoped<IMasterEscalationMatrixContractRepository, MasterEscalationMatrixContractRepository>();
             services.AddScoped<IMasterApprovalMatrixMOURepository, MasterApprovalMatrixMOURepository>();
             services.AddScoped<IMasterApostilleRepository, MasterApostilleRepository>();
+            services.AddScoped<IContractTypeMasterRepository, ContractTypeMasterRepository>();
+            services.AddScoped<ICompanyCascadeRepository, CompanyCascadeRepository>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<JwtSettings>>().Value);
             services.AddTransient<IAuthRepository, AuthRepository>();

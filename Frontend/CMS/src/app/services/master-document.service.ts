@@ -18,4 +18,8 @@ export class MasterDocumentService {
   addDocument(masterDocument:MasterDocument):Observable<MasterDocument>{
     return this.http.post<MasterDocument>(this.apiUrl,masterDocument);
   }
+
+  updateDocument(updateMasterDocument:MasterDocument):Observable<MasterDocument>{
+    return this.http.put<MasterDocument>(`${this.apiUrl}/`,updateMasterDocument)
+  }
 }

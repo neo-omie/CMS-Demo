@@ -1,5 +1,6 @@
 ﻿using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
+using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
 using CMS.Domain.Entities;
@@ -43,12 +44,37 @@ namespace CMS.Persistence.Repositories
                 .Select(c => new GetApprovalMatrixContractByIdDto
                 {
                     MasterApprovalMatrixContractId = c.MasterApprovalMatrixContractId,
+                    DepartmentId = c.DepartmentId,
                     DepartmentName = c.Department.DepartmentName,
                     ApproverName1 = c.Approver1.EmployeeName,
+                    ApproverId1 = c.Approver1.EmployeeCode,
                     ApproverName2 = c.Approver2.EmployeeName,
+                    ApproverId2 = c.Approver2.EmployeeCode,
                     ApproverName3 = c.Approver3.EmployeeName,
+                    ApproverId3 = c.Approver3.EmployeeCode,
                     NumberOfDays = c.NumberOfDays
                 }).FirstOrDefaultAsync();
+        }
+        public async Task<bool> UpdateApprovalMatrixContract(int id, UpdateApprovalMatrixContractDto contract)
+        {
+            var checkApprMatrCont = await _context.MasterApprovalMatrixContracts.FirstOrDefaultAsync(m => m.MasterApprovalMatrixContractId == id);
+            if (checkApprMatrCont == null)
+            {
+                throw new NotFoundException($"Approval Matrix MOU with value ID {id} not found.");
+            }
+            checkApprMatrCont.ApproverId1 = contract.ApproverId1;
+            checkApprMatrCont.ApproverId2 = contract.ApproverId2;
+            checkApprMatrCont.ApproverId3 = contract.ApproverId3;
+            checkApprMatrCont.NumberOfDays = contract.NumberOfDays;
+            _context.MasterApprovalMatrixContracts.Update(checkApprMatrCont);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("For some reasons, data has not been updated :/");
+            }
         }
     }
 }

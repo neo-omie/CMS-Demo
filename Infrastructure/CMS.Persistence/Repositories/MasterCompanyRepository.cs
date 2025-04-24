@@ -1,0 +1,95 @@
+﻿using CMS.Application.Contracts.Persistence;
+using CMS.Domain.Entities.CompanyMaster;
+using CMS.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CMS.Persistence.Repositories
+{
+    public class MasterCompanyRepository : IMasterCompanyRepository
+    {
+        private readonly CMSDbContext _context;
+
+        public MasterCompanyRepository(CMSDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<MasterCompany> AddCompanyAsync(MasterCompany masterCompany)
+        {
+            await _context.MasterCompanies.AddAsync(masterCompany);
+            if (await _context.SaveChangesAsync()>0)
+            {
+                return masterCompany;
+            }
+            else
+            {
+                throw new Exception("Company not added. Failed :(");
+            }
+        }
+
+        public async Task<bool> DeleteCompanyAsync(int id)
+        {
+            var company = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
+            if (company == null)
+            {
+                throw new Exception("Company  not Found. :(");
+            }
+            company.IsDeleted = true;
+            _context.MasterCompanies.Update(company);
+            if (await _context.SaveChangesAsync()>0)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Company not deleted . failed :(");
+            }
+        }
+
+        public async Task<IEnumerable<MasterCompany>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize)
+        {
+            var query = _context.MasterCompanies.AsQueryable();
+           
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(e => e.CompanyName.Contains(searchTerm));
+            }
+
+            return await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<MasterCompany> GetCompanyByIdAsync(int id)
+        {
+            var gotComp = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
+            if (gotComp==null)
+                throw new Exception("Company not found. Failed :(");
+            return gotComp;
+
+        }
+
+        public async Task<MasterCompany> UpdateCompanyAsync(int id, MasterCompany masterCompany)
+        {
+            var checkComp = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
+            if (checkComp==null)
+            {
+                throw new Exception("Company Not found :(");
+            }
+            _context.Entry(masterCompany).State = EntityState.Modified;
+            if (await _context.SaveChangesAsync()>0)
+            {
+                return masterCompany;
+            }
+            else {
+                throw new Exception("Company not updated. Failed :(");
+            }
+        }
+    }
+}

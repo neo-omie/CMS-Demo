@@ -14,5 +14,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee);
         Task<bool> DeleteEmployeeAsync(int id);
 
+        Task<IEnumerable<MasterEmployee>> GetEmployeesByDepartmentIdAndEmployeeDetails(int departmentId, string inpQuery);
+
     }
 }
