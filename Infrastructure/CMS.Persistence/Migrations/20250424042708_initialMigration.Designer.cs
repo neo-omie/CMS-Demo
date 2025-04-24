@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250423130258_initialMigration")]
+    [Migration("20250424042708_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -455,7 +455,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEPV0VbuDgdqx5m29T2gWS/cBQCkhDizXEk+gWMXCuvPmSBrLhSIVfNQ5oqVNuq/UjA==",
+                            Password = "AQAAAAIAAYagAAAAELfAre9lvYdGbnrSB70I2vxVlLn/Dbleb/FB6cmPibnpGmPWM6+kox6LxKYh1b8WSQ==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -470,7 +470,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEP1rUMRWTFVqY4YjZRGIi++BPeb56iDS8/2pnw4ejANr09qBapcc1LQTIX3qGqfyOg==",
+                            Password = "AQAAAAIAAYagAAAAEK0baBwtxN5pLiFk+aHqTQwIQmWwi0fNQqfwZj3rhuudZk5bemGDGnGwq1dQ3tIs3Q==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });

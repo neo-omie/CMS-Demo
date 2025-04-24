@@ -158,8 +158,7 @@ namespace CMS.Persistence.Migrations
                         name: "FK_States_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
-                        principalColumn: "CountryId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CountryId");
                 });
 
             migrationBuilder.CreateTable(
@@ -181,26 +180,22 @@ namespace CMS.Persistence.Migrations
                         name: "FK_MasterApprovalMatrixContracts_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DepartmentId");
                     table.ForeignKey(
                         name: "FK_MasterApprovalMatrixContracts_MasterEmployees_ApproverId1",
                         column: x => x.ApproverId1,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                     table.ForeignKey(
                         name: "FK_MasterApprovalMatrixContracts_MasterEmployees_ApproverId2",
                         column: x => x.ApproverId2,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                     table.ForeignKey(
                         name: "FK_MasterApprovalMatrixContracts_MasterEmployees_ApproverId3",
                         column: x => x.ApproverId3,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                 });
 
             migrationBuilder.CreateTable(
@@ -222,26 +217,22 @@ namespace CMS.Persistence.Migrations
                         name: "FK_MasterApprovalMatrixMOUs_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DepartmentId");
                     table.ForeignKey(
                         name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId1",
                         column: x => x.ApproverId1,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                     table.ForeignKey(
                         name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId2",
                         column: x => x.ApproverId2,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                     table.ForeignKey(
                         name: "FK_MasterApprovalMatrixMOUs_MasterEmployees_ApproverId3",
                         column: x => x.ApproverId3,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                 });
 
             migrationBuilder.CreateTable(
@@ -265,26 +256,22 @@ namespace CMS.Persistence.Migrations
                         name: "FK_MasterEscalationMatrixContracts_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DepartmentId");
                     table.ForeignKey(
                         name: "FK_MasterEscalationMatrixContracts_MasterEmployees_EscalationId1",
                         column: x => x.EscalationId1,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                     table.ForeignKey(
                         name: "FK_MasterEscalationMatrixContracts_MasterEmployees_EscalationId2",
                         column: x => x.EscalationId2,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                     table.ForeignKey(
                         name: "FK_MasterEscalationMatrixContracts_MasterEmployees_EscalationId3",
                         column: x => x.EscalationId3,
                         principalTable: "MasterEmployees",
-                        principalColumn: "EmployeeCode",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmployeeCode");
                 });
 
             migrationBuilder.CreateTable(
@@ -303,8 +290,7 @@ namespace CMS.Persistence.Migrations
                         name: "FK_Cities_States_StateId",
                         column: x => x.StateId,
                         principalTable: "States",
-                        principalColumn: "StateId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "StateId");
                 });
 
             migrationBuilder.InsertData(
@@ -334,8 +320,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPV0VbuDgdqx5m29T2gWS/cBQCkhDizXEk+gWMXCuvPmSBrLhSIVfNQ5oqVNuq/UjA==", "Admin", "Dadar" },
-                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEP1rUMRWTFVqY4YjZRGIi++BPeb56iDS8/2pnw4ejANr09qBapcc1LQTIX3qGqfyOg==", "MOU_User", "Dadar" }
+                    { 1, 100, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELfAre9lvYdGbnrSB70I2vxVlLn/Dbleb/FB6cmPibnpGmPWM6+kox6LxKYh1b8WSQ==", "Admin", "Dadar" },
+                    { 2, 101, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEK0baBwtxN5pLiFk+aHqTQwIQmWwi0fNQqfwZj3rhuudZk5bemGDGnGwq1dQ3tIs3Q==", "MOU_User", "Dadar" }
                 });
 
             migrationBuilder.CreateIndex(
