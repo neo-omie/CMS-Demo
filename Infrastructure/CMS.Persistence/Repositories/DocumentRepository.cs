@@ -79,10 +79,17 @@ namespace CMS.Persistence.Repositories
         }
 
 
-        public async Task<int> UpdateDocument(MasterDocument masterDocument)
+        public  async Task<int> UpdateDocument(MasterDocument masterDocument)
         {
-           
-            _context.MasterDocuments.Update(masterDocument);
+            var doc = new MasterDocument
+            {
+
+                DocumentName = masterDocument.DocumentName,
+                status=masterDocument.status,
+
+            };
+
+             _context.MasterDocuments.Update(doc);
             return await _context.SaveChangesAsync();
 
         }

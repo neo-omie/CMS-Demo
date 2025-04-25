@@ -86,6 +86,7 @@ GetPage(pgNumber:number){
     this.getDocuments(pgNumber, 10);
   }
 }
+
  addDocument(documentForm :NgForm){
   this.document = documentForm.value;
   this.document.status = Number(this.document.status);
@@ -103,5 +104,21 @@ GetPage(pgNumber:number){
       }
     });
  }
- 
+
+ updateDocument(updateDocForm : NgForm){
+  this.document = updateDocForm.value;
+  this.document.status = Number(this.document.status);
+
+  this.documentService.updateDocument(this.document).subscribe({
+    next: (response) => {
+      Alert.bigToast('Success!','Document updated successfully.',TYPE.SUCCESS,'Ok');
+      updateDocForm.resetForm();
+      this.GetPage(this.maxPage);
+    },
+    error: (error) => {
+      console.error('Error updating Document:', error);
+      Alert.bigToast('Error!','There was an error adding the Document.',TYPE.ERROR,'Try Again');
+    }
+  });
+}
 }
