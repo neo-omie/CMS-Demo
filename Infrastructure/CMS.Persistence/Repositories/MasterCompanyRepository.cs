@@ -1,4 +1,6 @@
 ﻿using CMS.Application.Contracts.Persistence;
+using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU;
+using CMS.Application.Features.MasterCompanies;
 using CMS.Domain.Entities.CompanyMaster;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -51,19 +53,24 @@ namespace CMS.Persistence.Repositories
             }
         }
 
-        public async Task<IEnumerable<MasterCompany>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize)
         {
+            var totalRecords = await _context.MasterCompanies.CountAsync();
             var query = _context.MasterCompanies.AsQueryable();
            
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(e => e.CompanyName.Contains(searchTerm));
             }
-
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            return _context.MasterCompanies.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .Select(a => new GetMastersDTO
+                {
+                    ValueId = a.ValueId,
+                    CompanyName = a.CompanyName,
+                    CompanyLocation = a.city.City,
+                    status = a.CompanyStatus,
+                    TotalRecords = totalRecords
+                });
         }
 
         public async Task<MasterCompany> GetCompanyByIdAsync(int id)

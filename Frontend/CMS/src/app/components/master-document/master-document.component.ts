@@ -6,7 +6,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { DocumentStatus } from '../../constants';
-import Swal from 'sweetalert2';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 

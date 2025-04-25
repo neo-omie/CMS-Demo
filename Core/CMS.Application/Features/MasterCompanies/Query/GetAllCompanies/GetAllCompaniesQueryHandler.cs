@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.MasterCompanies.Query.GetAllCompanies
 {
-    public class GetAllCompaniesQueryHandler : IRequestHandler<GetAllCompaniesQuery, IEnumerable<MasterCompany>>
+    public class GetAllCompaniesQueryHandler : IRequestHandler<GetAllCompaniesQuery, IEnumerable<GetMastersDTO>>
     {
         private readonly IMasterCompanyRepository _comprepo;
        
@@ -19,7 +19,7 @@ namespace CMS.Application.Features.MasterCompanies.Query.GetAllCompanies
             _comprepo = comprepo;
            
         }
-        public Task<IEnumerable<MasterCompany>> Handle(GetAllCompaniesQuery request, CancellationToken cancellationToken)
+        public Task<IEnumerable<GetMastersDTO>> Handle(GetAllCompaniesQuery request, CancellationToken cancellationToken)
         {
             return _comprepo.GetAllCompanyDetailsAsync(request.searchTerm, request.pageNumber, request.pageSize);
         }
