@@ -1,4 +1,5 @@
-﻿using CMS.Domain.Entities.CompanyMaster;
+﻿using CMS.Application.Features.MasterCompanies;
+using CMS.Domain.Entities.CompanyMaster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CMS.Application.Contracts.Persistence
 {
    public  interface IMasterCompanyRepository
     {
-        Task<IEnumerable<MasterCompany>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize);
+        Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize);
 
         Task<MasterCompany> GetCompanyByIdAsync(int id);
 
