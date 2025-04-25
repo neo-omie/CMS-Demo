@@ -9,14 +9,14 @@ using MediatR;
 
 namespace CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU
 {
-    public class UpdateApprovalMatrixMOUCommandHandler : IRequestHandler<UpdateApprovalMatrixMOUCommand, MasterApprovalMatrixMOU>
+    public class UpdateApprovalMatrixMOUCommandHandler : IRequestHandler<UpdateApprovalMatrixMOUCommand, bool>
     {
         readonly IMasterApprovalMatrixMOURepository _masterApprovalMatrixMOURepository;
         public UpdateApprovalMatrixMOUCommandHandler(IMasterApprovalMatrixMOURepository masterApprovalMatrixMOURepository)
         {
             _masterApprovalMatrixMOURepository = masterApprovalMatrixMOURepository;
         }
-        public async Task<MasterApprovalMatrixMOU> Handle(UpdateApprovalMatrixMOUCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateApprovalMatrixMOUCommand request, CancellationToken cancellationToken)
         {
             return await _masterApprovalMatrixMOURepository.UpdateApprovalMatrixMOU(request.id, request.mou);
         }

@@ -48,15 +48,19 @@ namespace CMS.Persistence.Repositories
                 .Select(c => new GetAllApprovalMatrixMOUByIdDto
                 {
                     MasterApprovalMatrixMOUId = c.MasterApprovalMatrixMOUId,
+                    DepartmentId = c.DepartmentId,
                     DepartmentName = c.Department.DepartmentName,
                     ApproverName1 = c.Approver1.EmployeeName,
+                    ApproverId1 = c.Approver1.EmployeeCode,
                     ApproverName2 = c.Approver2.EmployeeName,
+                    ApproverId2 = c.Approver2.EmployeeCode,
                     ApproverName3 = c.Approver3.EmployeeName,
+                    ApproverId3 = c.Approver3.EmployeeCode,
                     NumberOfDays = c.NumberOfDays
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<MasterApprovalMatrixMOU> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
+        public async Task<bool> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
         {
             var checkApprMatrMOU = await _context.MasterApprovalMatrixMOUs.FirstOrDefaultAsync(m => m.MasterApprovalMatrixMOUId == id);
             if(checkApprMatrMOU == null)
@@ -68,9 +72,9 @@ namespace CMS.Persistence.Repositories
             checkApprMatrMOU.ApproverId3 = mou.ApproverId3;
             checkApprMatrMOU.NumberOfDays = mou.NumberOfDays;
             _context.MasterApprovalMatrixMOUs.Update(checkApprMatrMOU);
-            if(await _context.SaveChangesAsync() > 0)
+            if (await _context.SaveChangesAsync() > 0)
             {
-                return checkApprMatrMOU;
+                return true;
             }
             else
             {

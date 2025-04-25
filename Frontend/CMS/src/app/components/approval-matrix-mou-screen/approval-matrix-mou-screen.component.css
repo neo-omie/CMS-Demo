@@ -48,10 +48,23 @@ td{
     background-color: whitesmoke;
     color: #5f5fee;
 }
+.dropdown-input{
+    background-color: white;
+    border-right: 0;
+}
+.dropdown-icon{
+    background-color: white;
+    border-left: 0;
+}
+.dropdown-btn{
+    text-align: start;
+    border-color: #dee2e6;
+}
+.dropdown-btn:hover{
+    color: #5f5fee;
+    border-color: #5f5fee ;
+}
 .form-control:focus{
     box-shadow: none;
     border-color: #dee2e6;
-}
-.form-control:disabled{
-    background-color: white;
 }
