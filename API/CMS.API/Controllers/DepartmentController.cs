@@ -1,8 +1,14 @@
-﻿using CMS.Application.Features.Departments.Commands.AddDepartment;
+﻿using CMS.Application.Features.ApprovalMatrixContract.Commands;
+using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
+using CMS.Application.Features.Departments.Commands.AddContractApprovers;
+using CMS.Application.Features.Departments.Commands.AddContractEscalators;
+using CMS.Application.Features.Departments.Commands.AddDepartment;
+using CMS.Application.Features.Departments.Commands.AddMOUApprovers;
 using CMS.Application.Features.Departments.Commands.DeleteDepartment;
 using CMS.Application.Features.Departments.Commands.UpdateDepartment;
 using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.Departments.Queries.GetDepartmentById;
+using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -56,6 +62,27 @@ namespace CMS.API.Controllers
         {
             var checkDelete = await _mediator.Send(new DeleteDepartmentCommand(id));
             return Ok(checkDelete);
+        }
+
+        [HttpPost("AddContractApprovers")]
+        public async Task<IActionResult> AddContractApprovers([FromQuery] int id, [FromBody] UpdateApprovalMatrixContractDto addApprovers)
+        {
+            var addedApprovers = await _mediator.Send(new AddContractApproversCommand(id, addApprovers));
+            return Ok(addedApprovers);
+        }
+
+        [HttpPost("AddMOUApprovers")]
+        public async Task<IActionResult> AddMOUApprovers([FromQuery] int id, [FromBody] UpdateApprovalMatrixMOUDto addApprovers)
+        {
+            var addedApprovers = await _mediator.Send(new AddMOUApproversCommand(id, addApprovers));
+            return Ok(addedApprovers);
+        }
+
+        [HttpPost("AddContractEscalators")]
+        public async Task<IActionResult> AddContractEscalators([FromQuery] int id, [FromBody] UpdateEscalationMatrixContractDto addEscalators)
+        {
+            var addedEscalators = await _mediator.Send(new AddContractEscalatorsCommand(id, addEscalators));
+            return Ok(addedEscalators);
         }
     }
 }
