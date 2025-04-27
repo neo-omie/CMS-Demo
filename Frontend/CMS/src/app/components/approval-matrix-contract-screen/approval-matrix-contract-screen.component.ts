@@ -138,7 +138,6 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   editApproverMatrixContractSubmit(id:number){
     let nod = this.editNumberOfDays.nativeElement.value;
     if(nod !== "" && Number(nod) > 0){
-      console.log(nod);
       this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1.nativeElement.value;
       this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2.nativeElement.value;
       this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3.nativeElement.value;

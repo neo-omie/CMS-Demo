@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AddCompanyDto, CompanyListResponse, CompanyMasterDto, MasterCompany } from '../models/master-company';
-import { AddDocumentDto } from '../models/master-document';
 
 @Injectable({
   providedIn: 'root'

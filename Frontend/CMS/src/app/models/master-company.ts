@@ -1,6 +1,6 @@
 export class MasterCompany {
     valueId?:number;
-    pompanyName?:string;
+    companyName?:string;
     pocName?:string;
     companyStatus?:boolean;
     pocContactNumber?:number;
@@ -17,7 +17,7 @@ export class MasterCompany {
     bankAccNo?:number;
     mSMERegistrationNo?:number;
     iFSCCode?:string;
-    PanNo?:string;
+    panNo?:string;
     countryId?:number;
     stateId?:number;
     cityId?:number;
@@ -43,28 +43,29 @@ export class CompanyMasterDto{
 
 export class AddCompanyDto{
     //without constructor initializing values using nullable type
-    valueId?:number;
-    pompanyName?:string;
-    pocName?:string;
-    companyStatus?:boolean;
-    pocContactNumber?:number;
-    pocEmailId?:string;
-    companyAddressLine1?:string;
-    companyAddressLine2?:string;
-    companyAddressLine3?:string;
-    zipcode?:number;
-    companyContactNo?:number;
-    companyEmailId?:string;
-    companyWebsiteUrl?:string;
-    companyBankName?:string;
-    gSTno?:number;
-    bankAccNo?:number;
-    mSMERegistrationNo?:number;
-    iFSCCode?:string;
-    PanNo?:string;
-    countryId?:number;
-    stateId?:number;
-    cityId?:number;
+    companyName?:string | null;
+    valueId?:number | null;
+    pompanyName?:string | null;
+    pocName?:string | null;
+    companyStatus?:boolean | null;
+    pocContactNumber?:number | null;
+    pocEmailId?:string | null;
+    companyAddressLine1?:string | null;
+    companyAddressLine2?:string | null;
+    companyAddressLine3?:string | null;
+    zipcode?:number | null;
+    companyContactNo?:number | null;
+    companyEmailId?:string | null;
+    companyWebsiteUrl?:string | null;
+    companyBankName?:string | null;
+    gSTno?:number | null;
+    bankAccNo?:number | null;
+    mSMERegistrationNo?:number | null;
+    iFSCCode?:string | null;
+    PanNo?:string | null;
+    countryId?:number | null;
+    stateId?:number | null;
+    cityId?:number | null;
 }
 
 export class CompanyListResponse {
