@@ -14,6 +14,6 @@ namespace CMS.Application.Contracts.Persistence
     {
         public Task<IEnumerable<GetAllApprovalMatrixMOUDto>> GetAllApprovalMatrixMOU(int pageNumber, int pageSize);
         public Task<GetAllApprovalMatrixMOUByIdDto> GetApprovalMatrixMOUById(int id);
-        public Task<MasterApprovalMatrixMOU> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou);
+        public Task<bool> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou);
     }
 }

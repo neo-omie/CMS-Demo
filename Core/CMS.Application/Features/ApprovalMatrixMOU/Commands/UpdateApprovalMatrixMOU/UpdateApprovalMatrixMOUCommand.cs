@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU
 {
-    public record UpdateApprovalMatrixMOUCommand(int id, UpdateApprovalMatrixMOUDto mou) : IRequest<MasterApprovalMatrixMOU>;
+    public record UpdateApprovalMatrixMOUCommand(int id, UpdateApprovalMatrixMOUDto mou) : IRequest<bool>;
 }

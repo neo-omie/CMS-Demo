@@ -31,7 +31,7 @@ namespace CMS.API.Controllers
             return Ok(approvalMatrixContract);
         }
 
-        [HttpPost("UpdateApprovalMatrixMOU")]
+        [HttpPut("UpdateApprovalMatrixMOU")]
         public async Task<IActionResult> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
         {
             var updatedApprovalMatrixMOU = await _mediator.Send(new UpdateApprovalMatrixMOUCommand(id, mou));
