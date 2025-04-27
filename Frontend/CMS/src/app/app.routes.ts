@@ -9,6 +9,7 @@ import { NotFoundComponent } from './components/misc/not-found/not-found.compone
 import { ApprovalMatrixMouScreenComponent } from './components/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
 import { EscalationMatrixContractComponent } from './components/escalation-matrix-contract/escalation-matrix-contract.component';
 import { MasterCompanyAddFormComponent } from './components/master-company-add-form/master-company-add-form.component';
+import { MasterDepartmentComponent } from './components/master-department/master-department.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -16,10 +17,11 @@ export const routes: Routes = [
     {path: 'masters', component: MastersScreenComponent}, 
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent},
     {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent},
-    {path: 'masters/documentMasters', component:MasterDocumentComponent},
-    {path: 'masters/escalationContracts', component:EscalationMatrixContractComponent},
-    {path: 'masters/companyMasters/addCompany', component:MasterCompanyAddFormComponent},
-    {path: 'auth/renewPassword', component:RenewPasswordComponent},
+    {path: 'masters/documentMasters', component: MasterDocumentComponent},
+    {path: 'masters/departmentMasters', component: MasterDepartmentComponent},
+    {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent},
+    {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent},
+    {path: 'auth/renewPassword', component: RenewPasswordComponent},
     {path: '**', component: NotFoundComponent}
 
 ];

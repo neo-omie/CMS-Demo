@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
+using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 
@@ -12,7 +13,7 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface IDepartmentRepository
     {
-        public Task<IEnumerable<Department>> GetAllDepartments(int pageNumber, int pageSize);
+        public Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize);
         public Task<Department> GetDepartmentById(int id);
         public Task<Department> AddNewDepartment(string departmentName);
         public Task<bool> DeleteDepartment(int id);

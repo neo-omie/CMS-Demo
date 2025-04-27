@@ -7,6 +7,8 @@ using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
 using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
+using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU;
+using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
@@ -21,10 +23,16 @@ namespace CMS.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Department>> GetAllDepartments(int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.Departments.CountAsync();
-            return _context.Departments.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            return _context.Departments.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .Select(a => new GetAllDepartmentsDto
+                {
+                    DepartmentId = a.DepartmentId,
+                    DepartmentName = a.DepartmentName,
+                    TotalRecords = totalRecords
+                });
         }
 
         public async Task<Department> GetDepartmentById(int id)

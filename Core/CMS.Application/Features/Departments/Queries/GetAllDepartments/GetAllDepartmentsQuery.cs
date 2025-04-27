@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Departments.Queries.GetAllDepartments
 {
-    public record GetAllDepartmentsQuery(int pageNumber, int pageSize) : IRequest<IEnumerable<Department>>;
+    public record GetAllDepartmentsQuery(int pageNumber, int pageSize) : IRequest<IEnumerable<GetAllDepartmentsDto>>;
 }

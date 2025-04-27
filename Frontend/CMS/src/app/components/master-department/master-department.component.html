@@ -1,0 +1,106 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="mt-3">Department Master</h2>
+<!-- <div class="modal fade" id="department-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
+<div class="" id="department-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5"><i class="fa-solid fa-file-circle-plus"></i>Add New Department</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #departmentForm="ngForm" (ngSubmit)="addDepartment(departmentForm)">
+            <div class="form-group">
+                <label for="departmentName">Department Name</label>
+                <input type="text" class="form-control" id="departmentName" name="departmentName" [(ngModel)]="addDept.departmentName" required />
+              </div>
+              <br>
+              <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="fa-solid fa-plus"></i> Add department</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<div *ngIf="!loading" class="table-responsive p-3">
+    <table class="table align-middle table-bordered table-striped">
+      <thead>
+        <tr>
+            <th>Department ID</th>
+            <th>Department</th>
+            <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let department of departments">
+            <td>{{department.departmentId}}</td>
+            <td>{{department.departmentName}}</td>
+            <td>
+              <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#department-edit" (click)="GetDepartment(department.departmentId)"></i>
+              <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#department-detail" (click)="GetDepartment(department.departmentId)"></i>
+              <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#department-delete" (click)="deleteDepartment(department.departmentId)"></i>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <nav class="d-flex justify-content-center" *ngIf="departments.length > 0" aria-label="Page navigation example">
+    <ul *ngIf="maxPage > 1" class="pagination">
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link" aria-label="Previous">&lsaquo;</span></li>
+      <li class="page-item" (click)="GetPage(pageNumbers[1])"><span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
+      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
+      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link" aria-label="Next">&rsaquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
+    </ul>
+  </nav>
+  <div class="modal fade" id="department-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <form class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Edit</h1>
+          <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="closeEditApproverCollapses()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+              <input #editDepartmentName class="form-control" placeholder="Change department name" type="text" value="{{dept != undefined ? dept.departmentName : ''}}"/>
+          </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-bs-dismiss="modal" (click)="editDepartment(dept != undefined ? dept.departmentId : 0)">Save</button>
+            <button type="reset" class="btn" data-bs-dismiss="modal" (click)="closeEditApproverCollapses()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal fade" id="department-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Detail</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <h1 class="modal-title fs-6 mb-3">Department ID</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                <input type="text" name="departmentId" class="form-control" id="departmentId" [value]="dept != undefined ? dept.departmentId : '0'" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Department Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+                <input type="text" name="departmentName" class="form-control" id="departmentName" [value]="dept != undefined ? dept.departmentName : ''" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
