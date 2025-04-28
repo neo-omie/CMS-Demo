@@ -2,6 +2,7 @@
 using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Persistence.Repositories
@@ -54,6 +55,11 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> AddEmployeeAsync(MasterEmployee employee)
         {
+
+            var hasher = new PasswordHasher<MasterEmployee>();
+            var hashedPswd = hasher.HashPassword(null, employee.Password);
+            employee.Password = hashedPswd;
+            employee.LastPasswordChanged = DateTime.Now;
             await _context.MasterEmployees.AddAsync(employee);
             if(await _context.SaveChangesAsync() > 0)
             {
