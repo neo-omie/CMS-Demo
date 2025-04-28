@@ -100,6 +100,7 @@ namespace CMS.Persistence.Repositories
             //_context.MasterEmployees.Update(employee);
             checkEmp.EmployeeName = employee.EmployeeName;
             checkEmp.Password = employee.Password;
+            checkEmp.Role = employee.Role;
             checkEmp.EmployeeCode = employee.EmployeeCode;
             checkEmp.Unit = employee.Unit;
             checkEmp.DepartmentId = employee.DepartmentId;
