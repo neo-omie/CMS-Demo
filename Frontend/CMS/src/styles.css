@@ -10,3 +10,7 @@
 .swal2-timer-progress-bar {
     background-color: rgba(95, 95, 238, 1);
 }
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -23,14 +23,15 @@ public class EmployeeController : ControllerBase
     
     [HttpGet("{pageNumber}/{pageSize}")]
     public async Task<ActionResult<IEnumerable<MasterEmployee>>> GetAllEmployees(
-        [FromQuery] string unit,
-        [FromQuery] string searchTerm,
-        [FromRoute] int pageNumber, 
-        [FromRoute] int pageSize)
+        [FromRoute] int pageNumber,
+        [FromRoute] int pageSize,
+        [FromQuery] string? unit,
+        [FromQuery] string? searchTerm
+        )
     {
         var query = new GetAllEmployeesQuery
         (
-            unit, searchTerm, pageNumber, pageSize
+             pageNumber, pageSize, unit, searchTerm
         );
 
         return Ok(await _mediator.Send(query));
@@ -44,14 +45,14 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MasterEmployee>> AddEmployee([FromBody] AddEmployeeDto employee)
+    public async Task<ActionResult<MasterEmployee>> AddEmployee([FromBody]AddEmployeeDto employee)
     {
         var command = new AddEmployeeCommand(employee);
         return Ok(await _mediator.Send(command));
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MasterEmployee>> UpdateEmployee(int id, [FromBody] UpdateEmployeeDto employee)
+    public async Task<ActionResult<MasterEmployee>> UpdateEmployee(int id, [FromBody]UpdateEmployeeDto employee)
     {
         var command = new UpdateEmployeeCommand(id,employee);
         return await _mediator.Send(command);
