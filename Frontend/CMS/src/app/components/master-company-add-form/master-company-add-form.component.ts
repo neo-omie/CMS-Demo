@@ -5,6 +5,7 @@ import { AddCompanyDto, MasterCompany } from '../../models/master-company';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { CompanyMasterService } from '../../services/company-master.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-master-company-add-form',
@@ -14,7 +15,7 @@ import { CompanyMasterService } from '../../services/company-master.service';
   styleUrl: './master-company-add-form.component.css'
 })
 export class MasterCompanyAddFormComponent {
-  constructor(private  companyMasterService:CompanyMasterService) {}
+  constructor(private  companyMasterService:CompanyMasterService,private route:Router) {}
   masterCompanyAddForm = new FormGroup({
     companyName : new FormControl('',[Validators.required]),
     pocName : new FormControl('',[Validators.required]),
@@ -95,6 +96,7 @@ export class MasterCompanyAddFormComponent {
           next:(response:MasterCompany) => {
             if( response.valueId !== undefined && response.valueId > 0){
               Alert.toast(TYPE.SUCCESS,true,'Added successfully');
+              this.route.navigate(['masters/companyMasters'])
             }
           }, 
           error:(error) => {

@@ -10,6 +10,7 @@ import { ApprovalMatrixMouScreenComponent } from './components/approval-matrix-m
 import { EscalationMatrixContractComponent } from './components/escalation-matrix-contract/escalation-matrix-contract.component';
 import { MasterCompanyAddFormComponent } from './components/master-company-add-form/master-company-add-form.component';
 import { MasterDepartmentComponent } from './components/master-department/master-department.component';
+import { MasterCompanyComponent } from './components/master-company/master-company.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -22,6 +23,7 @@ export const routes: Routes = [
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent},
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
+    {path: 'masters/companyMasters', component: MasterCompanyComponent},
     {path: '**', component: NotFoundComponent}
 
 ];
