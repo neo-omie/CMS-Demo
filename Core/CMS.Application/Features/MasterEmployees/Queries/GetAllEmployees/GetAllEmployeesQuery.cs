@@ -5,5 +5,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees
 {
-    public record GetAllEmployeesQuery(string unit, string searchTerm, int pageNumber, int pageSize) : IRequest<IEnumerable<MasterEmployee>>;
+    public record GetAllEmployeesQuery(int pageNumber, int pageSize, string? unit, string? searchTerm) : IRequest<object>;
 }

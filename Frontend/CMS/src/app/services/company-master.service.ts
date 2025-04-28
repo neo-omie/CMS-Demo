@@ -10,8 +10,8 @@ export class CompanyMasterService {
 private apiUrl='https://localhost:7041/api/MasterCompany'
   constructor(private http:HttpClient) { }
 
-  getCompany(pageNumber:number,pageSize:number):Observable<CompanyListResponse>{
-    return this.http.get<CompanyListResponse>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
+  getCompany(pageNumber:number,pageSize:number):Observable<CompanyListResponse[]>{
+    return this.http.get<CompanyListResponse[]>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
   }
 
   addCompany(addCompanyDto:AddCompanyDto):Observable<MasterCompany>{
