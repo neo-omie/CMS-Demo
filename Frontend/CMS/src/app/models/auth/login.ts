@@ -1,6 +1,6 @@
 export class Login {
-    email:string;
-    password:string;
+    email?:string | null;
+    password?:string | null;
     constructor(email:string, password:string)
     {
         this.email = email;

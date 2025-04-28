@@ -24,6 +24,19 @@
     align-items: center;
     justify-content: center;
 }
+.field-container{
+  position: relative;
+}
+.error{
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background: white;
+  padding: 0 5px;
+  color: red;
+  font-size: 12px;
+  z-index: 9;
+}
 .input-group-text{
   background-color: whitesmoke;
 }
@@ -45,5 +58,5 @@ input[type="password"]::-ms-reveal {
     background-color: #5f5fee;
   }
   input:focus{
-    box-shadow: 0 0 5px #5f5fee;
+    box-shadow: 0 0 2px #5f5fee;
   }
