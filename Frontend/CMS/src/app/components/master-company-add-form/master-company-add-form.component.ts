@@ -19,7 +19,7 @@ export class MasterCompanyAddFormComponent {
     companyName : new FormControl('',[Validators.required]),
     pocName : new FormControl('',[Validators.required]),
     valueId : new FormControl(undefined),
-    pocContactNumber : new FormControl('',[Validators.required,Validators.minLength(10),Validators.maxLength(10),Validators.pattern('^[0-9]+$')]),
+    pocContactNumber : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
     companyStatus : new FormControl('',[Validators.required,Validators.pattern('^(0|1)$')]),
     pocEmailId : new FormControl('',[Validators.required,Validators.email]),
     companyAddressLine1 : new FormControl('',[Validators.required]),
@@ -29,7 +29,7 @@ export class MasterCompanyAddFormComponent {
     stateId : new FormControl('',[Validators.required]),
     cityId : new FormControl('',[Validators.required]),
     zipcode : new FormControl('',[Validators.required]),
-    companyContactNo : new FormControl('',[Validators.required,Validators.minLength(10),Validators.maxLength(10),Validators.pattern('^[0-9]+$')]),
+    companyContactNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
     companyEmailId : new FormControl('',[Validators.required,Validators.email]),
     companyWebsiteUrl : new FormControl('',[Validators.required]),
     companyBankName : new FormControl('',[Validators.required]),
@@ -103,6 +103,9 @@ export class MasterCompanyAddFormComponent {
             Alert.toast(TYPE.ERROR,true,this.errorMsg);
           }
         });
+      }
+      else{
+        console.log("should not come here ", this.masterCompanyAddForm.value)
       }
     }
   }

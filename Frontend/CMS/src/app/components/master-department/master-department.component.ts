@@ -94,28 +94,26 @@ export class MasterDepartmentComponent {
       }
       deleteDepartment(id:number){
         // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
-        let askFirst:boolean = Alert.confirmToast("Are you sure you want to delete this department?",
+        Alert.confirmToast("Are you sure you want to delete this department?",
                            "You won't be able to revert this!", TYPE.WARNING,
                            "Yes, delete it!",
                            "Deleted successfully!",
-                           "Department has been deleted.", TYPE.SUCCESS);
-                           
-        // if(askFirst) {
-          this.departmentService.deleteDepartment(id).subscribe({
-            next:(response:boolean)=>{
-              if(response){
-                Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
-                this.GetAllDepartments(1, 10);
-              }
-      
-            },
-            error:(error)=>{
-              console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
-            }
-          });
-        // }
+                           "Department has been deleted.", TYPE.SUCCESS,() => {
+                            this.departmentService.deleteDepartment(id).subscribe({
+                              next:(response:boolean)=>{
+                                if(response){
+                                  Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
+                                  this.GetAllDepartments(1, 10);
+                                }
+                        
+                              },
+                              error:(error)=>{
+                                console.error('Error :(', error);
+                                this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+                                Alert.toast(TYPE.ERROR,true,this.errorMsg);
+                              }
+                            });
+                           });
       }
       addDept:AddDepartmentDto = new AddDepartmentDto('');
       addDepartment(departmentForm:NgForm){

@@ -21,7 +21,7 @@ export  class Alert{
     });
    }
    static confirmToast(title:string, text:string, icon = TYPE.WARNING, confirmButtonText:string,
-                       successTitle:string, successText:string, successIcon = TYPE.SUCCESS):boolean{
+                       successTitle:string, successText:string, successIcon = TYPE.SUCCESS, callback:()=>void){
     Swal.fire({
       title: title,
       text: text,
@@ -32,15 +32,13 @@ export  class Alert{
       confirmButtonText: confirmButtonText
     }).then((result) => {
       if (result.isConfirmed) {
+        callback();
         Swal.fire({
           title: successTitle,
           text: successText,
           icon: successIcon
         });
-        return true;
       }
-      return false;
     });
-    return false;
    }
 }

@@ -20,7 +20,7 @@
                     </div>
                     <div class="m-3">
                         <span *ngIf="pocContactNumber?.hasError('required') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">*Required</span>
-                        <span *ngIf="(pocContactNumber?.hasError('pattern') || pocContactNumber?.hasError('minLength') || pocContactNumber?.hasError('maxLength'))&& (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Invalid number</span>
+                        <span *ngIf="pocContactNumber?.hasError('pattern') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Invalid number</span>
                         <input class="form-control" type="text" id="pocContactNumber" placeholder="Enter POC contact number" formControlName="pocContactNumber">
                     </div>
                     <div class="m-3">
