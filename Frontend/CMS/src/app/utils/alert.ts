@@ -20,4 +20,25 @@ export  class Alert{
       confirmButtonText: confirmButtonText
     });
    }
+   static confirmToast(title:string, text:string, icon = TYPE.WARNING, confirmButtonText:string,
+                       successTitle:string, successText:string, successIcon = TYPE.SUCCESS, callback:()=>void){
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: icon,
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: confirmButtonText
+    }).then((result) => {
+      if (result.isConfirmed) {
+        callback();
+        Swal.fire({
+          title: successTitle,
+          text: successText,
+          icon: successIcon
+        });
+      }
+    });
+   }
 }

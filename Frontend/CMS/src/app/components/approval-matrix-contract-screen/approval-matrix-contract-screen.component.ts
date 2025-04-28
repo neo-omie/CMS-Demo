@@ -17,6 +17,7 @@ import { Pagination } from '../../utils/pagination';
   styleUrl: './approval-matrix-contract-screen.component.css'
 })
 export class ApprovalMatrixContractScreenComponent implements OnInit {
+  isView:boolean = false;
   approvers1:MasterEmployee[] = [];
   approvers2:MasterEmployee[] = [];
   approvers3:MasterEmployee[] = [];
@@ -73,11 +74,11 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
       this.GetApprovalMatrixContract(pgNumber, 10);
     }
   }
-  GetContract(id:number){
+  GetContract(id:number,isView:boolean){
+    this.isView = isView;
     this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
       next:(response:ApprovalMatrixContract) => {
         this.approvalMatrixContract = response;
-        console.log(this.approvalMatrixContract.numberOfDays);
       }, 
       error:(error) => {
         console.error('Error :(', error);
@@ -138,7 +139,6 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   editApproverMatrixContractSubmit(id:number){
     let nod = this.editNumberOfDays.nativeElement.value;
     if(nod !== "" && Number(nod) > 0){
-      console.log(nod);
       this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1.nativeElement.value;
       this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2.nativeElement.value;
       this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3.nativeElement.value;
@@ -163,4 +163,7 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     }
     this.closeEditApproverCollapses();
   }
+  // getApproverList(){
+  //   console.log("comming")
+  // }
 }

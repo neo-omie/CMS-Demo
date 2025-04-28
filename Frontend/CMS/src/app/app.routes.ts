@@ -8,24 +8,21 @@ import { RenewPasswordComponent } from './components/auth/renew-password/renew-p
 import { NotFoundComponent } from './components/misc/not-found/not-found.component';
 import { ApprovalMatrixMouScreenComponent } from './components/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
 import { EscalationMatrixContractComponent } from './components/escalation-matrix-contract/escalation-matrix-contract.component';
-import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
-import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
-import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
-import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { MasterCompanyAddFormComponent } from './components/master-company-add-form/master-company-add-form.component';
+import { MasterDepartmentComponent } from './components/master-department/master-department.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
-    {path: 'dashboard', component: DashboardComponent},
-    {path: 'masters', component: MastersScreenComponent}, 
-    {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent},
-    {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent},
-    {path: 'masters/documentMasters', component:MasterDocumentComponent},
-    {path: 'masters/escalationContracts', component:EscalationMatrixContractComponent},
-    {path: 'masters/employeeMasters', component:MasterEmployeeComponent},
-    {path:'employeeMaster/add', component:AddEmployeeComponent},
-    {path:'employeeMaster/edit', component:EditEmployeeComponent},
-    {path:'employeeMaster/view', component:ViewEmployeeComponent},
-    {path: 'auth/renewPassword', component:RenewPasswordComponent},
-    {path: '404NotFound', component: NotFoundComponent}
+    {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
+    {path: 'masters', component: MastersScreenComponent, canActivate:[authGuard]}, 
+    {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate:[authGuard]},
+    {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate:[authGuard]},
+    {path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate:[authGuard]},
+    {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
+    {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
+    {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
+    {path: 'auth/renewPassword', component: RenewPasswordComponent},
+    {path: '**', component: NotFoundComponent}
 
 ];
