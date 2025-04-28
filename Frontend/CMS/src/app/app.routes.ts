@@ -11,6 +11,10 @@ import { EscalationMatrixContractComponent } from './components/escalation-matri
 import { MasterCompanyAddFormComponent } from './components/master-company-add-form/master-company-add-form.component';
 import { MasterDepartmentComponent } from './components/master-department/master-department.component';
 import { authGuard } from './auth.guard';
+import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
+import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
+import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -19,6 +23,10 @@ export const routes: Routes = [
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate:[authGuard]},
     {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate:[authGuard]},
     {path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate:[authGuard]},
+    {path:'masters/employeeMasters', component:MasterEmployeeComponent, canActivate:[authGuard]},
+    {path:'masters/employeeMasters/addEmpoyee', component:AddEmployeeComponent, canActivate:[authGuard]},
+    // {path:'masters/employeeMasters/editEmpoyee', component:EditEmployeeComponent, canActivate:[authGuard]},
+    // {path:'masters/employeeMasters/viewEmpoyee', component:ViewEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},

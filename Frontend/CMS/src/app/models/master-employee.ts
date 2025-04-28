@@ -47,3 +47,15 @@ export class MasterEmployeeDto {
     this.totalCount = totalCount;
   }
 }
+
+export class AddEmployeeDto{
+  employeeName?:string
+      password?:string
+      role?:string
+      employeeCode?:string
+      unit?:string
+      department?:string
+      employeeMobile?:number
+      email?:string
+      employeeExtension?:string
+}

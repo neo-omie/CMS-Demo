@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { MasterEmployee, MasterEmployeeDto } from '../models/master-employee';
+import { AddEmployeeDto, MasterEmployee, MasterEmployeeDto } from '../models/master-employee';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -39,8 +39,8 @@ export class MasterEmployeeService {
     return this.http.get<MasterEmployee>(`${this.apiUrl}/${id}`);
   }
 
-  addEmployee(employee:MasterEmployee):Observable<MasterEmployee>{
-    return this.http.post<MasterEmployee>(`${this.apiUrl}`,employee);
+  addEmployee(employee:AddEmployeeDto):Observable<AddEmployeeDto>{
+    return this.http.post<AddEmployeeDto>(`${this.apiUrl}`,employee);
   }
 
   updateEmployee(id:number, employee:MasterEmployee):Observable<MasterEmployee>{

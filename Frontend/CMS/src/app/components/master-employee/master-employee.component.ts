@@ -82,7 +82,7 @@ getPageNumbers():number[]{
 }
 
 addEmployee(){
-  this.router.navigate(['employeeMaster/add']);
+  this.router.navigate(['masters/employeeMasters/addEmpoyee']);
 }
 
 deleteEmployee(employee:MasterEmployee){
@@ -94,11 +94,11 @@ deleteEmployee(employee:MasterEmployee){
 }
 
 viewEmployee(employee:MasterEmployee){
-  this.router.navigate(['employeeMaster/view']);
+  this.router.navigate(['masters/employeeMasters/viewEmpoyee']);
 }
 
 editEmployee(employee:MasterEmployee){
-  this.router.navigate(['employeeMaster/edit']);
+  this.router.navigate(['masters/employeeMasters/editEmpoyee']);
 }
 
 }
