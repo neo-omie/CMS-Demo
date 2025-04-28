@@ -93,8 +93,14 @@ export class MasterDepartmentComponent {
         this.closeEditApproverCollapses();
       }
       deleteDepartment(id:number){
-        let askFirst:boolean = confirm("Are you sure you want to delete this department?");
-        if(askFirst) {
+        // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
+        let askFirst:boolean = Alert.confirmToast("Are you sure you want to delete this department?",
+                           "You won't be able to revert this!", TYPE.WARNING,
+                           "Yes, delete it!",
+                           "Deleted successfully!",
+                           "Department has been deleted.", TYPE.SUCCESS);
+                           
+        // if(askFirst) {
           this.departmentService.deleteDepartment(id).subscribe({
             next:(response:boolean)=>{
               if(response){
@@ -109,7 +115,7 @@ export class MasterDepartmentComponent {
               Alert.toast(TYPE.ERROR,true,this.errorMsg);
             }
           });
-        }
+        // }
       }
       addDept:AddDepartmentDto = new AddDepartmentDto('');
       addDepartment(departmentForm:NgForm){
