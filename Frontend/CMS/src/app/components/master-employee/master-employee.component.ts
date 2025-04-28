@@ -1,12 +1,104 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
+import { LoaderComponent } from '../loader/loader.component';
+import { CommonModule } from '@angular/common';
+import { ControlContainer, FormsModule } from '@angular/forms';
+import { MasterEmployee, MasterEmployeeDto } from '../../models/master-employee';
+import { MasterEmployeeService } from '../../services/master-employee.service';
+import { HttpClient } from '@angular/common/http';
+import { Pagination } from '../../utils/pagination';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-master-employee',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, LoaderComponent, FormsModule,RouterModule],
   templateUrl: './master-employee.component.html',
   styleUrl: './master-employee.component.css'
 })
-export class MasterEmployeeComponent {
+export class MasterEmployeeComponent implements OnInit{
+loading=true;
+employees: MasterEmployee[]=[];
+totalEmployees:number=0;
+totalPages:number=0;
+currentPage:number=1;
+pageSize:number=10;
+maxPage:number=1; //used now 
+pageNumbers:number[] = []; //used now 
+selectedUnit: string = 'All';
+searchTerm: string = '';
+errorMsg ?: string
+
+constructor(private employeeService: MasterEmployeeService,private router: Router){}
+
+ngOnInit(): void {
+  this.fetchEmployees();
+}
+
+fetchEmployees(){
+  this.employeeService.getEmployees(this.currentPage, this.pageSize, this?.selectedUnit, this?.searchTerm)
+  .subscribe({
+    next:(response: MasterEmployeeDto) => {
+      this.loading = false;
+      console.log(response);
+      this.employees = response.data;
+      this.totalEmployees = response.totalCount
+      if(this.employees!= undefined && this.employees.length > 0){
+        let result = Pagination.paginator(this.currentPage,this.totalEmployees,this.pageSize)
+        this.maxPage = result.maxPage;
+        console.log(this.maxPage);
+        this.pageNumbers = result.pageNumbers;
+      }
+    },
+    error:(error)=> {
+      this.loading = false;
+      console.error('Error :(', error);
+      this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+      Alert.toast(TYPE.ERROR,true,this.errorMsg);
+    }
+  });
+}
+
+GetPage(pgNumber:number){
+  if(this.maxPage >= pgNumber && pgNumber >= 1){
+    this.currentPage=pgNumber;
+    this.fetchEmployees();
+  }
+}
+
+onFilterChange(){
+  this.currentPage=1;
+  this.fetchEmployees();
+}
+
+
+getPageNumbers():number[]{
+  const pageNumbers=[];
+  for(let i=1; i<=this.totalPages;i++){
+    pageNumbers.push(i)
+  }
+  return pageNumbers
+}
+
+addEmployee(){
+  this.router.navigate(['employeeMaster/add']);
+}
+
+deleteEmployee(employee:MasterEmployee){
+  if(confirm(`Are you sure you want to Delete ${employee.employeeName}?`)){
+    this.employeeService.deleteEmployee(employee.valueId).subscribe(()=>{
+      this.fetchEmployees();
+    })
+  }
+}
+
+viewEmployee(employee:MasterEmployee){
+  this.router.navigate(['employeeMaster/view']);
+}
+
+editEmployee(employee:MasterEmployee){
+  this.router.navigate(['employeeMaster/edit']);
+}
 
 }
