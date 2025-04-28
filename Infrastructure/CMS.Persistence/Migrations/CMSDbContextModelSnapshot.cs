@@ -170,6 +170,8 @@ namespace CMS.Persistence.Migrations
 
                     b.HasKey("ValueId");
 
+                    b.HasIndex("CityId");
+
                     b.ToTable("MasterCompanies");
                 });
 
@@ -452,7 +454,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEJ3w+ROYveqrxz/Zyr5KBrXoeem44IMGuCyKX/vUF58W4Beuf24bCk2TmtP5O+p3mQ==",
+                            Password = "AQAAAAIAAYagAAAAEJ6RJj3CfH3EdenYGhJD9EBNpvN19Fk7dGxbBOC9wAEDt2bm1v1dqgAmXx3mYX4Fsg==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
@@ -467,7 +469,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEJy5+Og72I4l/miRVFJc8HnxFrxSoE4bkmlwyq9ahVvoGW+geRdnPnK4kTGR4qReqQ==",
+                            Password = "AQAAAAIAAYagAAAAEBeB6YKCk0HNrFAjKUo702DsIyE3lCmMjkCI4l2CHBSqdh3FQrViZVs0+LLe3rtdGw==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -538,6 +540,17 @@ namespace CMS.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("listofStates");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.MasterCompany", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.CompanyMaster.ListofCity", "city")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("city");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixContract", b =>

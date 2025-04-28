@@ -45,7 +45,7 @@ namespace CMS.Persistence.Context
             //mastercompany location
             modelBuilder.Entity<ListOfStates>().HasOne(st => st.listofcountries).WithMany().HasForeignKey(st => st.CountryId);
             modelBuilder.Entity<ListofCity>().HasOne(ct => ct.listofStates).WithMany().HasForeignKey(ct=> ct.StateId);
-
+            modelBuilder.Entity<MasterCompany>().HasOne(mc => mc.city).WithMany().HasForeignKey(mc => mc.CityId);
             //Company Cascading 
 
 

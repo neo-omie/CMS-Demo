@@ -89,7 +89,7 @@ namespace CMS.API.Controllers
             var command = new DeleteCompanyCommand(id);
             var checkifDel = await _mediator.Send(command);
             if (checkifDel)
-                return Ok("successfully deleted");
+                return Ok(checkifDel);
             _logger.LogInformation("DeleteCompany method Performed");
             return BadRequest();
         }

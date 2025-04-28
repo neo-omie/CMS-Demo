@@ -62,7 +62,7 @@ namespace CMS.Persistence.Repositories
             {
                 query = query.Where(e => e.CompanyName.Contains(searchTerm));
             }
-            return _context.MasterCompanies.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+            var result = _context.MasterCompanies.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(a=> a.IsDeleted == false)
                 .Select(a => new GetMastersDTO
                 {
                     ValueId = a.ValueId,
@@ -71,6 +71,7 @@ namespace CMS.Persistence.Repositories
                     status = a.CompanyStatus,
                     TotalRecords = totalRecords
                 });
+            return result;
         }
 
         public async Task<MasterCompany> GetCompanyByIdAsync(int id)
