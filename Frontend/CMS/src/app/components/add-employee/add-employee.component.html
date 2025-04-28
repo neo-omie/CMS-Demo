@@ -1,1 +1,126 @@
-<p>add-employee works!</p>
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+          <div class="heading">
+              <h2>Employee Master</h2>
+              <h3>Add Employee</h3>
+            </div>
+            
+            <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="employeeName" class="form-label">Employee Name</label>
+                <input
+                  type="text"
+                  id="employeeName"
+                  class="form-control"
+                  formControlName="employeeName"
+                  placeholder="Enter Employee Name"
+                />
+                <div *ngIf="addEmployeeForm.get('employeeName')?.invalid && addEmployeeForm.get('employeeName')?.touched">
+                  <small class="text-danger">Employee Name is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="employeeCode" class="form-label">Employee Code</label>
+                <input
+                  type="text"
+                  id="employeeCode"
+                  class="form-control"
+                  formControlName="employeeCode"
+                  placeholder="Enter Employee Code"
+                  required
+                />
+                <div *ngIf="addEmployeeForm.get('employeeCode')?.invalid && addEmployeeForm.get('employeeCode')?.touched">
+                  <small class="text-danger">Employee Code is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="unit" class="form-label">Unit</label>
+                <select id="unit" class="form-select" formControlName="unit">
+                  <option value="All">All</option>
+                  <option value="Thane">Thane</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Indore">Indore</option>
+                </select>
+                <div *ngIf="addEmployeeForm.get('unit')?.invalid && addEmployeeForm.get('unit')?.touched">
+                  <small class="text-danger">Unit selection is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="department" class="form-label">Department</label>
+                <select id="department" class="form-select" formControlName="department">
+                  <option value="Admin Support">Admin Support</option>
+                  <option value="IT">IT</option>
+                </select>
+                <div *ngIf="addEmployeeForm.get('department')?.invalid && addEmployeeForm.get('department')?.touched">
+                  <small class="text-danger">Department selection is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="employeeMobile" class="form-label">Employee Mobile</label>
+                <input
+                  type="text"
+                  id="employeeMobile"
+                  class="form-control"
+                  formControlName="employeeMobile"
+                  placeholder="Enter Employee Mobile"
+                  required
+                />
+                <div *ngIf="addEmployeeForm.get('employeeMobile')?.invalid && addEmployeeForm.get('employeeMobile')?.touched">
+                  <small class="text-danger">Employee Mobile is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="employeeEmail" class="form-label">Employee Email</label>
+                <input
+                  type="email"
+                  id="employeeEmail"
+                  class="form-control"
+                  formControlName="employeeEmail"
+                  placeholder="Enter Employee Email"
+                  required
+                />
+                <div *ngIf="addEmployeeForm.get('employeeEmail')?.invalid && addEmployeeForm.get('employeeEmail')?.touched">
+                  <small class="text-danger">Valid Email is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="employeeExtension" class="form-label">Employee Ext</label>
+                <input
+                  type="text"
+                  id="employeeExtension"
+                  class="form-control"
+                  formControlName="employeeExtension"
+                  placeholder="Enter Employee Ext"
+                  required
+                />
+                <div *ngIf="addEmployeeForm.get('employeeExtension')?.invalid && addEmployeeForm.get('employeeExtension')?.touched">
+                  <small class="text-danger">Employee Ext is required.</small>
+                </div>
+              </div>
+            
+              <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select id="role" class="form-select" formControlName="role" >
+                  <option value="Admin">Admin</option>
+                  <option value="IT">IT</option>
+                </select>
+                <div *ngIf="addEmployeeForm.get('role')?.invalid && addEmployeeForm.get('role')?.touched">
+                  <small class="text-danger">At least one role must be selected.</small>
+                </div>
+              </div>
+            
+              <div class="d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="addEmployeeForm.invalid">Save</button>
+                <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+              </div>
+            </form>
+      </div>
+    </div>
+</div>

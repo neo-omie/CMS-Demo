@@ -45,14 +45,14 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MasterEmployee>> AddEmployee([FromBody] AddEmployeeDto employee)
+    public async Task<ActionResult<MasterEmployee>> AddEmployee([FromBody]AddEmployeeDto employee)
     {
         var command = new AddEmployeeCommand(employee);
         return Ok(await _mediator.Send(command));
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MasterEmployee>> UpdateEmployee(int id, [FromBody] UpdateEmployeeDto employee)
+    public async Task<ActionResult<MasterEmployee>> UpdateEmployee(int id, [FromBody]UpdateEmployeeDto employee)
     {
         var command = new UpdateEmployeeCommand(id,employee);
         return await _mediator.Send(command);

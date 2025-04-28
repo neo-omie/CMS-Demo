@@ -91,7 +91,15 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Employee not Found. :(");
             }
-            _context.Entry(employee).State = EntityState.Modified;
+            //_context.MasterEmployees.Update(employee);
+            checkEmp.EmployeeName = employee.EmployeeName;
+            checkEmp.Password = employee.Password;
+            checkEmp.EmployeeCode = employee.EmployeeCode;
+            checkEmp.Unit = employee.Unit;
+            checkEmp.DepartmentId = employee.DepartmentId;
+            checkEmp.EmployeeMobile = employee.EmployeeMobile;
+            checkEmp.Email = employee.Email;
+            checkEmp.EmployeeExtension = employee.EmployeeExtension;
             if (await _context.SaveChangesAsync() > 0)
             {
                 return employee;

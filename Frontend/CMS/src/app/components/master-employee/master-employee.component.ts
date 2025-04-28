@@ -5,27 +5,32 @@ import { ControlContainer, FormsModule } from '@angular/forms';
 import { MasterEmployee, MasterEmployeeDto } from '../../models/master-employee';
 import { MasterEmployeeService } from '../../services/master-employee.service';
 import { HttpClient } from '@angular/common/http';
+import { Pagination } from '../../utils/pagination';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-master-employee',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule],
+  imports: [CommonModule, LoaderComponent, FormsModule,RouterModule],
   templateUrl: './master-employee.component.html',
   styleUrl: './master-employee.component.css'
 })
 export class MasterEmployeeComponent implements OnInit{
 loading=true;
 employees: MasterEmployee[]=[];
-paginatedEmployees:MasterEmployee[]=[];
 totalEmployees:number=0;
 totalPages:number=0;
 currentPage:number=1;
 pageSize:number=10;
+maxPage:number=1; //used now 
+pageNumbers:number[] = []; //used now 
 selectedUnit: string = 'All';
 searchTerm: string = '';
+errorMsg ?: string
 
-
-constructor(private employeeService: MasterEmployeeService){}
+constructor(private employeeService: MasterEmployeeService,private router: Router){}
 
 ngOnInit(): void {
   this.fetchEmployees();
@@ -33,29 +38,31 @@ ngOnInit(): void {
 
 fetchEmployees(){
   this.employeeService.getEmployees(this.currentPage, this.pageSize, this?.selectedUnit, this?.searchTerm)
-  .subscribe(
-    (response: MasterEmployeeDto) => {
+  .subscribe({
+    next:(response: MasterEmployeeDto) => {
       this.loading = false;
       console.log(response);
       this.employees = response.data;
-      this.totalEmployees = response.totalCount;
-      this.totalPages=Math.ceil(this.totalEmployees / this.pageSize);
-      this.paginateEmployee();
+      this.totalEmployees = response.totalCount
+      if(this.employees!= undefined && this.employees.length > 0){
+        let result = Pagination.paginator(this.currentPage,this.totalEmployees,this.pageSize)
+        this.maxPage = result.maxPage;
+        console.log(this.maxPage);
+        this.pageNumbers = result.pageNumbers;
+      }
+    },
+    error:(error)=> {
+      this.loading = false;
+      console.error('Error :(', error);
+      this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+      Alert.toast(TYPE.ERROR,true,this.errorMsg);
     }
-  );
+  });
 }
 
-paginateEmployee(){
-  const startIndex=(this.currentPage-1)*this.pageSize;
-  const endIndex=startIndex + this.pageSize;
-  this.paginatedEmployees=this.employees;
-}
-
-
-onPageChange(page:number){
-  if(page>=1 && page <= this.totalPages){
-    this.currentPage=page;
-    console.log(this.currentPage);
+GetPage(pgNumber:number){
+  if(this.maxPage >= pgNumber && pgNumber >= 1){
+    this.currentPage=pgNumber;
     this.fetchEmployees();
   }
 }
@@ -74,20 +81,8 @@ getPageNumbers():number[]{
   return pageNumbers
 }
 
-onPreviousPage(){
-  if(this.currentPage>1){
-    this.onPageChange(this.currentPage-1);
-  }
-}
-
-onNextPage(){
-  if(this.currentPage<this.totalPages){
-    this.onPageChange(this.currentPage+1);
-  }
-}
-
 addEmployee(){
-  
+  this.router.navigate(['employeeMaster/add']);
 }
 
 deleteEmployee(employee:MasterEmployee){
@@ -99,11 +94,11 @@ deleteEmployee(employee:MasterEmployee){
 }
 
 viewEmployee(employee:MasterEmployee){
-
+  this.router.navigate(['employeeMaster/view']);
 }
 
 editEmployee(employee:MasterEmployee){
-
+  this.router.navigate(['employeeMaster/edit']);
 }
 
 }
