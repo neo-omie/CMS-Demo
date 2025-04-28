@@ -62,7 +62,7 @@ namespace CMS.API.Controllers
             return Ok(new { Message = "Deleted Document Successfully" });
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult<int>> UpdateDocument(int id, DocumentDTO document)
         {
             await _mediator.Send(new UpdateDocumentCommand(id, document));
