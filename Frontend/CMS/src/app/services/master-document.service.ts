@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MasterDocument, MasterDocumentDto } from '../models/master-document';
+import { AddDocumentDto, GetDocumentById, MasterDocument, MasterDocumentDto } from '../models/master-document';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,19 @@ export class MasterDocumentService {
     return this.http.get<MasterDocumentDto>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
   }
 
-  addDocument(masterDocument:MasterDocument):Observable<MasterDocument>{
-    return this.http.post<MasterDocument>(this.apiUrl,masterDocument);
+  addDocument(masterDocument:AddDocumentDto):Observable<AddDocumentDto>{
+    return this.http.post<AddDocumentDto>(this.apiUrl,masterDocument);
   }
 
-  updateDocument(updateMasterDocument:MasterDocument):Observable<MasterDocument>{
-    return this.http.put<MasterDocument>(`${this.apiUrl}/`,updateMasterDocument)
+  updateDocument(updateMasterDocument?:GetDocumentById):Observable<GetDocumentById>{
+    return this.http.put<GetDocumentById>(`${this.apiUrl}/`,updateMasterDocument)
+  }
+
+  deleteDocument(documentId:number):Observable<boolean>{
+    return this.http.delete<boolean>(`${this.apiUrl}/${documentId}`);
+  }
+
+  getById(id:number):Observable<GetDocumentById>{
+    return this.http.get<GetDocumentById>(`${this.apiUrl}/${id}`);
   }
 }

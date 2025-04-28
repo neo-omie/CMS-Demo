@@ -31,6 +31,7 @@ export const routes: Routes = [
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
+    {path: 'masters/companyMasters', component: MasterCompanyComponent},
     {path: '**', component: NotFoundComponent}
 
 ];
