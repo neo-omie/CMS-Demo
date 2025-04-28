@@ -15,4 +15,7 @@ export class UserService {
   refreshPassword(refPswd:PasswordRenewal):Observable<string> {
     return this.http.post<string>(`${this.apiUrl}/refreshPassword`, refPswd);
   }
+  isLoggedIn():boolean{
+    return !!localStorage.getItem('token');
+  }
 }

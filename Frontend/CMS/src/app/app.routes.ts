@@ -10,17 +10,18 @@ import { ApprovalMatrixMouScreenComponent } from './components/approval-matrix-m
 import { EscalationMatrixContractComponent } from './components/escalation-matrix-contract/escalation-matrix-contract.component';
 import { MasterCompanyAddFormComponent } from './components/master-company-add-form/master-company-add-form.component';
 import { MasterDepartmentComponent } from './components/master-department/master-department.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
-    {path: 'dashboard', component: DashboardComponent},
-    {path: 'masters', component: MastersScreenComponent}, 
-    {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent},
-    {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent},
-    {path: 'masters/documentMasters', component: MasterDocumentComponent},
-    {path: 'masters/departmentMasters', component: MasterDepartmentComponent},
-    {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent},
-    {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent},
+    {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
+    {path: 'masters', component: MastersScreenComponent, canActivate:[authGuard]}, 
+    {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate:[authGuard]},
+    {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate:[authGuard]},
+    {path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate:[authGuard]},
+    {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
+    {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
+    {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
     {path: '**', component: NotFoundComponent}
 
