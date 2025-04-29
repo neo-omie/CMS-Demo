@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Contracts.Queries.GetContractById
 {
-    public record GetContractByIdQuery(int id) : IRequest<Contract>;
+    public record GetContractByIdQuery(int id) : IRequest<GetContractByIdDto>;
 }
