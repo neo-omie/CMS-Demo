@@ -23,6 +23,7 @@ namespace CMS.Persistence
             services.AddScoped<IMasterCompanyRepository, MasterCompanyRepository>();
             services.AddScoped<IMasterApprovalMatrixContractRepository, MasterApprovalMatrixContractRepository>();
             services.AddScoped<IMasterEscalationMatrixContractRepository, MasterEscalationMatrixContractRepository>();
+            services.AddScoped<IMasterEscalationMatrixMouRepository, MasterEscalationMatrixMouRepository>();
             services.AddScoped<IMasterApprovalMatrixMOURepository, MasterApprovalMatrixMOURepository>();
             services.AddScoped<IMasterApostilleRepository, MasterApostilleRepository>();
             services.AddScoped<IContractTypeMasterRepository, ContractTypeMasterRepository>();

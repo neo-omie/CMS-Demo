@@ -47,6 +47,7 @@ namespace CMS.Persistence.Repositories
                     Escalation1 = a.Escalation1.EmployeeName,
                     Escalation2 = a.Escalation2.EmployeeName,
                     Escalation3 = a.Escalation3.EmployeeName,
+                    totalRecords = totalRecords
                 });
 
             return emMou;
@@ -65,8 +66,8 @@ namespace CMS.Persistence.Repositories
                 MatrixMouId = x.MatrixMouId,
                 DepartmentName = x.Department.DepartmentName,
                 Escalation1 = x.Escalation1.EmployeeName,
-                Escalation2 = x.Escalation1.EmployeeName,
-                Escalation3 = x.Escalation1.EmployeeName,
+                Escalation2 = x.Escalation2.EmployeeName,
+                Escalation3 = x.Escalation3.EmployeeName,
                 TriggerDaysEscalation1 = x.TriggerDaysEscalation1,
                 TriggerDaysEscalation2 = x.TriggerDaysEscalation2,
                 TriggerDaysEscalation3 = x.TriggerDaysEscalation3

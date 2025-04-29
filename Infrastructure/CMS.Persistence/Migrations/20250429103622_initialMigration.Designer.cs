@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250429053550_initialMigration")]
+    [Migration("20250429103622_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -219,6 +219,9 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<int>("EmpCustodianId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -527,7 +530,7 @@ namespace CMS.Persistence.Migrations
                         new
                         {
                             ValueId = 1,
-                            DepartmentId = 100,
+                            DepartmentId = 1,
                             Email = "admin@cms.com",
                             EmployeeCode = "NEO1",
                             EmployeeExtension = "Main person",
@@ -535,14 +538,14 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEL4wxCA/+iShrYIfQPrZsk5nSbjXDwtny33tOyFbOKjEu3tA8ML4ncVALB8lPVm28w==",
+                            Password = "AQAAAAIAAYagAAAAECpQWn4z6pK6NB2zDwhCwWqREi1z+16rirMIBDnqaa9uWwgrD1jlBjBzcsWB6WO8Bw==",
                             Role = "Admin",
                             Unit = "Dadar"
                         },
                         new
                         {
                             ValueId = 2,
-                            DepartmentId = 101,
+                            DepartmentId = 2,
                             Email = "sarthak@neosoft.com",
                             EmployeeCode = "NEO2",
                             EmployeeExtension = "IT Smart",
@@ -550,7 +553,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEK5VKkcX9Kme8nPJfSvfRElvr2hrdQI28KxFd5bfblnMGE0GRuWIaa7cI/Qy5CEyZA==",
+                            Password = "AQAAAAIAAYagAAAAENaW+Whtl60ymxL1Y/LJA6gqShgmONNJLdNJE+lnGYcuEUE6nC7MkQrkpCiAATqzuA==",
                             Role = "MOU_User",
                             Unit = "Dadar"
                         });
@@ -599,6 +602,51 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixContracts");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterEscalationMatrixMou", b =>
+                {
+                    b.Property<int>("MatrixMouId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MatrixMouId"));
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EscalationId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EscalationId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EscalationId3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TriggerDaysEscalation1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation3")
+                        .HasColumnType("int");
+
+                    b.HasKey("MatrixMouId");
+
+                    b.HasAlternateKey("DepartmentId");
+
+                    b.HasIndex("EscalationId1");
+
+                    b.HasIndex("EscalationId2");
+
+                    b.HasIndex("EscalationId3");
+
+                    b.ToTable("MasterEscalationMatrixMous");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
@@ -755,6 +803,44 @@ namespace CMS.Persistence.Migrations
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEscalationMatrixContract", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation1")
+                        .WithMany()
+                        .HasForeignKey("EscalationId1")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation2")
+                        .WithMany()
+                        .HasForeignKey("EscalationId2")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Escalation3")
+                        .WithMany()
+                        .HasForeignKey("EscalationId3")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Escalation1");
+
+                    b.Navigation("Escalation2");
+
+                    b.Navigation("Escalation3");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterEscalationMatrixMou", b =>
                 {
                     b.HasOne("CMS.Domain.Entities.Department", "Department")
                         .WithMany()

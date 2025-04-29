@@ -16,6 +16,7 @@ import { AddEmployeeComponent } from './components/add-employee/add-employee.com
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
+import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -30,6 +31,7 @@ export const routes: Routes = [
     // {path:'masters/employeeMasters/viewEmployee', component:ViewEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
+    {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
     {path: 'masters/companyMasters', component: MasterCompanyComponent},
