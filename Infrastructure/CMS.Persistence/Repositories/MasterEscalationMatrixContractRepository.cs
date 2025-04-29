@@ -70,8 +70,8 @@ namespace CMS.Persistence.Repositories
                 MatrixContractId = x.MatrixContractId,
                 DepartmentName = x.Department.DepartmentName,
                 Escalation1 = x.Escalation1.EmployeeName,
-                Escalation2 = x.Escalation1.EmployeeName,
-                Escalation3 = x.Escalation1.EmployeeName,
+                Escalation2 = x.Escalation2.EmployeeName,
+                Escalation3 = x.Escalation3.EmployeeName,
                 TriggerDaysEscalation1 = x.TriggerDaysEscalation1,
                 TriggerDaysEscalation2 = x.TriggerDaysEscalation2,
                 TriggerDaysEscalation3 = x.TriggerDaysEscalation3

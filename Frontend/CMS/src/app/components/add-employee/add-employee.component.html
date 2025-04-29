@@ -1,8 +1,10 @@
 <div class="row justify-content-center">
       <div class="col-md-8">
-        <p class="fs-3 m-4" style="color: #5f5fee; text-align: center;">ADD EMPLOYEE </p>
+        <p class="fs-3 m-4" style="color: #5f5fee; text-align: center;">
+          {{ mode==='add'? 'ADD EMPLOYEES' : mode==='edit' ? 'EDIT EMPLOYEES' :'VIEW EMPLOYEES'}}
+        </p>
             
-            <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()" *ngIf="mode!=='view'">
               <div class="fields-container">
                 <div class="m-3">
                   <label for="employeeName" class="form-label">Employee Name</label>
@@ -75,9 +77,39 @@
 
             
               <div class="d-flex justify-content-center gap-2">
-                <button type="submit" class="btn btn-primary" style="background-color: #5f5fee;" [disabled]="addEmployeeForm.invalid">Save</button>
+                <button type="submit" class="btn btn-primary" style="background-color: #5f5fee;" [disabled]="addEmployeeForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
                 <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
               </div>
             </form>
+
+            <div class="view-mode" *ngIf="mode==='view'">
+              <div class="m-3">
+                <strong>Employee Name: </strong>{{addEmployeeForm.get('employeeName')?.value}}
+              </div>
+              <div class="m-3">
+                <strong>Role: </strong>{{addEmployeeForm.get('role')?.value}}
+              </div>
+              <div class="m-3">
+                <strong>Employee Code: </strong>{{addEmployeeForm.get('employeeCode')?.value}}
+              </div>
+              <div class="m-3">
+                <strong>Unit: </strong>{{addEmployeeForm.get('unit')?.value}}
+              </div>
+              <div class="m-3">
+                <strong>Department: </strong>{{addEmployeeForm.get('department')?.value}}
+              </div>
+              <div class="m-3">
+                <strong>Employee Mobile:</strong> {{ addEmployeeForm.get('employeeMobile')?.value }}
+              </div>
+              <div class="m-3">
+                <strong>Email:</strong> {{ addEmployeeForm.get('email')?.value }}
+              </div>
+              <div class="m-3">
+                <strong>Employee Extension:</strong> {{ addEmployeeForm.get('employeeExtension')?.value }}
+              </div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-secondary" (click)="onCancel()">Back</button>
+              </div>
+            </div>
       </div>
 </div>

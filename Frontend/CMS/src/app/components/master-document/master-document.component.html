@@ -49,9 +49,8 @@
             <td *ngIf="doc.status == 0">InActive</td>
              <td>
                <i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#document-edit" (click)="GetDocument(doc.valueId)"></i>   
-              <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#document-detail" (click)="GetDocument(doc.valueId)"></i>
-
-            <i  class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#document-delete" (click)="deleteDocument(doc.valueId)"></i></td>
+               <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#document-detail" (click)="GetDocument(doc.valueId)"></i>
+               <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#document-delete" (click)="deleteDocument(doc.valueId)"></i></td>
 
         </tr>
     </tbody>
@@ -69,8 +68,8 @@
       <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
     </ul>
   </nav>
-
-  <!-- <div class="modal fade" id="document-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  
+  <div class="modal fade" id="document-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <form class="modal-content">
         <div class="modal-header d-flex justify-content-between">
@@ -81,17 +80,26 @@
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
-              <input #editDocumentName  class="form-control" placeholder="Change Document name" type="text" value="{{ getMasterDocumentById?.documentName  }}"/>
+              <input #editDocumentName class="form-control" placeholder="Change document name" type="text" value="{{doc != undefined ? doc.documentName : ''}}"/>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+              <select #editDocumentStatus class="form-control form-select">
+                <option value="0" selected="{{doc != undefined && doc.status == 0 ? true : false}}">InActive</option>
+                <option value="1" selected="{{doc != undefined && doc.status == 1 ? true : false}}">Active</option>
+              </select>
+            </div>
           </div>
         </div>
-        </div>
         <div class="modal-footer">
-            <button type="button" class="btn" data-bs-dismiss="modal" (click)="updateDocument()">Save</button>
+            <button type="button" class="btn" data-bs-dismiss="modal" (click)="editDocument(doc != undefined ? doc.valueId : 0)">Save</button>
             <button type="reset" class="btn" data-bs-dismiss="modal" (click)="closeEditApproverCollapses()">Cancel</button>
         </div>
       </form>
     </div>
-  </div> -->
+  </div>
 
   <div class="modal fade" id="document-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">

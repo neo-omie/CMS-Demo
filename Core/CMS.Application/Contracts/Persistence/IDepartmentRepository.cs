@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
 using CMS.Application.Features.Departments.Queries.GetAllDepartments;
+using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 
@@ -22,6 +23,6 @@ namespace CMS.Application.Contracts.Persistence
         public Task<MasterApprovalMatrixContract> AddContractApprovers(int id, UpdateApprovalMatrixContractDto addApprovers);
         public Task<MasterApprovalMatrixMOU> AddMOUApprovers(int id, UpdateApprovalMatrixMOUDto addApprovers);
         public Task<MasterEscalationMatrixContract> AddContractEscalators(int id, UpdateEscalationMatrixContractDto addEscalators);
-        //public Task<MasterEscalationMatrixMOU> AddMOUEscalators(int id);
+        public Task<MasterEscalationMatrixMou> AddMouEscalators(int id, UpdateEscalationMatrixMouDto addEscalators);
     }
 }

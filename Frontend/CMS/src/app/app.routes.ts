@@ -16,6 +16,8 @@ import { AddEmployeeComponent } from './components/add-employee/add-employee.com
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
+import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
+import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 
 export const routes: Routes = [
@@ -27,10 +29,11 @@ export const routes: Routes = [
     {path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate:[authGuard]},
     {path:'masters/employeeMasters', component:MasterEmployeeComponent, canActivate:[authGuard]},
     {path:'masters/employeeMasters/addEmpoyee', component:AddEmployeeComponent, canActivate:[authGuard]},
-    // {path:'masters/employeeMasters/editEmpoyee', component:EditEmployeeComponent, canActivate:[authGuard]},
-    // {path:'masters/employeeMasters/viewEmpoyee', component:ViewEmployeeComponent, canActivate:[authGuard]},
+    // {path:'masters/employeeMasters/editEmployee', component:EditEmployeeComponent, canActivate:[authGuard]},
+    // {path:'masters/employeeMasters/viewEmployee', component:ViewEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
+    {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
     {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},

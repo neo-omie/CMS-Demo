@@ -59,3 +59,15 @@ export class AddEmployeeDto{
       email?:string
       employeeExtension?:string
 }
+
+export class EditEmployeeDto{
+  employeeName?:string
+      password?:string
+      role?:string
+      employeeCode?:string
+      unit?:string
+      department?:string
+      employeeMobile?:number
+      email?:string
+      employeeExtension?:string
+}

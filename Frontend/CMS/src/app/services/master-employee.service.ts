@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { AddEmployeeDto, MasterEmployee, MasterEmployeeDto } from '../models/master-employee';
+import { AddEmployeeDto, EditEmployeeDto, MasterEmployee, MasterEmployeeDto } from '../models/master-employee';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -43,8 +43,8 @@ export class MasterEmployeeService {
     return this.http.post<AddEmployeeDto>(`${this.apiUrl}`,employee);
   }
 
-  updateEmployee(id:number, employee:MasterEmployee):Observable<MasterEmployee>{
-    return this.http.put<MasterEmployee>(`${this.apiUrl}/${id}`, employee);
+  updateEmployee(id:number, employee:EditEmployeeDto):Observable<EditEmployeeDto>{
+    return this.http.put<EditEmployeeDto>(`${this.apiUrl}/${id}`, employee);
   }
 
   deleteEmployee(id:number):Observable<any>{
