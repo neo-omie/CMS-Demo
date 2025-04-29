@@ -324,7 +324,8 @@ namespace CMS.Persistence.Migrations
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Approver1Status = table.Column<int>(type: "int", nullable: false),
                     Approver2Status = table.Column<int>(type: "int", nullable: false),
-                    Approver3Status = table.Column<int>(type: "int", nullable: false)
+                    Approver3Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
