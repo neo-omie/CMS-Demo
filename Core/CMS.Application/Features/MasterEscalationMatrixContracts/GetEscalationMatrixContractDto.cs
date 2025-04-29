@@ -13,7 +13,6 @@ namespace CMS.Application.Features.MasterEscalationMatrixContracts
     {
 
         public int MatrixContractId { get; set; }
-
         public string Escalation1 { get; set; }
         public string Escalation2 { get; set; }
         public string Escalation3 { get; set; }

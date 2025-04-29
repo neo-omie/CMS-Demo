@@ -14,6 +14,7 @@ namespace CMS.Persistence.Context
         public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
 
         public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
+        public DbSet<MasterEscalationMatrixMou> MasterEscalationMatrixMous { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<MasterCompany> MasterCompanies { get; set; }
