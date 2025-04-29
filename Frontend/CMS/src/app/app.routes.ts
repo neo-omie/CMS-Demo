@@ -15,6 +15,7 @@ import { MasterEmployeeComponent } from './components/master-employee/master-emp
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
+import { MasterCompanyComponent } from './components/master-company/master-company.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
