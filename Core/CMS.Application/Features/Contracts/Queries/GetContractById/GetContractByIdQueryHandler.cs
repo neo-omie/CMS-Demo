@@ -9,14 +9,14 @@ using MediatR;
 
 namespace CMS.Application.Features.Contracts.Queries.GetContractById
 {
-    public class GetContractByIdQueryHandler : IRequestHandler<GetContractByIdQuery, Contract>
+    public class GetContractByIdQueryHandler : IRequestHandler<GetContractByIdQuery, GetContractByIdDto>
     {
         readonly IContractRepository _contractRepository;
         public GetContractByIdQueryHandler(IContractRepository contractRepository)
         {
             _contractRepository = contractRepository;
         }
-        public async Task<Contract> Handle(GetContractByIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetContractByIdDto> Handle(GetContractByIdQuery request, CancellationToken cancellationToken)
         {
             return await _contractRepository.GetContractByIdAsync(request.id);
         }
