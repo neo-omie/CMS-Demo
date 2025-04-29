@@ -1,8 +1,17 @@
 export class MasterDocument {
-  valueId?: number ;
-  documentName?: string  ;
-  status?: number;
-  // isDeleted:number;
+  // valueId?: number ;
+  // documentName?: string  ;
+  // status?: number;
+
+  valueId: number;
+  documentName: string;
+  status: number;
+
+  constructor(valueId:number, documentName: string, status: number) {
+    this.valueId=valueId;
+    this.status = status;
+    this.documentName = documentName;
+  }
 }
 export class MasterDocumentDto {
   documents: MasterDocument[];
@@ -15,12 +24,25 @@ export class MasterDocumentDto {
 }
 
 export class AddDocumentDto {
-    documentName: string;
+  documentName: string;
   status: number;
-  constructor(documentName:string,status:number){
-    this.documentName=documentName;
-    this.status=status;
+  constructor(documentName: string, status: number) {
+    this.documentName = documentName;
+    this.status = status;
   }
 
   
+}
+
+export class GetDocumentById{
+  valueId :number;
+  documentName : string;
+  status:number;
+  
+  constructor(valueId:number,documentName:string,status:number){
+    this.valueId=valueId;
+    this.documentName=documentName;
+    this.status = status;
+
+  }
 }

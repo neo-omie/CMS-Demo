@@ -1,0 +1,83 @@
+<div class="row justify-content-center">
+      <div class="col-md-8">
+        <p class="fs-3 m-4" style="color: #5f5fee; text-align: center;">ADD EMPLOYEE </p>
+            
+            <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()">
+              <div class="fields-container">
+                <div class="m-3">
+                  <label for="employeeName" class="form-label">Employee Name</label>
+                  <span *ngIf="employeeName?.hasError('required') && (employeeName?.dirty || employeeName?.touched)" style="color: red;">*Required</span>
+                  <input class="form-control" type="text" id="employeeName" placeholder="Enter company name" formControlName="employeeName">
+                </div>
+  
+                <div class="m-3">
+                  <label for="password" class="form-label">Password</label>
+                  <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)" style="color: red;">*Required</span>
+                  <input class="form-control" type="text" id="password" placeholder="Enter company name" formControlName="password">
+                </div>
+  
+                <div class="m-3">
+                  <label for="role" class="form-label">Role</label>
+                  <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">*Required</span>
+                  <select class="form-select" id="employeeCode" placeholder="Select Role"  formControlName="role">
+                    <option value="Management User">Management User</option>
+                    <option value="MOU_User">MOU_User</option>
+                    <option value="MOU_Approver">MOU_Approver</option>
+                    <option value="Contract_User">Contract_User</option>
+                    <option value="Contract_Approver">Contract_Approver</option>
+                  </select>
+                </div>
+  
+                <div class="m-3">
+                  <label for="employeeCode" class="form-label">Employee Code</label>
+                  <span *ngIf="employeeCode?.hasError('required') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">*Required</span>
+                  <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee Code" formControlName="employeeCode">
+                </div>
+  
+                <div class="m-3">
+                  <label for="unit" class="form-label">Unit</label>
+                  <span *ngIf="unit?.hasError('required') && (unit?.dirty || unit?.touched)" style="color: red;">*Required</span>
+                  <select class="form-select" id="unit" placeholder="Select unit" formControlName="unit">
+                    <option value="Thane">Thane</option>
+                    <option value="Indore">Indore</option>
+                    <option value="Pune">Pune</option>
+                  </select>
+                </div>
+  
+                <div class="m-3">
+                  <label for="department" class="form-label">Department</label>
+                  <span *ngIf="department?.hasError('required') && (department?.dirty || department?.touched)" style="color: red;">*Required</span>
+                  <select class="form-select" id="department" placeholder="Select department name" formControlName="department">
+                    <option value="" disabled selected>--SELECT--</option>
+                    <option *ngFor="let department of departments" [value]="department.departmentId">{{department.departmentName}}</option>
+                  </select>
+                </div>
+  
+                <div class="m-3">
+                  <label for="employeeMobile" class="form-label">Employee Mobile</label>
+                  <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">*Required</span>
+                  <input class="form-control" type="number" id="employeeMobile" placeholder="Enter Employee Mobile" formControlName="employeeMobile">
+                </div>
+  
+                <div class="m-3">
+                  <label for="email" class="form-label">Email</label>
+                  <span *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)" style="color: red;">*Required</span>
+                  <input class="form-control" type="email" id="email" placeholder="Enter your Email" formControlName="email">
+                </div>
+  
+                <div class="m-3">
+                  <label for="employeeExtension" class="form-label">Employee Ext</label>
+                  <span *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)" style="color: red;">*Required</span>
+                  <input class="form-control" type="text" id="employeeExtension" placeholder="Enter Employee extension" formControlName="employeeExtension">
+                </div>
+
+              </div>
+
+            
+              <div class="d-flex justify-content-center gap-2">
+                <button type="submit" class="btn btn-primary" style="background-color: #5f5fee;" [disabled]="addEmployeeForm.invalid">Save</button>
+                <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+              </div>
+            </form>
+      </div>
+</div>

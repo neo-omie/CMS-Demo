@@ -1,22 +1,26 @@
 <div class="card login-form-card" style="width: 18rem;">
     <div class="card-body">
         <h3 class="card-title login-title mb-3">Login</h3>
-        <form class="needs-validation" #loginForm = "ngForm" (ngSubmit)="loginUser(loginForm)" novalidate>
+        <form class="needs-validation" [formGroup]="loginForm" (ngSubmit)="loginUser()" >
         <div class="mb-3">
-            <div class="input-group">
-                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                <input type="email" name="email" #email = "ngModel" class="form-control" id="email" placeholder="Email" required [(ngModel)] = loginModel.email>
+            <div class="field-container">
+                <span class="error" *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)">*Required</span>
+                <span class="error" *ngIf="email?.hasError('email') && (email?.dirty || email?.touched)">Invalid email</span>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Email" formControlName="email">
+                </div>
             </div>
-            <!-- <div class="invalid-feedback">Email is required</div> -->
-            <small class="fields-error" *ngIf="email.invalid && email.touched">Email is required</small>
         </div>
         <div class="mb-3">
-            <div class="input-group">
-                <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
-                <input [type]="loginPasswordEyeOpen ? 'text' : 'password'" name="password" #password = "ngModel" class="form-control" id="password" placeholder="Password" required [(ngModel)] = loginModel.password>
+            <div class="field-container">
+                <span class="error" *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)">*Required</span>
+                <span class="error" *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)">A-Z,a-z,0-9,&#64;#$%^&-+=() length:4-10</span>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+                    <input [type]="loginPasswordEyeOpen ? 'text' : 'password'" name="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+                </div>
             </div>
-            <!-- <div class="invalid-feedback">Password is required</div> -->
-            <small class="fields-error" *ngIf="password.invalid && password.touched">Password is required</small>
         </div>
         <div class="mb-3 form-check">
             <label class="form-check-label" for="showPassword">

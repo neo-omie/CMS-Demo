@@ -11,8 +11,6 @@ namespace CMS.Domain.Entities
         public string Password { get; set; }
         public string Role {  get; set; }
         public string EmployeeName { get; set; }
-        //public string EmployeeLocation { get; set; }
-        //public string Roles { get; set; }
         public bool IsDeleted { get; set; } = false;
         public string EmployeeCode { get; set; }
         public string Unit { get; set; }

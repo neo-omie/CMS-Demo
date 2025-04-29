@@ -10,8 +10,16 @@ thead th{
     color: whitesmoke;
 }
 td{
-    font-weight: 450;
+    font-weight: 400;
     color: rgb(61, 61, 61);
+}
+.icon{
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 1rem;
+}
+.icon:hover{
+    color: #5f5fee;
 }
 .page-link{
     color: #5f5fee;
@@ -24,4 +32,39 @@ td{
 .active{
     background-color: #5f5fee;
     color: whitesmoke;
+}
+.modal-header{
+    border-color: #5f5fee;
+    background-color: #5f5fee;
+}
+.modal-title{
+    color: #5f5fee;
+}
+.close-btn{
+    border-color: whitesmoke;
+    color: whitesmoke;
+}
+.close-btn:hover{
+    background-color: whitesmoke;
+    color: #5f5fee;
+}
+.dropdown-input{
+    background-color: white;
+    border-right: 0;
+}
+.dropdown-icon{
+    background-color: white;
+    border-left: 0;
+}
+.dropdown-btn{
+    text-align: start;
+    border-color: #dee2e6;
+}
+.dropdown-btn:hover{
+    color: #5f5fee;
+    border-color: #5f5fee ;
+}
+.form-control:focus{
+    box-shadow: none;
+    border-color: #dee2e6;
 }

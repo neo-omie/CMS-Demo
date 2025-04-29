@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using CMS.Application.Features.Departments.Queries.GetDepartmentById;
 using CMS.Application.Features.MasterCompanies;
 using CMS.Application.Features.MasterCompanies.Command.AddCompany;
 using CMS.Application.Features.MasterCompanies.Command.DeleteCompany;
 using CMS.Application.Features.MasterCompanies.Command.UpdateCompany;
 using CMS.Application.Features.MasterCompanies.Query.GetAllCompanies;
+using CMS.Application.Features.MasterCompanies.Query.GetCompanyById;
 using CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees;
 using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
@@ -46,9 +48,19 @@ namespace CMS.API.Controllers
             return Ok(compDto);
         }
 
+        //Get company by ID
+        [Route("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCompanyById([FromRoute] int id)
+        {
+            _logger.LogInformation("GetCompanyById method initiated");
+            var department = await _mediator.Send(new GetCompanyByIdQuery(id));
+            _logger.LogInformation("GetCompanyById method Performed");
+            return Ok(department);
+        }
 
-        //Add
-        [HttpPost]
+            //Add
+            [HttpPost]
         public async Task<ActionResult<MasterCompany>> AddCompany([FromBody] MasterCompany company)
         {
             _logger.LogInformation("AddCompany method initiated");
@@ -77,7 +89,7 @@ namespace CMS.API.Controllers
             var command = new DeleteCompanyCommand(id);
             var checkifDel = await _mediator.Send(command);
             if (checkifDel)
-                return Ok("successfully deleted");
+                return Ok(checkifDel);
             _logger.LogInformation("DeleteCompany method Performed");
             return BadRequest();
         }
