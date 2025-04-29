@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
   styleUrl: './master-company-add-form.component.css'
 })
 export class MasterCompanyAddFormComponent {
+  mode:any;
   constructor(private  companyMasterService:CompanyMasterService,private route:Router) {}
   masterCompanyAddForm = new FormGroup({
     companyName : new FormControl('',[Validators.required]),
@@ -170,5 +171,9 @@ export class MasterCompanyAddFormComponent {
   }
   get panNo(){
     return this.masterCompanyAddForm.get('panNo');
+  }
+
+  onClick(){
+    this.route.navigate(['masters/companyMasters']);
   }
 }

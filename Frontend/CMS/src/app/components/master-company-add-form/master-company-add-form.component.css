@@ -22,3 +22,14 @@
     background-color: #5f5fee;
     color: whitesmoke;
 }
+
+#btnadd{
+    margin: 5px;
+    background-color: #5f5fee;
+    color: white;
+}
+#btncancel{
+    margin: 5px;
+    background-color: #5f5fee;
+    color: white;
+}

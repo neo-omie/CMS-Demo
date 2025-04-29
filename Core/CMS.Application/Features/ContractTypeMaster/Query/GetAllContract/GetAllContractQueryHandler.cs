@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.ContractTypeMaster.Query.GetAllContract
 {
-    public class GetAllContractQueryHandler : IRequestHandler<GetAllContractQuery, IEnumerable<ContractTypeMasters>>
+    public class GetAllContractQueryHandler : IRequestHandler<GetAllContractQuery, IEnumerable<GetAllContractTypesDTO>>
     {
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
 
@@ -17,7 +17,7 @@ namespace CMS.Application.Features.ContractTypeMaster.Query.GetAllContract
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
         }
-        public Task<IEnumerable<ContractTypeMasters>> Handle(GetAllContractQuery request, CancellationToken cancellationToken)
+        public Task<IEnumerable<GetAllContractTypesDTO>> Handle(GetAllContractQuery request, CancellationToken cancellationToken)
         {
             return _contractTypeMasterRepository.GetAllContractAsync(request.pageNumber, request.pageSize);
         }

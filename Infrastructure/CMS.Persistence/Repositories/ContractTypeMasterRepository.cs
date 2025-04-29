@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Contracts.Persistence;
+using CMS.Application.Features.ContractTypeMaster.Query;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -51,14 +52,19 @@ namespace CMS.Persistence.Repositories
             
         }
 
-        public async Task<IEnumerable<ContractTypeMasters>> GetAllContractAsync( int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetAllContractTypesDTO>> GetAllContractAsync( int pageNumber, int pageSize)
         {
-            var query = _context.contracts.AsQueryable();
-
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            int totalRecords = await _context.contracts.CountAsync();
+            return await _context.contracts.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .Where(c => c.IsDeleted == false)
+                .Select(c => new GetAllContractTypesDTO
+                { 
+                    ValueId = c.ValueId,
+                    ContractTypeName = c.ContractTypeName,
+                    Status = c.Status,
+                    IsDeleted = c.IsDeleted,
+                    TotalRecords = totalRecords
+                }).ToListAsync();
         }
 
         public async Task<ContractTypeMasters> GetContractById(int id)
