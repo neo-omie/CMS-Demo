@@ -31,6 +31,7 @@ export class MasterDocumentComponent implements OnInit {
   document: AddDocumentDto = new AddDocumentDto('', 0);
   errorMsg?: string;
   getMasterDocumentById ?: GetDocumentById;
+  doc?: MasterDocument;
    @ViewChild('editDocumentName') editDocumentName!: ElementRef;
    @ViewChild('editDocumentStatus') editDocumentStatus!: ElementRef;
 
@@ -44,7 +45,7 @@ export class MasterDocumentComponent implements OnInit {
   closeEditApproverCollapses() {
     this.renderer.removeClass(this.editDocumentName.nativeElement,'show');
     this.renderer.removeClass(this.editDocumentStatus.nativeElement,'show');
-
+    this.doc = undefined;
 }
 
   
@@ -106,21 +107,31 @@ export class MasterDocumentComponent implements OnInit {
       },
     });
   }
-  updateDocument(updateDocForm: NgForm) {
-    this.getMasterDocumentById = updateDocForm.value;
-    // this.getMasterDocumentById.status = Number(this.document.status);
+  editDocument(id: number) {
+    let docName = this.editDocumentName.nativeElement.value;
+    let status = Number(this.editDocumentStatus.nativeElement.value);
+    this.document.documentName = docName;
+    this.document.status = status;
+    if (docName !== "") {
+      this.documentService.updateDocument(id, this.document).subscribe({
+        next: (response: string) => {
+          if (response) {
+            Alert.toast(TYPE.SUCCESS, true, "Document Updated Successfully");
+            this.getDocuments(1, 10);
+          }
 
-    this.documentService.updateDocument(this.getMasterDocumentById).subscribe({
-      next: (response) => {
-        Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-        updateDocForm.resetForm();
-        this.GetPage(this.maxPage);
-      },
-      error: (error) => {
-        console.error('Error updating Document:', error);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      },
-    });
+        },
+        error: (error) => {
+          console.error('Error :(', error);
+          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
+      });
+    }
+    else {
+      Alert.toast(TYPE.ERROR, true, "Please enter the department name.");
+    }
+    this.closeEditApproverCollapses();
   }
 
   deleteDocument(id?: number) {
@@ -152,6 +163,7 @@ export class MasterDocumentComponent implements OnInit {
           this.documentService.getById(id).subscribe({
             next:(response:GetDocumentById) => {
               this.getMasterDocumentById = response;
+              this.doc = response;
             }, 
             error:(error) => {
               console.error('Error :(', error);
