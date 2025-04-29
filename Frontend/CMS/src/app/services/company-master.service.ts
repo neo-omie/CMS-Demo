@@ -10,11 +10,23 @@ export class CompanyMasterService {
 private apiUrl='https://localhost:7041/api/MasterCompany'
   constructor(private http:HttpClient) { }
 
-  getCompany(pageNumber:number,pageSize:number):Observable<CompanyListResponse[]>{
-    return this.http.get<CompanyListResponse[]>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
+  getCompany(searchTerm:string, pageNumber:number,pageSize:number):Observable<CompanyMasterDto[]>{
+    return this.http.get<CompanyMasterDto[]>(`${this.apiUrl}/${pageNumber}/${pageSize}?searchTerm=${searchTerm}`);
   }
+
+   getCompanyById(valueId:number):Observable<MasterCompany>{
+      return this.http.get<MasterCompany>(`${this.apiUrl}/${valueId}`);
+    }
 
   addCompany(addCompanyDto:AddCompanyDto):Observable<MasterCompany>{
     return this.http.post<MasterCompany>(`${this.apiUrl}`,addCompanyDto)
+  }
+
+  updateCompany(valueId:number, CompanyName:string):Observable<boolean>{
+    return this.http.put<boolean>(`${this.apiUrl}/${valueId}?companyName=${CompanyName}`, null);
+  }
+
+  deleteCompany(valueId:number):Observable<boolean>{
+    return this.http.delete<boolean>(`${this.apiUrl}/${valueId}`);
   }
 }
