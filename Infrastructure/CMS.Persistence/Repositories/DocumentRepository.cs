@@ -41,7 +41,7 @@ namespace CMS.Persistence.Repositories
             }
 
             
-            var totalCount = await _context.MasterDocuments.CountAsync();
+            var totalCount = await _context.MasterDocuments.Where(x => x.IsDeleted == false).CountAsync();
 
 
             var documents = await _context.MasterDocuments

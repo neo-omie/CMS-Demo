@@ -54,7 +54,7 @@ namespace CMS.Persistence.Repositories
 
         public async Task<IEnumerable<GetAllContractTypesDTO>> GetAllContractAsync( int pageNumber, int pageSize)
         {
-            int totalRecords = await _context.contracts.CountAsync();
+            int totalRecords = await _context.contracts.Where(x => x.IsDeleted == false).CountAsync();
             return await _context.contracts.Skip((pageNumber - 1) * pageSize).Take(pageSize)
                 .Where(c => c.IsDeleted == false)
                 .Select(c => new GetAllContractTypesDTO

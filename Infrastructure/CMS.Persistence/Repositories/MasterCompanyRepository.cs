@@ -55,22 +55,13 @@ namespace CMS.Persistence.Repositories
 
         public async Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string? searchTerm, int pageNumber, int pageSize)
         {
-            var totalRecords = await _context.MasterCompanies.CountAsync();
+            var totalRecords = await _context.MasterCompanies.Where(x => x.IsDeleted == false).CountAsync();
             var query = _context.MasterCompanies.AsQueryable();
            
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(e => e.CompanyName.Contains(searchTerm));
             }
-            //var result = _context.MasterCompanies.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(a=> a.IsDeleted == false)
-            //    .Select(a => new GetMastersDTO
-            //    {
-            //        ValueId = a.ValueId,
-            //        CompanyName = a.CompanyName,
-            //        CompanyLocation = a.city.City,
-            //        status = a.CompanyStatus,
-            //        TotalRecords = totalRecords
-            //    });
             var result = query
             .Where(x => x.IsDeleted == false)
             .Skip((pageNumber - 1) * pageSize)
