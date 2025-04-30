@@ -48,9 +48,9 @@
             <td *ngIf="doc.status == 1">Active</td>
             <td *ngIf="doc.status == 0">InActive</td>
              <td>
-               <i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#document-edit" (click)="GetDocument(doc.valueId)"></i>   
+               <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#document-edit" (click)="GetDocument(doc.valueId)"></i>   
                <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#document-detail" (click)="GetDocument(doc.valueId)"></i>
-               <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#document-delete" (click)="deleteDocument(doc.valueId)"></i></td>
+               <i class="fa-regular fa-trash-can icon" data-bs-toggle="modal" data-bs-target="#document-delete" (click)="deleteDocument(doc.valueId)"></i></td>
 
         </tr>
     </tbody>
@@ -79,13 +79,13 @@
         <div class="modal-body">
           <div class="mb-3">
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+              <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
               <input #editDocumentName class="form-control" placeholder="Change document name" type="text" value="{{doc != undefined ? doc.documentName : ''}}"/>
             </div>
           </div>
           <div class="mb-3">
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+              <span class="input-group-text"><i class="fa-solid fa-toggle-on"></i></span>
               <select #editDocumentStatus class="form-control form-select">
                 <option value="0" selected="{{doc != undefined && doc.status == 0 ? true : false}}">InActive</option>
                 <option value="1" selected="{{doc != undefined && doc.status == 1 ? true : false}}">Active</option>
@@ -112,21 +112,21 @@
           <h1 class="modal-title fs-6 mb-3">Document ID</h1>
           <div class="mb-3">
             <div class="input-group">
-                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
                 <input type="text" name="documentId" class="form-control" id="documentId" [value]=" getMasterDocumentById?.valueId" disabled>
             </div>
           </div>
           <h1 class="modal-title fs-6 mb-3">Document Name</h1>
           <div class="mb-3">
             <div class="input-group">
-                <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+                <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
                 <input type="text" name="departmentName" class="form-control" id="departmentName" [value]="getMasterDocumentById?.documentName" disabled>
             </div>
           </div>
           <h1 class="modal-title fs-6 mb-3">Document Status</h1>
           <div class="mb-3">
             <div class="input-group">
-                <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
+                <span class="input-group-text"><i class="fa-solid fa-toggle-on"></i></span>
                 <input type="text" name="departmentStatus" class="form-control" id="departmentStatus" [value]="getMasterDocumentById?.status == 1 ? 'Active' : 'InActive'" disabled>
             </div>
           </div>

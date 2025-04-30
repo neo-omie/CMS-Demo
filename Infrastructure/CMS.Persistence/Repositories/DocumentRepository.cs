@@ -41,17 +41,11 @@ namespace CMS.Persistence.Repositories
             }
 
             
-            var totalCount = await _context.MasterDocuments.CountAsync();
+            var totalCount = await _context.MasterDocuments.Where(x => x.IsDeleted == false).CountAsync();
 
-
-            var documents = await _context.MasterDocuments
-                .Where(x => x.IsDeleted == false)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-                
-
-            return (documents, totalCount);
+            string sql = "EXEC SP_GetAllDocuments @PageNumber = {0}, @PageSize = {1}";
+            var docs = _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize);
+            return (docs, totalCount);
         }
 
         public async Task<MasterDocument> GetDocumentById(int id)

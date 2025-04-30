@@ -55,7 +55,7 @@ namespace CMS.Persistence.Repositories
 
         public async Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string? searchTerm, int pageNumber, int pageSize)
         {
-            var totalRecords = await _context.MasterCompanies.CountAsync();
+            var totalRecords = await _context.MasterCompanies.Where(x => x.IsDeleted == false).CountAsync();
             var query = _context.MasterCompanies.AsQueryable();
            
             if (!string.IsNullOrEmpty(searchTerm))
