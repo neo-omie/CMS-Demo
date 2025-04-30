@@ -36,7 +36,7 @@ namespace CMS.API.Controllers
         public async Task<IActionResult> UpdateMatrixMou(int id, [FromBody] UpdateEscalationMatrixMouDto updateDto)
         {
             await _mediator.Send(new UpdateEscalationMatrixMouCommand(id, updateDto));
-            return Ok(new { Message = "SuccessFully updated" });
+            return Ok(new { Message = "Updated successfully" });
         }
     }
 }

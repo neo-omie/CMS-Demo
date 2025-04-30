@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MasterEscalationMatrixMouDto } from '../models/master-escalation-matrix-mou-dto';
+import { MasterEscalationMatrixMouDto, UpdateMatrixMouDto } from '../models/master-escalation-matrix-mou-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -24,6 +24,14 @@ export class EscalationMatrixMouService {
   ): Observable<MasterEscalationMatrixMouDto> {
     return this.http.get<MasterEscalationMatrixMouDto>(
       `${this.apiUrl}/${valueId}`
+    );
+  }
+  postMatrixMouById(
+    valueId: number,
+    updateMatrixMouDto: UpdateMatrixMouDto
+  ): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/${valueId}`,updateMatrixMouDto
     );
   }
 }
