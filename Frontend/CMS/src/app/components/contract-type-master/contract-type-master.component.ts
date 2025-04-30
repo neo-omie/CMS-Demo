@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -22,8 +22,9 @@ loading: boolean = true;
   pageNumbers = [1, 1, 2, 3, 4, 5];
   masterContract: ContractListResponse[]=[];
   showContract: ContractTypeMasterDTO[]=[];
-  comp?:ContractTypeMaster;
+  cont?:ContractTypeMaster;
   errorMsg:string = '';
+  @ViewChild('editContractName') editContractName!: ElementRef;
 
   constructor(
       private contractService: ContractTypeMasterService,
@@ -60,6 +61,71 @@ loading: boolean = true;
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.getContract(pgNumber, 10);
     }
+  }
+
+
+  //get contrat by id 
+GetContract(id:number){
+  console.log("fetch id",id);
+  
+    this.contractService.getContractById(id).subscribe({
+      next:(res:ContractTypeMaster)=>{
+      this.cont=res;
+      },
+      error:(error)=>{
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+      }
+        })
+  }
+
+
+  //edit contract 
+  editContract(id:number){
+    let compName=this.editContractName.nativeElement.value;
+    if (compName !=="") {
+      console.log(compName);
+      this.contractService.updateContract(id,compName).subscribe({
+        next:(res:boolean)=>{
+          if (res) {
+            Alert.toast(TYPE.SUCCESS,true,"Updated Successfully")
+            this.getContract(1,10);
+          }
+        },
+        error:(error)=>{
+          console.error('Error :(', error);
+              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+              Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        }
+      })
+      
+    }
+  }
+
+  //delete contract 
+  deleteContract(id:number){
+    // let askFirst:boolean = confirm("Are you sure you want to delete this Contract?");
+    Alert.confirmToast("Are you sure you want to delete this Contract?",
+                       "You won't be able to revert this!", TYPE.WARNING,
+                       "Yes, delete it!",
+                       "Deleted successfully!",
+                       "Contract has been deleted.", TYPE.SUCCESS,() => {
+                        this.contractService.deleteContract(id).subscribe({
+                          next:(response:boolean)=>{
+                            if(response){
+                              Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
+                              this.getContract(1,10);
+                            }
+                    
+                          },
+                          error:(error)=>{
+                            console.error('Error :(', error);
+                            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+                            Alert.toast(TYPE.ERROR,true,this.errorMsg);
+                          }
+                        });
+                       });
   }
 
 }

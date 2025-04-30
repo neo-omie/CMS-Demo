@@ -71,20 +71,22 @@ namespace CMS.Persistence.Repositories
             //        status = a.CompanyStatus,
             //        TotalRecords = totalRecords
             //    });
-            var result = query
-            .Where(x => x.IsDeleted == false)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
+            //var result = query
+            //.Where(x => x.IsDeleted == false)
+            //.Skip((pageNumber - 1) * pageSize)
+            //.Take(pageSize)
+            string sql = "EXEC SP_GetAllCompanies @PageNumber= {0}, @PageSize={1}, @searchTerm= {3}";
+            var res = _context.MasterCompanies.FromSqlRaw(sql, pageNumber, pageSize, searchTerm)
                 .Select(a => new GetMastersDTO
-                {
-                    ValueId = a.ValueId,
-                    CompanyName = a.CompanyName,
-                    CompanyLocation = a.city.City,
-                    status = a.CompanyStatus,
-                    TotalRecords = totalRecords
-                });
+            {
+                ValueId = a.ValueId,
+                CompanyName = a.CompanyName,
+                CompanyLocation = a.city.City,
+                status = a.CompanyStatus,
+                TotalRecords = totalRecords
+            }); ;
 
-            return result;
+            return res;
         }
 
         public async Task<MasterCompany> GetCompanyByIdAsync(int id)
