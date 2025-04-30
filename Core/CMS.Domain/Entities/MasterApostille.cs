@@ -12,7 +12,7 @@ namespace CMS.Domain.Entities
         [Key]
         public int ValueId { get; set; }
         public string ApostilleName { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
         public bool IsDeleted { get; set; } = false;
     }
 }

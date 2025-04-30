@@ -4,6 +4,8 @@ using CMS.Persistence.Context;
 using CMS.Domain.Entities;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
+using CMS.Application.Features.MasterApostilles.ApostilleDtos;
+using CMS.Application.Exceptions;
 
 namespace CMS.Persistence.Repositories
 {
@@ -16,34 +18,33 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MasterApostille>> GetAllMasterApostilleAsync(string searchTerm, int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetAllApostilleDto>> GetAllMasterApostilleAsync(int pageNumber, int pageSize)
         {
-            var query = _context.MasterApostilles.AsQueryable();
-            if(!string.IsNullOrEmpty(searchTerm))
+            if (pageNumber < 1)
             {
-                var IsInt= Int32.TryParse(searchTerm, out int checkId);
-                if (IsInt)
-                {
-                    query=query.Where(m=>m.ValueId == checkId);
-                }
-                else
-                {
-                    query=query.Where(e=>e.ApostilleName.Contains(searchTerm)); 
-                }  
+                throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
             }
-            return await query
-            .Where(x => x.IsDeleted == false)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
+            }
+
+            string sql = "EXEC SP_GetAllApostilles @PageNumber = {0}, @PageSize = {1}";
+            var allApostilles = await _context.GetApostillesDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allApostilles;
         }
 
         public async Task<MasterApostille> GetMasterApostilleByIdAsync(int id)
         {
-            var query = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
-            if (query == null)
-                throw new Exception("Master Apostille not found. Failed :(");
-            return query;
+            string sql = "EXEC SP_GetApostilleByID @id = {0}";
+            var findingApostille = await _context.MasterApostilles.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundApostille = findingApostille.FirstOrDefault();
+            if (foundApostille == null)
+            {
+                throw new NotFoundException($"Apostille with ID {id} not found.");
+            }
+            return foundApostille;
         }
 
         public async Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille)

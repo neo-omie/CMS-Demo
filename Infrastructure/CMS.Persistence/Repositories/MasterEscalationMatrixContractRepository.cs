@@ -27,7 +27,6 @@ namespace CMS.Persistence.Repositories
 
         public async Task<(IEnumerable<GetEscalationMatrixContractDto>, int)> GetAllEscalationMatrixContract(int pageNumber, int pageSize)
         {
-
             if (pageNumber < 1)
             {
                 throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
@@ -37,24 +36,10 @@ namespace CMS.Persistence.Repositories
             {
                 throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
             }
-
-
             var totalCount = await _context.MasterEscalationMatrixContracts.CountAsync();
-
-
-            var emContracts = _context.MasterEscalationMatrixContracts
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(a => new GetEscalationMatrixContractDto
-                {
-                    MatrixContractId = a.MatrixContractId,
-                    DepartmentName = a.Department.DepartmentName,
-                    Escalation1 = a.Escalation1.EmployeeName,
-                    Escalation2 = a.Escalation2.EmployeeName,
-                    Escalation3 = a.Escalation3.EmployeeName,
-                });
-
-            return (emContracts, totalCount);
+            string sql = "EXEC SP_GetAllEscalationMatrixContracts @PageNumber = {0}, @PageSize = {1}";
+            var allEscalations = _context.GetEscalationMatrixContractDtos.FromSqlRaw(sql,pageNumber, pageSize);
+            return (allEscalations, totalCount);
         }
 
         public async Task<GetEscalationMatrixContractDto> GetEscalationMatrixContract(int valueId)

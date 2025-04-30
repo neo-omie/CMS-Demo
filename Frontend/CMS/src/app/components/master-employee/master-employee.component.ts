@@ -23,7 +23,7 @@ employees: MasterEmployee[]=[];
 totalEmployees:number=0;
 totalPages:number=0;
 currentPage:number=1;
-pageSize:number=10;
+pageSize:number=2;
 maxPage:number=1; //used now 
 pageNumbers:number[] = []; //used now 
 selectedUnit: string = 'All';
@@ -40,6 +40,7 @@ fetchEmployees(){
   this.employeeService.getEmployees(this.currentPage, this.pageSize, this?.selectedUnit, this?.searchTerm)
   .subscribe({
     next:(response: MasterEmployeeDto) => {
+      this.employees = response.data;
       this.loading = false;
       console.log(response);
       this.employees = response.data;
@@ -82,23 +83,34 @@ getPageNumbers():number[]{
 }
 
 addEmployee(){
-  this.router.navigate(['masters/employeeMasters/addEmpoyee']);
+  this.router.navigate(['masters/employeeMasters/addEmployee']);
 }
 
 deleteEmployee(employee:MasterEmployee){
-  if(confirm(`Are you sure you want to Delete ${employee.employeeName}?`)){
-    this.employeeService.deleteEmployee(employee.valueId).subscribe(()=>{
-      this.fetchEmployees();
-    })
-  }
+  Alert.confirmToast("Are you sure you want to delete this Employee?",
+    "You won't be able to revert this!", TYPE.WARNING,
+    "Yes, delete it!",
+    "Deleted successfully!",
+    "Company has been deleted.", TYPE.SUCCESS,() => {
+     this.employeeService.deleteEmployee(employee.valueId).subscribe({
+       next:(response:boolean)=>{
+         if(response){
+           Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
+           this.fetchEmployees();
+         }
+       }
+     });
+    });
 }
 
 viewEmployee(employee:MasterEmployee){
-  this.router.navigate(['masters/employeeMasters/viewEmpoyee']);
+  console.log('Navigating to viewEmployee with valueId:', employee.valueId);
+  this.router.navigate(['masters/employeeMasters/viewEmployee', employee.valueId]);
 }
 
 editEmployee(employee:MasterEmployee){
-  this.router.navigate(['masters/employeeMasters/editEmpoyee']);
+  console.log('Navigating to editEmployee with valueId:', employee.valueId);
+  this.router.navigate(['masters/employeeMasters/editEmployee', employee.valueId]);
 }
 
 }

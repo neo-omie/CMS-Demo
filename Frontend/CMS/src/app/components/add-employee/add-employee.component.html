@@ -12,7 +12,7 @@
                   <input class="form-control" type="text" id="employeeName" placeholder="Enter company name" formControlName="employeeName">
                 </div>
   
-                <div class="m-3">
+                <div class="m-3" *ngIf="mode!=='edit'">
                   <label for="password" class="form-label">Password</label>
                   <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)" style="color: red;">*Required</span>
                   <input class="form-control" type="text" id="password" placeholder="Enter company name" formControlName="password">
@@ -113,3 +113,5 @@
             </div>
       </div>
 </div>
+
+<!-- {{ departments.find(dept => dept.departmentId === addEmployeeForm.get('department')?.value)?.departmentName }} -->

@@ -1,4 +1,8 @@
 ﻿using CMS.Application.Features.MasterCompanies;
+using CMS.Application.Features.Departments.Queries.GetAllDepartments;
+using CMS.Application.Features.EscalationMatrixMouMaster;
+using CMS.Application.Features.MasterApostilles.ApostilleDtos;
+using CMS.Application.Features.MasterEscalationMatrixContracts;
 using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
 using CMS.Persistence.Configurations;
@@ -15,13 +19,17 @@ namespace CMS.Persistence.Context
         public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
 
         public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
+        public DbSet<GetEscalationMatrixContractDto> GetEscalationMatrixContractDtos { get; set; }
         public DbSet<MasterEscalationMatrixMou> MasterEscalationMatrixMous { get; set; }
+        public DbSet<EscalationMatrixMoutDto> GetEscalationMatrixMouDtos { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<MasterCompany> MasterCompanies { get; set; }
         public DbSet<GetMastersDTO> GetCompanyDtos { get; set; }
         public DbSet<MasterApostille> MasterApostilles { get; set; }
+        public DbSet<GetAllApostilleDto> GetApostillesDtos { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<GetAllDepartmentsDto> GetDepartmentsDtos { get; set; }
         public DbSet<ListOfCountries> Countries { get; set; }
         public DbSet<ListOfStates> States { get; set; }
         public DbSet<ListofCity> Cities { get; set; }
@@ -33,6 +41,11 @@ namespace CMS.Persistence.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Ignore<GetAllDepartmentsDto>().Entity<GetAllDepartmentsDto>().HasNoKey();
+            modelBuilder.Ignore<GetEscalationMatrixContractDto>().Entity<GetEscalationMatrixContractDto>().HasNoKey();
+            modelBuilder.Ignore<EscalationMatrixMoutDto>().Entity<EscalationMatrixMoutDto>().HasNoKey();
+            modelBuilder.Ignore<GetAllApostilleDto>().Entity<GetAllApostilleDto>().HasNoKey();
+
             modelBuilder.Entity<GetMastersDTO>().HasNoKey();
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);

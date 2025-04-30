@@ -1,10 +1,11 @@
-﻿using CMS.Domain.Entities;
+﻿using CMS.Application.Features.MasterApostilles.ApostilleDtos;
+using CMS.Domain.Entities;
 
 namespace CMS.Application.Contracts.Persistence
 {
     public interface IMasterApostilleRepository
     {
-        Task<IEnumerable<MasterApostille>> GetAllMasterApostilleAsync( string searchTerm, int pageNumber, int pageSize);
+        Task<IEnumerable<GetAllApostilleDto>> GetAllMasterApostilleAsync(int pageNumber, int pageSize);
         Task<MasterApostille> GetMasterApostilleByIdAsync(int id);
         Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille);
         Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille);

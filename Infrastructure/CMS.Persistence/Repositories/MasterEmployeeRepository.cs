@@ -15,7 +15,7 @@ namespace CMS.Persistence.Repositories
         {
             _context = context;
         }
-
+        
         public async Task<(IEnumerable<MasterEmployee> Data, int TotalCount)> GetAllEmployeesAsync(int pageNumber, int pageSize, string? unit, string? searchTerm )
         {
             var query = _context.MasterEmployees.AsQueryable();
