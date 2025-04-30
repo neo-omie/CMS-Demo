@@ -41,7 +41,7 @@ namespace CMS.Persistence.Repositories
             }
 
             
-            var totalCount = await _context.MasterDocuments.CountAsync();
+            var totalCount = await _context.MasterDocuments.Where(x => x.IsDeleted == false).CountAsync();
 
 
             var documents = await _context.MasterDocuments
@@ -79,17 +79,16 @@ namespace CMS.Persistence.Repositories
         }
 
 
-        public  async Task<int> UpdateDocument(MasterDocument masterDocument)
+        public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
         {
-            var doc = new MasterDocument
+            var foundDoc = await _context.MasterDocuments.FirstOrDefaultAsync(md => md.ValueId == id);
+            if(foundDoc == null)
             {
-
-                DocumentName = masterDocument.DocumentName,
-                status=masterDocument.status,
-
-            };
-
-             _context.MasterDocuments.Update(doc);
+                throw new NotFoundException($"Document with ID {id} not found. Please enter correct ID.");
+            }
+            foundDoc.DocumentName = masterDocument.DocumentName;
+            foundDoc.status = masterDocument.status;
+             _context.MasterDocuments.Update(foundDoc);
             return await _context.SaveChangesAsync();
 
         }

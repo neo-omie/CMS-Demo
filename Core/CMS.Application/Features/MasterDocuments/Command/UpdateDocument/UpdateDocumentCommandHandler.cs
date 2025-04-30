@@ -26,7 +26,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
             }
             var existingDocument = _mapper.Map<MasterDocument>(request.documentDTO);
             //existingDocument.ValueId = request.id;
-            return await _repository.UpdateDocument(existingDocument);
+            return await _repository.UpdateDocument(request.id, existingDocument);
 
         }
     }

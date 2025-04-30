@@ -10,7 +10,7 @@ namespace CMS.Application.Contracts.Persistence
 {
    public  interface IMasterCompanyRepository
     {
-        Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize);
+        Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string? searchTerm, int pageNumber, int pageSize);
 
         Task<MasterCompany> GetCompanyByIdAsync(int id);
 

@@ -35,7 +35,7 @@ namespace CMS.API.Controllers
         //Get all Companies
         [HttpGet("{pageNumber}/{pageSize}")]
         public async Task<ActionResult<IEnumerable<GetMastersDTO>>> GetAllCompanies(
-        [FromQuery] string searchTerm, int pageNumber = 1, int pageSize = 10)
+        [FromQuery] string? searchTerm, int pageNumber = 1, int pageSize = 10)
         {
             _logger.LogInformation("GetAllCompany method initiated");
             var query = new GetAllCompaniesQuery
@@ -54,9 +54,9 @@ namespace CMS.API.Controllers
         public async Task<IActionResult> GetCompanyById([FromRoute] int id)
         {
             _logger.LogInformation("GetCompanyById method initiated");
-            var department = await _mediator.Send(new GetCompanyByIdQuery(id));
+            var company = await _mediator.Send(new GetCompanyByIdQuery(id));
             _logger.LogInformation("GetCompanyById method Performed");
-            return Ok(department);
+            return Ok(company);
         }
 
             //Add
