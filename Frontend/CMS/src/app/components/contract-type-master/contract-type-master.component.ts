@@ -71,6 +71,8 @@ GetContract(id:number){
     this.contractService.getContractById(id).subscribe({
       next:(res:ContractTypeMaster)=>{
       this.cont=res;
+      console.log(res);
+      
       },
       error:(error)=>{
         console.error('Error :(', error);

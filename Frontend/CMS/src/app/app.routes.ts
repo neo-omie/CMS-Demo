@@ -19,6 +19,7 @@ import { ViewEmployeeComponent } from './components/view-employee/view-employee.
 import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
+import { MasterCompanyComponent } from './components/master-company/master-company.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 

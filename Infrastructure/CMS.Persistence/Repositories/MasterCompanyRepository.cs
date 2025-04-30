@@ -53,7 +53,7 @@ namespace CMS.Persistence.Repositories
             }
         }
 
-        public async Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string? searchTerm, int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize)
         {
             var totalRecords = await _context.MasterCompanies.Where(x => x.IsDeleted == false).CountAsync();
             var query = _context.MasterCompanies.AsQueryable();
@@ -61,6 +61,10 @@ namespace CMS.Persistence.Repositories
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(e => e.CompanyName.Contains(searchTerm));
+            }
+            if(searchTerm == null)
+            {
+                searchTerm = "";
             }
             //var result = _context.MasterCompanies.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(a=> a.IsDeleted == false)
             //    .Select(a => new GetMastersDTO
@@ -75,26 +79,23 @@ namespace CMS.Persistence.Repositories
             //.Where(x => x.IsDeleted == false)
             //.Skip((pageNumber - 1) * pageSize)
             //.Take(pageSize)
-            string sql = "EXEC SP_GetAllCompanies @PageNumber= {0}, @PageSize={1}, @searchTerm= {3}";
-            var res = _context.MasterCompanies.FromSqlRaw(sql, pageNumber, pageSize, searchTerm)
-                .Select(a => new GetMastersDTO
-            {
-                ValueId = a.ValueId,
-                CompanyName = a.CompanyName,
-                CompanyLocation = a.city.City,
-                status = a.CompanyStatus,
-                TotalRecords = totalRecords
-            }); ;
-
+            string sql = "EXEC SP_GetAllCompanies @PageNumber= {0}, @PageSize={1}, @searchTerm= {2}";
+            var res = _context.GetCompanyDtos.FromSqlRaw(sql, pageNumber, pageSize, searchTerm);
             return res;
         }
 
         public async Task<MasterCompany> GetCompanyByIdAsync(int id)
         {
             var gotComp = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
-            if (gotComp==null)
+            if (gotComp == null)
                 throw new Exception("Company not found. Failed :(");
-            return gotComp;
+
+                string sql = "EXEC SP_GetCompanyById @ValId={0}";
+            var compbyId = await _context.MasterCompanies.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundCompany = compbyId.FirstOrDefault();
+
+
+                return foundCompany;
 
         }
 
