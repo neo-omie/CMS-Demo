@@ -17,7 +17,6 @@ import { EditEmployeeComponent } from './components/edit-employee/edit-employee.
 import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
-import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 
 export const routes: Routes = [
