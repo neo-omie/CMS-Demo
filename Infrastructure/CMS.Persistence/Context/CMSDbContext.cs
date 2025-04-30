@@ -1,4 +1,6 @@
-﻿using CMS.Domain.Entities;
+﻿using CMS.Application.Features.EscalationMatrixMouMaster;
+using CMS.Application.Features.MasterEscalationMatrixContracts;
+using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
 using CMS.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,9 @@ namespace CMS.Persistence.Context
         public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
 
         public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
+        public DbSet<GetEscalationMatrixContractDto> GetEscalationMatrixContractDtos { get; set; }
         public DbSet<MasterEscalationMatrixMou> MasterEscalationMatrixMous { get; set; }
+        public DbSet<EscalationMatrixMoutDto> GetEscalationMatrixMouDtos { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<MasterCompany> MasterCompanies { get; set; }
@@ -32,6 +36,9 @@ namespace CMS.Persistence.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Ignore<GetEscalationMatrixContractDto>().Entity<GetEscalationMatrixContractDto>().HasNoKey();
+            modelBuilder.Ignore<EscalationMatrixMoutDto>().Entity<EscalationMatrixMoutDto>().HasNoKey();
+
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);

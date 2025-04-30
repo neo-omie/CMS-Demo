@@ -45,6 +45,7 @@ namespace CMS.Persistence.Repositories
 
             string sql = "EXEC SP_GetAllDocuments @PageNumber = {0}, @PageSize = {1}";
             var docs = _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize);
+
             return (docs, totalCount);
         }
 
