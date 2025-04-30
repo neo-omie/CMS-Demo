@@ -65,6 +65,8 @@ namespace CMS.Persistence.Repositories
             if(searchTerm == null)
             {
                 searchTerm = "";
+
+
             }
             //var result = _context.MasterCompanies.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(a=> a.IsDeleted == false)
             //    .Select(a => new GetMastersDTO
