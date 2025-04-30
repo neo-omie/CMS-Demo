@@ -1,9 +1,10 @@
-<!-- <app-loader *ngIf="loading"></app-loader> -->
+<app-loader *ngIf="loading"></app-loader>
 <h2 class="mt-3">Company Master</h2>
 <div *ngIf="!loading" class="table-responsive p-3">
-    <button class="btn btn-outline-primary mb-2">
+    <button class="btn btn-outline-primary mb-2 me-3">
       <a routerLink="addCompany"><i class="fa-solid fa-file-circle-plus"></i> Add New Company </a>
     </button>
+    <input type="text"  placeholder="Search by Company name" class="searchbox w-25    d-inline-block me-2" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
       <table class="table align-middle table-bordered table-striped">
         <thead>
           <tr>
@@ -21,9 +22,9 @@
               <td>{{company.companyLocation}}</td>
               <td>{{company.status}}</td>
               <td>
-                <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="GetCompany(company.valueId)"></i>
-                <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
-                <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#company-delete" (click)="deleteCompany(company.valueId)"></i>
+                <i class="fa-regular fa-pen-to-square icon me-4" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="GetCompany(company.valueId)"></i>
+                <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
+                <i class="fa-regular fa-trash-can icon me-4"  (click)="deleteCompany(company.valueId)"></i>
               </td>
           </tr>
         </tbody>
@@ -43,3 +44,44 @@
         </ul>
       </nav>
 
+     
+
+<!-- Modal for Viewing Company  Details -->
+<div class="modal fade" id="company-detail" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyDetailLabel">Contract Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Value ID: </strong> {{ comp?.valueId }}</p>
+        <p><strong>Company Name: </strong> {{ comp?.companyName }}</p>
+        <p><strong>PocName: </strong> {{ comp?.pocName }}</p>
+        <p><strong>companyStatus: </strong>{{comp?.companyStatus}}</p>
+        <p><strong>PocContactNumber:</strong>{{comp?.pocContactNumber}}</p>
+        <p><strong>PocEmailId: </strong>{{comp?.pocEmailId}}</p>
+        <p><strong>CompanyAddressLine1: </strong>{{comp?.companyAddressLine1}}</p>
+        <p><strong>CompanyAddressLine2: </strong>{{comp?.companyAddressLine2}}</p>
+        <p><strong>CompanyAddressLine3: </strong>{{comp?.companyAddressLine3}}</p>
+        <p><strong>Zipcode: </strong>{{comp?.zipcode}}</p>
+        <p><strong>CompanyContactNo: </strong>{{comp?.companyContactNo}}</p>
+        <p><strong>CompanyEmailId: </strong>{{comp?.companyEmailId}}</p>
+        <p><strong>CompanyWebsiteUrl: </strong>{{comp?.companyWebsiteUrl}}</p>
+        <p><strong>CompanyBankName: </strong>{{comp?.companyBankName}}</p>
+        <p><strong>GSTno: </strong>{{comp?.gSTno}}</p>
+        <p><strong>BankAccNo: </strong>{{comp?.bankAccNo}}</p>
+        <p><strong>MSMERegistrationNo: </strong>{{comp?.mSMERegistrationNo}}</p>
+        <p><strong>IFSCCode: </strong>{{comp?.iFSCCode}}</p>
+        <p><strong>PanNo: </strong>{{comp?.panNo}}</p>
+        <p><strong>CountryId: </strong>{{comp?.countryId}}</p>
+        <p><strong>StateId: </strong>{{comp?.stateId}}</p>
+        <p><strong>CityId: </strong>{{comp?.cityId}}</p>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,6 +14,7 @@ namespace CMS.Persistence.Context
         public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
 
         public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
+        public DbSet<MasterEscalationMatrixMou> MasterEscalationMatrixMous { get; set; }
         public DbSet<MasterEmployee> MasterEmployees { get; set; }
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<MasterCompany> MasterCompanies { get; set; }
@@ -36,6 +37,7 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
+            modelBuilder.Entity<MasterEscalationMatrixMou>().HasAlternateKey(mamc => mamc.DepartmentId);
 
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
@@ -59,6 +61,11 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasOne(memc => memc.Escalation2).WithMany().HasForeignKey(memc => memc.EscalationId2).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasOne(memc => memc.Escalation3).WithMany().HasForeignKey(memc => memc.EscalationId3).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasOne(memc => memc.Department).WithMany().HasForeignKey(memc => memc.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
+
+            modelBuilder.Entity<MasterEscalationMatrixMou>().HasOne(memc => memc.Escalation1).WithMany().HasForeignKey(memc => memc.EscalationId1).HasPrincipalKey(me => me.EmployeeCode);
+            modelBuilder.Entity<MasterEscalationMatrixMou>().HasOne(memc => memc.Escalation2).WithMany().HasForeignKey(memc => memc.EscalationId2).HasPrincipalKey(me => me.EmployeeCode);
+            modelBuilder.Entity<MasterEscalationMatrixMou>().HasOne(memc => memc.Escalation3).WithMany().HasForeignKey(memc => memc.EscalationId3).HasPrincipalKey(me => me.EmployeeCode);
+            modelBuilder.Entity<MasterEscalationMatrixMou>().HasOne(memc => memc.Department).WithMany().HasForeignKey(memc => memc.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
 
 
             modelBuilder.Entity<Contract>().HasOne(c => c.Department).WithMany().HasForeignKey(c => c.DepartmentId).HasPrincipalKey(d => d.DepartmentId);

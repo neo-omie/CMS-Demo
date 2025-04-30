@@ -9,6 +9,7 @@ using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
 using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU;
 using CMS.Application.Features.Departments.Queries.GetAllDepartments;
+using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
@@ -193,6 +194,38 @@ namespace CMS.Persistence.Repositories
             else
             {
                 throw new Exception($"For some reasons, contract escalators for department id {id} has not been added");
+            }
+        }
+        public async Task<MasterEscalationMatrixMou> AddMouEscalators(int id, UpdateEscalationMatrixMouDto addEscalators)
+        {
+            var checkDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
+            if (checkDepartment == null)
+            {
+                throw new NotFoundException($"Department with {id} not found.");
+            }
+            var checkDepartmentInMatrix = await _context.MasterEscalationMatrixMous.FirstOrDefaultAsync(d => d.DepartmentId == id);
+            if (checkDepartmentInMatrix != null)
+            {
+                throw new Exception($"Mou Escalators for Department with {id} already exists");
+            }
+            var newDepartmentEscalators = new MasterEscalationMatrixMou
+            {
+                DepartmentId = id,
+                EscalationId1 = addEscalators.EscalationId1,
+                EscalationId2 = addEscalators.EscalationId2,
+                EscalationId3 = addEscalators.EscalationId3,
+                TriggerDaysEscalation1 = addEscalators.TriggerDaysEscalation1,
+                TriggerDaysEscalation2 = addEscalators.TriggerDaysEscalation2,
+                TriggerDaysEscalation3 = addEscalators.TriggerDaysEscalation3
+            };
+            await _context.MasterEscalationMatrixMous.AddAsync(newDepartmentEscalators);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return newDepartmentEscalators;
+            }
+            else
+            {
+                throw new Exception($"For some reasons, mou escalators for department id {id} has not been added");
             }
         }
     }

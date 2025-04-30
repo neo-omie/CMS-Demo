@@ -14,6 +14,9 @@ using CMS.Application.Features.MasterCompanies.Command.DeleteCompany;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
 using CMS.Application.Features.ContractTypeMaster.Command.AddContract;
 using CMS.Application.Features.ContractTypeMaster.Command.UpdateContract;
+using CMS.Application.Features.MasterCompanies.Query.GetCompanyById;
+using CMS.Application.Features.ContractTypeMaster.Query.GetContractById;
+using CMS.Application.Features.ContractTypeMaster.Query;
 
 namespace CMS.API.Controllers
 {
@@ -34,7 +37,7 @@ namespace CMS.API.Controllers
 
         //Get all Companies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetContractDTO>>> GetAllContracts(
+        public async Task<ActionResult<IEnumerable<GetAllContractTypesDTO>>> GetAllContracts(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
         {
@@ -44,9 +47,20 @@ namespace CMS.API.Controllers
                 pageNumber, pageSize
             );
             var runQuery = await _mediator.Send(query);
-            var contDto = _mapper.Map<IEnumerable<GetContractDTO>>(runQuery);
+            var contDto = _mapper.Map<IEnumerable<GetAllContractTypesDTO>>(runQuery);
             _logger.LogInformation("GetAllContracts method Performed");
             return Ok(contDto);
+        }
+
+        //Get company by ID
+        [Route("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetContractById([FromRoute] int id)
+        {
+            _logger.LogInformation("GetContractById method initiated");
+            var contract = await _mediator.Send(new GetContractByIdQuery(id));
+            _logger.LogInformation("GetContractById method Performed");
+            return Ok(contract);
         }
 
         [HttpPost]

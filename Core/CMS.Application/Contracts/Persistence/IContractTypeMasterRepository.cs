@@ -1,4 +1,5 @@
-﻿using CMS.Domain.Entities;
+﻿using CMS.Application.Features.ContractTypeMaster.Query;
+using CMS.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CMS.Application.Contracts.Persistence
 {
    public  interface IContractTypeMasterRepository
     {
-        Task<IEnumerable<ContractTypeMasters>> GetAllContractAsync( int pageNumber, int pageSize);
+        Task<IEnumerable<GetAllContractTypesDTO>> GetAllContractAsync( int pageNumber, int pageSize);
 
         Task<ContractTypeMasters> GetContractById(int id);
 

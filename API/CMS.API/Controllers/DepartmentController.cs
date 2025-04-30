@@ -4,10 +4,12 @@ using CMS.Application.Features.Departments.Commands.AddContractApprovers;
 using CMS.Application.Features.Departments.Commands.AddContractEscalators;
 using CMS.Application.Features.Departments.Commands.AddDepartment;
 using CMS.Application.Features.Departments.Commands.AddMOUApprovers;
+using CMS.Application.Features.Departments.Commands.AddMouEscalators;
 using CMS.Application.Features.Departments.Commands.DeleteDepartment;
 using CMS.Application.Features.Departments.Commands.UpdateDepartment;
 using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.Departments.Queries.GetDepartmentById;
+using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 using MediatR;
@@ -82,6 +84,12 @@ namespace CMS.API.Controllers
         public async Task<IActionResult> AddContractEscalators([FromQuery] int id, [FromBody] UpdateEscalationMatrixContractDto addEscalators)
         {
             var addedEscalators = await _mediator.Send(new AddContractEscalatorsCommand(id, addEscalators));
+            return Ok(addedEscalators);
+        }
+        [HttpPost("AddMouEscalators")]
+        public async Task<IActionResult> AddMouEscalators([FromQuery] int id, [FromBody] UpdateEscalationMatrixMouDto addEscalators)
+        {
+            var addedEscalators = await _mediator.Send(new AddMouEscalatorsCommand(id, addEscalators));
             return Ok(addedEscalators);
         }
     }

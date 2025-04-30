@@ -1,0 +1,68 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="mt-3">Contract Master</h2>
+<div *ngIf="!loading" class="table-responsive p-3">
+    <button class="btn btn-outline-primary mb-2 me-3">
+      <a routerLink="addContract"><i class="fa-solid fa-file-circle-plus"></i> Add New Type </a>
+    </button>
+      <table class="table align-middle table-bordered table-striped">
+        <thead>
+          <tr>
+              <th>Value Id</th>
+              <th>Contract Type</th>
+              <th>Status</th>
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contract of showContract">
+              <td>{{contract.valueId}}</td>
+              <td>{{contract.contractTypeName}}</td>
+              <td>{{contract.status}}</td>
+              <td>
+                <!-- <i class="fa-regular fa-pen-to-square icon me-4" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="GetContract(contract.valueId)"></i> -->
+                <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#contract-detail" (click)="GetContract(contract.valueId)"></i>
+                <i class="fa-solid fa-trash icon me-4"  (click)="deleteContract(contract.valueId)"></i>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+      
+    </div>
+    <nav class="d-flex justify-content-center" *ngIf="showContract.length > 0" aria-label="Page navigation example">
+        <ul *ngIf="maxPage > 1" class="pagination">
+          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
+          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link" aria-label="Previous">&lsaquo;</span></li>
+          <li class="page-item" (click)="GetPage(pageNumbers[1])"><span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
+          <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
+          <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
+          <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
+          <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
+          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link" aria-label="Next">&rsaquo;</span></li>
+          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
+        </ul>
+      </nav>
+
+      
+
+
+
+      <!-- Modal for Viewing Contract Details -->
+<div class="modal fade" id="contract-detail" tabindex="-1" aria-labelledby="contractDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contractDetailLabel">Contract Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Value ID:</strong> {{ cont?.ValuedId }}</p>
+        <p><strong>Contract Type:</strong> {{ cont?.ContractTypeName }}</p>
+        <p><strong>Status:</strong> {{ cont?.Status }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

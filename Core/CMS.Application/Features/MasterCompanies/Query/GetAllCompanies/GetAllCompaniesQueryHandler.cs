@@ -21,7 +21,7 @@ namespace CMS.Application.Features.MasterCompanies.Query.GetAllCompanies
         }
         public Task<IEnumerable<GetMastersDTO>> Handle(GetAllCompaniesQuery request, CancellationToken cancellationToken)
         {
-            return _comprepo.GetAllCompanyDetailsAsync(request.searchTerm, request.pageNumber, request.pageSize);
+            return _comprepo.GetAllCompanyDetailsAsync(request?.searchTerm, request.pageNumber, request.pageSize);
         }
     }
 }

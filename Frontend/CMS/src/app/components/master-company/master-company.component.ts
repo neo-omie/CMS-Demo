@@ -25,6 +25,9 @@ export class MasterCompanyComponent implements OnInit{
   showCompanies: CompanyMasterDto[]=[];
   comp?:MasterCompany;
   errorMsg:string = '';
+  searchTerm: string = '';
+  pageNumber:number=1;
+  pageSize:number=10;
   @ViewChild('editCompanyName') editCompanyName!: ElementRef;
 
   company: AddCompanyDto = new AddCompanyDto();
@@ -35,18 +38,18 @@ export class MasterCompanyComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.getCompanies(1, 10);
+    this.getCompanies();
   }
 
-  getCompanies(pageNumber: number, pageSize: number): void {
-    this.companyService.getCompany('t', pageNumber, pageSize).subscribe({
+  getCompanies(): void {
+    this.companyService.getCompany(this?.searchTerm, this.pageNumber, this.pageSize)
+    .subscribe({
       next:(res:CompanyMasterDto[]) => {
-        console.log(res);
-        
       this.loading = false;
       this.showCompanies = res;
+      console.log(res);
         if(this.showCompanies != undefined && this.showCompanies.length > 0){
-                      let result = Pagination.paginator(pageNumber,this.showCompanies[0].TotalRecords,pageSize)
+                      let result = Pagination.paginator(this.pageNumber,this.showCompanies[0].TotalRecords,this.pageSize)
                       this.maxPage = result.maxPage;
                       this.pageNumbers = result.pageNumbers;
                     }
@@ -62,13 +65,19 @@ export class MasterCompanyComponent implements OnInit{
     });
   }
 
+  onFilterChange(){
+    this.pageNumber=1;
+    this.getCompanies();
+  }
+
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
-      this.getCompanies(pgNumber, 10);
+      this.getCompanies();
     }
   }
 
   GetCompany(id:number){
+    console.log("ftech id",id);
     this.companyService.getCompanyById(id).subscribe({
       next:(res:MasterCompany)=>{
       this.comp=res;
@@ -89,7 +98,7 @@ export class MasterCompanyComponent implements OnInit{
         next:(res:boolean)=>{
           if (res) {
             Alert.toast(TYPE.SUCCESS,true,"Updated Successfully")
-            this.getCompanies(1,10);
+            this.getCompanies();
           }
         },
         error:(error)=>{
@@ -129,7 +138,7 @@ export class MasterCompanyComponent implements OnInit{
                           next:(response:boolean)=>{
                             if(response){
                               Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
-                              this.getCompanies(1, 10);
+                              this.getCompanies();
                             }
                     
                           },

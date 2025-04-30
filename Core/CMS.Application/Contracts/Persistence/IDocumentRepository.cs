@@ -14,7 +14,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<MasterDocument> GetDocumentById(int id);
         Task<int> AddDocument(MasterDocument masterDocument);
 
-        Task<int> UpdateDocument(MasterDocument masterDocument);
+        Task<int> UpdateDocument(int id, MasterDocument masterDocument);
         Task<int> DeleteDocument(int id);
     }
 }

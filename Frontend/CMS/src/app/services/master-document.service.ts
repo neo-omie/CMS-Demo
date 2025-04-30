@@ -19,8 +19,8 @@ export class MasterDocumentService {
     return this.http.post<AddDocumentDto>(this.apiUrl,masterDocument);
   }
 
-  updateDocument(updateMasterDocument?:GetDocumentById):Observable<GetDocumentById>{
-    return this.http.put<GetDocumentById>(`${this.apiUrl}/`,updateMasterDocument)
+  updateDocument(docId?:number, data?:AddDocumentDto):Observable<string>{
+    return this.http.put<string>(`${this.apiUrl}/${docId}`, data)
   }
 
   deleteDocument(documentId:number):Observable<boolean>{

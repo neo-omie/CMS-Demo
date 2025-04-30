@@ -14,9 +14,16 @@ import { authGuard } from './auth.guard';
 import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
+import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { ViewEmployeeComponent } from './components/view-employee/view-employee.component';
+//import { MasterCompanyComponent } from './components/master-company/master-company.component';
+import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
+import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
+import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
+    {path: 'auth/renewPassword', component: RenewPasswordComponent},
     {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
     {path: 'masters', component: MastersScreenComponent, canActivate:[authGuard]}, 
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate:[authGuard]},
@@ -28,9 +35,12 @@ export const routes: Routes = [
     {path: 'masters/employeeMasters/viewEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
+    {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
-    {path: 'auth/renewPassword', component: RenewPasswordComponent},
-    {path: 'masters/companyMasters', component: MasterCompanyComponent},
+    {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},
+    {path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate:[authGuard]},
+
+    {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
     {path: '**', component: NotFoundComponent}
 
 ];

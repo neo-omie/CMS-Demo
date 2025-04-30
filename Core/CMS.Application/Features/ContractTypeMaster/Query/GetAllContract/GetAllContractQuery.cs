@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.ContractTypeMaster.Query.GetAllContract
 {
-    public record GetAllContractQuery(int pageNumber, int pageSize):IRequest<IEnumerable<ContractTypeMasters>>;
+    public record GetAllContractQuery(int pageNumber, int pageSize):IRequest<IEnumerable<GetAllContractTypesDTO>>;
     
 }
