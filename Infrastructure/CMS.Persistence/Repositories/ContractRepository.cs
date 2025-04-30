@@ -23,25 +23,9 @@ namespace CMS.Persistence.Repositories
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
-            return _context.ContractsEntity.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Where(ce => ce.IsDeleted == false)
-                .Select(a => new GetAllContractsDto
-                {
-                    ContractID = a.ContractId,
-                    ContractName = a.ContractName,
-                    ContractType = a.ContractType.ContractTypeName,
-                    DepartmentName = a.Department.Department.DepartmentName,
-                    EffectiveDate = a.ValidFrom,
-                    ExpiryDate = a.ValidTill,
-                    ToBeRenewedOn = a.RenewalFrom,
-                    AddendumDate = DateTime.Now.AddMonths(3),
-                    Status = a.Approver3Status,
-                    ApprovalPendingFrom = a.Department.Approver3.EmployeeName,
-                    RenewalContractPerson = a.Department.Approver3.EmployeeName,
-                    RenewalDueIn = (a.RenewalTill - DateTime.Now).ToString(),
-                    Location = a.Location,
-                    TotalRecords = totalRecords
-                });
+            string sql = "EXEC SP_GetAllContracts @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
         }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
