@@ -8,6 +8,7 @@ using CMS.Domain.Entities.CompanyMaster;
 using CMS.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
+using CMS.Application.Features.Contracts.Queries.GetContractById;
 
 namespace CMS.Persistence.Context
 {
@@ -37,6 +38,7 @@ namespace CMS.Persistence.Context
         public DbSet<ContractTypeMasters> contracts { get; set; }
         public DbSet<Contract> ContractsEntity { get; set; }
         public DbSet<GetAllContractsDto> GetContractsDtos { get; set; }
+        public DbSet<GetContractByIdDto> GetContractByIdDtos { get; set; }
 
 
 
@@ -48,6 +50,7 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<EscalationMatrixMoutDto>().Entity<EscalationMatrixMoutDto>().HasNoKey();
             modelBuilder.Ignore<GetAllApostilleDto>().Entity<GetAllApostilleDto>().HasNoKey();
             modelBuilder.Ignore<GetAllContractsDto>().Entity<GetAllContractsDto>().HasNoKey();
+            modelBuilder.Ignore<GetContractByIdDto>().Entity<GetContractByIdDto>().HasNoKey();
 
             modelBuilder.Entity<GetMastersDTO>().HasNoKey();
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);

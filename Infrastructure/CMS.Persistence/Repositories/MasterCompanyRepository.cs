@@ -102,10 +102,10 @@ namespace CMS.Persistence.Repositories
 
         }
 
-        //public async Task<MasterCompany> UpdateCompanyAsync(int id, MasterCompany masterCompany)
-        //{
+        public async Task<MasterCompany> UpdateCompanyAsync(int id, MasterCompany masterCompany)
+        {
         //    var checkComp = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
-        //    if (checkComp==null)
+        //    if (checkComp == null)
         //    {
         //        throw new Exception("Company Not found :(");
         //    }
@@ -117,18 +117,19 @@ namespace CMS.Persistence.Repositories
         //        paramsList[i] = masterCompany[i];
         //    }
 
-        //    foreach(var m in masterCompany.)
+        //    foreach (var m in masterCompany.)
         //    {
 
         //    }
-        //    int result = await _context.Database.ExecuteSqlRawAsync(sql,...masterCompany);
-        //    if (result >0)
+        //    int result = await _context.Database.ExecuteSqlRawAsync(sql, ...masterCompany);
+        //    if (result > 0)
         //    {
-        //        return masterCompany;
-        //    }
-        //    else {
-        //        throw new Exception("Company not updated. Failed :(");
-        //    }
-        //}
+                return masterCompany;
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("Company not updated. Failed :(");
+            //    }
+        }
     }
 }

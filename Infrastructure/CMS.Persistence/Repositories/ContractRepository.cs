@@ -23,48 +23,21 @@ namespace CMS.Persistence.Repositories
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
-            string sql = "EXEC SP_GetAllContracts @PageNumber = {0}, @PageSize = {1}";
+            string sql = "EXEC SP_GetAllContractsEntity @PageNumber = {0}, @PageSize = {1}";
             var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return allContracts;
         }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
         {
-            var foundContract = await _context.ContractsEntity.FirstOrDefaultAsync(ce => ce.ContractId == id);
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
             if(foundContract == null)
             {
-                throw new NotFoundException($"Contract with id {id} not found. Please enter correct id");
+                throw new NotFoundException($"Contract with ID {id} not found");
             }
-            return await _context.ContractsEntity
-                .Where(ce => ce.ContractId == id)
-                .Select(ce => new GetContractByIdDto
-            {
-                ContractId = ce.ContractId,
-                ContractName = ce.ContractName,
-                DepartmentId = ce.DepartmentId,
-                DepartmentName = ce.Department.Department.DepartmentName,
-                ContractWithCompanyId = ce.ContractWithCompanyId,
-                ContractWithCompanyName = ce.ContractWithCompany.CompanyName,
-                ContractTypeId = ce.ContractTypeId,
-                ContractTypeName = ce.ContractType.ContractTypeName,
-                ApostilleTypeId = ce.ApostilleTypeId,
-                ApostilleTypeName = ce.ApostilleType.ApostilleName,
-                ActualDocRefNo = ce.ActualDocRefNo,
-                RetainerContract = ce.RetainerContract,
-                TermsAndConditions = ce.TermsAndConditions,
-                ValidFrom = ce.ValidFrom,
-                ValidTill = ce.ValidTill,
-                RenewalFrom = ce.RenewalFrom,
-                RenewalTill = ce.RenewalTill,
-                AddendumDate = ce.AddendumDate,
-                EmpCustodianId = ce.EmpCustodianId,
-                EmpCustodianName = ce.EmpCustodian.EmployeeName,
-                Location = ce.Location,
-                Approver1Status = ce.Approver1Status,
-                Approver2Status = ce.Approver2Status,
-                Approver3Status = ce.Approver3Status,
-                IsDeleted = ce.IsDeleted
-            }).FirstOrDefaultAsync();
+            return foundContract;
 
         }
         public async Task<Contract> AddContractAsync(Contract cp)

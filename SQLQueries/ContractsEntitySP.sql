@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE SP_GetAllContracts @PageNumber int, @PageSize int
+CREATE OR ALTER PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
 AS
 DECLARE @TotalRecords int
 BEGIN
@@ -21,18 +21,18 @@ BEGIN
 	OFFSET(@PageNumber-1)*@PageSize ROWS
 	FETCH NEXT @PageSize ROWS ONLY
 END
-EXEC SP_GetAllContracts @PageNumber = 1, @PageSize = 10;
+EXEC SP_GetAllContractsEntity @PageNumber = 1, @PageSize = 10;
 
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;
 
-CREATE OR ALTER PROCEDURE SP_GetContractByID @ID int
+CREATE OR ALTER PROCEDURE SP_GetContractEntityByID @ID int
 AS
 BEGIN
 	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
 	c.DepartmentId as DepartmentId, dd.DepartmentName as DepartmentName,
 	c.ContractWithCompanyId as ContractWithCompanyId, mc.CompanyName as ContractWithCompanyName,
-	c.ContractTypeId as ContractTypeId, cc.ContractTypeName as ContractType,
+	c.ContractTypeId as ContractTypeId, cc.ContractTypeName as ContractTypeName,
 	c.ApostilleTypeId as ApostilleTypeId, ma.ApostilleName as ApostilleTypeName,
 	c.ActualDocRefNo as ActualDocRefNo, c.RetainerContract as RetainerContract,
 	c.TermsAndConditions as TermsAndConditions,
@@ -52,7 +52,7 @@ BEGIN
 	LEFT JOIN MasterApostilles ma ON ma.ValueId = c.ApostilleTypeId
 	WHERE c.ContractId = @ID;
 END
-EXEC SP_GetContractByID @ID = 2;
+EXEC SP_GetContractEntityByID @ID = 2;
 
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;
