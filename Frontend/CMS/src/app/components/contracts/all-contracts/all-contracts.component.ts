@@ -79,4 +79,30 @@ export class AllContractsComponent implements OnInit {
         }
       });
     }
+    DeleteContract(id?: number) {
+      Alert.confirmToast(
+        'Are you sure you want to delete this contract?',
+        "You won't be able to revert this!!",
+        TYPE.WARNING,
+        'Yes ,Delete it',
+        'Deleted Successfully',
+        'Contract has been Deleted',
+        TYPE.SUCCESS,
+        () => {
+          if (id !== undefined) {
+            this.contractsService.deleteContract(id).subscribe({
+              next: () => {
+                Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
+                this.GetAllContracts(1, 10);
+              },
+              error: (error) => {
+                console.error('Deletion Failed', error);
+                this.errorMsg = JSON.stringify(error.error.message);
+                Alert.toast(TYPE.ERROR, true, this.errorMsg);
+              },
+            });
+          }
+        }
+      );
+    }
 }

@@ -72,3 +72,24 @@ export class GetContractByIdDto {
     approver3Status?: number;
     isDeleted?: boolean;
 }
+export class AddContractDto {
+    contractName?: string;
+  departmentId?: number;
+  contractWithCompanyId?: number;
+  contractTypeId?: number;
+  apostilleTypeId?: number;
+  actualDocRefNo?: number;
+  retainerContract?: number;
+  termsAndConditions?: string;
+  validFrom?: Date;
+  validTill?: Date;
+  renewalFrom?: Date;
+  renewalTill?: Date;
+  addendumDate?: Date;
+  empCustodianId?: number;
+  location?: string;
+  approver1Status?: number;
+  approver2Status?: number;
+  approver3Status?: number;
+  isDeleted?: true;
+}

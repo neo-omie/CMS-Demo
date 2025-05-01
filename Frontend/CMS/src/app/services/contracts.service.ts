@@ -16,4 +16,7 @@ export class ContractsService {
   getContractByID(contractID: number) : Observable<GetContractByIdDto> {
     return this.http.get<GetContractByIdDto>(`${this.apiUrl}/${contractID}`);
   }
+  deleteContract(contractID: number) : Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiUrl}/${contractID}`);
+  }
 }

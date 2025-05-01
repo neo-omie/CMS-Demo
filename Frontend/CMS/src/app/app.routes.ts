@@ -18,6 +18,7 @@ import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 import { AllContractsComponent } from './components/contracts/all-contracts/all-contracts.component';
+import { AddContractComponent } from './components/contracts/add-contract/add-contract.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -40,6 +41,7 @@ export const routes: Routes = [
 
     {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
     {path: 'contracts/allContracts', component: AllContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/addNewContract', component: AddContractComponent, canActivate:[authGuard]},
     {path: '**', component: NotFoundComponent}
 
 ];

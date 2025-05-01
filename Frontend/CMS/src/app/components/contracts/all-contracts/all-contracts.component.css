@@ -3,6 +3,12 @@ h2 {
     font-weight: 600;
     text-align: center;
 }
+a {
+    text-decoration: none;
+}
+a:hover {
+    color: white;
+}
 thead tr, thead tr th{
     background-color: #5f5fee;
 }
