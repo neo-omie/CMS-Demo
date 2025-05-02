@@ -23,7 +23,7 @@ mode:any;
     contractWithCompanyId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     contractTypeId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     apostilleTypeId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
-    actualDocRefNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
+    actualDocRefNo : new FormControl('',[Validators.required]),
     retainerContract : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     termsAndConditions : new FormControl('',[Validators.required]),
     validFrom : new FormControl('',[Validators.required]),
