@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Net.Mail;
+using System.Net;
+using AutoMapper;
 using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
 using MediatR;
