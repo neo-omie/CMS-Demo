@@ -15,9 +15,12 @@ export class MasterDocumentService {
     return this.http.get<MasterDocumentDto>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
   }
 
-  addDocument(masterDocument:AddDocumentDto):Observable<AddDocumentDto>{
-    return this.http.post<AddDocumentDto>(this.apiUrl,masterDocument);
+  
+  addDocument(masterDocument:AddDocumentDto):Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}/upload`,masterDocument);
   }
+
+  // uploadDocument()
 
   updateDocument(docId?:number, data?:AddDocumentDto):Observable<string>{
     return this.http.put<string>(`${this.apiUrl}/${docId}`, data)

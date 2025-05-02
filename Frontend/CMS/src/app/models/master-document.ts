@@ -24,10 +24,10 @@ export class MasterDocumentDto {
 }
 
 export class AddDocumentDto {
-  documentName: string;
+  file: File | null;
   status: number;
-  constructor(documentName: string, status: number) {
-    this.documentName = documentName;
+  constructor(file: File | null, status: number) {
+    this.file = file;
     this.status = status;
   }
 

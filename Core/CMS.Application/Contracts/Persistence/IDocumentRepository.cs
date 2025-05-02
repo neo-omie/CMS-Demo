@@ -13,6 +13,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<(IEnumerable<MasterDocument> Documents, int TotalCount)> GetAllDocuments(int pageNumber, int pageSize);
         Task<MasterDocument> GetDocumentById(int id);
         Task<int> AddDocument(MasterDocument masterDocument);
+        Task<int> UploadDocument(MasterDocument masterDocument);
 
         Task<int> UpdateDocument(int id, MasterDocument masterDocument);
         Task<int> DeleteDocument(int id);

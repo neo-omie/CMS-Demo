@@ -7,6 +7,7 @@ using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -54,32 +55,52 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<int> AddDocument(MasterDocument masterDocument)
         {
-            await _context.MasterDocuments.AddAsync(masterDocument);
-            return _context.SaveChanges();
+            
+
+            string sql = "EXEC SP_AddDocument @documentName={0},@status={1},@isDeleted={2}";
+           int affectedRows = await _context.Database.ExecuteSqlRawAsync(sql, masterDocument.DocumentName, masterDocument.status,masterDocument.IsDeleted);
+            if (affectedRows < 0)
+            {
+            throw new Exception("Something went wrong try again later");
+                
+            }
+            return affectedRows;
+        }
+
+
+        public Task<int> UploadDocument(MasterDocument masterDocument)
+        {
+            _context.MasterDocuments.AddAsync(masterDocument);
+            return _context.SaveChangesAsync();
         }
 
         public async Task<int> DeleteDocument(int id)
         {
-            var document = await GetDocumentById(id);
-            document.IsDeleted = true;
-            _context.MasterDocuments.Update(document);
-           return await _context.SaveChangesAsync();
-            //return _context.SaveChanges();
+            string sql = "EXEC SP_DeleteDocumentById @id";
+
+            
+            var affectedRows = await _context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@id", id));
+
+           
+            //await _context.SaveChangesAsync();
+
+            return affectedRows; 
         }
 
 
         public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
         {
-            var foundDoc = await _context.MasterDocuments.FirstOrDefaultAsync(md => md.ValueId == id);
-            if(foundDoc == null)
-            {
-                throw new NotFoundException($"Document with ID {id} not found. Please enter correct ID.");
-            }
-            foundDoc.DocumentName = masterDocument.DocumentName;
-            foundDoc.status = masterDocument.status;
-             _context.MasterDocuments.Update(foundDoc);
-            return await _context.SaveChangesAsync();
+            string sql = "EXEC SP_UpdateDocumentById @id ={0}, @DocumentName ={1}, @Status={2} ";
+           int affectedRows = await  _context.Database.ExecuteSqlRawAsync(sql, id, masterDocument.DocumentName, masterDocument.status);
 
+            if (affectedRows > 0)
+            {
+                return affectedRows;
+            }
+            throw new Exception("Something went wrong try again later");
+           
         }
+
+        
     }
 }

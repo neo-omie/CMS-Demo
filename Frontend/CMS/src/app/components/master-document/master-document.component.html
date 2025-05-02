@@ -8,10 +8,46 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form #documentForm="ngForm" (ngSubmit)="addDocument(documentForm)">
+        <!-- <form (ngSubmit)="addDocument()" #documentForm="ngForm">
           <div class="form-group">
-              <label for="documentName">Document Name</label>
-              <input type="text" class="form-control" id="documentName" name="documentName" [(ngModel)]="document.documentName" required />
+            <label for="file">Select Document</label>
+            <input
+              type="file"
+              class="form-control"
+              id="file"
+              (change)="onFileChange($event)"
+              required
+            />
+          </div>
+        
+          <br />
+        
+          <div class="form-group">
+            <label for="status">Document Status</label>
+            <select
+              id="status"
+              class="form-select"
+              [(ngModel)]="document.status"
+              name="status"
+              required
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        
+          <br />
+        
+          <button type="submit" class="btn btn-outline-success">
+            <i class="fa-solid fa-plus"></i> Add document
+          </button>
+        </form> -->
+        
+        
+         <form #documentForm="ngForm" (ngSubmit)="addDocument(documentForm)">
+          <div class="form-group">
+              <label for="file">Document Name</label>
+              <input type="file" class="form-control" id="file" name="file" [(ngModel)]="document.file" required />
             </div>
             <br>
             <div class="form-group">
@@ -23,7 +59,7 @@
             </div>
             <br>
             <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="fa-solid fa-plus"></i>Add document</button>
-          </form>
+          </form> 
       </div>
     </div>
   </div>

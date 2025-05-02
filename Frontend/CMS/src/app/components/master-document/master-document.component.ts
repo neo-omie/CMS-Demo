@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { MasterDocumentService } from '../../services/master-document.service';
 import { Router, RouterModule } from '@angular/router';
 import {
@@ -26,29 +32,29 @@ export class MasterDocumentComponent implements OnInit {
   loading: boolean = true;
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
-  masterDocuments: MasterDocumentDto = new MasterDocumentDto([],0);
+  masterDocuments: MasterDocumentDto = new MasterDocumentDto([], 0);
   documentStatus = DocumentStatus;
-  document: AddDocumentDto = new AddDocumentDto('', 0);
+  document: AddDocumentDto = new AddDocumentDto(null, 0);
   errorMsg?: string;
-  getMasterDocumentById ?: GetDocumentById;
+  getMasterDocumentById?: GetDocumentById;
   doc?: MasterDocument;
-   @ViewChild('editDocumentName') editDocumentName!: ElementRef;
-   @ViewChild('editDocumentStatus') editDocumentStatus!: ElementRef;
+  @ViewChild('editDocumentName') editDocumentName!: ElementRef;
+  @ViewChild('editDocumentStatus') editDocumentStatus!: ElementRef;
 
   ngOnInit(): void {
     this.getDocuments(1, 10);
   }
   constructor(
     private documentService: MasterDocumentService,
-    private router: Router,private renderer : Renderer2
+    private router: Router,
+    private renderer: Renderer2
   ) {}
   closeEditApproverCollapses() {
-    this.renderer.removeClass(this.editDocumentName.nativeElement,'show');
-    this.renderer.removeClass(this.editDocumentStatus.nativeElement,'show');
+    this.renderer.removeClass(this.editDocumentName.nativeElement, 'show');
+    this.renderer.removeClass(this.editDocumentStatus.nativeElement, 'show');
     this.doc = undefined;
-}
+  }
 
-  
   getDocuments(pageNumber: number, pageSize: number) {
     this.documentService.getDocument(pageNumber, pageSize).subscribe({
       next: (res: MasterDocumentDto) => {
@@ -82,9 +88,8 @@ export class MasterDocumentComponent implements OnInit {
 
   addDocument(documentForm: NgForm) {
     this.document = documentForm.value;
+    console.log(this.document);
     this.document.status = Number(this.document.status);
-    console.log(documentForm);
-
     this.documentService.addDocument(this.document).subscribe({
       next: (response) => {
         Alert.bigToast(
@@ -93,7 +98,7 @@ export class MasterDocumentComponent implements OnInit {
           TYPE.SUCCESS,
           'Ok'
         );
-        documentForm.resetForm();
+        documentForm.reset();
         this.GetPage(this.maxPage);
       },
       error: (error) => {
@@ -104,32 +109,34 @@ export class MasterDocumentComponent implements OnInit {
           TYPE.ERROR,
           'Try Again'
         );
+        documentForm.resetForm();
       },
     });
   }
+
   editDocument(id: number) {
     let docName = this.editDocumentName.nativeElement.value;
     let status = Number(this.editDocumentStatus.nativeElement.value);
-    this.document.documentName = docName;
+    this.document.file = docName;
     this.document.status = status;
-    if (docName !== "") {
+    if (docName !== '') {
       this.documentService.updateDocument(id, this.document).subscribe({
         next: (response: string) => {
           if (response) {
-            Alert.toast(TYPE.SUCCESS, true, "Document Updated Successfully");
+            Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
             this.getDocuments(1, 10);
           }
-
         },
         error: (error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
           Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        },
       });
-    }
-    else {
-      Alert.toast(TYPE.ERROR, true, "Please enter the department name.");
+    } else {
+      Alert.toast(TYPE.ERROR, true, 'Please enter the department name.');
     }
     this.closeEditApproverCollapses();
   }
@@ -159,16 +166,19 @@ export class MasterDocumentComponent implements OnInit {
     );
   }
 
-  GetDocument(id:number){
-          this.documentService.getById(id).subscribe({
-            next:(response:GetDocumentById) => {
-              this.getMasterDocumentById = response;
-              this.doc = response;
-            }, 
-            error:(error) => {
-              console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
-          }});
-        }
+  GetDocument(id: number) {
+    this.documentService.getById(id).subscribe({
+      next: (response: GetDocumentById) => {
+        this.getMasterDocumentById = response;
+        this.doc = response;
+      },
+      error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      },
+    });
+  }
 }
