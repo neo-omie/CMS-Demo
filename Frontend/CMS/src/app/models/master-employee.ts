@@ -10,6 +10,7 @@ export class MasterEmployee {
     employeeExtension: string;
     departmentId: number;
     lastPasswordChanged: Date;
+    departmentName:string;
 
 constructor(
     valueId: number=0,
@@ -22,7 +23,8 @@ constructor(
     employeeMobile: number=0,
     employeeExtension: string='',
     departmentId: number=0,
-    lastPasswordChanged: Date=new Date()
+    lastPasswordChanged: Date=new Date(),
+    departmentName:string
 ){
     this.valueId = valueId;
     this.email = email;
@@ -35,6 +37,7 @@ constructor(
     this.employeeExtension = employeeExtension;
     this.departmentId = departmentId;
     this.lastPasswordChanged = lastPasswordChanged;
+    this.departmentName = departmentName;
 }
 }
 
@@ -54,7 +57,7 @@ export class AddEmployeeDto{
       role?:string
       employeeCode?:string
       unit?:string
-      department?:string
+      departmentId?:number
       employeeMobile?:number
       email?:string
       employeeExtension?:string
@@ -66,7 +69,7 @@ export class EditEmployeeDto{
       role?:string
       employeeCode?:string
       unit?:string
-      department?:string
+      departmentId?:number
       employeeMobile?:number
       email?:string
       employeeExtension?:string

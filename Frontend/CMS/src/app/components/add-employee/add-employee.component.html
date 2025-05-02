@@ -47,9 +47,9 @@
                 </div>
   
                 <div class="m-3">
-                  <label for="department" class="form-label">Department</label>
-                  <span *ngIf="department?.hasError('required') && (department?.dirty || department?.touched)" style="color: red;">*Required</span>
-                  <select class="form-select" id="department" placeholder="Select department name" formControlName="department">
+                  <label for="departmentId" class="form-label">Department</label>
+                  <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)" style="color: red;">*Required</span>
+                  <select class="form-select" id="departmentId" placeholder="Select department name" formControlName="departmentId">
                     <option value="" disabled selected>--SELECT--</option>
                     <option *ngFor="let department of departments" [value]="department.departmentId">{{department.departmentName}}</option>
                   </select>
@@ -96,7 +96,7 @@
                 <strong>Unit: </strong>{{addEmployeeForm.get('unit')?.value}}
               </div>
               <div class="m-3">
-                <strong>Department: </strong>{{addEmployeeForm.get('department')?.value}}
+                <strong>Department: </strong>{{addEmployeeForm.get('departmentName')?.value}}
               </div>
               <div class="m-3">
                 <strong>Employee Mobile:</strong> {{ addEmployeeForm.get('employeeMobile')?.value }}

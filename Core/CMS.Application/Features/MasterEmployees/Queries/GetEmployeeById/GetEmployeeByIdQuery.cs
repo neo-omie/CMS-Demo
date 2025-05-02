@@ -4,5 +4,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Queries.GetEmployeeById
 {
-    public record GetEmployeeByIdQuery(int id):IRequest<MasterEmployee>;
+    public record GetEmployeeByIdQuery(int id):IRequest<GetEmployeeByIDDto>;
 }

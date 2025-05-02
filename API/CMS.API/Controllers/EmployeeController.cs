@@ -38,7 +38,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<MasterEmployee>> GetEmployeeById(int id)
+    public async Task<ActionResult<GetEmployeeByIDDto>> GetEmployeeById(int id)
     {
         var query = new GetEmployeeByIdQuery(id);
         return Ok(await _mediator.Send(query));
