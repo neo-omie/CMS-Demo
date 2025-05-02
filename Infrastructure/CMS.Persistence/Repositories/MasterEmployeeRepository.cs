@@ -48,12 +48,11 @@ namespace CMS.Persistence.Repositories
             //.ToListAsync();
 
             //return (data, totalCount);
-
+            var query = _context.MasterEmployees.AsQueryable();
+            int totalCount = await query.CountAsync();
             var data = await _context.MasterEmployees
                 .FromSqlRaw("EXEC sp_GetAllEmployees @PageNumber= {0}, @PageSize={1}, @unit= {2}, @searchTerm= {3}", pageNumber, pageSize, unit, searchTerm)
                 .ToListAsync();
-
-            int totalCount= data.Count;
 
             return(data, totalCount);
         }
