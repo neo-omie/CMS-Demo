@@ -40,7 +40,6 @@ fetchEmployees(){
   this.employeeService.getEmployees(this.currentPage, this.pageSize, this?.selectedUnit, this?.searchTerm)
   .subscribe({
     next:(response: MasterEmployeeDto) => {
-      this.employees = response.data;
       this.loading = false;
       console.log(response);
       this.employees = response.data;
