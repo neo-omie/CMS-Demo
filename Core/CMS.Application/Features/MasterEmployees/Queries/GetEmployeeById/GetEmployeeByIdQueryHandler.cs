@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
-using CMS.Domain.Entities;
 using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Queries.GetEmployeeById
