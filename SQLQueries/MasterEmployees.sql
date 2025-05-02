@@ -46,7 +46,8 @@ create or alter procedure sp_AddEmployee
     @Email nvarchar(255),
     @EmployeeExtension nvarchar(20),
     @LastPasswordChanged datetime,
-	@IsDeleted BIT
+	@IsDeleted BIT,
+	@ValueId int Output
 AS 
 Begin
 INSERT INTO MasterEmployees (
@@ -74,7 +75,7 @@ INSERT INTO MasterEmployees (
         @LastPasswordChanged,
 		@IsDeleted
 	)
-	Select Cast(SCOPE_IDENTITY() as int) as ValueId;
+	set @ValueId = SCOPE_IDENTITY();
 end
 go
 
