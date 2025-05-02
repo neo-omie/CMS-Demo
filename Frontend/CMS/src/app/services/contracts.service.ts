@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ContractsEntity, GetContractByIdDto } from '../models/contracts';
+import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../models/contracts';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +18,8 @@ export class ContractsService {
   }
   deleteContract(contractID: number) : Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/${contractID}`);
+  }
+  addContract(addContractDto: AddContractDto) : Observable<ContractsEntity> {
+    return this.http.post<ContractsEntity>(`${this.apiUrl}`,addContractDto);
   }
 }
