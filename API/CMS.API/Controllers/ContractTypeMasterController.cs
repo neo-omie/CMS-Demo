@@ -47,9 +47,8 @@ namespace CMS.API.Controllers
                 pageNumber, pageSize
             );
             var runQuery = await _mediator.Send(query);
-            var contDto = _mapper.Map<IEnumerable<GetAllContractTypesDTO>>(runQuery);
             _logger.LogInformation("GetAllContracts method Performed");
-            return Ok(contDto);
+            return Ok(runQuery);
         }
 
         //Get company by ID
@@ -90,7 +89,7 @@ namespace CMS.API.Controllers
             var command = new DeleteContractCommand(id);
             var checkifDel = await _mediator.Send(command);
             if (checkifDel)
-                return Ok("successfully deleted");
+                return Ok(checkifDel);
             _logger.LogInformation("DeleteContracts method Performed");
             return BadRequest();
         }

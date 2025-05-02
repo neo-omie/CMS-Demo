@@ -34,8 +34,14 @@ namespace CMS.Application.Features.Contracts.Queries.GetContractById
         public string EmpCustodianName { get; set; }
         public string Location { get; set; }
         public ContractStatus Approver1Status { get; set; } = ContractStatus.PendingApproval;
+        public string Approver1Email { get; set; }
+        public string Approver1EmployeeCode { get; set; }
         public ContractStatus Approver2Status { get; set; } = ContractStatus.PendingApproval;
+        public string Approver2Email { get; set; }
+        public string Approver2EmployeeCode { get; set; }
         public ContractStatus Approver3Status { get; set; } = ContractStatus.PendingApproval;
+        public string Approver3Email { get; set; }
+        public string Approver3EmployeeCode { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

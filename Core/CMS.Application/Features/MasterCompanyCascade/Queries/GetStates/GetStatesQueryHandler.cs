@@ -20,10 +20,6 @@ namespace CMS.Application.Features.MasterCompanyCascade.Queries.GetStates
         public async Task<IEnumerable<ListOfStates>> Handle(GetStatesQuery request, CancellationToken cancellationToken)
         {
             var check = await _companyCascadeRepository.GetStates(request.id);
-            if (check==null)
-            {
-                throw new Exception("state not found");
-            }
             return check;
         }
     }

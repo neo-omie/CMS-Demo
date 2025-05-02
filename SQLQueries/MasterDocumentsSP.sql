@@ -8,3 +8,11 @@ BEGIN
 	FETCH NEXT @PageSize ROWS ONLY
 END
 EXEC SP_GetAllDocuments @PageNumber = 1, @PageSize = 10;
+
+CREATE OR ALTER PROCEDURE SP_GetDocumentByID @id int
+AS
+BEGIN
+	SELECT * FROM MasterDocuments
+	WHERE ValueId = @id;
+END
+EXEC SP_GetDocumentByID @id = 1;

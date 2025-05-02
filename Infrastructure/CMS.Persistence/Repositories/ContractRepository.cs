@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.DTOs;
 using CMS.Application.Exceptions;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
@@ -16,81 +17,66 @@ namespace CMS.Persistence.Repositories
     public class ContractRepository : IContractRepository
     {
         readonly CMSDbContext _context;
-        public ContractRepository(CMSDbContext context)
+        readonly IEmailService _emailService;
+        public ContractRepository(CMSDbContext context, IEmailService emailService)
         {
+            _emailService = emailService;
             _context = context;
         }
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
-            return _context.ContractsEntity.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Where(ce => ce.IsDeleted == false)
-                .Select(a => new GetAllContractsDto
-                {
-                    ContractID = a.ContractId,
-                    ContractName = a.ContractName,
-                    ContractType = a.ContractType.ContractTypeName,
-                    DepartmentName = a.Department.Department.DepartmentName,
-                    EffectiveDate = a.ValidFrom,
-                    ExpiryDate = a.ValidTill,
-                    ToBeRenewedOn = a.RenewalFrom,
-                    AddendumDate = DateTime.Now.AddMonths(3),
-                    Status = a.Approver3Status,
-                    ApprovalPendingFrom = a.Department.Approver3.EmployeeName,
-                    RenewalContractPerson = a.Department.Approver3.EmployeeName,
-                    RenewalDueIn = (a.RenewalTill - DateTime.Now).ToString(),
-                    Location = a.Location,
-                    TotalRecords = totalRecords
-                });
+            string sql = "EXEC SP_GetAllContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
         }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
         {
-            var foundContract = await _context.ContractsEntity.FirstOrDefaultAsync(ce => ce.ContractId == id);
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
             if(foundContract == null)
             {
-                throw new NotFoundException($"Contract with id {id} not found. Please enter correct id");
+                throw new NotFoundException($"Contract with ID {id} not found");
             }
-            return await _context.ContractsEntity
-                .Where(ce => ce.ContractId == id)
-                .Select(ce => new GetContractByIdDto
-            {
-                ContractId = ce.ContractId,
-                ContractName = ce.ContractName,
-                DepartmentId = ce.DepartmentId,
-                DepartmentName = ce.Department.Department.DepartmentName,
-                ContractWithCompanyId = ce.ContractWithCompanyId,
-                ContractWithCompanyName = ce.ContractWithCompany.CompanyName,
-                ContractTypeId = ce.ContractTypeId,
-                ContractTypeName = ce.ContractType.ContractTypeName,
-                ApostilleTypeId = ce.ApostilleTypeId,
-                ApostilleTypeName = ce.ApostilleType.ApostilleName,
-                ActualDocRefNo = ce.ActualDocRefNo,
-                RetainerContract = ce.RetainerContract,
-                TermsAndConditions = ce.TermsAndConditions,
-                ValidFrom = ce.ValidFrom,
-                ValidTill = ce.ValidTill,
-                RenewalFrom = ce.RenewalFrom,
-                RenewalTill = ce.RenewalTill,
-                AddendumDate = ce.AddendumDate,
-                EmpCustodianId = ce.EmpCustodianId,
-                EmpCustodianName = ce.EmpCustodian.EmployeeName,
-                Location = ce.Location,
-                Approver1Status = ce.Approver1Status,
-                Approver2Status = ce.Approver2Status,
-                Approver3Status = ce.Approver3Status,
-                IsDeleted = ce.IsDeleted
-            }).FirstOrDefaultAsync();
+            return foundContract;
 
         }
         public async Task<Contract> AddContractAsync(Contract cp)
         {
             var addedContract = await _context.ContractsEntity.AddAsync(cp);
-            if(await _context.SaveChangesAsync() > 0)
-                return cp;
-            throw new Exception("For some reasons, contract has not been added.");
+            if(await _context.SaveChangesAsync() <= 0)
+                throw new Exception("For some reasons, contract has not been added.");
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, cp.ContractId).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
+            await SendMail(
+                foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ContractId, cp.ContractName
+            );
+            return cp;
         }
-
+        private string GenerateEmailBody(string name, int contractID, string contractName)
+        {
+            string emailBody = string.Empty;
+            emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+            emailBody += $"<h1>Hello {name}, new contract has been started under your department.</h1>";
+            emailBody += $"<h2>Contract ID: {contractID}<br>Contract Name: {contractName}</h2>";
+            emailBody += "<h3>Please check your CMS portal.</h3>";
+            emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+            emailBody += "</div>";
+            return emailBody;
+        }
+        public async Task SendMail(string email, string name, int contractID, string contractName)
+        {
+            var mailRequest = new MailRequest
+            {
+                Email = email,
+                Subject = "New Contract Added",
+                EmailBody = GenerateEmailBody(name, contractID, contractName)
+            };
+            await _emailService.SendEmail(mailRequest);
+        }
         public async Task<bool> DeleteContractAsync(int id)
         {
             var foundContract = await _context.ContractsEntity.FirstOrDefaultAsync(ce => ce.ContractId == id);

@@ -20,10 +20,6 @@ namespace CMS.Application.Features.MasterCompanyCascade.Queries.GetCities
         public async Task<IEnumerable<ListofCity>> Handle(GetCitiesQuery request, CancellationToken cancellationToken)
         {
             var check = await _companyCascadeRepository.GetCities(request.id);
-            if (check==null)
-            {
-                throw new Exception("cities not found");
-            }
             return check;
         }
     }

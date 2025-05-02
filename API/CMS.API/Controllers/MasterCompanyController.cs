@@ -43,9 +43,8 @@ namespace CMS.API.Controllers
                searchTerm, pageNumber, pageSize
             );
             var runQuery = await _mediator.Send(query);
-            var compDto = _mapper.Map<IEnumerable<GetMastersDTO>>(runQuery);
             _logger.LogInformation("GetAllCompany method Performed");
-            return Ok(compDto);
+            return Ok(runQuery);
         }
 
         //Get company by ID

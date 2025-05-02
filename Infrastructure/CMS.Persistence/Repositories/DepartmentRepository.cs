@@ -26,24 +26,41 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize)
         {
-            int totalRecords = await _context.Departments.CountAsync();
-            return _context.Departments.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Select(a => new GetAllDepartmentsDto
-                {
-                    DepartmentId = a.DepartmentId,
-                    DepartmentName = a.DepartmentName,
-                    TotalRecords = totalRecords
-                });
+            if (pageNumber < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
+            }
+
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
+            }
+
+            string sql = "EXEC SP_GetAllDepartments @PageNumber = {0}, @PageSize = {1}";
+            var allDepartments = await _context.GetDepartmentsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allDepartments;
         }
 
         public async Task<Department> GetDepartmentById(int id)
         {
-            var foundDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
+            string sql = "EXEC SP_GetDepartmentByID @id = {0}";
+            var findingDepartment = await _context.Departments.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundDepartment = findingDepartment.FirstOrDefault();
             if(foundDepartment == null)
             {
                 throw new NotFoundException($"Department with ID {id} not found.");
             }
             return foundDepartment;
+        }
+        public async Task<IEnumerable<Department>> SearchDepartment(string searchQuery)
+        {
+            var isInt = Int32.TryParse(searchQuery, out int checkID);
+            var searchDepartment = await _context.Departments.Where(a => a.DepartmentName.Contains(searchQuery) || a.DepartmentId == checkID).ToListAsync();
+            if (searchDepartment.Count() <= 0)
+            {
+                throw new NotFoundException($"Department not found.");
+            }
+            return searchDepartment;
         }
         public async Task<Department> AddNewDepartment(string departmentName)
         {
