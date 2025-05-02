@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
+using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
 using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU;
 using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOUById;
@@ -23,63 +25,21 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<IEnumerable<GetAllApprovalMatrixMOUDto>> GetAllApprovalMatrixMOU(int pageNumber, int pageSize)
         {
-            int totalRecords = await _context.MasterApprovalMatrixMOUs.CountAsync();
-            return _context.MasterApprovalMatrixMOUs.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Select(a => new GetAllApprovalMatrixMOUDto
-                {
-                    MasterApprovalMatrixMOUId = a.MasterApprovalMatrixMOUId,
-                    DepartmentName = a.Department.DepartmentName,
-                    ApproverName1 = a.Approver1.EmployeeName, 
-                    ApproverName2 = a.Approver2.EmployeeName,
-                    ApproverName3 = a.Approver3.EmployeeName,
-                    TotalRecords = totalRecords
-                });
+            string query = "EXEC SP_GetAllApprovalMatrixMOUDto @pageNumber = {0}, @pageSize = {1}";
+            return _context.GetAllApprovalMatrixMOUDtos.FromSqlRaw(query, pageNumber, pageSize);
         }
 
         public async Task<GetAllApprovalMatrixMOUByIdDto> GetApprovalMatrixMOUById(int id)
         {
-            MasterApprovalMatrixMOU mouInfo = await _context.MasterApprovalMatrixMOUs.FirstOrDefaultAsync(c => c.MasterApprovalMatrixMOUId == id);
-
-            if (mouInfo == null)
-            {
-                throw new NotFoundException($"Approval contract with value id: {id} not found");
-            }
-            return await _context.MasterApprovalMatrixMOUs.Where(c => c.MasterApprovalMatrixMOUId == id)
-                .Select(c => new GetAllApprovalMatrixMOUByIdDto
-                {
-                    MasterApprovalMatrixMOUId = c.MasterApprovalMatrixMOUId,
-                    DepartmentId = c.DepartmentId,
-                    DepartmentName = c.Department.DepartmentName,
-                    ApproverName1 = c.Approver1.EmployeeName,
-                    ApproverId1 = c.Approver1.EmployeeCode,
-                    ApproverName2 = c.Approver2.EmployeeName,
-                    ApproverId2 = c.Approver2.EmployeeCode,
-                    ApproverName3 = c.Approver3.EmployeeName,
-                    ApproverId3 = c.Approver3.EmployeeCode,
-                    NumberOfDays = c.NumberOfDays
-                }).FirstOrDefaultAsync();
+            string query = "EXEC SP_GetApprovalMatrixMOUById @id = {0}";
+            IEnumerable<GetAllApprovalMatrixMOUByIdDto> result = _context.GetAllApprovalMatrixMOUByIdDtos.FromSqlRaw(query, id);
+            return result.FirstOrDefault();
         }
 
         public async Task<bool> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
         {
-            var checkApprMatrMOU = await _context.MasterApprovalMatrixMOUs.FirstOrDefaultAsync(m => m.MasterApprovalMatrixMOUId == id);
-            if(checkApprMatrMOU == null)
-            {
-                throw new NotFoundException($"Approval Matrix MOU with value ID {id} not found.");
-            }
-            checkApprMatrMOU.ApproverId1 = mou.ApproverId1;
-            checkApprMatrMOU.ApproverId2 = mou.ApproverId2;
-            checkApprMatrMOU.ApproverId3 = mou.ApproverId3;
-            checkApprMatrMOU.NumberOfDays = mou.NumberOfDays;
-            _context.MasterApprovalMatrixMOUs.Update(checkApprMatrMOU);
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                throw new Exception("For some reasons, data has not been updated :/");
-            }
+            string query = "EXEC SP_UpdateApprovalMatrixMOU @id = {0}, @approverId1 = {1}, @approverId2 = {2}, @approverId3 = {3}, @numberOfDays = {4}";
+            return await _context.Database.ExecuteSqlRawAsync(query, id, mou.ApproverId1, mou.ApproverId2, mou.ApproverId3, mou.NumberOfDays) > 0;
         }
     }
 }

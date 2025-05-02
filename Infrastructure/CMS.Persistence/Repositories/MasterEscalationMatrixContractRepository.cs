@@ -54,9 +54,13 @@ namespace CMS.Persistence.Repositories
             {
                 MatrixContractId = x.MatrixContractId,
                 DepartmentName = x.Department.DepartmentName,
+                DepartmentId = x.DepartmentId,
                 Escalation1 = x.Escalation1.EmployeeName,
                 Escalation2 = x.Escalation2.EmployeeName,
                 Escalation3 = x.Escalation3.EmployeeName,
+                EscalationId1 = x.Escalation1.EmployeeCode,
+                EscalationId2 = x.Escalation2.EmployeeCode,
+                EscalationId3 = x.Escalation3.EmployeeCode,
                 TriggerDaysEscalation1 = x.TriggerDaysEscalation1,
                 TriggerDaysEscalation2 = x.TriggerDaysEscalation2,
                 TriggerDaysEscalation3 = x.TriggerDaysEscalation3
