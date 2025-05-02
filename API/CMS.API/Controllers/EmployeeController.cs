@@ -38,7 +38,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<MasterEmployee>> GetEmployeeById(int id)
+    public async Task<ActionResult<GetEmployeeByIDDto>> GetEmployeeById(int id)
     {
         var query = new GetEmployeeByIdQuery(id);
         return Ok(await _mediator.Send(query));
@@ -64,7 +64,7 @@ public class EmployeeController : ControllerBase
         var command = new DeleteEmployeeCommand(id);
         var checkDelete= await _mediator.Send(command);
         if (checkDelete)
-            return Ok("Successfully Deleted!!!");
+            return Ok(checkDelete);
         return NotFound();
     }
 

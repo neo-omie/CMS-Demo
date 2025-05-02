@@ -25,12 +25,12 @@ export class AddEmployeeComponent implements OnInit{
     role:new FormControl("",Validators.required),
     employeeCode:new FormControl("",Validators.required),
     unit:new FormControl("All",Validators.required),
-    department: new FormGroup("", Validators.required),
+    departmentId: new FormControl("", Validators.required),
+    departmentName: new FormControl(""),
     employeeMobile:new FormControl("", Validators.required),
     email: new FormControl("", [Validators.required, Validators.email]),
     employeeExtension: new FormControl("", Validators.required)
   })
-
   formsValue:any;
   departments:MasterDepartment[] = [];
   mode:'add'|'edit'|'view'='add';
@@ -69,6 +69,8 @@ export class AddEmployeeComponent implements OnInit{
     this.employeeService.getEmployeeById(valueId).subscribe({
       next:(employee)=>{
         this.addEmployeeForm.patchValue(employee);
+        console.log(this.addEmployeeForm.value.departmentId);
+        
         if(this.mode==='view'){
           this.addEmployeeForm.disable();
         }
@@ -95,11 +97,11 @@ export class AddEmployeeComponent implements OnInit{
       const role = this.addEmployeeForm.value.role;
       const employeeCode = this.addEmployeeForm.value.employeeCode;
       const unit = this.addEmployeeForm.value.unit;
-      const department = this.addEmployeeForm.value.department;
+      const departmentId = this.addEmployeeForm.value.departmentId;
       const employeeMobile = this.addEmployeeForm.value.employeeMobile;
       const email = this.addEmployeeForm.value.email;
       const employeeExtension = this.addEmployeeForm.value.employeeExtension;
-      if(employeeMobile && Number(employeeMobile)
+      if(employeeMobile && Number(employeeMobile) && Number(departmentId)
       ){
         const addFormValues:AddEmployeeDto = new AddEmployeeDto();
         addFormValues.employeeName = this.addEmployeeForm.value.employeeName;
@@ -107,7 +109,7 @@ export class AddEmployeeComponent implements OnInit{
         addFormValues.role =this.addEmployeeForm.value.role;
         addFormValues.employeeCode =this.addEmployeeForm.value.employeeCode;
         addFormValues.unit =this.addEmployeeForm.value.unit;
-        addFormValues.department =this.addEmployeeForm.value.department;
+        addFormValues.departmentId = Number(departmentId);
         addFormValues.employeeMobile = Number(employeeMobile);
   
         addFormValues.email =this.addEmployeeForm.value.email;
@@ -135,11 +137,11 @@ export class AddEmployeeComponent implements OnInit{
       const role = this.addEmployeeForm.value.role;
       const employeeCode = this.addEmployeeForm.value.employeeCode;
       const unit = this.addEmployeeForm.value.unit;
-      const department = this.addEmployeeForm.value.department;
+      const departmentId = this.addEmployeeForm.value.departmentId;
       const employeeMobile = this.addEmployeeForm.value.employeeMobile;
       const email = this.addEmployeeForm.value.email;
       const employeeExtension = this.addEmployeeForm.value.employeeExtension;
-      if(employeeMobile && Number(employeeMobile)
+      if(employeeMobile && Number(employeeMobile) && Number(departmentId)
       ){
         const addFormValues:EditEmployeeDto = new EditEmployeeDto();
         addFormValues.employeeName = this.addEmployeeForm.value.employeeName;
@@ -147,7 +149,7 @@ export class AddEmployeeComponent implements OnInit{
         addFormValues.role =this.addEmployeeForm.value.role;
         addFormValues.employeeCode =this.addEmployeeForm.value.employeeCode;
         addFormValues.unit =this.addEmployeeForm.value.unit;
-        addFormValues.department =this.addEmployeeForm.value.department;
+        addFormValues.departmentId =Number(departmentId);
         addFormValues.employeeMobile = Number(employeeMobile);
   
         addFormValues.email =this.addEmployeeForm.value.email;
@@ -194,8 +196,11 @@ export class AddEmployeeComponent implements OnInit{
   get unit(){
     return this.addEmployeeForm.get('unit');
   }
-  get department(){
-    return this.addEmployeeForm.get('department');
+  get departmentId(){
+    return this.addEmployeeForm.get('departmentId');
+  }
+  get departmentName(){
+    return this.addEmployeeForm.get('departmentName');
   }
   get employeeMobile(){
     return this.addEmployeeForm.get('employeeMobile');
