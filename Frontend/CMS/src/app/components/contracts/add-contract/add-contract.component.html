@@ -1,117 +1,147 @@
-<!-- <div class="row justify-content-center">
-    <div class="col-md-8">
-      <p class="fs-3 m-4" style="color: #5f5fee; text-align: center;">
-        {{ mode==='add'? 'Add New Comtract' : mode==='edit' ? 'EDIT Contract' :'VIEW Contract'}}
-      </p>
-          
-          <form [formGroup]="addContractForm" (ngSubmit)="onSubmit()" *ngIf="mode!=='view'">
-            <div class="fields-container">
-              <div class="m-3">
-                <label for="contractName" class="form-label">Contract Name</label>
-                <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)" style="color: red;">*Required</span>
-                <input class="form-control" type="text" id="employeeName" placeholder="Enter company name" formControlName="employeeName">
-              </div>
-
-              <div class="m-3" *ngIf="mode!=='edit'">
-                <label for="password" class="form-label">Department</label>
-                <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)" style="color: red;">*Required</span>
-                <input class="form-control" type="text" id="password" placeholder="Enter company name" formControlName="password">
-              </div>
-
-              <div class="m-3">
-                <label for="role" class="form-label">Role</label>
-                <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">*Required</span>
-                <select class="form-select" id="employeeCode" placeholder="Select Role"  formControlName="role">
-                  <option value="Management User">Management User</option>
-                  <option value="MOU_User">MOU_User</option>
-                  <option value="MOU_Approver">MOU_Approver</option>
-                  <option value="Contract_User">Contract_User</option>
-                  <option value="Contract_Approver">Contract_Approver</option>
-                </select>
-              </div>
-
-              <div class="m-3">
-                <label for="employeeCode" class="form-label">Employee Code</label>
-                <span *ngIf="employeeCode?.hasError('required') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">*Required</span>
-                <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee Code" formControlName="employeeCode">
-              </div>
-
-              <div class="m-3">
-                <label for="unit" class="form-label">Unit</label>
-                <span *ngIf="unit?.hasError('required') && (unit?.dirty || unit?.touched)" style="color: red;">*Required</span>
-                <select class="form-select" id="unit" placeholder="Select unit" formControlName="unit">
-                  <option value="Thane">Thane</option>
-                  <option value="Indore">Indore</option>
-                  <option value="Pune">Pune</option>
-                </select>
-              </div>
-
-              <div class="m-3">
-                <label for="department" class="form-label">Department</label>
-                <span *ngIf="department?.hasError('required') && (department?.dirty || department?.touched)" style="color: red;">*Required</span>
-                <select class="form-select" id="department" placeholder="Select department name" formControlName="department">
-                  <option value="" disabled selected>--SELECT--</option>
-                  <option *ngFor="let department of departments" [value]="department.departmentId">{{department.departmentName}}</option>
-                </select>
-              </div>
-
-              <div class="m-3">
-                <label for="employeeMobile" class="form-label">Employee Mobile</label>
-                <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">*Required</span>
-                <input class="form-control" type="number" id="employeeMobile" placeholder="Enter Employee Mobile" formControlName="employeeMobile">
-              </div>
-
-              <div class="m-3">
-                <label for="email" class="form-label">Email</label>
-                <span *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)" style="color: red;">*Required</span>
-                <input class="form-control" type="email" id="email" placeholder="Enter your Email" formControlName="email">
-              </div>
-
-              <div class="m-3">
-                <label for="employeeExtension" class="form-label">Employee Ext</label>
-                <span *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)" style="color: red;">*Required</span>
-                <input class="form-control" type="text" id="employeeExtension" placeholder="Enter Employee extension" formControlName="employeeExtension">
-              </div>
-
-            </div>
-
-          
-            <div class="d-flex justify-content-center gap-2">
-              <button type="submit" class="btn btn-primary" style="background-color: #5f5fee;" [disabled]="addEmployeeForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
-              <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-            </div>
-          </form>
-
-          <div class="view-mode" *ngIf="mode==='view'">
-            <div class="m-3">
-              <strong>Employee Name: </strong>{{addEmployeeForm.get('employeeName')?.value}}
-            </div>
-            <div class="m-3">
-              <strong>Role: </strong>{{addEmployeeForm.get('role')?.value}}
-            </div>
-            <div class="m-3">
-              <strong>Employee Code: </strong>{{addEmployeeForm.get('employeeCode')?.value}}
-            </div>
-            <div class="m-3">
-              <strong>Unit: </strong>{{addEmployeeForm.get('unit')?.value}}
-            </div>
-            <div class="m-3">
-              <strong>Department: </strong>{{addEmployeeForm.get('department')?.value}}
-            </div>
-            <div class="m-3">
-              <strong>Employee Mobile:</strong> {{ addEmployeeForm.get('employeeMobile')?.value }}
-            </div>
-            <div class="m-3">
-              <strong>Email:</strong> {{ addEmployeeForm.get('email')?.value }}
-            </div>
-            <div class="m-3">
-              <strong>Employee Extension:</strong> {{ addEmployeeForm.get('employeeExtension')?.value }}
-            </div>
-            <div class="d-flex justify-content-center gap-2">
-              <button type="button" class="btn btn-secondary" (click)="onCancel()">Back</button>
-            </div>
+<p class="fs-3 m-4" style="color: #5f5fee; text-align: center;">ADD Contract </p>
+<form [formGroup]="masterContractAddForm" (ngSubmit)="onAddFormSubmit()">
+  <div class="p-2">
+    <div class="card">
+      <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-detail-container">
+        <span>Add Contract Details</span> <i class="fa-solid fa-angle-down"></i>
+      </div>
+      <div class="card-body collapse show" id="company-detail-container">
+        <div class="fields-container">
+          <div class="m-3">
+            <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
+              formControlName="contractName">
           </div>
+          <div class="m-3">
+            <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="departmentId?.hasError('pattern') && (departmentId?.dirty || departmentId?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID"
+              formControlName="departmentId">
+          </div>
+          <div class="m-3">
+            <span *ngIf="contractWithCompanyId?.hasError('required') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="contractWithCompanyId?.hasError('pattern') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID"
+              formControlName="contractWithCompanyId">
+          </div>
+          <div class="m-3">
+            <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID"
+              formControlName="contractTypeId">
+          </div>
+          <div class="m-3">
+            <span *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="apostilleTypeId" placeholder="Enter Apostille ID"
+              formControlName="apostilleTypeId">
+          </div>
+          <div class="m-3">
+            <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="actualDocRefNo" placeholder="Enter Actual Document Reference Number"
+              formControlName="actualDocRefNo">
+          </div>
+          <div class="m-3">
+            <span *ngIf="retainerContract?.hasError('required') && (retainerContract?.dirty || retainerContract?.touched)"
+              style="color: red;">*Required</span>
+              <span *ngIf="retainerContract?.hasError('pattern') && (retainerContract?.dirty || retainerContract?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract">
+          </div>
+          <div class="m-3">
+            <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
+          </div>
+          <div class="m-3">
+            <label for="termsAndConditions">Terms and Conditions</label>
+            <span *ngIf="termsAndConditions?.hasError('required') && (termsAndConditions?.dirty || termsAndConditions?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="text" placeholder="Terms and Conditions" id="termsAndConditions" formControlName="termsAndConditions">
+          </div>
+          <div class="m-3">
+            <label for="validFrom">Valid from</label>
+            <span *ngIf="validFrom?.hasError('required') && (validFrom?.dirty || validFrom?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="date" id="validFrom" formControlName="validFrom">
+          </div>
+          <div class="m-3">
+            <label for="validTill">Valid till</label>
+            <span *ngIf="validTill?.hasError('required') && (validTill?.dirty || validTill?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="date" id="validTill" formControlName="validTill">
+          </div>
+          <div class="m-3">
+            <label for="renewalFrom">Renewal from</label>
+            <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="date" id="renewalFrom" formControlName="renewalFrom">
+          </div>
+          <div class="m-3">
+            <label for="renewalTill">Renewal till</label>
+            <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="date" id="renewalTill" formControlName="renewalTill">
+          </div>
+          <div class="m-3">
+            <label for="addendumDate">Addendum Date</label>
+            <span *ngIf="addendumDate?.hasError('required') && (addendumDate?.dirty || addendumDate?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
+          </div>
+          <div class="m-3">
+            <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="empCustodianId" placeholder="Enter Custodian Employee ID"
+              formControlName="empCustodianId">
+          </div>
+          <div class="m-3">
+            <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
+              style="color: red;">*Required</span>
+            <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
+          </div>
+          <div class="m-3">
+            <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="approver1Status" placeholder="Enter Approver 1 Status"
+              formControlName="approver1Status">
+          </div>
+          <div class="m-3">
+            <span *ngIf="approver2Status?.hasError('required') && (approver2Status?.dirty || approver2Status?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="approver2Status?.hasError('pattern') && (approver2Status?.dirty || approver2Status?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="approver2Status" placeholder="Enter Approver 2 Status"
+              formControlName="approver2Status">
+          </div>
+          <div class="m-3">
+            <span *ngIf="approver3Status?.hasError('required') && (approver3Status?.dirty || approver3Status?.touched)"
+              style="color: red;">*Required</span>
+            <span *ngIf="approver3Status?.hasError('pattern') && (approver3Status?.dirty || approver3Status?.touched)"
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
+              formControlName="approver3Status">
+          </div>
+        </div>
+      </div>
     </div>
-</div> -->
+  </div>
+  <div class="d-flex justify-content-center">
+    <button class="btn btn-outline-primary w-100" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
+    <button class="btn btn-outline-primary w-100" id="btncancel" type="submit" style="max-width: 300px;  "
+      (click)="onClick()">Cancel</button>
+  </div>
 
-<!-- {{ departments.find(dept => dept.departmentId === addEmployeeForm.get('department')?.value)?.departmentName }} -->
+</form>

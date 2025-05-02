@@ -14,6 +14,7 @@ import { authGuard } from './auth.guard';
 import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
+//import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';

@@ -1,6 +1,8 @@
-CREATE OR ALTER PROCEDURE SP_GetAllEscalationMatrixContracts @PageNumber INT, @PageSize INT
+CREATE PROCEDURE SP_GetAllEscalationMatrixContracts @PageNumber INT, @PageSize INT
 AS
 BEGIN
+DECLARE @TotalRecords INT
+	SELECT @TotalRecords = Count(m.MatrixContractId) FROM MasterEscalationMatrixContracts m; 
     SELECT 
         m.MatrixContractId,
         d.DepartmentName, m.DepartmentId,
