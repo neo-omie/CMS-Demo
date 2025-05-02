@@ -1,13 +1,16 @@
-CREATE OR ALTER PROCEDURE SP_GetAllEscalationMatrixContracts @PageNumber INT, @PageSize INT
+CREATE PROCEDURE SP_GetAllEscalationMatrixContracts @PageNumber INT, @PageSize INT
 AS
 BEGIN
+DECLARE @TotalRecords INT
+	SELECT @TotalRecords = Count(m.MatrixContractId) FROM MasterEscalationMatrixContracts m; 
     SELECT 
         m.MatrixContractId,
-        d.DepartmentName,
-        e1.EmployeeName AS Escalation1,
-        e2.EmployeeName AS Escalation2,
-        e3.EmployeeName AS Escalation3,
-		m.TriggerDaysEscalation1, m.TriggerDaysEscalation2, m.TriggerDaysEscalation3
+        d.DepartmentName, m.DepartmentId,
+        m.EscalationId1, e1.EmployeeName AS Escalation1,
+        m.EscalationId2, e2.EmployeeName AS Escalation2,
+        m.EscalationId3, e3.EmployeeName AS Escalation3,
+		m.TriggerDaysEscalation1, m.TriggerDaysEscalation2, m.TriggerDaysEscalation3,
+		@TotalRecords as TotalRecords
     FROM MasterEscalationMatrixContracts m
     LEFT JOIN Departments d ON m.DepartmentId = d.DepartmentId
     LEFT JOIN MasterEmployees e1 ON m.EscalationId1 = e1.EmployeeCode
