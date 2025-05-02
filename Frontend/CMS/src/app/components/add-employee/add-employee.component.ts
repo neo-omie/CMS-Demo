@@ -34,18 +34,7 @@ export class AddEmployeeComponent implements OnInit{
   formsValue:any;
   departments:MasterDepartment[] = [];
   mode:'add'|'edit'|'view'='add';
-  valueId:number=0;
-
-  ngOnInit(){
-    this.getDepartmentName();
-
-    const idParam=this.route.snapshot.paramMap.get('id');
-    if(idParam){
-      const valueId=+idParam;
-      this.mode=this.route.snapshot.url[0].path === 'view' ? 'view' : 'edit';
-      this.fetchEmployeeData(this.valueId);
-    }
-  }
+  valueId?:number;
 
   constructor(
     private route:ActivatedRoute,
@@ -54,6 +43,20 @@ export class AddEmployeeComponent implements OnInit{
     private employeeService: MasterEmployeeService
   ){}
 
+  ngOnInit(){
+    this.getDepartmentName();
+    this.route.params.subscribe(params=>{
+      console.log('Route Params:', params);
+      const paramValueId=params['valueId']
+      if(paramValueId){
+         this.valueId=+paramValueId;
+        console.log('Dynamic valueId:', this.valueId);
+        this.mode=this.route.snapshot.url[2].path === 'editEmployee' ? 'edit' : 'view';
+        console.log(this.mode);
+        this.fetchEmployeeData(this.valueId);
+      }
+    })
+  }
 
   getDepartmentName(){
     this.departmentService.getAllDepartments(1, 100).subscribe((res)=>{
@@ -62,8 +65,8 @@ export class AddEmployeeComponent implements OnInit{
     });
   }
 
-  fetchEmployeeData(id:number){
-    this.employeeService.getEmployeeById(id).subscribe({
+  fetchEmployeeData(valueId:number){
+    this.employeeService.getEmployeeById(valueId).subscribe({
       next:(employee)=>{
         this.addEmployeeForm.patchValue(employee);
         if(this.mode==='view'){
@@ -113,6 +116,7 @@ export class AddEmployeeComponent implements OnInit{
         this.employeeService.addEmployee(addFormValues).subscribe({
           next:(response:AddEmployeeDto) => {
               Alert.toast(TYPE.SUCCESS,true,'Added successfully');
+              this.router.navigate(['masters/employeeMasters']);
           }, 
           error:(error) => {
             console.error('Error :(', error);
@@ -149,9 +153,15 @@ export class AddEmployeeComponent implements OnInit{
         addFormValues.email =this.addEmployeeForm.value.email;
         addFormValues.employeeExtension =this.addEmployeeForm.value.employeeExtension;
         console.log(addFormValues);
+        if (!this.valueId) {
+          console.error('valueId is undefined. Cannot update employee.');
+          Alert.toast(TYPE.ERROR, true, 'Invalid employee ID.');
+          return;
+        }
         this.employeeService.updateEmployee(this.valueId, addFormValues).subscribe({
           next:(response:EditEmployeeDto) => {
               Alert.toast(TYPE.SUCCESS,true,'Updated successfully');
+              this.router.navigate(['masters/employeeMasters']);
           }, 
           error:(error) => {
             console.error('Error :(', error);

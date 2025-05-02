@@ -15,7 +15,7 @@ export class ContractTypeMasterService {
       return this.http.get<ContractTypeMasterDTO[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
   }
   
-  getCompanyById(valueId:number):Observable<ContractTypeMaster>{
+  getContractById(valueId:number):Observable<ContractTypeMaster>{
         return this.http.get<ContractTypeMaster>(`${this.apiUrl}/${valueId}`);
       }
   

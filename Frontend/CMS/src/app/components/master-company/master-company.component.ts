@@ -77,6 +77,7 @@ export class MasterCompanyComponent implements OnInit{
   }
 
   GetCompany(id:number){
+    console.log("ftech id",id);
     this.companyService.getCompanyById(id).subscribe({
       next:(res:MasterCompany)=>{
       this.comp=res;

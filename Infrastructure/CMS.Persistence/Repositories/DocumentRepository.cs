@@ -21,15 +21,8 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        //public async Task<IEnumerable<MasterDocument>> GetAllDocuments(int pageNumber, int pageSize)
-        //{
-        //    return await _context.MasterDocuments.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-        //        .ToListAsync();
-        //}
-
         public async Task<(IEnumerable<MasterDocument> , int )> GetAllDocuments(int pageNumber, int pageSize)
         {
-            
             if (pageNumber < 1)
             {
                 throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
@@ -42,24 +35,20 @@ namespace CMS.Persistence.Repositories
 
             
             var totalCount = await _context.MasterDocuments.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetAllDocuments @PageNumber = {0}, @PageSize = {1}";
+            var docs = _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize);
 
-
-            var documents = await _context.MasterDocuments
-                .Where(x => x.IsDeleted == false)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-                
-
-            return (documents, totalCount);
+            return (docs, totalCount);
         }
 
         public async Task<MasterDocument> GetDocumentById(int id)
         {
-            var document = await _context.MasterDocuments.FirstOrDefaultAsync(x => x.ValueId == id);
+            string sql = "EXEC SP_GetDocumentByID @id = {0}";
+            var findingDocument = await _context.MasterDocuments.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var document = findingDocument.FirstOrDefault();
             if (document == null)
             {
-                throw new DocumentNotFoundException("Document not found");
+                throw new DocumentNotFoundException($"Document with id {id} not found");
             }
             return document;
         }

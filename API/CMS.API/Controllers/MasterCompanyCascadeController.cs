@@ -20,24 +20,24 @@ namespace CMS.API.Controllers
         }
 
         [HttpGet("GetCountries")]
-        public JsonResult GetCountries()
+        public async Task<IActionResult> GetCountries()
         {
-            var countries = _mediator.Send(new GetCountriesQuery());
-            return new JsonResult(countries);
+            var countries = await _mediator.Send(new GetCountriesQuery());
+            return Ok(countries);
         }
 
         [HttpGet("GetStates")]
-        public JsonResult GetStates(int countryId)
+        public async Task<IActionResult> GetStates(int countryId)
         {
-            var states = _mediator.Send(new GetStatesQuery(countryId));
-            return new JsonResult(states);
+            var states = await _mediator.Send(new GetStatesQuery(countryId));
+            return Ok(states);
         }
 
         [HttpGet("GetCities")]
-        public JsonResult GetCities(int stateId)
+        public async Task<IActionResult> GetCities(int stateId)
         {
-            var cities = _mediator.Send(new GetCitiesQuery(stateId));
-            return new JsonResult(cities);
+            var cities = await _mediator.Send(new GetCitiesQuery(stateId));
+            return Ok(cities);
         }
     }
 }

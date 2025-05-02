@@ -35,22 +35,9 @@ namespace CMS.Persistence.Repositories
 
 
             int totalRecords = await _context.MasterEscalationMatrixMous.CountAsync();
-
-
-            var emMou = _context.MasterEscalationMatrixMous
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(a => new EscalationMatrixMoutDto
-                {
-                    MatrixMouId = a.MatrixMouId,
-                    DepartmentName = a.Department.DepartmentName,
-                    Escalation1 = a.Escalation1.EmployeeName,
-                    Escalation2 = a.Escalation2.EmployeeName,
-                    Escalation3 = a.Escalation3.EmployeeName,
-                    totalRecords = totalRecords
-                });
-
-            return emMou;
+            string sql = "EXEC SP_GetAllEscalationMatrixMOUs @PageNumber = {0}, @PageSize = {1}";
+            var allEscalations = _context.GetEscalationMatrixMouDtos.FromSqlRaw(sql, pageNumber, pageSize);
+            return allEscalations;
         }
 
         public async Task<EscalationMatrixMoutDto> GetEscalationMatrixMou(int valueId)

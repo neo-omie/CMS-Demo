@@ -1,7 +1,7 @@
 export class ContractTypeMaster {
-    ValuedId?:number;
-    ContractTypeName?:string;
-    Status?:boolean;
+    valueId?:number;
+    contractTypeName?:string;
+    status?:boolean;
 }
 
 export class ContractTypeMasterDTO{

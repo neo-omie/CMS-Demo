@@ -54,17 +54,24 @@ namespace CMS.Persistence.Repositories
 
         public async Task<IEnumerable<GetAllContractTypesDTO>> GetAllContractAsync( int pageNumber, int pageSize)
         {
-            int totalRecords = await _context.contracts.Where(x => x.IsDeleted == false).CountAsync();
-            return await _context.contracts.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Where(c => c.IsDeleted == false)
-                .Select(c => new GetAllContractTypesDTO
+            var totalRecords = await _context.contracts.Where(x => x.IsDeleted == false).CountAsync();
+            var query = _context.contracts.AsQueryable();
+
+                string sql = "EXEC SP_GetAllContracts @PageNumber= {0}, @PageSize={1}";
+
+            var rawData = await _context.contracts
+            .FromSqlRaw(sql, pageNumber, pageSize)
+            .AsNoTracking()
+            .ToListAsync();
+                var res=rawData.Select(c => new GetAllContractTypesDTO
                 { 
                     ValueId = c.ValueId,
                     ContractTypeName = c.ContractTypeName,
                     Status = c.Status,
                     IsDeleted = c.IsDeleted,
                     TotalRecords = totalRecords
-                }).ToListAsync();
+                });
+            return res;
         }
 
         public async Task<ContractTypeMasters> GetContractById(int id)

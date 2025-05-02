@@ -21,12 +21,11 @@ namespace CMS.API.Controllers
             _mediator = mediator;
         }
         [HttpGet("{pageNumber}/{pageSize}")]
-        public async Task<ActionResult<IEnumerable<MasterApostille>>> GetAllApostilleAsync(
-        [FromQuery] string searchTerm,
+        public async Task<ActionResult<IEnumerable<GetAllApostilleDto>>> GetAllApostilleAsync(
         [FromRoute] int pageNumber,
         [FromRoute] int pageSize)
         {
-            var query= new GetAllApostilleQuery(searchTerm, pageNumber, pageSize);
+            var query= new GetAllApostilleQuery(pageNumber, pageSize);
             return Ok(await _mediator.Send(query));
         }
 
