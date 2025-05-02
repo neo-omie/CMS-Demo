@@ -64,7 +64,7 @@ public class EmployeeController : ControllerBase
         var command = new DeleteEmployeeCommand(id);
         var checkDelete= await _mediator.Send(command);
         if (checkDelete)
-            return Ok("Successfully Deleted!!!");
+            return Ok(checkDelete);
         return NotFound();
     }
 
