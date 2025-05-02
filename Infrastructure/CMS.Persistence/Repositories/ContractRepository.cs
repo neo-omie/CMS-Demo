@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.DTOs;
 using CMS.Application.Exceptions;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
@@ -16,8 +17,10 @@ namespace CMS.Persistence.Repositories
     public class ContractRepository : IContractRepository
     {
         readonly CMSDbContext _context;
-        public ContractRepository(CMSDbContext context)
+        readonly IEmailService _emailService;
+        public ContractRepository(CMSDbContext context, IEmailService emailService)
         {
+            _emailService = emailService;
             _context = context;
         }
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
@@ -43,11 +46,37 @@ namespace CMS.Persistence.Repositories
         public async Task<Contract> AddContractAsync(Contract cp)
         {
             var addedContract = await _context.ContractsEntity.AddAsync(cp);
-            if(await _context.SaveChangesAsync() > 0)
-                return cp;
-            throw new Exception("For some reasons, contract has not been added.");
+            if(await _context.SaveChangesAsync() <= 0)
+                throw new Exception("For some reasons, contract has not been added.");
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, cp.ContractId).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
+            await SendMail(
+                foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ContractId, cp.ContractName
+            );
+            return cp;
         }
-
+        private string GenerateEmailBody(string name, int contractID, string contractName)
+        {
+            string emailBody = string.Empty;
+            emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+            emailBody += $"<h1>Hello {name}, new contract has been started under your department.</h1>";
+            emailBody += $"<h2>Contract ID: {contractID}<br>Contract Name: {contractName}</h2>";
+            emailBody += "<h3>Please check your CMS portal.</h3>";
+            emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+            emailBody += "</div>";
+            return emailBody;
+        }
+        public async Task SendMail(string email, string name, int contractID, string contractName)
+        {
+            var mailRequest = new MailRequest
+            {
+                Email = email,
+                Subject = "New Contract Added",
+                EmailBody = GenerateEmailBody(name, contractID, contractName)
+            };
+            await _emailService.SendEmail(mailRequest);
+        }
         public async Task<bool> DeleteContractAsync(int id)
         {
             var foundContract = await _context.ContractsEntity.FirstOrDefaultAsync(ce => ce.ContractId == id);
