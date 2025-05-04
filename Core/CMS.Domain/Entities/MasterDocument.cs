@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using CMS.Domain.Constants;
+using Microsoft.AspNetCore.Http;
 
 namespace CMS.Domain.Entities
 {
@@ -19,7 +20,8 @@ namespace CMS.Domain.Entities
 
         public Status status { get; set; } 
 
-        public bool IsDeleted { get; set; } =false ;
+       
+        public bool IsDeleted { get; set; } = false ;
        
     }
 

@@ -1,15 +1,21 @@
-﻿using CMS.Application.Features.Document;
+﻿using System.Reflection.Metadata;
+using Azure.Core;
+using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterDocuments;
 using CMS.Application.Features.MasterDocuments.Command.AddDocument;
 using CMS.Application.Features.MasterDocuments.Command.DeleteDocument;
 using CMS.Application.Features.MasterDocuments.Command.UpdateDocument;
+using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetAllDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetDocumentById;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities;
+using CMS.Persistence.Context;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace CMS.API.Controllers
 {
@@ -18,12 +24,56 @@ namespace CMS.API.Controllers
     public class DocumentController : Controller
     {
         readonly IMediator _mediator;
+        private readonly CMSDbContext _context;
 
-        public DocumentController(IMediator mediator)
+        private readonly IWebHostEnvironment _environment;
+        public DocumentController(IMediator mediator, IWebHostEnvironment environment, CMSDbContext context)
         {
             _mediator = mediator;
+            _environment = environment;
+            _context = context;
         }
+
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
+        {
+            if (model.File == null || model.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+            var fileName = Path.GetFileName(model.File.FileName);
         
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
+
+            
+            var document = new MasterDocument
+            {
+                DocumentName = $"uploads/{filePath}",
+                status = model.Status,
+               
+                 
+            };
+
+            
+            _context.MasterDocuments.AddAsync(document);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "File uploaded successfully."});
+        }
+
         [HttpGet("{pageNumber}/{pageSize}")]
         public async Task<IActionResult> GetAllDocs([FromRoute]int pageNumber, [FromRoute] int pageSize)
         {
@@ -68,6 +118,10 @@ namespace CMS.API.Controllers
             await _mediator.Send(new AddDocumentCommand(document));
             return Ok(new { Message = "Added Document Successfully" });
         }
+
+
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<int>> DeleteDocument(int id)

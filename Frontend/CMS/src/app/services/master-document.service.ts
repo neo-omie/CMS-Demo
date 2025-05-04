@@ -19,6 +19,8 @@ export class MasterDocumentService {
     return this.http.post<AddDocumentDto>(this.apiUrl,masterDocument);
   }
 
+  // uploadDocument()
+
   updateDocument(docId?:number, data?:AddDocumentDto):Observable<string>{
     return this.http.put<string>(`${this.apiUrl}/${docId}`, data)
   }

@@ -86,8 +86,8 @@ mode:any;
         addFormValues.approver3Status = Number(approver3Status);
         console.log(addFormValues);
         this.contractsService.addContract(addFormValues).subscribe({
-          next:(response:ContractsEntity) => {
-            if( response.contractID !== undefined && response.contractID > 0){
+          next:(response:boolean) => {
+            if( response !== false){
               Alert.toast(TYPE.SUCCESS,true,'Added successfully');
               this.route.navigate(['contracts/allContracts'])
             }

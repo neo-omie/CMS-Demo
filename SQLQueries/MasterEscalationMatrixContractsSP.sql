@@ -6,11 +6,10 @@ DECLARE @TotalRecords INT
     SELECT 
         m.MatrixContractId,
         d.DepartmentName, m.DepartmentId,
-        m.EscalationId1, e1.EmployeeName AS Escalation1,
-        m.EscalationId2, e2.EmployeeName AS Escalation2,
-        m.EscalationId3, e3.EmployeeName AS Escalation3,
-		m.TriggerDaysEscalation1, m.TriggerDaysEscalation2, m.TriggerDaysEscalation3,
-		@TotalRecords as TotalRecords
+        e1.EmployeeName AS Escalation1,m.EscalationId1,
+        e2.EmployeeName AS Escalation2,m.EscalationId2,
+        e3.EmployeeName AS Escalation3,m.EscalationId3,
+		m.TriggerDaysEscalation1, m.TriggerDaysEscalation2, m.TriggerDaysEscalation3
     FROM MasterEscalationMatrixContracts m
     LEFT JOIN Departments d ON m.DepartmentId = d.DepartmentId
     LEFT JOIN MasterEmployees e1 ON m.EscalationId1 = e1.EmployeeCode

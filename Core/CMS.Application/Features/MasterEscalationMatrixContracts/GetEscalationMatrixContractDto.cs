@@ -14,7 +14,8 @@
         public int TriggerDaysEscalation3 { get; set; }
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
-        public int totalRecords { get; set; }
+
+        //public int totalRecords { get; set; }
 
     }
 }
