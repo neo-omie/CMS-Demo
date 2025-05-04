@@ -5,6 +5,7 @@ using CMS.Application.Features.MasterDocuments.Command.DeleteDocument;
 using CMS.Application.Features.MasterDocuments.Command.UpdateDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetAllDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetDocumentById;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -46,11 +47,25 @@ namespace CMS.API.Controllers
             return Ok(getDocs);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<int>> AddDocument(DocumentDTO document)
+        [HttpPost("upload")]
+        public async Task<ActionResult<int>> AddDocument(DocumentFormDTO documentForm)
         {
-            await _mediator.Send(new AddDocumentCommand(document));
+            if (documentForm.File == null || documentForm.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
 
+            using var memoryStream = new MemoryStream();
+            await documentForm.File.CopyToAsync(memoryStream);
+            var fileData = memoryStream.ToArray();
+            var document = new DocumentDTO
+            {
+                DocumentName = documentForm.File.FileName,
+                DocumentType = documentForm.File.ContentType,
+                DocumentData = fileData,
+                status = (Status)documentForm.Status
+            };
+            await _mediator.Send(new AddDocumentCommand(document));
             return Ok(new { Message = "Added Document Successfully" });
         }
 

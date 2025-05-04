@@ -23,6 +23,7 @@ import { Pagination } from '../../utils/pagination';
   styleUrl: './master-document.component.css',
 })
 export class MasterDocumentComponent implements OnInit {
+  file:File|null = null;
   loading: boolean = true;
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
@@ -81,11 +82,15 @@ export class MasterDocumentComponent implements OnInit {
   }
 
   addDocument(documentForm: NgForm) {
-    this.document = documentForm.value;
-    this.document.status = Number(this.document.status);
-    console.log(documentForm);
+    if (!this.file || !documentForm.valid) {
+      alert('Form is invalid or file is missing');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('File',this.file)
+    formData.append('Status',String(this.document.status))
 
-    this.documentService.addDocument(this.document).subscribe({
+    this.documentService.addDocument(formData).subscribe({
       next: (response) => {
         Alert.bigToast(
           'Success!',
@@ -170,5 +175,12 @@ export class MasterDocumentComponent implements OnInit {
               this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
               Alert.toast(TYPE.ERROR,true,this.errorMsg);
           }});
+        }
+
+        uploadFile(event: Event) {
+          const input = event.target as HTMLInputElement;
+          if (input.files?.length) {
+            this.file = input.files[0];
+          }
         }
 }

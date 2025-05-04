@@ -11,7 +11,7 @@
         <form #documentForm="ngForm" (ngSubmit)="addDocument(documentForm)">
           <div class="form-group">
               <label for="documentName">Document Name</label>
-              <input type="text" class="form-control" id="documentName" name="documentName" [(ngModel)]="document.documentName" required />
+              <input type="file" class="form-control" id="file" name="file" (change)="uploadFile($event)" required />
             </div>
             <br>
             <div class="form-group">
