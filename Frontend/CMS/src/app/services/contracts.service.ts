@@ -19,7 +19,7 @@ export class ContractsService {
   deleteContract(contractID: number) : Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/${contractID}`);
   }
-  addContract(addContractDto: AddContractDto) : Observable<ContractsEntity> {
-    return this.http.post<ContractsEntity>(`${this.apiUrl}`,addContractDto);
+  addContract(addContractDto: AddContractDto) : Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}`,addContractDto);
   }
 }
