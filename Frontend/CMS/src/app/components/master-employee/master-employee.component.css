@@ -1,7 +1,8 @@
 .container{
-    margin: 0px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    align-items: center;
+    /* flex-wrap: wrap; */
 }
 h2 {
     color: #5f5fee;
@@ -38,30 +39,8 @@ td{
     background-color: #5f5fee;
     color: whitesmoke;
 }
-.searchbox{
-    margin-left: 150px;
-    margin-right: 150px;
-    width: 500px;
-    height: 40px;
-    border-radius: 5px;
-}
 
-.addbtn{
+.btn{
     color: white;
     background-color:#5f5fee ;
-    height:40px;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.tablefoot {
-    display: flex;
-}
-  
-.pagination {
-    margin-left: 880px;
-}
-
-.totalemp{
-    margin-left: 10px;
 }
