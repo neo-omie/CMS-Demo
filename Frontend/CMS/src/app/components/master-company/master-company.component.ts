@@ -90,26 +90,26 @@ export class MasterCompanyComponent implements OnInit{
         })
   }
 
-  editCompany(id:number){
-    let compName=this.editCompanyName.nativeElement.value;
-    if (compName !=="") {
-      console.log(compName);
-      this.companyService.updateCompany(id,compName).subscribe({
-        next:(res:boolean)=>{
-          if (res) {
-            Alert.toast(TYPE.SUCCESS,true,"Updated Successfully")
-            this.getCompanies();
-          }
-        },
-        error:(error)=>{
-          console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
-        }
-      })
+  // editCompany(id:number){
+  //   let compName=this.editCompanyName.nativeElement.value;
+  //   if (compName !=="") {
+  //     console.log(compName);
+  //     this.companyService.updateCompany(id,compName).subscribe({
+  //       next:(res:boolean)=>{
+  //         if (res) {
+  //           Alert.toast(TYPE.SUCCESS,true,"Updated Successfully")
+  //           this.getCompanies();
+  //         }
+  //       },
+  //       error:(error)=>{
+  //         console.error('Error :(', error);
+  //             this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+  //             Alert.toast(TYPE.ERROR,true,this.errorMsg);
+  //       }
+  //     })
       
-    }
-  }
+  //   }
+  // }
 
   addCompany(companyForm: NgForm) {
     this.company = companyForm.value;
@@ -150,5 +150,8 @@ export class MasterCompanyComponent implements OnInit{
                         });
                        });
   }
-
+  editCompany(comp:CompanyMasterDto){
+    console.log('Navigating to editContract with valueId:', comp.valueId);
+    this.router.navigate(['masters/companyMasters/updateCompany', comp.valueId]);
+  }
 }

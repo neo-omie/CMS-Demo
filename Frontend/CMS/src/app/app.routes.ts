@@ -44,7 +44,7 @@ export const routes: Routes = [
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
-    {path: 'masters/companyMasters/UpdateCompany', component: MasterCompanyUpdateFormComponent, canActivate:[authGuard]},
+    {path: 'masters/companyMasters/updateCompany/:valueId', component: MasterCompanyUpdateFormComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},
     {path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate:[authGuard]},
 
