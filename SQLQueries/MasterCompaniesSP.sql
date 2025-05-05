@@ -17,6 +17,16 @@ EXEC SP_GetAllCompanies @PageNumber = 1, @PageSize = 10, @searchTerm='';
 
 go
 
+--deleting company by id
+CREATE OR Alter PROCEDURE SP_DeleteCompanyById @ValId int
+AS 
+BEGIN
+	DELETE FROM MasterCompanies
+	WHERE ValueId=@ValId;
+END
+EXEC SP_DeleteCompanyById @ValId=1
+
+
 
 --getting company by id 
 CREATE OR ALTER PROCEDURE SP_GetCompanyByID @ValId int
@@ -59,6 +69,84 @@ EXEC SP_UpdateCompany @ValId=1, @CompanyName=null,
 	@CompanyWebsiteUrl =null, @CompanyBankName =null,
 	@GSTno=null, @BankAccNo=null,
 	@MSMERegistrationNo=null, @IFSCCode=null, @PanNo =null
+
+
+--inserting values into company
+CREATE PROCEDURE SP_AddCompany
+@CompanyName NVARCHAR(255),
+    @PocName NVARCHAR(255),
+    @CompanyStatus BIT = 1,
+    @PocContactNumber BIGINT,
+    @PocEmailId NVARCHAR(255),
+    @CompanyAddressLine1 NVARCHAR(255),
+    @CompanyAddressLine2 NVARCHAR(255),
+    @CompanyAddressLine3 NVARCHAR(255),
+    @Zipcode INT,
+    @CompanyContactNo BIGINT,
+    @CompanyEmailId NVARCHAR(255),
+    @CompanyWebsiteUrl NVARCHAR(255),
+    @CompanyBankName NVARCHAR(255),
+    @GSTno BIGINT,
+    @BankAccNo BIGINT,
+    @MSMERegistrationNo BIGINT,
+    @IFSCCode NVARCHAR(50),
+    @PanNo NVARCHAR(50),
+    @IsDeleted BIT = 0,
+    @CountryId INT,
+    @StateId INT,
+    @CityId INT
+AS
+BEGIN
+    --SET NOCOUNT ON;
+	INSERT INTO MasterCompanies (
+        CompanyName,
+        PocName,
+        CompanyStatus,
+        PocContactNumber,
+        PocEmailId,
+        CompanyAddressLine1,
+        CompanyAddressLine2,
+        CompanyAddressLine3,
+        Zipcode,
+        CompanyContactNo,
+        CompanyEmailId,
+        CompanyWebsiteUrl,
+        CompanyBankName,
+        GSTno,
+        BankAccNo,
+        MSMERegistrationNo,
+        IFSCCode,
+        PanNo,
+        IsDeleted,
+        CountryId,
+        StateId,
+        CityId
+    )
+    VALUES (
+        @CompanyName,
+        @PocName,
+        @CompanyStatus,
+        @PocContactNumber,
+        @PocEmailId,
+        @CompanyAddressLine1,
+        @CompanyAddressLine2,
+        @CompanyAddressLine3,
+        @Zipcode,
+        @CompanyContactNo,
+        @CompanyEmailId,
+        @CompanyWebsiteUrl,
+        @CompanyBankName,
+        @GSTno,
+        @BankAccNo,
+        @MSMERegistrationNo,
+        @IFSCCode,
+        @PanNo,
+        @IsDeleted,
+        @CountryId,
+        @StateId,
+        @CityId
+    );
+END;
 	
 
 

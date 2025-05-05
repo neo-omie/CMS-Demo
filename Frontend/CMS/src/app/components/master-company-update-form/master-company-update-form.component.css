@@ -8,7 +8,7 @@
 }
 .fields-container > div > span{
     position: absolute;
-    top: 20px;
+    top: -10px;
     left: 15px;
     background: white;
     padding: 0 5px;
@@ -21,4 +21,15 @@
     justify-content: space-between;
     background-color: #5f5fee;
     color: whitesmoke;
+}
+#btnadd,#btncancel{
+    margin: 5px;
+    background-color: whitesmoke;
+    border-color: #5f5fee;
+    color: #5f5fee;
+}
+#btnadd:hover,#btncancel:hover{
+    margin: 5px;
+    background-color: #5f5fee;
+    color: white;
 }

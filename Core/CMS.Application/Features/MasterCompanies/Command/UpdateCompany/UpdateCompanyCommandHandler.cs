@@ -17,14 +17,14 @@ namespace CMS.Application.Features.MasterCompanies.Command.UpdateCompany
         {
             _comprepo = comprepo;
         }
-        public Task<MasterCompany> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
+        public async Task<MasterCompany> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
-            var company = _comprepo.GetCompanyByIdAsync(request.id);
+            var company =await _comprepo.GetCompanyByIdAsync(request.id);
             if (company==null)
             {
                 //throw new CompanyNotFound($"Company Not Found");
             }
-            return _comprepo.UpdateCompanyAsync(request.id, request.comp);
+            return await _comprepo.UpdateCompanyAsync(request.id, request.comp);
         }
     }
 }
