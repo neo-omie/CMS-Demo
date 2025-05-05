@@ -1,0 +1,130 @@
+<p class="fs-3 m-4" style="color: #5f5fee; text-align: center;">ADD COMPANY </p>
+<form [formGroup] = "masterCompanyUpdateForm" (ngSubmit)="onUpdateFormSubmit()">
+    <div class="p-2">
+        <div class="card">
+            <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-detail-container">
+                <span>Company Details</span> <i class="fa-solid fa-angle-down"></i>
+            </div>
+            <div class="card-body collapse show" id="company-detail-container">
+                <div class="fields-container">
+                    <div class="m-3">
+                        <span *ngIf="companyName?.hasError('required') && (companyName?.dirty || companyName?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="companyName" placeholder="Enter company name" formControlName="companyName">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="pocName?.hasError('required') && (pocName?.dirty || pocName?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="pocName" placeholder="Enter POC Name" formControlName="pocName">
+                    </div>
+                    <div class="m-3">
+                        <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="pocContactNumber?.hasError('required') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">*Required</span>
+                        <span *ngIf="pocContactNumber?.hasError('pattern') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Invalid number</span>
+                        <input class="form-control" type="text" id="pocContactNumber" placeholder="Enter POC contact number" formControlName="pocContactNumber">
+                    </div>
+                    <!-- <div class="m-3">
+                        <span *ngIf="companyStatus?.hasError('required') && (companyStatus?.dirty || companyStatus?.touched)" style="color: red;" >*Required</span>
+                        <input class="form-control" type="text" id="companyStatus" formControlName="companyStatus" placeholder="Choose eithe true or false">
+                    </div> -->
+                    <div class="m-3">
+                        <span *ngIf="pocEmailId?.hasError('required') && (pocEmailId?.dirty || pocEmailId?.touched)" style="color: red;">*Required</span>
+                        <span *ngIf="pocEmailId?.hasError('email') && (pocEmailId?.dirty || pocEmailId?.touched)" style="color: red;">Invalid email</span>
+                        <input class="form-control" type="text" id="pocEmailId" placeholder="Enter POC emailId" formControlName="pocEmailId">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-2">
+        <div class="card">
+            <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-contract-detail-container">
+                <span>Company Contact Details</span> <i class="fa-solid fa-angle-down"></i>
+            </div>
+            <div class="card-body collapse show" id="company-contract-detail-container">
+                <div class="fields-container">
+                    <div class="m-3">
+                        <span *ngIf="companyAddressLine1?.hasError('required') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="companyAddressLine1" placeholder="Enter company address line 1" formControlName="companyAddressLine1">
+                    </div>
+                    <div class="m-3">
+                        <input class="form-control" type="text" id="companyAddressLine2" placeholder="Enter company address line 2" formControlName="companyAddressLine2">
+                    </div>
+                    <div class="m-3">
+                        <input class="form-control" type="text" id="companyAddressLine3" placeholder="Enter company address line 3" formControlName="companyAddressLine3">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="countryId?.hasError('required') && (countryId?.dirty || countryId?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="countryId" formControlName="countryId">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="stateId?.hasError('required') && (stateId?.dirty || stateId?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="stateId" formControlName="stateId">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="cityId?.hasError('required') && (cityId?.dirty || cityId?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="cityId" formControlName="cityId">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="zipcode?.hasError('required') && (zipcode?.dirty || zipcode?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="zipcode" placeholder="Enter ZIP code" formControlName="zipcode">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="companyContactNo?.hasError('required') && (companyContactNo?.dirty || companyContactNo?.touched)" style="color: red;">*Required</span>
+                        <span *ngIf="(companyContactNo?.hasError('pattern') || companyContactNo?.hasError('minLength') || companyContactNo?.hasError('maxLength'))&& (companyContactNo?.dirty || companyContactNo?.touched)" style="color: red;">Invalid number</span>
+                        <input class="form-control" type="text" id="companyContactNo" placeholder="Enter company contact no." formControlName="companyContactNo">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="companyEmailId?.hasError('required') && (companyEmailId?.dirty || companyEmailId?.touched)" style="color: red;">*Required</span>
+                        <span *ngIf="companyEmailId?.hasError('email') && (companyEmailId?.dirty || companyEmailId?.touched)" style="color: red;">Invalid email</span>
+                        <input class="form-control" type="text" id="companyEmailId" placeholder="Enter company emailId" formControlName="companyEmailId">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="companyWebsiteUrl?.hasError('required') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="companyWebsiteUrl" placeholder="Enter company website url" formControlName="companyWebsiteUrl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-2">
+        <div class="card fs-5">
+            <div class="card-header" data-bs-toggle="collapse" data-bs-target="#company-bank-detail-container">
+                <span>Company Bank / Other Details</span> <i class="fa-solid fa-angle-down"></i>
+            </div>
+            <div class="card-body collapse show" id="company-bank-detail-container">
+                <div class="fields-container">
+                    <div class="m-3">
+                        <span *ngIf="companyBankName?.hasError('required') && (companyBankName?.dirty || companyBankName?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="companyBankName" placeholder="Enter company bank name" formControlName="companyBankName">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="gSTno?.hasError('required') && (gSTno?.dirty || gSTno?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="gSTno" placeholder="Enter gst no." formControlName="gSTno">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="bankAccNo?.hasError('required') && (bankAccNo?.dirty || bankAccNo?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="bankAccNo" placeholder="Enter bank Acc no." formControlName="bankAccNo">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="mSMERegistrationNo?.hasError('required') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="mSMERegistrationNo" placeholder="Enter MSME registration no." formControlName="mSMERegistrationNo">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="iFSCCode?.hasError('required') && (iFSCCode?.dirty || iFSCCode?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="iFSCCode" placeholder="Enter IFSC code" formControlName="iFSCCode">
+                    </div>
+                    <div class="m-3">
+                        <span *ngIf="panNo?.hasError('required') && (panNo?.dirty || panNo?.touched)" style="color: red;">*Required</span>
+                        <input class="form-control" type="text" id="panNo" placeholder="Enter PAN no." formControlName="panNo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-outline-primary w-100" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
+        <button class="btn btn-outline-primary w-100" id="btncancel" type="submit" style="max-width: 300px;  " (click)="onClick()">Cancel</button>
+      </div>
+      
+</form>

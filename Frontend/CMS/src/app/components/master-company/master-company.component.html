@@ -22,7 +22,7 @@
               <td>{{company.companyLocation}}</td>
               <td>{{company.status}}</td>
               <td>
-                <i class="fa-regular fa-pen-to-square icon me-4" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="GetCompany(company.valueId)"></i>
+                <i class="fa-regular fa-pen-to-square icon me-4"  (click)="GetCompany(company.valueId)"></i>
                 <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
                 <i class="fa-regular fa-trash-can icon me-4"  (click)="deleteCompany(company.valueId)"></i>
               </td>

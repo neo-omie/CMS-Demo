@@ -24,6 +24,7 @@ import { ClassifiedContractsScreenComponent } from './components/classifiedContr
 import { AllClassifiedContractComponent } from './components/classifiedContracts/all-classified-contract/all-classified-contract.component';
 import { CreateClassifiedContractComponent } from './components/classifiedContracts/create-classified-contract/create-classified-contract.component';
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
+import { MasterCompanyUpdateFormComponent } from './components/master-company-update-form/master-company-update-form.component';
 import { UpdateContractComponent } from './components/contracts/update-contract/update-contract.component';
 
 export const routes: Routes = [
@@ -43,6 +44,7 @@ export const routes: Routes = [
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
+    {path: 'masters/companyMasters/UpdateCompany', component: MasterCompanyUpdateFormComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},
     {path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate:[authGuard]},
 
