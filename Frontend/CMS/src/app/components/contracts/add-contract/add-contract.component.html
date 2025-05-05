@@ -8,12 +8,14 @@
       <div class="card-body collapse show" id="company-detail-container">
         <div class="fields-container">
           <div class="m-3">
+            <label for="termsAndConditions">Contract Name</label>
             <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
               style="color: red;">*Required</span>
             <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
               formControlName="contractName">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Department</label>
             <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="departmentId?.hasError('pattern') && (departmentId?.dirty || departmentId?.touched)"
@@ -22,6 +24,7 @@
               formControlName="departmentId">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Contract with Company</label>
             <span *ngIf="contractWithCompanyId?.hasError('required') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="contractWithCompanyId?.hasError('pattern') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
@@ -30,12 +33,14 @@
               formControlName="contractWithCompanyId">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Contract Type</label>
             <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
               style="color: red;">*Required</span>
             <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID"
               formControlName="contractTypeId">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Apostille Type</label>
             <span *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
@@ -44,6 +49,7 @@
               formControlName="apostilleTypeId">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Actual Document Reference Number</label>
             <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
@@ -52,6 +58,7 @@
               formControlName="actualDocRefNo">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Retainer Contract Type</label>
             <span *ngIf="retainerContract?.hasError('required') && (retainerContract?.dirty || retainerContract?.touched)"
               style="color: red;">*Required</span>
               <span *ngIf="retainerContract?.hasError('pattern') && (retainerContract?.dirty || retainerContract?.touched)"
@@ -59,7 +66,7 @@
             <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract">
           </div>
           <div class="m-3">
-            <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
+            <input class="form-control" type="text" id="valueId" placeholder="ValueId" disabled>
           </div>
           <div class="m-3">
             <label for="termsAndConditions">Terms and Conditions</label>
@@ -98,6 +105,7 @@
             <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Employee Custodian Name</label>
             <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
@@ -106,6 +114,7 @@
               formControlName="empCustodianId">
           </div>
           <div class="m-3">
+            <label for="termsAndConditions">Location</label>
             <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
               style="color: red;">*Required</span>
             <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">

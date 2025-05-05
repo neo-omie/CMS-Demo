@@ -27,4 +27,38 @@ BEGIN
 END
 EXEC SP_GetCompanyById @ValId=1
 
+--Updating Company
+CREATE OR ALTER PROCEDURE SP_UpdateCompany 
+	@ValId int, @CompanyName nvarchar(255),
+	@PocName nvarchar(255), @CompanyStatus bit,
+	@PocContactNumber bigint,@PocEmailId nvarchar(255),
+	@CompanyAddressLine1 nvarchar(255), @CompanyAddressLine2 nvarchar(255),
+	@CompanyAddressLine3 nvarchar(255), @Zipcode int,
+	@CompanyContactNo bigint, @CompanyEmailId nvarchar(255),
+	@CompanyWebsiteUrl nvarchar(255), @CompanyBankName nvarchar(255),
+	@GSTno bigint, @BankAccNo bigint,
+	@MSMERegistrationNo bigint, @IFSCCode bigint, @PanNo nvarchar(255)
+AS
+BEGIN
+	SELECT * FROM MasterCompanies
+	WHERE ValueId=@ValId;
+	UPDATE MasterCompanies
+	SET CompanyName=@CompanyName,@PocName=@PocName,CompanyStatus=@CompanyStatus,PocContactNumber=@PocContactNumber,PocEmailId=@PocEmailId,
+	CompanyAddressLine1=@CompanyAddressLine1,CompanyAddressLine2=@CompanyAddressLine2,CompanyAddressLine3=@CompanyAddressLine3,Zipcode=@Zipcode,
+	CompanyContactNo=@CompanyContactNo,CompanyEmailId=@CompanyEmailId,CompanyWebsiteUrl=@CompanyWebsiteUrl,CompanyBankName=@CompanyBankName,
+	GSTno=@GSTno ,BankAccNo=@BankAccNo, MSMERegistrationNo=@MSMERegistrationNo,IFSCCode=@IFSCCode,PanNo=@PanNo
+	WHERE ValueId=@ValId;
+END
+
+EXEC SP_UpdateCompany @ValId=1, @CompanyName=null,
+	@PocName =null, @CompanyStatus =null,
+	@PocContactNumber=null,@PocEmailId =null,
+	@CompanyAddressLine1 =null, @CompanyAddressLine2 =null,
+	@CompanyAddressLine3 =null, @Zipcode=null,
+	@CompanyContactNo=null, @CompanyEmailId =null,
+	@CompanyWebsiteUrl =null, @CompanyBankName =null,
+	@GSTno=null, @BankAccNo=null,
+	@MSMERegistrationNo=null, @IFSCCode=null, @PanNo =null
+	
+
 
