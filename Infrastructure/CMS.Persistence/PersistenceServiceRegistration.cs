@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using CMS.Application.Contracts.Persistence;
+using CMS.Application.DTOs;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using CMS.Persistence.Repositories;
@@ -30,6 +31,8 @@ namespace CMS.Persistence
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<ICompanyCascadeRepository, CompanyCascadeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.AddScoped<IEmailService, EmailService>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<JwtSettings>>().Value);
             services.AddTransient<IAuthRepository, AuthRepository>();

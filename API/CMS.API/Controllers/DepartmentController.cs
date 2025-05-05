@@ -9,6 +9,7 @@ using CMS.Application.Features.Departments.Commands.DeleteDepartment;
 using CMS.Application.Features.Departments.Commands.UpdateDepartment;
 using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.Departments.Queries.GetDepartmentById;
+using CMS.Application.Features.Departments.Queries.SearchDepartment;
 using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
@@ -42,6 +43,14 @@ namespace CMS.API.Controllers
             var department = await _mediator.Send(new GetDepartmentByIdQuery(id));
             return Ok(department);
         }
+
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchDepartment(string searchQuery)
+        {
+            var departments = await _mediator.Send(new SearchDepartmentQuery(searchQuery));
+            return Ok(departments);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddDepartment(string departmentName)

@@ -52,6 +52,16 @@ namespace CMS.Persistence.Repositories
             }
             return foundDepartment;
         }
+        public async Task<IEnumerable<Department>> SearchDepartment(string searchQuery)
+        {
+            var isInt = Int32.TryParse(searchQuery, out int checkID);
+            var searchDepartment = await _context.Departments.Where(a => a.DepartmentName.Contains(searchQuery) || a.DepartmentId == checkID).ToListAsync();
+            if (searchDepartment.Count() <= 0)
+            {
+                throw new NotFoundException($"Department not found.");
+            }
+            return searchDepartment;
+        }
         public async Task<Department> AddNewDepartment(string departmentName)
         {
             var checkDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentName == departmentName);

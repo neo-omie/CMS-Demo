@@ -16,3 +16,35 @@ BEGIN
 	WHERE ValueId = @id;
 END
 EXEC SP_GetDocumentByID @id = 1;
+
+CREATE OR ALTER PROCEDURE SP_AddDocument 
+@documentName nvarchar(255),
+@status int,
+@isDeleted int
+As
+Begin
+	Insert into MasterDocuments (DocumentName,status,IsDeleted) values (@documentName,@status,@isDeleted)
+End
+Exec SP_AddDocument @documentName='Resume',@status=1 ,@isDeleted =0
+
+CREATE OR ALTER PROCEDURE SP_DeleteDocumentById @id int
+As
+Begin
+	Update  MasterDocuments
+	set IsDeleted = 1
+	where ValueId = @id;
+End
+Exec SP_DeleteDocumentById  @id=3
+
+CREATE OR ALTER PROCEDURE SP_UpdateDocumentById
+@id int,
+@DocumentName nvarchar(255),
+@Status int
+as
+Begin
+	update MasterDocuments
+	set DocumentName = @DocumentName,status = @Status
+	where	 ValueId =@id
+End
+
+Exec SP_UpdateDocumentById  @id=3 ,@DocumentName ='Addmission form',@Status=1

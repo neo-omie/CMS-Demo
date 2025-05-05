@@ -1,11 +1,8 @@
 ﻿using CMS.Application.Contracts.Persistence;
-using CMS.Application.Exceptions;
 using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
-using CMS.Domain.Entities;
 using CMS.Persistence.Context;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Persistence.Repositories
@@ -19,62 +16,20 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<IEnumerable<GetAllApprovalMatrixContractDTO>> GetAllApprovalMatrixContract(int pageNumber, int pageSize)
         {
-            int totalRecords = await _context.MasterApprovalMatrixContracts.CountAsync();
-            return _context.MasterApprovalMatrixContracts.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Select(a => new GetAllApprovalMatrixContractDTO
-                {
-                    MasterApprovalMatrixContractId = a.MasterApprovalMatrixContractId,
-                    DepartmentName = a.Department.DepartmentName,
-                    ApproverName1 = a.Approver1.EmployeeName,
-                    ApproverName2 = a.Approver2.EmployeeName,
-                    ApproverName3 = a.Approver3.EmployeeName,
-                    TotalRecords = totalRecords
-                });
+            string query = "EXEC SP_GetAllApprovalMatrixContract @pageNumber = {0}, @pageSize = {1}";
+            var allApprovals = _context.GetAllApprovalMatrixContractDTOs.FromSqlRaw(query, pageNumber, pageSize);
+            return allApprovals;
         }
-
         public async Task<GetApprovalMatrixContractByIdDto> GetApprovalMatrixContractById(int id)
         {
-            MasterApprovalMatrixContract contractIfo = await _context.MasterApprovalMatrixContracts.FirstOrDefaultAsync(c => c.MasterApprovalMatrixContractId == id);
-
-            if (contractIfo == null)
-            {
-                throw new NotFoundException($"Approval contract with value id: {id} not found");
-            }
-            return await _context.MasterApprovalMatrixContracts.Where(c => c.MasterApprovalMatrixContractId == id)
-                .Select(c => new GetApprovalMatrixContractByIdDto
-                {
-                    MasterApprovalMatrixContractId = c.MasterApprovalMatrixContractId,
-                    DepartmentId = c.DepartmentId,
-                    DepartmentName = c.Department.DepartmentName,
-                    ApproverName1 = c.Approver1.EmployeeName,
-                    ApproverId1 = c.Approver1.EmployeeCode,
-                    ApproverName2 = c.Approver2.EmployeeName,
-                    ApproverId2 = c.Approver2.EmployeeCode,
-                    ApproverName3 = c.Approver3.EmployeeName,
-                    ApproverId3 = c.Approver3.EmployeeCode,
-                    NumberOfDays = c.NumberOfDays
-                }).FirstOrDefaultAsync();
+            string query = "EXEC SP_GetApprovalMatrixContractById @id = {0}";
+            IEnumerable<GetApprovalMatrixContractByIdDto> result = _context.GetApprovalMatrixContractByIdDtos.FromSqlRaw(query, id);
+            return result.FirstOrDefault();
         }
         public async Task<bool> UpdateApprovalMatrixContract(int id, UpdateApprovalMatrixContractDto contract)
         {
-            var checkApprMatrCont = await _context.MasterApprovalMatrixContracts.FirstOrDefaultAsync(m => m.MasterApprovalMatrixContractId == id);
-            if (checkApprMatrCont == null)
-            {
-                throw new NotFoundException($"Approval Matrix MOU with value ID {id} not found.");
-            }
-            checkApprMatrCont.ApproverId1 = contract.ApproverId1;
-            checkApprMatrCont.ApproverId2 = contract.ApproverId2;
-            checkApprMatrCont.ApproverId3 = contract.ApproverId3;
-            checkApprMatrCont.NumberOfDays = contract.NumberOfDays;
-            _context.MasterApprovalMatrixContracts.Update(checkApprMatrCont);
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                throw new Exception("For some reasons, data has not been updated :/");
-            }
+            string query = "EXEC SP_UpdateApprovalMatrixContract @id = {0}, @ApproverId1 = {1}, @ApproverId2 = {2}, @ApproverId3 = {3}, @NumberOfDays = {4}";
+            return await _context.Database.ExecuteSqlRawAsync(query, id, contract.ApproverId1, contract.ApproverId2, contract.ApproverId3, contract.NumberOfDays ) > 0;
         }
     }
 }

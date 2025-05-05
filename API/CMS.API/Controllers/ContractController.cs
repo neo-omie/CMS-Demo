@@ -1,6 +1,7 @@
 ﻿using CMS.Application.Features.Contracts;
 using CMS.Application.Features.Contracts.Commands.CreateNewContract;
 using CMS.Application.Features.Contracts.Commands.EditContract;
+using CMS.Application.Features.Contracts.Commands.RemoveContract;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
@@ -45,7 +46,9 @@ namespace CMS.API.Controllers
             _logger.LogInformation("AddContract method initiated");
             var addedContract = await _mediator.Send(new CreateNewContractCommand(cont));
             _logger.LogInformation("AddContract method performed");
-            return Ok(addedContract);
+            if(addedContract != null)
+                return Ok(true);
+            return Ok(false);
         }
         [Route("{id}")]
         [HttpPut]
@@ -61,7 +64,7 @@ namespace CMS.API.Controllers
         public async Task<IActionResult> DeleteContract([FromRoute] int id)
         {
             _logger.LogInformation("DeleteContract method initiated");
-            var deletedContract = await _mediator.Send(new DeleteContractCommand(id));
+            var deletedContract = await _mediator.Send(new RemoveContractCommand(id));
             _logger.LogInformation("DeleteContract method performed");
             return Ok(deletedContract); // bool
         }

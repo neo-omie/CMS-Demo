@@ -3,11 +3,17 @@ using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.EscalationMatrixMouMaster;
 using CMS.Application.Features.MasterApostilles.ApostilleDtos;
 using CMS.Application.Features.MasterEscalationMatrixContracts;
+using System.ComponentModel.DataAnnotations.Schema;
+using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
+using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
+using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU;
+using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOUById;
 using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
 using CMS.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
+using CMS.Application.Features.Contracts.Queries.GetContractById;
 
 namespace CMS.Persistence.Context
 {
@@ -16,6 +22,10 @@ namespace CMS.Persistence.Context
         public CMSDbContext(DbContextOptions<CMSDbContext> options) : base(options)
         {
         }
+        public DbSet<GetAllApprovalMatrixContractDTO> GetAllApprovalMatrixContractDTOs {  get; set; }
+        public DbSet<GetApprovalMatrixContractByIdDto> GetApprovalMatrixContractByIdDtos { get; set; }
+        public DbSet<GetAllApprovalMatrixMOUDto> GetAllApprovalMatrixMOUDtos { get; set; }
+        public DbSet<GetAllApprovalMatrixMOUByIdDto> GetAllApprovalMatrixMOUByIdDtos { get; set; }
         public DbSet<MasterApprovalMatrixContract> MasterApprovalMatrixContracts { get; set; }
         public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
 
@@ -37,6 +47,7 @@ namespace CMS.Persistence.Context
         public DbSet<ContractTypeMasters> contracts { get; set; }
         public DbSet<Contract> ContractsEntity { get; set; }
         public DbSet<GetAllContractsDto> GetContractsDtos { get; set; }
+        public DbSet<GetContractByIdDto> GetContractByIdDtos { get; set; }
 
 
 
@@ -48,8 +59,13 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<EscalationMatrixMoutDto>().Entity<EscalationMatrixMoutDto>().HasNoKey();
             modelBuilder.Ignore<GetAllApostilleDto>().Entity<GetAllApostilleDto>().HasNoKey();
             modelBuilder.Ignore<GetAllContractsDto>().Entity<GetAllContractsDto>().HasNoKey();
+            modelBuilder.Ignore<GetContractByIdDto>().Entity<GetContractByIdDto>().HasNoKey();
 
             modelBuilder.Entity<GetMastersDTO>().HasNoKey();
+            modelBuilder.Ignore<GetAllApprovalMatrixContractDTO>().Entity<GetAllApprovalMatrixContractDTO>().HasNoKey();
+            modelBuilder.Ignore<GetApprovalMatrixContractByIdDto>().Entity<GetApprovalMatrixContractByIdDto>().HasNoKey();
+            modelBuilder.Ignore<GetAllApprovalMatrixMOUByIdDto>().Entity<GetAllApprovalMatrixMOUByIdDto>().HasNoKey();
+            modelBuilder.Ignore<GetAllApprovalMatrixMOUDto>().Entity<GetAllApprovalMatrixMOUDto>().HasNoKey();
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
