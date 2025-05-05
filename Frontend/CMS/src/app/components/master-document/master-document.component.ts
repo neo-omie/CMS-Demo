@@ -92,6 +92,10 @@ export class MasterDocumentComponent implements OnInit {
       alert('Form is invalid or file is missing');
       return;
     }
+    if (this.file.size > 1048576) {
+      alert("File too large. Max 1MB allowed.");
+      return;
+    }
     const formData = new FormData();
     formData.append('File',this.file)
     formData.append('Status',String(this.document.status))
