@@ -6,6 +6,7 @@ import { MasterEmployee } from '../models/master-employee';
 import { GetAllDepartmentsDto } from '../models/master-department';
 import { ContractTypeMasterDTO } from '../models/contract-type-master';
 import { CompanyMasterDto } from '../models/master-company';
+import { MasterApostille, MasterApostilleDto } from '../models/master-apostille';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,12 @@ export class ContractsService {
   addContract(addContractDto: AddContractDto) : Observable<boolean> {
     return this.http.post<boolean>(`${this.apiUrl}`,addContractDto);
   }
+  editContract(contractID:number, contract:AddContractDto) : Observable<boolean> {
+    return this.http.put<boolean>(`${this.apiUrl}/${contractID}`, contract);
+  }
+  fetchContractData(contractID:number):Observable<AddContractDto> {
+    return this.http.get<AddContractDto>(`${this.apiUrl}/${contractID}`);
+  }
 
   // For dropdowns and inputs from other tables
   GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
@@ -39,5 +46,8 @@ export class ContractsService {
   }
   GetCompanies():Observable<CompanyMasterDto[]> {
     return this.http.get<CompanyMasterDto[]>(`https://localhost:7041/api/MasterCompany/1/100`);
+  }
+  GetApostilleTypes() : Observable<MasterApostille[]> {
+    return this.http.get<MasterApostille[]>(`https://localhost:7041/api/Apostille/1/100`);
   }
 }

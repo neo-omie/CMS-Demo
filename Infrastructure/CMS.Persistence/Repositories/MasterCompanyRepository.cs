@@ -24,8 +24,9 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterCompany> AddCompanyAsync(MasterCompany masterCompany)
         {
-            await _context.MasterCompanies.AddAsync(masterCompany);
-            if (await _context.SaveChangesAsync()>0)
+            string sql = "EXEC SP_AddCompany @CompanyName={0},@PocName ={1}, @CompanyStatus ={2},@PocContactNumber={3},@PocEmailId={4},@CompanyAddressLine1={5}, @CompanyAddressLine2 ={6},@CompanyAddressLine3 ={7}, @Zipcode={8},@CompanyContactNo={9}, @CompanyEmailId ={10},@CompanyWebsiteUrl ={11}, @CompanyBankName ={12},@GSTno={13}, @BankAccNo={14},@MSMERegistrationNo={15}, @IFSCCode={16}, @PanNo ={17}, @CountryId={18}, @StateId= {19}, @CityId={20}, @IsDeleted={21}";
+            int result = await _context.Database.ExecuteSqlRawAsync(sql, masterCompany.CompanyName, masterCompany.PocName, masterCompany.CompanyStatus, masterCompany.PocContactNumber, masterCompany.PocEmailId, masterCompany.CompanyAddressLine1, masterCompany.CompanyAddressLine2, masterCompany.CompanyAddressLine3, masterCompany.Zipcode, masterCompany.CompanyContactNo, masterCompany.CompanyEmailId, masterCompany.CompanyWebsiteUrl, masterCompany.CompanyBankName, masterCompany.GSTno, masterCompany.BankAccNo, masterCompany.MSMERegistrationNo, masterCompany.IFSCCode, masterCompany.PanNo, masterCompany.CountryId, masterCompany.StateId, masterCompany.CityId, 0);
+            if (result > 0)
             {
                 return masterCompany;
             }
@@ -33,6 +34,15 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Company not added. Failed :(");
             }
+            //await _context.MasterCompanies.AddAsync(masterCompany);
+            //if (await _context.SaveChangesAsync()>0)
+            //{
+            //    return masterCompany;
+            //}
+            //else
+            //{
+            //    throw new Exception("Company not added. Failed :(");
+            //}
         }
 
         public async Task<bool> DeleteCompanyAsync(int id)
@@ -42,16 +52,26 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Company  not Found. :(");
             }
-            company.IsDeleted = true;
-            _context.MasterCompanies.Update(company);
-            if (await _context.SaveChangesAsync()>0)
+
+
+            string sql = "EXEC SP_DeleteCompanyById @ValId={0}";
+            var compbyId = await _context.Database.ExecuteSqlRawAsync(sql, id);
+            if (compbyId >0)
             {
                 return true;
             }
-            else
-            {
-                throw new Exception("Company not deleted . failed :(");
-            }
+            return false;
+            
+            //company.IsDeleted = true;
+            //_context.MasterCompanies.Update(company);
+            //if (await _context.SaveChangesAsync()>0)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    throw new Exception("Company not deleted . failed :(");
+            //}
         }
 
         public async Task<IEnumerable<GetMastersDTO>> GetAllCompanyDetailsAsync( string searchTerm, int pageNumber, int pageSize)

@@ -40,6 +40,9 @@ td{
 .modal-title{
     color: #5f5fee;
 }
+.add-header {
+    color: whitesmoke;
+}
 .close-btn{
     border-color: whitesmoke;
     color: whitesmoke;
@@ -81,10 +84,5 @@ td{
 }
 .add-modal-btn{
     display: flex;
-    justify-content: flex-end;
-    
-}
-.add-btn #plus-icon{
-    margin-top: 4px;
-    margin-right: 3px;
+    justify-content: flex-end; 
 }

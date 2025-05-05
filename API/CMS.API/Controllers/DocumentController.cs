@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Collections;
+using System.Reflection.Metadata;
 using Azure.Core;
 using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterDocuments;
@@ -51,9 +52,7 @@ namespace CMS.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MasterDocument>> GetDocumentbyId(int id)
         {
-
             var getDocs = await _mediator.Send(new GetDocumentByIdQuery(id));
-
             return Ok(getDocs);
         }
 

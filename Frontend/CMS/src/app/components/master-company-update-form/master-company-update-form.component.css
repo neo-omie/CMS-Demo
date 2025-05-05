@@ -8,7 +8,7 @@
 }
 .fields-container > div > span{
     position: absolute;
-    top: 20px;
+    top: -10px;
     left: 15px;
     background: white;
     padding: 0 5px;
@@ -22,21 +22,14 @@
     background-color: #5f5fee;
     color: whitesmoke;
 }
-
-.add-btn {
-    color: rgba(95, 95, 238);
+#btnadd,#btncancel{
+    margin: 5px;
     background-color: whitesmoke;
     border-color: #5f5fee;
-}
-.add-btn a {
     color: #5f5fee;
 }
-.add-btn:hover{
+#btnadd:hover,#btncancel:hover{
+    margin: 5px;
     background-color: #5f5fee;
-    border-color: whitesmoke;
-    color: whitesmoke;
-    border-radius: 5px;
-}
-.add-btn:hover a {
-    color: whitesmoke;
+    color: white;
 }

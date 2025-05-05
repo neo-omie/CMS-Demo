@@ -99,8 +99,26 @@ namespace CMS.Persistence.Repositories
             {
                 throw new NotFoundException($"Contract with id {id} not found. Please enter correct id");
             }
-            cp.ContractId = foundContract.ContractId;
-            _context.ContractsEntity.Update(cp);
+            foundContract.ContractName = cp.ContractName;
+            foundContract.DepartmentId = cp.DepartmentId;
+            foundContract.ContractWithCompanyId = cp.ContractWithCompanyId;
+            foundContract.ContractTypeId = cp.ContractTypeId;
+            foundContract.ApostilleTypeId = cp.ApostilleTypeId;
+            foundContract.ActualDocRefNo = cp.ActualDocRefNo;
+            foundContract.RetainerContract = cp.RetainerContract;
+            foundContract.TermsAndConditions = cp.TermsAndConditions;
+            foundContract.ValidFrom = cp.ValidFrom;
+            foundContract.ValidTill = cp.ValidTill;
+            foundContract.RenewalFrom = cp.RenewalFrom;
+            foundContract.RenewalTill = cp.RenewalTill;
+            foundContract.AddendumDate = cp.AddendumDate;
+            foundContract.EmpCustodianId = cp.EmpCustodianId;
+            foundContract.Location = cp.Location;
+            foundContract.Approver1Status = cp.Approver1Status;
+            foundContract.Approver2Status = cp.Approver2Status;
+            foundContract.Approver3Status = cp.Approver3Status;
+            foundContract.IsDeleted = cp.IsDeleted;
+            _context.ContractsEntity.Update(foundContract);
             if (await _context.SaveChangesAsync() > 0)
                 return true;
             return false;

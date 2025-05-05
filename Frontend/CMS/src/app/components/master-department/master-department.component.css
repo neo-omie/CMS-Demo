@@ -40,6 +40,9 @@ td{
 .modal-title{
     color: #5f5fee;
 }
+.add-header {
+    color: whitesmoke;
+}
 .close-btn{
     border-color: whitesmoke;
     color: whitesmoke;

@@ -37,11 +37,15 @@ export class AddDocumentDto {
 export class GetDocumentById{
   valueId :number;
   documentName : string;
+  documentType : string;
+  documentData : string;
   status:number;
   
-  constructor(valueId:number,documentName:string,status:number){
+  constructor(valueId:number,documentName:string,documentType:string,documentData:string,status:number){
     this.valueId=valueId;
     this.documentName=documentName;
+    this.documentType=documentType;
+    this.documentData=documentData;
     this.status = status;
 
   }

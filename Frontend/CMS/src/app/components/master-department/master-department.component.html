@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5"><i class="fa-solid fa-file-circle-plus"></i>Add New Department</h1>
+          <h1 class="modal-title fs-5 add-header"><i class="fa-solid fa-file-circle-plus"></i> Add New Department</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -17,7 +17,9 @@
               <br>
               <div class="add-modal-btn">
     
-                <button type="submit" class=" add-btn btn btn-primary add-modal-btn" data-bs-dismiss="modal"><i class="fa-solid fa-plus" id="plus-icon"></i>Add department</button>
+                <button type="submit" class=" add-btn btn btn-primary add-modal-btn" data-bs-dismiss="modal">Save</button>
+                &nbsp;
+                <a class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</a>
               </div>
             </form>
         </div>
@@ -78,8 +80,8 @@
         </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn" data-bs-dismiss="modal" (click)="editDepartment(dept != undefined ? dept.departmentId : 0)">Save</button>
-            <button type="reset" class="btn" data-bs-dismiss="modal" (click)="closeEditApproverCollapses()">Cancel</button>
+            <button type="button" class="btn add-btn add-modal-btn" data-bs-dismiss="modal" (click)="editDepartment(dept != undefined ? dept.departmentId : 0)">Save</button>
+            <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="closeEditApproverCollapses()">Cancel</button>
         </div>
       </form>
     </div>
