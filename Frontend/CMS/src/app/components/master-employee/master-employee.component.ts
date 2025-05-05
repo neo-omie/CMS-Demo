@@ -28,7 +28,7 @@ maxPage:number=1; //used now
 pageNumbers:number[] = []; //used now 
 selectedUnit: string = 'All';
 searchTerm: string = '';
-errorMsg ?: string
+errorMsg ?: string;
 
 constructor(private employeeService: MasterEmployeeService,private router: Router){}
 
