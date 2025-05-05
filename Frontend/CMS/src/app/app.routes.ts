@@ -25,7 +25,6 @@ import { AllClassifiedContractComponent } from './components/classifiedContracts
 import { CreateClassifiedContractComponent } from './components/classifiedContracts/create-classified-contract/create-classified-contract.component';
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 import { MasterCompanyUpdateFormComponent } from './components/master-company-update-form/master-company-update-form.component';
-import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 import { UpdateContractComponent } from './components/contracts/update-contract/update-contract.component';
 
 export const routes: Routes = [
