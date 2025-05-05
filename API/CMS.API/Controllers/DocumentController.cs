@@ -57,6 +57,67 @@ namespace CMS.API.Controllers
             return Ok(getDocs);
         }
 
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
+        {
+            if (model.File == null || model.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            // Max file size = 25 MB
+            const long maxFileSize = 25 * 1024 * 1024;
+            if (model.File.Length > maxFileSize)
+            {
+                return BadRequest("File size exceeds the 25MB limit.");
+            }
+
+            // Allowed file extensions
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                return BadRequest("Unsupported file format. Allowed formats: PDF, Word (.doc, .docx), and Images (.jpg, .png).");
+            }
+
+           
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+
+            
+            // Generate a GUID filename
+            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+
+            // Get original filename for display
+            var originalFileName = Path.GetFileName(model.File.FileName);
+
+            // Combine path using the unique name
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Save the file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
+
+            var document = new MasterDocument
+            {
+                DocumentName = $"uploads/{fileName}", // use just the relative path
+                status = model.Status
+            };
+
+            await _context.MasterDocuments.AddAsync(document);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "File uploaded successfully." });
+        }
+
         [HttpPost]
         public async Task<ActionResult<int>> AddDocument(DocumentFormDTO documentForm)
         {

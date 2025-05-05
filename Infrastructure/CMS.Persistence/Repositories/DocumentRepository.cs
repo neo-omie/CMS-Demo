@@ -66,10 +66,16 @@ namespace CMS.Persistence.Repositories
         }
 
 
-        public Task<int> UploadDocument(MasterDocument masterDocument)
+        public async Task<int> UploadDocument(MasterDocument masterDocument)
         {
-            _context.MasterDocuments.AddAsync(masterDocument);
-            return _context.SaveChangesAsync();
+              await _context.MasterDocuments.AddAsync(masterDocument);
+            int  affectedRows = await _context.SaveChangesAsync();
+            if (affectedRows < 0)
+            {
+                throw new Exception("Something went wrong try again later");
+
+            }
+            return affectedRows;
         }
 
         public async Task<int> DeleteDocument(int id)

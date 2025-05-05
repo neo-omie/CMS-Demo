@@ -73,7 +73,7 @@ export class ClassifiedContracts {
         approver3Status?: number;
         isDeleted?: boolean;
     }
-    export class AddClasifiedContractDto {
+    export class AddClassifiedContractDto {
         classifiedContractName?: string | null;
       departmentId?: number | null;
       contractWithCompanyId?: number | null;

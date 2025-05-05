@@ -23,6 +23,7 @@ import { AddContractComponent } from './components/contracts/add-contract/add-co
 import { ClassifiedContractsScreenComponent } from './components/classifiedContracts/classified-contracts-screen/classified-contracts-screen.component';
 import { AllClassifiedContractComponent } from './components/classifiedContracts/all-classified-contract/all-classified-contract.component';
 import { CreateClassifiedContractComponent } from './components/classifiedContracts/create-classified-contract/create-classified-contract.component';
+import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
