@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyMasterService } from '../../services/company-master.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AddCompanyDto, MasterCompany } from '../../models/master-company';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
@@ -16,10 +16,34 @@ import { TYPE } from '../auth/login/values.constants';
 })
 export class MasterCompanyUpdateFormComponent {
 mode:any;
+companyId:number = 0;
 /**
  *
  */
-constructor(private companyMasterService:CompanyMasterService,private route:Router) {}
+constructor(private companyMasterService:CompanyMasterService,private route:Router, private goTo:ActivatedRoute) {}
+ngOnInit() {
+  this.goTo.params.subscribe(params=>{
+    console.log('Route Params:', params);
+    const paramValueId=params['contractId']
+    if(paramValueId){
+       this.companyId=+paramValueId;
+      console.log('Dynamic valueId:', this.companyId);
+      // this.mode=this.goTo.snapshot.url[2].path === 'editEmployee' ? 'edit' : 'view';
+      // console.log(this.mode);
+      this.fetchCompanyData(this.companyId);
+    }
+  });
+}
+fetchCompanyData(companyId:number) {
+  this.companyMasterService.getCompanyById(companyId).subscribe({
+    next: (response) => {
+      this.masterCompanyUpdateForm.patchValue({
+        companyName: response.companyName,
+        pocName: response.pocName,
+      });
+    }
+  })
+}
  masterCompanyUpdateForm=new FormGroup({
   companyName:new FormControl('',[Validators.required]),
   pocName : new FormControl('',[Validators.required]),

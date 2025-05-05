@@ -40,8 +40,8 @@ fetchApostille(){
       this.loading=false;
       console.log(response);
       this.apostilles = response;
-      this.totalApostilles=this.apostilles.length;
-      if(this.apostilles!= undefined && this.totalApostilles>0){
+      this.totalApostilles=response.length;
+      if(this.apostilles && this.totalApostilles > 0){
         let result=Pagination.paginator(this.currentPage,this.totalApostilles,this.pageSize);
         this.maxPage = result.maxPage;
         console.log(this.maxPage);
@@ -99,6 +99,6 @@ viewApostille(apostille:MasterApostille){
 }
 
 editApostille(apostille:MasterApostille){
-  this.router.navigate(['masters/apostilleMasters/viewApostille', apostille.valueId]);
+  this.router.navigate(['masters/apostilleMasters/editApostille', apostille.valueId]);
 }
 }
