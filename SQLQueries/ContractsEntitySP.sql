@@ -1,8 +1,8 @@
-CREATE OR ALTER PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
+CREATE PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
 AS
 DECLARE @TotalRecords int
 BEGIN
-	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity
+	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
 
 	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
 	cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
@@ -26,7 +26,7 @@ EXEC SP_GetAllContractsEntity @PageNumber = 1, @PageSize = 10;
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;
 
-CREATE OR ALTER PROCEDURE SP_GetContractEntityByID @ID int
+CREATE PROCEDURE SP_GetContractEntityByID @ID int
 AS
 BEGIN
 	SELECT c.ContractId as ContractID, c.ContractName as ContractName,

@@ -51,7 +51,7 @@ namespace CMS.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMiddleware<ExceptionMiddleware>();
 

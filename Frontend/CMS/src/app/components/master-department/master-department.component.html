@@ -15,14 +15,17 @@
                 <input type="text" class="form-control" id="departmentName" name="departmentName" [(ngModel)]="addDept.departmentName" required />
               </div>
               <br>
-              <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="fa-solid fa-plus"></i> Add department</button>
+              <div class="add-modal-btn">
+    
+                <button type="submit" class=" add-btn btn btn-primary add-modal-btn" data-bs-dismiss="modal"><i class="fa-solid fa-plus" id="plus-icon"></i>Add department</button>
+              </div>
             </form>
         </div>
       </div>
     </div>
   </div>
 <div *ngIf="!loading" class="table-responsive p-3">
-  <button class="btn btn-outline-primary mb-2">
+  <button class="add-btn btn btn-outline-primary mb-2">
     <a data-bs-toggle="modal" data-bs-target="#department-add"><i class="fa-solid fa-file-circle-plus"></i> Add department</a>
   </button>
     <table class="table align-middle table-bordered table-striped">

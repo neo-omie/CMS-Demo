@@ -11,7 +11,7 @@
         <form #documentForm="ngForm" (ngSubmit)="addDocument(documentForm)">
           <div class="form-group">
               <label for="documentName">Document Name</label>
-              <input type="text" class="form-control" id="documentName" name="documentName" [(ngModel)]="document.documentName" required />
+              <input type="file" class="form-control" id="file" name="file" (change)="uploadFile($event)" required />
             </div>
             <br>
             <div class="form-group">
@@ -22,14 +22,17 @@
               </select>
             </div>
             <br>
-            <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="fa-solid fa-plus"></i>Add document</button>
-          </form>
+            <div class="add-modal-btn">
+    
+              <button type="submit" class=" add-btn btn btn-primary add-modal-btn" data-bs-dismiss="modal"><i class="fa-solid fa-plus" id="plus-icon"></i>Add document</button>
+            </div>
+          </form> 
       </div>
     </div>
   </div>
 </div>
 <div *ngIf="!loading" class="table-responsive p-3">
-  <button class="btn btn-outline-primary mb-2">
+  <button  class="add-btn btn btn-primary mb-2">
     <a data-bs-toggle="modal" data-bs-target="#document-add"><i class="fa-solid fa-file-circle-plus"></i> Add document</a>
   </button>
   <table class="table align-middle table-bordered table-striped">
@@ -80,7 +83,7 @@
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
-              <input #editDocumentName class="form-control" placeholder="Change document name" type="text" value="{{doc != undefined ? doc.documentName : ''}}"/>
+              <input type="file" class="form-control" id="file-edit" name="file-edit" (change)="uploadFile($event)" required />
             </div>
           </div>
           <div class="mb-3">

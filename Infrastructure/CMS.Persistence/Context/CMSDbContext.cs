@@ -14,6 +14,8 @@ using CMS.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts;
+using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById;
 
 namespace CMS.Persistence.Context
 {
@@ -49,7 +51,9 @@ namespace CMS.Persistence.Context
         public DbSet<GetAllContractsDto> GetContractsDtos { get; set; }
         public DbSet<GetContractByIdDto> GetContractByIdDtos { get; set; }
 
-
+        public DbSet<ClassifiedContract> ClassifiedContracts { get; set; }
+        public DbSet<GetAllClassifiedContractsDto> GetClassifiedContractsDtos { get; set; }
+        public DbSet<GetClassifiedContractByIdDto> GetClassifiedContractByIdDtos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +64,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<GetAllApostilleDto>().Entity<GetAllApostilleDto>().HasNoKey();
             modelBuilder.Ignore<GetAllContractsDto>().Entity<GetAllContractsDto>().HasNoKey();
             modelBuilder.Ignore<GetContractByIdDto>().Entity<GetContractByIdDto>().HasNoKey();
+            modelBuilder.Ignore<GetClassifiedContractByIdDto>().Entity<GetClassifiedContractByIdDto>().HasNoKey();
+            modelBuilder.Ignore<GetAllClassifiedContractsDto>().Entity<GetAllClassifiedContractsDto>().HasNoKey();
 
             modelBuilder.Entity<GetMastersDTO>().HasNoKey();
             modelBuilder.Ignore<GetAllApprovalMatrixContractDTO>().Entity<GetAllApprovalMatrixContractDTO>().HasNoKey();
@@ -110,7 +116,7 @@ namespace CMS.Persistence.Context
             
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
-            modelBuilder.ApplyConfiguration(new DocumentConfigurations());
+            //modelBuilder.ApplyConfiguration(new DocumentConfigurations());
 
         }
     }

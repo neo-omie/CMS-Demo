@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AddContractDto, ContractsEntity } from '../../../models/contracts';
 import { TYPE } from '../../auth/login/values.constants';
 import { Alert } from '../../../utils/alert';
 import { ContractsService } from '../../../services/contracts.service';
+import { MasterEmployee } from '../../../models/master-employee';
+import { GetAllDepartmentsDto } from '../../../models/master-department';
+import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
+import { CompanyMasterDto } from '../../../models/master-company';
 
 @Component({
   selector: 'app-add-contract',
@@ -15,15 +19,63 @@ import { ContractsService } from '../../../services/contracts.service';
   styleUrl: './add-contract.component.css'
 })
 export class AddContractComponent {
-mode:any;
-  constructor(private  contractsService:ContractsService,private route:Router) {}
+  mode:any;
+  deptID?:number;
+  // Dropdowns
+  employeeCustodians:MasterEmployee[] = [];
+  departments:GetAllDepartmentsDto[] = [];
+  contractTypes:ContractTypeMasterDTO[] = [];
+  companies:CompanyMasterDto[] =[]
+  ngOnInit() {
+    this.getAllDepartments();
+    this.getAllContractTypes();
+    this.getAllCompanies();
+  }
+  getAllDepartments() {
+    this.contractsService.GetDepartments().subscribe({
+      next: (response:GetAllDepartmentsDto[]) => {
+        this.departments = response;
+      }, error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+      }
+    });
+  }
+  getAllContractTypes() {
+    this.contractsService.GetContractTypes().subscribe({
+      next: (response:ContractTypeMasterDTO[]) => {
+        this.contractTypes = response;
+      }, error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+      }
+    });
+  }
+  getAllCompanies() {
+    this.contractsService.GetCompanies().subscribe({
+      next: (response:CompanyMasterDto[]) => {
+        this.companies = response;
+      }, error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+      }
+    });
+  }
+
+  @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
+  @ViewChild('editEmpCustodianName') editEmpCustodianName!: ElementRef;
+  @ViewChild('editEmpCustodianId') editEmpCustodianId!: ElementRef;
+  constructor(private  contractsService:ContractsService,private route:Router, private renderer : Renderer2) {}
   masterContractAddForm = new FormGroup({
     contractName : new FormControl('',[Validators.required]),
     departmentId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     contractWithCompanyId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     contractTypeId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     apostilleTypeId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
-    actualDocRefNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
+    actualDocRefNo : new FormControl('',[Validators.required]),
     retainerContract : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     termsAndConditions : new FormControl('',[Validators.required]),
     validFrom : new FormControl('',[Validators.required]),
@@ -33,12 +85,14 @@ mode:any;
     addendumDate : new FormControl('',[Validators.required]),
     empCustodianId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     location : new FormControl('',[Validators.required]),
-    approver1Status : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
-    approver2Status : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
-    approver3Status : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')])
+    approver1Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
+    approver2Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
+    approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')])
   })
+  
   errorMsg?: string 
   onAddFormSubmit(){
+    this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
     if(this.masterContractAddForm.invalid){
       this.masterContractAddForm.markAllAsTouched();
       return;
@@ -86,8 +140,8 @@ mode:any;
         addFormValues.approver3Status = Number(approver3Status);
         console.log(addFormValues);
         this.contractsService.addContract(addFormValues).subscribe({
-          next:(response:ContractsEntity) => {
-            if( response.contractID !== undefined && response.contractID > 0){
+          next:(response:boolean) => {
+            if( response !== false){
               Alert.toast(TYPE.SUCCESS,true,'Added successfully');
               this.route.navigate(['contracts/allContracts'])
             }
@@ -102,6 +156,35 @@ mode:any;
       else{
         console.log("should not come here ", this.masterContractAddForm.value)
       }
+    }
+  }
+  textChangeEmployeeCustodian(departmentId:number, event:Event, approverNumber:number){
+    let input = event.target as HTMLInputElement;
+    this.contractsService.GetEmployeeForInputText(departmentId,input.value).subscribe(
+      {
+        next:(response:MasterEmployee[]) => {
+          if(approverNumber == 1){
+            this.employeeCustodians = response;
+          }
+        },
+        error:(error) => {
+          console.error('Error :(', error);
+          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        }
+      }
+    )
+  }
+  fillEmployeeCustodian(employeeId:number, employeeName:string, inputNumber:number){
+    if(inputNumber == 1){
+      const input = this.editEmpCustodianCollapse.nativeElement.querySelector('input');
+      input.value = "";
+      console.log(input.value);
+      this.employeeCustodians.length = 0;
+      this.renderer.removeClass(this.editEmpCustodianCollapse.nativeElement,'show');
+      this.editEmpCustodianName.nativeElement.value = employeeName;
+      this.editEmpCustodianId.nativeElement.value = employeeId;
+      console.log(employeeId);
     }
   }
   get contractName(){

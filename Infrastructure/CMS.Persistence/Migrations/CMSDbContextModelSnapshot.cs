@@ -22,6 +22,546 @@ namespace CMS.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract.GetAllApprovalMatrixContractDTO", b =>
+                {
+                    b.Property<string>("ApproverName1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MasterApprovalMatrixContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetAllApprovalMatrixContractDTOs");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById.GetApprovalMatrixContractByIdDto", b =>
+                {
+                    b.Property<string>("ApproverId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverId3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MasterApprovalMatrixContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfDays")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetApprovalMatrixContractByIdDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU.GetAllApprovalMatrixMOUDto", b =>
+                {
+                    b.Property<string>("ApproverName1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MasterApprovalMatrixMOUId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetAllApprovalMatrixMOUDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOUById.GetAllApprovalMatrixMOUByIdDto", b =>
+                {
+                    b.Property<string>("ApproverId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverId3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproverName3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MasterApprovalMatrixMOUId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfDays")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetAllApprovalMatrixMOUByIdDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.Contracts.Queries.GetAllContracts.GetAllContractsDto", b =>
+                {
+                    b.Property<DateTime?>("AddendumDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovalPendingFrom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContractID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContractName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContractType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RenewalContractPerson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RenewalDueIn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ToBeRenewedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetContractsDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.Contracts.Queries.GetContractById.GetContractByIdDto", b =>
+                {
+                    b.Property<int>("ActualDocRefNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AddendumDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ApostilleTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApostilleTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver1Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver1EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Approver1Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Approver2Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver2EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Approver2Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Approver3Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver3EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Approver3Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContractName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContractTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContractTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContractWithCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContractWithCompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmpCustodianId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmpCustodianName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RenewalFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RenewalTill")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RetainerContract")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TermsAndConditions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ValidTill")
+                        .HasColumnType("datetime2");
+
+                    b.ToTable("GetContractByIdDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.Departments.Queries.GetAllDepartments.GetAllDepartmentsDto", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetDepartmentsDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.EscalationMatrixMouMaster.EscalationMatrixMoutDto", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EscalationId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EscalationId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EscalationId3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MatrixMouId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetEscalationMatrixMouDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.MasterApostilles.ApostilleDtos.GetAllApostilleDto", b =>
+                {
+                    b.Property<string>("ApostilleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ValueId")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetApostillesDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.MasterCompanies.GetMastersDTO", b =>
+                {
+                    b.Property<string>("CompanyLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ValueId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
+
+                    b.ToTable("GetCompanyDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.MasterEscalationMatrixContracts.GetEscalationMatrixContractDto", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Escalation3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EscalationId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EscalationId2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EscalationId3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MatrixContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerDaysEscalation3")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetEscalationMatrixContractDtos");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.ClassifiedContract", b =>
+                {
+                    b.Property<int>("ClassifiedContractId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassifiedContractId"));
+
+                    b.Property<int>("ActualDocRefNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AddendumDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ApostilleTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Approver1Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Approver2Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Approver3Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClassifiedContractName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContractTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContractWithCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpCustodianId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RenewalFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RenewalTill")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RetainerContract")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TermsAndConditions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ValidTill")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ClassifiedContractId");
+
+                    b.HasIndex("ApostilleTypeId");
+
+                    b.HasIndex("ContractTypeId");
+
+                    b.HasIndex("ContractWithCompanyId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("EmpCustodianId");
+
+                    b.ToTable("ClassifiedContracts");
+                });
+
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfCountries", b =>
                 {
                     b.Property<int>("CountryId")
@@ -340,9 +880,8 @@ namespace CMS.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("ValueId");
 
@@ -433,7 +972,15 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
+                    b.Property<byte[]>("DocumentData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("DocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -446,29 +993,6 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterDocuments");
-
-                    b.HasData(
-                        new
-                        {
-                            ValueId = 1,
-                            DocumentName = "Doc 1",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 2,
-                            DocumentName = "Doc 2",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 3,
-                            DocumentName = "Doc 3",
-                            IsDeleted = false,
-                            status = 1
-                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>
@@ -535,9 +1059,9 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAECpQWn4z6pK6NB2zDwhCwWqREi1z+16rirMIBDnqaa9uWwgrD1jlBjBzcsWB6WO8Bw==",
+                            Password = "AQAAAAIAAYagAAAAEFLZ07muU5HPtjPDkGtvn00VD3YlhRVza1O5ACaaIezP3zK99/GDcCTtsx1BgWUvhA==",
                             Role = "Admin",
-                            Unit = "Dadar"
+                            Unit = "Thane"
                         },
                         new
                         {
@@ -550,9 +1074,9 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAENaW+Whtl60ymxL1Y/LJA6gqShgmONNJLdNJE+lnGYcuEUE6nC7MkQrkpCiAATqzuA==",
+                            Password = "AQAAAAIAAYagAAAAENWh7ar92/3gn6YDWejRNGIZagbXVhA/TgWZmUuY01Sck9s90wKVNEdUv3RGSXMt9g==",
                             Role = "MOU_User",
-                            Unit = "Dadar"
+                            Unit = "Thane"
                         });
                 });
 
@@ -644,6 +1168,49 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixMous");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.ClassifiedContract", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.MasterApostille", "ApostilleType")
+                        .WithMany()
+                        .HasForeignKey("ApostilleTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.ContractTypeMasters", "ContractType")
+                        .WithMany()
+                        .HasForeignKey("ContractTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.CompanyMaster.MasterCompany", "ContractWithCompany")
+                        .WithMany()
+                        .HasForeignKey("ContractWithCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterApprovalMatrixContract", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "EmpCustodian")
+                        .WithMany()
+                        .HasForeignKey("EmpCustodianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApostilleType");
+
+                    b.Navigation("ContractType");
+
+                    b.Navigation("ContractWithCompany");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("EmpCustodian");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
