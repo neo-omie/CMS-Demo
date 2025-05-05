@@ -20,10 +20,12 @@ EXEC SP_GetDocumentByID @id = 1;
 CREATE OR ALTER PROCEDURE SP_AddDocument 
 @documentName nvarchar(255),
 @status int,
+@documentType nvarchar(255),
+@documentData varbinary,
 @isDeleted int
 As
 Begin
-	Insert into MasterDocuments (DocumentName,status,IsDeleted) values (@documentName,@status,@isDeleted)
+	Insert into MasterDocuments (DocumentName,status,docu,IsDeleted) values (@documentName,@status,@isDeleted)
 End
 Exec SP_AddDocument @documentName='Resume',@status=1 ,@isDeleted =0
 

@@ -68,3 +68,23 @@ td{
     box-shadow: none;
     border-color: #dee2e6;
 }
+.add-btn {
+    color: rgba(95, 95, 238);
+    background-color: whitesmoke;
+    border-color: #5f5fee;
+}
+.add-btn:hover{
+    background-color: #5f5fee;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+.add-modal-btn{
+    display: flex;
+    justify-content: flex-end;
+    
+}
+.add-btn #plus-icon{
+    margin-top: 4px;
+    margin-right: 3px;
+}
