@@ -8,10 +8,6 @@ namespace CMS.Domain.Entities
         [Required]
         public IFormFile File { get; set; }
         [Required]
-        public string DocumentType { get; set; }
-        [Required]
-        public byte[] DocumentData { get; set; }
-        [Required]
         public int Status { get; set; }
     }
 }

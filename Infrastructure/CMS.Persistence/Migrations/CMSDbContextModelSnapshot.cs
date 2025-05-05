@@ -228,11 +228,35 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Approver1Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver1EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Approver1Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("Approver2Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver2EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Approver2Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("Approver3Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Approver3EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Approver3Status")
                         .HasColumnType("int");
@@ -865,7 +889,15 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
+                    b.Property<byte[]>("DocumentData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("DocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -878,29 +910,6 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterDocuments");
-
-                    b.HasData(
-                        new
-                        {
-                            ValueId = 1,
-                            DocumentName = "Doc 1",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 2,
-                            DocumentName = "Doc 2",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 3,
-                            DocumentName = "Doc 3",
-                            IsDeleted = false,
-                            status = 1
-                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>
@@ -967,9 +976,9 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEJNJ1g/v7qwdY4qwpHitNpEhcmWjMYog0uANS8l91YazttgA+KnfIpeMA6LeI6YsZg==",
+                            Password = "AQAAAAIAAYagAAAAEIHxB2LKRT2AA9H8ibMWZdHRawKkIw3uo5FwUzedmbQgDC4PWNgsH8HKLedskjG/uA==",
                             Role = "Admin",
-                            Unit = "Dadar"
+                            Unit = "Thane"
                         },
                         new
                         {
@@ -982,9 +991,9 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAENoPxpSIHjaL3bmgCxvLO7yTh2aph01Iwtxa5k8Yf0GW87FyNVGkeB+PItcF3+jcfA==",
+                            Password = "AQAAAAIAAYagAAAAEBU2bPRpVbL8aCym57OwfLRvL3zV6FNwOzbcZKzwgCfaDDA0Q5P1LvaDWDx/FgRKhw==",
                             Role = "MOU_User",
-                            Unit = "Dadar"
+                            Unit = "Thane"
                         });
                 });
 

@@ -53,6 +53,7 @@ namespace CMS.API.Controllers
         {
 
             var getDocs = await _mediator.Send(new GetDocumentByIdQuery(id));
+
             return Ok(getDocs);
         }
 
@@ -94,8 +95,26 @@ namespace CMS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<int>> UpdateDocument(int id, DocumentDTO document)
+        public async Task<ActionResult<int>> UpdateDocument(int id, DocumentFormDTO documentForm)
         {
+            if (documentForm.File == null || documentForm.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            if (documentForm.File.Length > 1048576)
+            {
+                return BadRequest("File size exceeds 1MB.");
+            }
+            using var memoryStream = new MemoryStream();
+            await documentForm.File.CopyToAsync(memoryStream);
+            var fileData = memoryStream.ToArray();
+            var document = new DocumentDTO
+            {
+                DocumentName = documentForm.File.FileName,
+                DocumentType = documentForm.File.ContentType,
+                DocumentData = fileData,
+                status = (Status)documentForm.Status
+            };
             await _mediator.Send(new UpdateDocumentCommand(id, document));
 
             return Ok(new { Message = "updated Document Successfully" });

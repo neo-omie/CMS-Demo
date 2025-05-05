@@ -51,8 +51,8 @@ export class MasterDocumentComponent implements OnInit {
     private renderer: Renderer2
   ) {}
   closeEditApproverCollapses() {
-    this.renderer.removeClass(this.editDocumentName.nativeElement, 'show');
-    this.renderer.removeClass(this.editDocumentStatus.nativeElement, 'show');
+    // this.renderer.removeClass(this.editDocumentName.nativeElement, 'show');
+    // this.renderer.removeClass(this.editDocumentStatus.nativeElement, 'show');
     this.doc = undefined;
   }
 
@@ -125,29 +125,33 @@ export class MasterDocumentComponent implements OnInit {
   }
 
   editDocument(id: number) {
-    let docName = this.editDocumentName.nativeElement.value;
-    let status = Number(this.editDocumentStatus.nativeElement.value);
-    this.document.file = docName;
-    this.document.status = status;
-    if (docName !== '') {
-      this.documentService.updateDocument(id, this.document).subscribe({
-        next: (response: string) => {
-          if (response) {
-            Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
-            this.getDocuments(1, 10);
-          }
-        },
-        error: (error) => {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        },
-      });
-    } else {
-      Alert.toast(TYPE.ERROR, true, 'Please enter the department name.');
+    if (!this.file) {
+      alert('File is missing');
+      return;
     }
+    if (this.file.size > 1048576) {
+      alert("File too large. Max 1MB allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('File',this.file)
+    formData.append('Status',String(this.editDocumentStatus.nativeElement.value))
+    this.documentService.updateDocument(id, formData).subscribe({
+      next: (response: string) => {
+        if (response) {
+          Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
+          this.getDocuments(1, 10);
+        }
+      },
+      error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      },
+    });
     this.closeEditApproverCollapses();
   }
 

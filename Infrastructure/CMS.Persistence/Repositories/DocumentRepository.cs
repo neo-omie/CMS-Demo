@@ -55,10 +55,8 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<int> AddDocument(MasterDocument masterDocument)
         {
-            
-
-            string sql = "EXEC SP_AddDocument @documentName={0},@status={1},@isDeleted={2}";
-           int affectedRows = await _context.Database.ExecuteSqlRawAsync(sql, masterDocument.DocumentName, masterDocument.status,masterDocument.IsDeleted);
+            string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
+           int affectedRows = await _context.Database.ExecuteSqlRawAsync(sql,null,masterDocument.DocumentName, masterDocument.status,masterDocument.DocumentType,masterDocument.DocumentData,masterDocument.IsDeleted);
             if (affectedRows < 0)
             {
             throw new Exception("Something went wrong try again later");
@@ -90,8 +88,8 @@ namespace CMS.Persistence.Repositories
 
         public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
         {
-            string sql = "EXEC SP_UpdateDocumentById @id ={0}, @DocumentName ={1}, @Status={2} ";
-           int affectedRows = await  _context.Database.ExecuteSqlRawAsync(sql, id, masterDocument.DocumentName, masterDocument.status);
+            string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
+            int affectedRows = await  _context.Database.ExecuteSqlRawAsync(sql,id,masterDocument.DocumentName, masterDocument.status, masterDocument.DocumentType, masterDocument.DocumentData, masterDocument.IsDeleted);
 
             if (affectedRows > 0)
             {
