@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AddDocumentDto, GetDocumentById, MasterDocument, MasterDocumentDto } from '../models/master-document';
 
 @Injectable({
@@ -12,17 +12,22 @@ export class MasterDocumentService {
   constructor(private http:HttpClient) { }
 
   getDocument(pageNumber : number, pageSize : number):Observable<MasterDocumentDto>{
-    return this.http.get<MasterDocumentDto>(`${this.apiUrl}/${pageNumber}/${pageSize}`);
+    return this.http.get<MasterDocumentDto>(`${this.apiUrl}/${pageNumber}/${pageSize}`).pipe(
+      tap(() => console.log('HTTP request triggered')),
+      catchError(err => {
+        console.error('Error inside service:', err);
+        return throwError(() => err); // rethrow
+      })
+    );
   }
 
-  
-  addDocument(masterDocument:AddDocumentDto):Observable<any>{
-    return this.http.post<any>(`${this.apiUrl}/upload`,masterDocument);
+  addDocument(masterDocument:FormData):Observable<any>{
+    return this.http.post<any>(this.apiUrl,masterDocument);
   }
 
   // uploadDocument()
 
-  updateDocument(docId?:number, data?:AddDocumentDto):Observable<string>{
+  updateDocument(docId?:number, data?:FormData):Observable<string>{
     return this.http.put<string>(`${this.apiUrl}/${docId}`, data)
   }
 

@@ -22,30 +22,30 @@ loading=true;
 employees: MasterEmployee[]=[];
 totalEmployees:number=0;
 totalPages:number=0;
-currentPage:number = 1;
+currentPage:number=1;
+pageSize:number=2;
 maxPage:number=1; //used now 
 pageNumbers:number[] = []; //used now 
 selectedUnit: string = 'All';
 searchTerm: string = '';
-errorMsg ?: string
+errorMsg ?: string;
 
 constructor(private employeeService: MasterEmployeeService,private router: Router){}
 
 ngOnInit(): void {
-  this.fetchEmployees(this.currentPage, 2);
+  this.fetchEmployees();
 }
 
-fetchEmployees(currentPage:number, pageSize:number){
-  this.employeeService.getEmployees(currentPage, pageSize, this?.selectedUnit, this?.searchTerm)
+fetchEmployees(){
+  this.employeeService.getEmployees(this.currentPage, this.pageSize, this?.selectedUnit, this?.searchTerm)
   .subscribe({
     next:(response: MasterEmployeeDto) => {
-      this.employees = response.data;
       this.loading = false;
       console.log(response);
       this.employees = response.data;
-      this.totalEmployees = response.totalCount
-      if(this.employees.length > 0){
-        let result = Pagination.paginator(currentPage,this.totalEmployees,pageSize)
+      this.totalEmployees = response.totalCount;
+      if(this.employees!= undefined && this.employees.length > 0){
+        let result = Pagination.paginator(this.currentPage,this.totalEmployees,this.pageSize);
         this.maxPage = result.maxPage;
         console.log(this.maxPage);
         this.pageNumbers = result.pageNumbers;
@@ -63,20 +63,19 @@ fetchEmployees(currentPage:number, pageSize:number){
 GetPage(pgNumber:number){
   if(this.maxPage >= pgNumber && pgNumber >= 1){
     this.currentPage=pgNumber;
-    this.fetchEmployees(this.currentPage, 2);
+    this.fetchEmployees();
   }
 }
 
 onFilterChange(){
   this.currentPage=1;
-  this.fetchEmployees(this.currentPage, 2);
+  this.fetchEmployees();
 }
 
 
 getPageNumbers():number[]{
   const pageNumbers=[];
-  
-  for(let i=1; i<=this.maxPage;i++){
+  for(let i=1; i<=this.totalPages;i++){
     pageNumbers.push(i)
   }
   return pageNumbers
@@ -96,10 +95,10 @@ deleteEmployee(employee:MasterEmployee){
        next:(response:boolean)=>{
          if(response){
            Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
-          }
-        }
-      });
-      this.onFilterChange();
+           this.fetchEmployees();
+         }
+       }
+     });
     });
 }
 

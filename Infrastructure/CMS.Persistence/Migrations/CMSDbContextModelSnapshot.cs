@@ -972,7 +972,15 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
+                    b.Property<byte[]>("DocumentData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("DocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -985,29 +993,6 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterDocuments");
-
-                    b.HasData(
-                        new
-                        {
-                            ValueId = 1,
-                            DocumentName = "Doc 1",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 2,
-                            DocumentName = "Doc 2",
-                            IsDeleted = false,
-                            status = 1
-                        },
-                        new
-                        {
-                            ValueId = 3,
-                            DocumentName = "Doc 3",
-                            IsDeleted = false,
-                            status = 1
-                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>

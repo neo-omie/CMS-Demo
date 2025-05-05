@@ -116,7 +116,7 @@ namespace CMS.Persistence.Context
             
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
-            modelBuilder.ApplyConfiguration(new DocumentConfigurations());
+            //modelBuilder.ApplyConfiguration(new DocumentConfigurations());
 
         }
     }

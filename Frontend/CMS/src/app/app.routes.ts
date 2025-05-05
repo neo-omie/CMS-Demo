@@ -36,6 +36,7 @@ export const routes: Routes = [
     {path:'masters/employeeMasters/addEmployee', component:AddEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/employeeMasters/editEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/employeeMasters/viewEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
+    {path:'masters/apostilleMasters', component:MasterApostilleComponent,canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},

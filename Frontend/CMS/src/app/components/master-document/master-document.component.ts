@@ -29,6 +29,7 @@ import { Pagination } from '../../utils/pagination';
   styleUrl: './master-document.component.css',
 })
 export class MasterDocumentComponent implements OnInit {
+  file:File|null = null;
   loading: boolean = true;
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
@@ -50,8 +51,8 @@ export class MasterDocumentComponent implements OnInit {
     private renderer: Renderer2
   ) {}
   closeEditApproverCollapses() {
-    this.renderer.removeClass(this.editDocumentName.nativeElement, 'show');
-    this.renderer.removeClass(this.editDocumentStatus.nativeElement, 'show');
+    // this.renderer.removeClass(this.editDocumentName.nativeElement, 'show');
+    // this.renderer.removeClass(this.editDocumentStatus.nativeElement, 'show');
     this.doc = undefined;
   }
 
@@ -87,10 +88,19 @@ export class MasterDocumentComponent implements OnInit {
   }
 
   addDocument(documentForm: NgForm) {
-    this.document = documentForm.value;
-    console.log(this.document);
-    this.document.status = Number(this.document.status);
-    this.documentService.addDocument(this.document).subscribe({
+    if (!this.file || !documentForm.valid) {
+      alert('Form is invalid or file is missing');
+      return;
+    }
+    if (this.file.size > 1048576) {
+      alert("File too large. Max 1MB allowed.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append('File',this.file)
+    formData.append('Status',String(this.document.status))
+
+    this.documentService.addDocument(formData).subscribe({
       next: (response) => {
         Alert.bigToast(
           'Success!',
@@ -115,29 +125,33 @@ export class MasterDocumentComponent implements OnInit {
   }
 
   editDocument(id: number) {
-    let docName = this.editDocumentName.nativeElement.value;
-    let status = Number(this.editDocumentStatus.nativeElement.value);
-    this.document.file = docName;
-    this.document.status = status;
-    if (docName !== '') {
-      this.documentService.updateDocument(id, this.document).subscribe({
-        next: (response: string) => {
-          if (response) {
-            Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
-            this.getDocuments(1, 10);
-          }
-        },
-        error: (error) => {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        },
-      });
-    } else {
-      Alert.toast(TYPE.ERROR, true, 'Please enter the department name.');
+    if (!this.file) {
+      alert('File is missing');
+      return;
     }
+    if (this.file.size > 1048576) {
+      alert("File too large. Max 1MB allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('File',this.file)
+    formData.append('Status',String(this.editDocumentStatus.nativeElement.value))
+    this.documentService.updateDocument(id, formData).subscribe({
+      next: (response: string) => {
+        if (response) {
+          Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
+          this.getDocuments(1, 10);
+        }
+      },
+      error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      },
+    });
     this.closeEditApproverCollapses();
   }
 
@@ -166,19 +180,23 @@ export class MasterDocumentComponent implements OnInit {
     );
   }
 
-  GetDocument(id: number) {
-    this.documentService.getById(id).subscribe({
-      next: (response: GetDocumentById) => {
-        this.getMasterDocumentById = response;
-        this.doc = response;
-      },
-      error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      },
-    });
-  }
+  GetDocument(id:number){
+          this.documentService.getById(id).subscribe({
+            next:(response:GetDocumentById) => {
+              this.getMasterDocumentById = response;
+              this.doc = response;
+            }, 
+            error:(error) => {
+              console.error('Error :(', error);
+              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+              Alert.toast(TYPE.ERROR,true,this.errorMsg);
+          }});
+        }
+
+        uploadFile(event: Event) {
+          const input = event.target as HTMLInputElement;
+          if (input.files?.length) {
+            this.file = input.files[0];
+          }
+        }
 }

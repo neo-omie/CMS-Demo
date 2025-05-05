@@ -13,10 +13,12 @@ namespace CMS.Domain.Entities
 
         [Required]
         public string DocumentName { get; set; }
-
-        public Status status { get; set; }
-
-       
+        [Required]
+        public string DocumentType { get; set; }
+        [Required]
+        public byte[] DocumentData { get; set; }
+        [Required]
+        public Status status { get; set; } 
         public bool IsDeleted { get; set; } = false ;
        
     }

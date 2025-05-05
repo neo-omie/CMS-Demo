@@ -8,6 +8,7 @@ namespace CMS.Application.Features.MasterEmployees.EmployeeDtos
 {
     public class GetEmployeesByDepartmentIdAndEmpDetailsDto
     {
+        public string ValueId { get; set; }
         public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
     }

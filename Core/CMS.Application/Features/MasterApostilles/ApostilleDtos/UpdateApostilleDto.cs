@@ -3,6 +3,6 @@
     public class UpdateApostilleDto
     {
         public string ApostilleName { get; set; }
-        public int Status { get; set; }
+        public bool Status { get; set; }
     }
 }

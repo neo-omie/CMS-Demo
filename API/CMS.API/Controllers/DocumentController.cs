@@ -8,6 +8,7 @@ using CMS.Application.Features.MasterDocuments.Command.UpdateDocument;
 using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetAllDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetDocumentById;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using MediatR;
@@ -33,50 +34,9 @@ namespace CMS.API.Controllers
             _context = context;
         }
 
-
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
-        {
-            if (model.File == null || model.File.Length == 0)
-            {
-                return BadRequest("No file uploaded.");
-            }
-
-            
-            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-            var fileName = Path.GetFileName(model.File.FileName);
-        
-            var filePath = Path.Combine(uploadsFolder, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await model.File.CopyToAsync(stream);
-            }
-
-            
-            var document = new MasterDocument
-            {
-                DocumentName = $"uploads/{filePath}",
-                status = model.Status,
-               
-                 
-            };
-
-            
-            _context.MasterDocuments.AddAsync(document);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "File uploaded successfully."});
-        }
-
         [HttpGet("{pageNumber}/{pageSize}")]
         public async Task<IActionResult> GetAllDocs([FromRoute]int pageNumber, [FromRoute] int pageSize)
         {
-
             var(documents, totalCount)  = await _mediator.Send(new GetAllDocumentQuery( pageNumber,  pageSize));
 
             var getDocs = new DocumentResponse
@@ -93,14 +53,32 @@ namespace CMS.API.Controllers
         {
 
             var getDocs = await _mediator.Send(new GetDocumentByIdQuery(id));
+
             return Ok(getDocs);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> AddDocument(DocumentDTO document)
+        public async Task<ActionResult<int>> AddDocument(DocumentFormDTO documentForm)
         {
+            if (documentForm.File == null || documentForm.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            if (documentForm.File.Length > 1048576)
+            {
+                return BadRequest("File size exceeds 1MB.");
+            }
+            using var memoryStream = new MemoryStream();
+            await documentForm.File.CopyToAsync(memoryStream);
+            var fileData = memoryStream.ToArray();
+            var document = new DocumentDTO
+            {
+                DocumentName = documentForm.File.FileName,
+                DocumentType = documentForm.File.ContentType,
+                DocumentData = fileData,
+                status = (Status)documentForm.Status
+            };
             await _mediator.Send(new AddDocumentCommand(document));
-
             return Ok(new { Message = "Added Document Successfully" });
         }
 
@@ -117,8 +95,26 @@ namespace CMS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<int>> UpdateDocument(int id, DocumentDTO document)
+        public async Task<ActionResult<int>> UpdateDocument(int id, DocumentFormDTO documentForm)
         {
+            if (documentForm.File == null || documentForm.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            if (documentForm.File.Length > 1048576)
+            {
+                return BadRequest("File size exceeds 1MB.");
+            }
+            using var memoryStream = new MemoryStream();
+            await documentForm.File.CopyToAsync(memoryStream);
+            var fileData = memoryStream.ToArray();
+            var document = new DocumentDTO
+            {
+                DocumentName = documentForm.File.FileName,
+                DocumentType = documentForm.File.ContentType,
+                DocumentData = fileData,
+                status = (Status)documentForm.Status
+            };
             await _mediator.Send(new UpdateDocumentCommand(id, document));
 
             return Ok(new { Message = "updated Document Successfully" });
