@@ -74,22 +74,22 @@ export class GetContractByIdDto {
 }
 export class AddContractDto {
     contractName?: string | null;
-  departmentId?: number | null;
-  contractWithCompanyId?: number | null;
-  contractTypeId?: number | null;
-  apostilleTypeId?: number | null;
-  actualDocRefNo?: number | null;
-  retainerContract?: number | null;
-  termsAndConditions?: string | null;
-  validFrom?: string | null;
-  validTill?: string | null;
-  renewalFrom?: string | null;
-  renewalTill?: string | null;
-  addendumDate?: string | null;
-  empCustodianId?: number | null;
-  location?: string | null;
-  approver1Status?: number | null;
-  approver2Status?: number | null;
-  approver3Status?: number | null;
-  isDeleted: boolean = false;
+    departmentId?: number | null;
+    contractWithCompanyId?: number | null;
+    contractTypeId?: number | null;
+    apostilleTypeId?: number | null;
+    actualDocRefNo?: number | null;
+    retainerContract?: number | null;
+    termsAndConditions?: string | null;
+    validFrom?: string | null;
+    validTill?: string | null;
+    renewalFrom?: string | null;
+    renewalTill?: string | null;
+    addendumDate?: string | null;
+    empCustodianId?: number | null;
+    location?: string | null;
+    approver1Status?: number | null;
+    approver2Status?: number | null;
+    approver3Status?: number | null;
+    isDeleted: boolean = false;
 }

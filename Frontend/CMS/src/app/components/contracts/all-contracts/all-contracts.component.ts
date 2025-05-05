@@ -105,4 +105,8 @@ export class AllContractsComponent implements OnInit {
         }
       );
     }
+    editContract(contract:ContractsEntity){
+      console.log('Navigating to editContract with valueId:', contract.contractID);
+      this.router.navigate(['contracts/editContract', contract.contractID]);
+    }
 }

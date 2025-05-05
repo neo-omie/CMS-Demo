@@ -45,7 +45,7 @@
             <td>{{cont.location}}</td>
             <td>{{cont.totalRecords}}</td>
              <td>
-               <!-- <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit" (click)="GetContract(cont.contractID)"></i>    -->
+               <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit" (click)="editContract(cont)"></i>   
                <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail" (click)="GetContract(cont.contractID)"></i>
                <i class="fa-regular fa-trash-can icon" data-bs-toggle="modal" data-bs-target="#contract-delete" (click)="DeleteContract(cont.contractID)"></i></td>
         </tr>
