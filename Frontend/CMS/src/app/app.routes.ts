@@ -24,6 +24,8 @@ import { ClassifiedContractsScreenComponent } from './components/classifiedContr
 import { AllClassifiedContractComponent } from './components/classifiedContracts/all-classified-contract/all-classified-contract.component';
 import { CreateClassifiedContractComponent } from './components/classifiedContracts/create-classified-contract/create-classified-contract.component';
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
+import { MasterCompanyUpdateFormComponent } from './components/master-company-update-form/master-company-update-form.component';
+import { UpdateContractComponent } from './components/contracts/update-contract/update-contract.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -38,16 +40,21 @@ export const routes: Routes = [
     {path: 'masters/employeeMasters/editEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/employeeMasters/viewEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
     {path:'masters/apostilleMasters', component:MasterApostilleComponent,canActivate:[authGuard]},
+    {path:'masters/apostilleMasters/addApostille', component:AddApostilleComponent, canActivate:[authGuard]},
+    {path: 'masters/apostilleMasters/editApostille/:valueId', component: AddApostilleComponent, canActivate:[authGuard]},
+    {path: 'masters/apostilleMasters/viewApostille/:valueId', component: AddApostilleComponent, canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters/addCompany', component: MasterCompanyAddFormComponent, canActivate:[authGuard]},
+    {path: 'masters/companyMasters/updateCompany/:valueId', component: MasterCompanyUpdateFormComponent, canActivate:[authGuard]},
     {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},
     {path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate:[authGuard]},
 
     {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
     {path: 'contracts/allContracts', component: AllContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/addNewContract', component: AddContractComponent, canActivate:[authGuard]},
+    {path: 'contracts/editContract/:contractId', component: UpdateContractComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts', component: ClassifiedContractsScreenComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate:[authGuard]},
     {path: 'classifiedContract/createNewClassifiedContract', component: CreateClassifiedContractComponent, canActivate:[authGuard]},

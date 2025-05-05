@@ -22,7 +22,7 @@ export class MasterCompanyAddFormComponent {
     pocName : new FormControl('',[Validators.required]),
     valueId : new FormControl(undefined),
     pocContactNumber : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
-    companyStatus : new FormControl('',[Validators.required,Validators.pattern('^(0|1)$')]),
+    companyStatus : new FormControl('1',[Validators.required,Validators.pattern('^(0|1)$')]),
     pocEmailId : new FormControl('',[Validators.required,Validators.email]),
     companyAddressLine1 : new FormControl('',[Validators.required]),
     companyAddressLine2 : new FormControl(''),
@@ -95,7 +95,7 @@ export class MasterCompanyAddFormComponent {
         console.log(addFormValues);
         this.companyMasterService.addCompany(addFormValues).subscribe({
           next:(response:MasterCompany) => {
-            if( response.valueId !== undefined && response.valueId > 0){
+            if(response != undefined || response != null){
               Alert.toast(TYPE.SUCCESS,true,'Added successfully');
               this.route.navigate(['masters/companyMasters'])
             }
