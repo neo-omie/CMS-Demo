@@ -104,32 +104,32 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterCompany> UpdateCompanyAsync(int id, MasterCompany masterCompany)
         {
-        //    var checkComp = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
-        //    if (checkComp == null)
-        //    {
-        //        throw new Exception("Company Not found :(");
-        //    }
-        //    string sql = "EXEC SP_UpdateCompany @ValId={0}, @CompanyName={1},@PocName ={2}, @CompanyStatus ={3},@PocContactNumber={4},@PocEmailId={5},@CompanyAddressLine1 ={6}, @CompanyAddressLine2 ={7},@CompanyAddressLine3 ={8}, @Zipcode={9},@CompanyContactNo={10}, @CompanyEmailId ={11},@CompanyWebsiteUrl ={12}, @CompanyBankName ={13},@GSTno={14}, @BankAccNo={15},@MSMERegistrationNo={16}, @IFSCCode={17}, @PanNo ={18}";
-        //    //int result = await _context.Database.ExecuteSqlRawAsync(sql, masterCompany.ValueId, masterCompany.CompanyName, masterCompany.PocName, masterCompany.CompanyStatus, masterCompany.PocContactNumber, masterCompany.PocEmailId, masterCompany.CompanyAddressLine1, masterCompany.CompanyAddressLine2, masterCompany.CompanyAddressLine3, masterCompany.Zipcode, masterCompany.CompanyContactNo, masterCompany.CompanyEmailId, masterCompany.CompanyWebsiteUrl, masterCompany.CompanyBankName, masterCompany.GSTno, masterCompany.BankAccNo, masterCompany.MSMERegistrationNo, masterCompany.IFSCCode, masterCompany.PanNo);
-        //    var paramsList = new ArrayList();
-        //    for (int i = 0; i < 35; i++)
-        //    {
-        //        paramsList[i] = masterCompany[i];
-        //    }
-
-        //    foreach (var m in masterCompany.)
-        //    {
-
-        //    }
-        //    int result = await _context.Database.ExecuteSqlRawAsync(sql, ...masterCompany);
-        //    if (result > 0)
-        //    {
-                return masterCompany;
-            //    }
-            //    else
+            var checkComp = await _context.MasterCompanies.FirstOrDefaultAsync(cm => cm.ValueId == id);
+            if (checkComp == null)
+            {
+                throw new Exception("Company Not found :(");
+            }
+            string sql = "EXEC SP_UpdateCompany @ValId={0}, @CompanyName={1},@PocName ={2}, @CompanyStatus ={3},@PocContactNumber={4},@PocEmailId={5},@CompanyAddressLine1 ={6}, @CompanyAddressLine2 ={7},@CompanyAddressLine3 ={8}, @Zipcode={9},@CompanyContactNo={10}, @CompanyEmailId ={11},@CompanyWebsiteUrl ={12}, @CompanyBankName ={13},@GSTno={14}, @BankAccNo={15},@MSMERegistrationNo={16}, @IFSCCode={17}, @PanNo ={18}";
+            int result = await _context.Database.ExecuteSqlRawAsync(sql, masterCompany.ValueId, masterCompany.CompanyName, masterCompany.PocName, masterCompany.CompanyStatus, masterCompany.PocContactNumber, masterCompany.PocEmailId, masterCompany.CompanyAddressLine1, masterCompany.CompanyAddressLine2, masterCompany.CompanyAddressLine3, masterCompany.Zipcode, masterCompany.CompanyContactNo, masterCompany.CompanyEmailId, masterCompany.CompanyWebsiteUrl, masterCompany.CompanyBankName, masterCompany.GSTno, masterCompany.BankAccNo, masterCompany.MSMERegistrationNo, masterCompany.IFSCCode, masterCompany.PanNo);
+            //    var paramsList = new ArrayList();
+            //    for (int i = 0; i < 35; i++)
             //    {
-            //        throw new Exception("Company not updated. Failed :(");
+            //        paramsList[i] = masterCompany[i];
             //    }
+
+            //    foreach(var m in masterCompany.)
+            //    {
+
+            //    }
+            //    int result = await _context.Database.ExecuteSqlRawAsync(sql,...masterCompany);
+            if (result > 0)
+            {
+                return masterCompany;
+            }
+            else
+            {
+                throw new Exception("Company not updated. Failed :(");
+            }
         }
     }
-}
+    }

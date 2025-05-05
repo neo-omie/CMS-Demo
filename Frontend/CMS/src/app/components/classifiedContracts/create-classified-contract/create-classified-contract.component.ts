@@ -1,76 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AddContractDto, ContractsEntity } from '../../../models/contracts';
-import { TYPE } from '../../auth/login/values.constants';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { ClassifiedContractsService } from '../../../services/classified-contracts.service';
+import { AddClasifiedContractDto, ClassifiedContracts } from '../../../models/classified-contracts';
 import { Alert } from '../../../utils/alert';
-import { ContractsService } from '../../../services/contracts.service';
-import { MasterEmployee } from '../../../models/master-employee';
-import { GetAllDepartmentsDto } from '../../../models/master-department';
-import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
-import { CompanyMasterDto } from '../../../models/master-company';
+import { TYPE } from '../../auth/login/values.constants';
 
 @Component({
-  selector: 'app-add-contract',
+  selector: 'app-create-classified-contract',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './add-contract.component.html',
-  styleUrl: './add-contract.component.css'
+  imports: [ReactiveFormsModule,CommonModule ,RouterModule],
+  templateUrl: './create-classified-contract.component.html',
+  styleUrl: './create-classified-contract.component.css'
 })
-export class AddContractComponent {
-  mode:any;
-  deptID?:number;
-  // Dropdowns
-  employeeCustodians:MasterEmployee[] = [];
-  departments:GetAllDepartmentsDto[] = [];
-  contractTypes:ContractTypeMasterDTO[] = [];
-  companies:CompanyMasterDto[] =[]
-  ngOnInit() {
-    this.getAllDepartments();
-    this.getAllContractTypes();
-    this.getAllCompanies();
-  }
-  getAllDepartments() {
-    this.contractsService.GetDepartments().subscribe({
-      next: (response:GetAllDepartmentsDto[]) => {
-        this.departments = response;
-      }, error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
-      }
-    });
-  }
-  getAllContractTypes() {
-    this.contractsService.GetContractTypes().subscribe({
-      next: (response:ContractTypeMasterDTO[]) => {
-        this.contractTypes = response;
-      }, error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
-      }
-    });
-  }
-  getAllCompanies() {
-    this.contractsService.GetCompanies().subscribe({
-      next: (response:CompanyMasterDto[]) => {
-        this.companies = response;
-      }, error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
-      }
-    });
-  }
+export class CreateClassifiedContractComponent {
 
-  @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
-  @ViewChild('editEmpCustodianName') editEmpCustodianName!: ElementRef;
-  @ViewChild('editEmpCustodianId') editEmpCustodianId!: ElementRef;
-  constructor(private  contractsService:ContractsService,private route:Router, private renderer : Renderer2) {}
+mode:any;
+  constructor(private  contractsService:ClassifiedContractsService,private route:Router) {}
   masterContractAddForm = new FormGroup({
-    contractName : new FormControl('',[Validators.required]),
+    classifiedContractName : new FormControl('',[Validators.required]),
     departmentId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     contractWithCompanyId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     contractTypeId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
@@ -85,14 +34,12 @@ export class AddContractComponent {
     addendumDate : new FormControl('',[Validators.required]),
     empCustodianId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
     location : new FormControl('',[Validators.required]),
-    approver1Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
-    approver2Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
-    approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')])
+    approver1Status : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
+    approver2Status : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),
+    approver3Status : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')])
   })
-  
   errorMsg?: string 
   onAddFormSubmit(){
-    this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
     if(this.masterContractAddForm.invalid){
       this.masterContractAddForm.markAllAsTouched();
       return;
@@ -119,8 +66,8 @@ export class AddContractComponent {
       approver2Status && Number(approver2Status) &&
       approver3Status && Number(approver3Status) 
       ){
-        const addFormValues:AddContractDto = new AddContractDto();
-        addFormValues.contractName = this.masterContractAddForm.value.contractName;
+        const addFormValues:AddClasifiedContractDto = new AddClasifiedContractDto();
+        addFormValues.classifiedContractName = this.masterContractAddForm.value.classifiedContractName;
         addFormValues.departmentId = Number(departmentId);
         addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
         addFormValues.contractTypeId = Number(contractTypeId);
@@ -140,10 +87,10 @@ export class AddContractComponent {
         addFormValues.approver3Status = Number(approver3Status);
         console.log(addFormValues);
         this.contractsService.addContract(addFormValues).subscribe({
-          next:(response:boolean) => {
-            if( response !== false){
+          next:(response:ClassifiedContracts) => {
+            if( response.classifiedContractID !== undefined && response.classifiedContractID > 0){
               Alert.toast(TYPE.SUCCESS,true,'Added successfully');
-              this.route.navigate(['contracts/allContracts'])
+              this.route.navigate(['classifiedContracts/allContracts'])
             }
           }, 
           error:(error) => {
@@ -158,37 +105,8 @@ export class AddContractComponent {
       }
     }
   }
-  textChangeEmployeeCustodian(departmentId:number, event:Event, approverNumber:number){
-    let input = event.target as HTMLInputElement;
-    this.contractsService.GetEmployeeForInputText(departmentId,input.value).subscribe(
-      {
-        next:(response:MasterEmployee[]) => {
-          if(approverNumber == 1){
-            this.employeeCustodians = response;
-          }
-        },
-        error:(error) => {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-          Alert.toast(TYPE.ERROR,true,this.errorMsg);
-        }
-      }
-    )
-  }
-  fillEmployeeCustodian(employeeId:number, employeeName:string, inputNumber:number){
-    if(inputNumber == 1){
-      const input = this.editEmpCustodianCollapse.nativeElement.querySelector('input');
-      input.value = "";
-      console.log(input.value);
-      this.employeeCustodians.length = 0;
-      this.renderer.removeClass(this.editEmpCustodianCollapse.nativeElement,'show');
-      this.editEmpCustodianName.nativeElement.value = employeeName;
-      this.editEmpCustodianId.nativeElement.value = employeeId;
-      console.log(employeeId);
-    }
-  }
-  get contractName(){
-    return this.masterContractAddForm.get('contractName');
+  get classifiedContractName(){
+    return this.masterContractAddForm.get('classifiedContractName');
   }
   get departmentId(){
     return this.masterContractAddForm.get('departmentId');
@@ -246,3 +164,4 @@ export class AddContractComponent {
     this.route.navigate(['contracts/allContracts']);
   }
 }
+

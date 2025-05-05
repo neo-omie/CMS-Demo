@@ -6,7 +6,7 @@
     flex-grow: 1;
     position: relative;
 }
-.fields-container > div > span{
+ .fields-container > div > span{
     position: absolute;
     top: 20px;
     left: 15px;
@@ -14,7 +14,10 @@
     padding: 0 5px;
     color: red;
     font-size: 12px;
-}
+    
+} 
+
+
 .card-header{
     display: flex;
     align-items: center;
@@ -22,5 +25,3 @@
     background-color: #5f5fee;
     color: whitesmoke;
 }
-/* .hiddenFields {
-} */

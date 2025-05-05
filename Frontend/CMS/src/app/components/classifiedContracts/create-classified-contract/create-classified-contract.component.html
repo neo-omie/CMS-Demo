@@ -7,49 +7,35 @@
       </div>
       <div class="card-body collapse show" id="company-detail-container">
         <div class="fields-container">
-          <div class="m-3">
-            <label for="termsAndConditions">Contract Name</label>
-            <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
+          <div class="m-3 ">
+            <span class="error-text" *ngIf="classifiedContractName?.hasError('required') && (classifiedContractName?.dirty || classifiedContractName?.touched)"
               style="color: red;">*Required</span>
             <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
-              formControlName="contractName">
+              formControlName="classifiedContractName">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Department</label>
             <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="departmentId?.hasError('pattern') && (departmentId?.dirty || departmentId?.touched)"
               style="color: red;">Invalid number</span>
-            <!-- <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID" formControlName="departmentId" [(ngModel)]="deptID"> -->
-            <select class="form-select" name="departmentId" id="departmentId" formControlName="departmentId" [(ngModel)]="deptID">
-              <option value="" disabled selected>--Select one Department--</option>
-              <option *ngFor="let department of departments" value="{{department.departmentId}}">{{department.departmentName}}</option>
-            </select>
+            <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID"
+              formControlName="departmentId">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Contract with Company</label>
             <span *ngIf="contractWithCompanyId?.hasError('required') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="contractWithCompanyId?.hasError('pattern') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
               style="color: red;">Invalid number</span>
-            <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
-              <select class="form-select" name="contractWithCompanyId" id="contractWithCompanyId" formControlName="contractWithCompanyId">
-                <option value="" disabled selected>--Select one Company--</option>
-                <option *ngFor="let company of companies" value="{{company.valueId}}">{{company.companyName}}</option>
-              </select>
+            <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID"
+              formControlName="contractWithCompanyId">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Contract Type</label>
             <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
               style="color: red;">*Required</span>
-            <!-- <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID" formControlName="contractTypeId"> -->
-            <select class="form-select" name="contractTypeId" id="contractTypeId" formControlName="contractTypeId">
-              <option value="" disabled selected>--Select one Contract Type--</option>
-              <option *ngFor="let contractType of contractTypes" value="{{contractType.valueId}}">{{contractType.contractTypeName}}</option>
-            </select>
+            <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID"
+              formControlName="contractTypeId">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Apostille Type</label>
             <span *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
@@ -58,7 +44,6 @@
               formControlName="apostilleTypeId">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Actual Document Reference Number</label>
             <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
@@ -67,22 +52,14 @@
               formControlName="actualDocRefNo">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Retainer Contract Type</label>
             <span *ngIf="retainerContract?.hasError('required') && (retainerContract?.dirty || retainerContract?.touched)"
               style="color: red;">*Required</span>
               <span *ngIf="retainerContract?.hasError('pattern') && (retainerContract?.dirty || retainerContract?.touched)"
               style="color: red;">Invalid number</span>
-            <!-- <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract"> -->
-            <select class="form-select" name="retainerContract" id="retainerContract" formControlName="retainerContract">
-              <option value="1">None</option>
-              <option value="2">Weekly</option>
-              <option value="3">Monthly</option>
-              <option value="4">Quarterly</option>
-              <option value="5">Yearly</option>
-            </select>
+            <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract">
           </div>
           <div class="m-3">
-            <input class="form-control" type="text" id="valueId" placeholder="ValueId" disabled>
+            <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
           </div>
           <div class="m-3">
             <label for="termsAndConditions">Terms and Conditions</label>
@@ -121,32 +98,19 @@
             <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Employee Custodian Name</label>
             <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
-              style="color: red;">Invalid Employee</span>
-              <div class="mb-3">
-                <div class="input-group">
-                  <input #editEmpCustodianName class="form-control edit-input dropdown-input" placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown" aria-expanded="false" readonly/>
-                  <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
-                  </div>
-                    <div #editEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
-                      <div class="card card-body">
-                        <input type="text" class="form-control" placeholder="Search.." (input)="textChangeEmployeeCustodian(deptID != undefined ? deptID : 0,$event,1)">
-                        <button type="button" *ngFor="let emp of employeeCustodians" class="dropdown-btn btn" (click)="fillEmployeeCustodian(emp.valueId,emp.employeeName,1)">({{emp.employeeCode}}) {{emp.employeeName}}</button>
-                      </div>
-                  </div>
-                </div>
-                <input #editEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId" formControlName="empCustodianId">
+              style="color: red;">Invalid number</span>
+            <input class="form-control" type="text" id="empCustodianId" placeholder="Enter Custodian Employee ID"
+              formControlName="empCustodianId">
           </div>
           <div class="m-3">
-            <label for="termsAndConditions">Location</label>
             <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
               style="color: red;">*Required</span>
             <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
           </div>
-          <!-- <div class="m-3">
+          <div class="m-3">
             <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
               style="color: red;">*Required</span>
             <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
@@ -169,7 +133,7 @@
               style="color: red;">Invalid number</span>
             <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
               formControlName="approver3Status">
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
