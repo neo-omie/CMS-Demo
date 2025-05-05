@@ -10,6 +10,7 @@ import { MasterEmployee } from '../../../models/master-employee';
 import { GetAllDepartmentsDto } from '../../../models/master-department';
 import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
 import { CompanyMasterDto } from '../../../models/master-company';
+import { MasterApostille } from '../../../models/master-apostille';
 
 @Component({
   selector: 'app-add-contract',
@@ -25,10 +26,12 @@ export class AddContractComponent {
   employeeCustodians:MasterEmployee[] = [];
   departments:GetAllDepartmentsDto[] = [];
   contractTypes:ContractTypeMasterDTO[] = [];
+  apostilleTypes:MasterApostille[] = [];
   companies:CompanyMasterDto[] =[]
   ngOnInit() {
     this.getAllDepartments();
     this.getAllContractTypes();
+    this.getAllApostilleTypes();
     this.getAllCompanies();
   }
   getAllDepartments() {
@@ -46,6 +49,17 @@ export class AddContractComponent {
     this.contractsService.GetContractTypes().subscribe({
       next: (response:ContractTypeMasterDTO[]) => {
         this.contractTypes = response;
+      }, error: (error) => {
+        console.error('Error :(', error);
+        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+      }
+    });
+  }
+  getAllApostilleTypes() {
+    this.contractsService.GetApostilleTypes().subscribe({
+      next: (response:MasterApostille[]) => {
+        this.apostilleTypes = response;
       }, error: (error) => {
         console.error('Error :(', error);
         this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
