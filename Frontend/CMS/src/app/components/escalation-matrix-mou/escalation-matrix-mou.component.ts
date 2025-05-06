@@ -10,6 +10,7 @@ import { MasterEmployee } from '../../models/master-employee';
 import { TYPE } from '../auth/login/values.constants';
 import { Alert } from '../../utils/alert';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-escalation-matrix-mou',
@@ -49,8 +50,11 @@ approvers3:MasterEmployee[] = [];
     private escalationService: EscalationMatrixMouService,
     private router: Router,
     private renderer : Renderer2,
-    private approverMatrixContractService : ApproverMatrixContractService
-  ) {}
+    private approverMatrixContractService : ApproverMatrixContractService,
+    private title:Title
+  ) {
+    this.title.setTitle("Escalation Matrix (MOU) - CMS");
+  }
   closeEditApproverCollapses() {
     this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');
     this.renderer.removeClass(this.editApproverCollapse2.nativeElement,'show');

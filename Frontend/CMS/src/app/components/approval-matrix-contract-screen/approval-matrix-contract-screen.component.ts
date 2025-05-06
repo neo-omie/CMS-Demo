@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { Pagination } from '../../utils/pagination';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-approval-matrix-contract-screen',
@@ -37,7 +38,9 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   @ViewChild('editApproverId2') editApproverId2!: ElementRef;
   @ViewChild('editApproverId3') editApproverId3!: ElementRef;
   @ViewChild('editNumberOfDays') editNumberOfDays!: ElementRef;
-  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2){}
+  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2, private title:Title) {
+    this.title.setTitle("Approval Matrix (Contract) - CMS");
+  }
   ngOnInit(){
     this.GetApprovalMatrixContract(1 ,10);
   }

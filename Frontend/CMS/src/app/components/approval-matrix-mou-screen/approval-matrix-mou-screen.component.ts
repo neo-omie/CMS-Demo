@@ -7,6 +7,7 @@ import { MasterEmployee } from '../../models/master-employee';
 import { Pagination } from '../../utils/pagination';
 import { TYPE } from '../auth/login/values.constants';
 import { Alert } from '../../utils/alert';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-approval-matrix-mou-screen',
@@ -35,7 +36,9 @@ export class ApprovalMatrixMouScreenComponent implements OnInit {
     @ViewChild('editApproverId2') editApproverId2!: ElementRef;
     @ViewChild('editApproverId3') editApproverId3!: ElementRef;
     @ViewChild('editNumberOfDays') editNumberOfDays!: ElementRef;
-    constructor(private approverMatrixMouService : ApprovalMatrixMouService, private renderer : Renderer2){}
+    constructor(private approverMatrixMouService : ApprovalMatrixMouService, private renderer : Renderer2, private title:Title) {
+      this.title.setTitle("Approval Matrix (MOU) - CMS");
+    }
     ngOnInit(){
       this.GetApprovalMatrixMOU(1 ,10);
     }

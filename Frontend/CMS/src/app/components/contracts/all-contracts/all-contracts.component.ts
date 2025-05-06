@@ -8,6 +8,7 @@ import { ContractsService } from '../../../services/contracts.service';
 import { Pagination } from '../../../utils/pagination';
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-all-contracts',
@@ -27,7 +28,9 @@ export class AllContractsComponent implements OnInit {
   ngOnInit(): void {
     this.GetAllContracts(1, 10);
   }
-  constructor(private contractsService: ContractsService, private router: Router,private renderer : Renderer2) {}
+  constructor(private contractsService: ContractsService, private router: Router,private renderer : Renderer2, private title:Title) {
+    this.title.setTitle("All Contracts - CMS");
+  }
 
   GetAllContracts(pageNumber: number, pageSize: number) {
       this.contractsService.getContracts(pageNumber, pageSize).subscribe({
