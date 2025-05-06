@@ -10,15 +10,26 @@ import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
 import { Title } from '@angular/platform-browser';
+import { ApprovalMatrixContract } from '../../models/approval-matrix-contract';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-escalation-matrix-contract',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, MatTableModule,MatSortModule,MatFormFieldModule,MatInputModule],
   templateUrl: './escalation-matrix-contract.component.html',
   styleUrl: './escalation-matrix-contract.component.css',
 })
 export class EscalationMatrixContractComponent implements OnInit {
+  displayedColumns: string[] = ['departmentName', 'escalation1', 'escalation2', 'escalation3', 'action'];
+    dataSource = new MatTableDataSource<EscalationMatrixContract>();
+    @ViewChild(MatSort) sort!: MatSort;
+    ngAfterViewInit() {
+      this.dataSource.sort = this.sort;
+    }
   loading: boolean = true;
   approvers1:MasterEmployee[] = [];
   approvers2:MasterEmployee[] = [];
@@ -70,7 +81,10 @@ export class EscalationMatrixContractComponent implements OnInit {
       .getAllMatrixContract(pageNumber, pageSize)
       .subscribe((res) => {
         this.loading = false;
-        
+        this.dataSource.data = res.getEscalationMatrixContractDto;
+        if (this.sort) {
+          this.dataSource.sort = this.sort;
+        }
         this.matrixContracts = res;
         this.pageNumbers[0] = pageNumber;
         console.log(res.getEscalationMatrixContractDto);
