@@ -22,6 +22,7 @@
     "@angular/router": "^18.2.0",
     "@sweetalert2/ngx-sweetalert2": "^13.0.0",
     "bootstrap": "^5.3.5",
+    "datatables.net-dt": "^2.3.0",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
