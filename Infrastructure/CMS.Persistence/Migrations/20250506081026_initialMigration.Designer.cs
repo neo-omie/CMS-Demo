@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506081026_initialMigration.Designer.cs
     [Migration("20250506081026_initialMigration")]
     partial class initialMigration
+========
+    [Migration("20250506043546_updatedDocumentEntity")]
+    partial class updatedDocumentEntity
+>>>>>>>> 0d24baa3920bd995b9ec4dfffda2b0be39e6add2:Infrastructure/CMS.Persistence/Migrations/20250506043546_updatedDocumentEntity.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1140,11 +1145,19 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506081026_initialMigration.Designer.cs
                     b.Property<byte[]>("DocumentData")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("DocumentName")
+========
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+>>>>>>>> 0d24baa3920bd995b9ec4dfffda2b0be39e6add2:Infrastructure/CMS.Persistence/Migrations/20250506043546_updatedDocumentEntity.Designer.cs
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1154,6 +1167,10 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UniqueDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -1230,7 +1247,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506081026_initialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEAh65KObHtk6g6nbyhUDnjXj6s1DbEsBwPCiJ6ECCyCNVe5WyNsHsrVit0asWWczmg==",
+========
+                            Password = "AQAAAAIAAYagAAAAEOBEQEpNcauDBqADgJqnrSjMdxxHrnkx/w442sOz7D0iyJnyMY3fIj0Scz/zXULvSw==",
+>>>>>>>> 0d24baa3920bd995b9ec4dfffda2b0be39e6add2:Infrastructure/CMS.Persistence/Migrations/20250506043546_updatedDocumentEntity.Designer.cs
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1245,7 +1266,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506081026_initialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEEpjNRzCixhCSv/MrHURY6RKdm0aYDjnzoee3S8p/eGH2qnYTz1IsQj1TyWPoaBmVw==",
+========
+                            Password = "AQAAAAIAAYagAAAAEJAkMaxXsbz8yDp8fmLU5051/Rg0uc5a7O+hOiWzlxxG0zvn1LhQzDnOxaCPAPbjKg==",
+>>>>>>>> 0d24baa3920bd995b9ec4dfffda2b0be39e6add2:Infrastructure/CMS.Persistence/Migrations/20250506043546_updatedDocumentEntity.Designer.cs
                             Role = "MOU_User",
                             Unit = "Thane"
                         });

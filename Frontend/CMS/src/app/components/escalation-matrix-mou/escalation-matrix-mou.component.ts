@@ -10,19 +10,30 @@ import { MasterEmployee } from '../../models/master-employee';
 import { TYPE } from '../auth/login/values.constants';
 import { Alert } from '../../utils/alert';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
+import { Title } from '@angular/platform-browser';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-escalation-matrix-mou',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './escalation-matrix-mou.component.html',
   styleUrl: './escalation-matrix-mou.component.css'
 })
 export class EscalationMatrixMouComponent {
-loading: boolean = true;
-approvers1:MasterEmployee[] = [];
-approvers2:MasterEmployee[] = [];
-approvers3:MasterEmployee[] = [];
+  loading: boolean = true;
+  displayedColumns: string[] = ['departmentName', 'escalation1', 'escalation2', 'escalation3', 'action'];
+  dataSource = new MatTableDataSource<MasterEscalationMatrixMouDto>();
+  @ViewChild(MatSort) sort!: MatSort;
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+  approvers1:MasterEmployee[] = [];
+  approvers2:MasterEmployee[] = [];
+  approvers3:MasterEmployee[] = [];
   @ViewChild('editApproverCollapse1') editApproverCollapse1!: ElementRef;
   @ViewChild('editApproverCollapse2') editApproverCollapse2!: ElementRef;
   @ViewChild('editApproverCollapse3') editApproverCollapse3!: ElementRef;
@@ -49,8 +60,11 @@ approvers3:MasterEmployee[] = [];
     private escalationService: EscalationMatrixMouService,
     private router: Router,
     private renderer : Renderer2,
-    private approverMatrixContractService : ApproverMatrixContractService
-  ) {}
+    private approverMatrixContractService : ApproverMatrixContractService,
+    private title:Title
+  ) {
+    this.title.setTitle("Escalation Matrix (MOU) - CMS");
+  }
   closeEditApproverCollapses() {
     this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');
     this.renderer.removeClass(this.editApproverCollapse2.nativeElement,'show');
@@ -65,7 +79,10 @@ approvers3:MasterEmployee[] = [];
       .getAllMatrixMou(pageNumber, pageSize)
       .subscribe((res) => {
         this.loading = false;
-        
+        this.dataSource.data = res;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
         this.matrixMous = res;
         this.pageNumbers[0] = pageNumber;
         if (this.matrixMous != undefined && this.matrixMous.length > 0) {

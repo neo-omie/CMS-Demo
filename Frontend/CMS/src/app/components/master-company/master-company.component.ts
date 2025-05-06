@@ -9,6 +9,7 @@ import { TYPE } from '../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { Pagination } from '../../utils/pagination';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-company',
@@ -34,8 +35,11 @@ export class MasterCompanyComponent implements OnInit{
 
   constructor(
     private companyService: CompanyMasterService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private title: Title
+  ) {
+    this.title.setTitle("Company Master - CMS");
+  }
 
   ngOnInit(): void {
     this.getCompanies();

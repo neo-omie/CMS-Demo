@@ -6,6 +6,7 @@ import { PasswordRenewal } from '../../../models/auth/login';
 import { TYPE } from '../login/values.constants';
 import Swal from 'sweetalert2';
 import { RouterService } from '../../../services/router.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-renew-password',
@@ -18,7 +19,9 @@ export class RenewPasswordComponent {
   renewModel:PasswordRenewal = new PasswordRenewal('', '', '', '');
   errorMsg = '';
   loginPasswordEyeOpen = false;
-  constructor(private userService:UserService, private route:RouterService) {}
+  constructor(private userService:UserService, private route:RouterService, private title:Title) {
+    this.title.setTitle("Renew Password - CMS");
+  }
   ngonInit() {}
   loginPasswordEyeToggle(){
     this.loginPasswordEyeOpen = !this.loginPasswordEyeOpen;
