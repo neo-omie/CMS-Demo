@@ -2,9 +2,10 @@
 <br>
 <h2>List Of Employees</h2>
 <br>
-<div class="container">
-    <!-- Filter Logic -->
-  <button class="btn" (click)="addEmployee()">Add Employee</button>
+<div class="containerfirst">
+  <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-primary">
+    <a><i class="fa-solid fa-file-circle-plus"></i> Add Employee</a>
+  </button>
   <div class="input-group">
     <span class="input-group-text">Unit</span>
     <select class="form-select" id="unitFilter" [(ngModel)]="selectedUnit" (change)="onFilterChange()">
@@ -16,12 +17,139 @@
   </div>
   <input class="form-control" type="text" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
 </div>
+
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="employee-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Employee' : mode==='edit' ? 'Edit Employee' :'View Employee'}}</h1>
+        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center">
+                <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()" *ngIf="mode!=='view'">
+                  <div class="fields-container">
+                    <div class="m-3">
+                      <label for="employeeName" class="form-label">Employee Name<span style="color: red;">*</span></label>
+                      <span *ngIf="employeeName?.hasError('required') && (employeeName?.dirty || employeeName?.touched)" style="color: red;">Required</span>
+                      <input class="form-control" type="text" id="employeeName" placeholder="Enter employee name" formControlName="employeeName">
+                    </div>
+      
+                    <div class="m-3" *ngIf="mode!=='edit'">
+                      <label for="password" class="form-label">Password<span style="color: red;">*</span></label>
+                      <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)" style="color: red;">Required</span>
+                      <input class="form-control" type="text" id="password" placeholder="Enter employee password" formControlName="password" autocomplete="off">
+                    </div>
+      
+                    <div class="m-3">
+                      <label for="role" class="form-label">Role<span style="color: red;">*</span></label>
+                      <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">Required</span>
+                      <select class="form-select" id="roleSelect" placeholder="Select Role"  formControlName="role">
+                        <option value="" disabled selected>--Select Role--</option>
+                        <option value="Management User">Management User</option>
+                        <option value="MOU_User">MOU_User</option>
+                        <option value="MOU_Approver">MOU_Approver</option>
+                        <option value="Contract_User">Contract_User</option>
+                        <option value="Contract_Approver">Contract_Approver</option>
+                      </select>
+                    </div>
+      
+                    <div class="m-3">
+                      <label for="employeeCode" class="form-label">Employee Code<span style="color: red;">*</span></label>
+                      <span *ngIf="employeeCode?.hasError('required') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">Required</span>
+                      <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee code" formControlName="employeeCode">
+                    </div>
+    
+                    <div class="m-3">
+                      <label for="unit" class="form-label">Unit<span style="color: red;">*</span></label>
+                      <span *ngIf="unit?.hasError('required') && (unit?.dirty || unit?.touched)" style="color: red;">Required</span>
+                      <select class="form-select" id="unit" placeholder="Select Unit"  formControlName="unit">
+                        <option value="" disabled selected>--Select Unit--</option>
+                        <option value="Thane">Thane</option>
+                        <option value="Indore">Indore</option>
+                        <option value="Pune">Pune</option>  
+                      </select>
+                    </div>
+      
+                    <div class="m-3">
+                      <label for="departmentId" class="form-label">Department<span style="color: red;">*</span></label>
+                      <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)" style="color: red;">Required</span>
+                      <select class="form-select" id="departmentId" placeholder="Select department name" formControlName="departmentId">
+                        <option value="" disabled selected>--Select Department--</option>
+                        <option *ngFor="let department of departments" [value]="department.departmentId">{{department.departmentName}}</option>
+                      </select>
+                    </div>
+      
+                    <div class="m-3">
+                      <label for="employeeMobile" class="form-label">Employee Mobile<span style="color: red;">*</span></label>
+                      <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">Required</span>
+                      <input class="form-control" type="tel" id="employeeMobile" placeholder="Enter employee mobile" formControlName="employeeMobile">
+                    </div>
+      
+                    <div class="m-3">
+                      <label for="email" class="form-label">Email<span style="color: red;">*</span></label>
+                      <span *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)" style="color: red;">Required</span>
+                      <span *ngIf="email?.hasError('email') && (email?.dirty || email?.touched)" style="color: red;">*Invalid Email</span>
+                      <input class="form-control" type="email" id="email" placeholder="Enter your email" formControlName="email">
+                    </div>
+      
+                    <div class="m-3">
+                      <label for="employeeExtension" class="form-label">Employee Ext<span style="color: red;">*</span></label>
+                      <span *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)" style="color: red;">Required</span>
+                      <input class="form-control" type="text" id="employeeExtension" placeholder="Enter employee extension" formControlName="employeeExtension">
+                    </div>
+    
+                  </div>
+    
+                
+                  <div class="d-flex justify-content-center gap-2">
+                    <button type="submit" class="btn btn-primary" style="background-color: #5f5fee;" [disabled]="addEmployeeForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+                </form>
+    
+                <div class="view-mode" *ngIf="mode==='view'">
+                  <div class="m-3">
+                    <strong>Employee Name: </strong>{{addEmployeeForm.get('employeeName')?.value}}
+                  </div>
+                  <div class="m-3">
+                    <strong>Role: </strong>{{addEmployeeForm.get('role')?.value}}
+                  </div>
+                  <div class="m-3">
+                    <strong>Employee Code: </strong>{{addEmployeeForm.get('employeeCode')?.value}}
+                  </div>
+                  <div class="m-3">
+                    <strong>Unit: </strong>{{addEmployeeForm.get('unit')?.value}}
+                  </div>
+                  <div class="m-3">
+                    <strong>Department: </strong>{{addEmployeeForm.get('departmentName')?.value}}
+                  </div>
+                  <div class="m-3">
+                    <strong>Employee Mobile:</strong> {{ addEmployeeForm.get('employeeMobile')?.value }}
+                  </div>
+                  <div class="m-3">
+                    <strong>Email:</strong> {{ addEmployeeForm.get('email')?.value }}
+                  </div>
+                  <div class="m-3">
+                    <strong>Employee Extension:</strong> {{ addEmployeeForm.get('employeeExtension')?.value }}
+                  </div>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Back</button>
+                  </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Table  -->
 <div *ngIf="!loading" class="table-responsive p-3">
     <table class="table align-middle table-bordered table-striped">
         <thead>
             <tr>
-                <th>ValueId</th>
                 <th>Employee Name</th>
                 <th>Employee Location</th>
                 <th>Roles</th>
@@ -30,14 +158,13 @@
         </thead>
         <tbody>
             <tr *ngFor="let employee of employees"> 
-                <td>{{employee.valueId}}</td>
                 <td>{{employee.employeeName}}</td>
                 <td>{{employee.unit}}</td>
                 <td>{{employee.role}}</td>
                 <td>
-                    <i class="fa-solid fa-pen-to-square icon" title="Edit" (click)="editEmployee(employee)"></i>
-                    <i class="fa-solid fa-eye icon" title="View" (click)="viewEmployee(employee)"></i>
-                    <i class="fa-solid fa-trash icon" title="Delete" (click)="deleteEmployee(employee)"></i>
+                    <i class="fa-solid fa-pen-to-square icon" aria-label="Edit Employee"  title="Edit" (click)="editEmployee(employee)"></i>
+                    <i class="fa-solid fa-eye icon" aria-label="View Employee"  title="View" (click)="viewEmployee(employee)"></i>
+                    <i class="fa-solid fa-trash icon" aria-label="Delete Employee"  title="Delete" (click)="deleteEmployee(employee)"></i>
                 </td>
             </tr> 
         </tbody>

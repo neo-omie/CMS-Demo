@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TYPE } from './values.constants';;
 import { RouterService } from '../../../services/router.service';
 import { Alert } from '../../../utils/alert';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,9 @@ export class LoginComponent {
   })
   errorMsg = '';
   loginPasswordEyeOpen = false;
-  constructor(private userService:UserService, private route:RouterService) {}
+  constructor(private userService:UserService, private route:RouterService, private title:Title) {
+    this.title.setTitle("Login - CMS");
+  }
   ngonInit() {}
   loginUser() {
     if(this.loginForm.invalid){

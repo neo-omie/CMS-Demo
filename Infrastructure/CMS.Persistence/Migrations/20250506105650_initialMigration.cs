@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedDocumentEntity : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -368,7 +368,7 @@ namespace CMS.Persistence.Migrations
                 {
                     ValueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmployeeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -376,14 +376,16 @@ namespace CMS.Persistence.Migrations
                     EmployeeCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmployeeMobile = table.Column<long>(type: "bigint", nullable: false),
-                    EmployeeExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployeeExtension = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     LastPasswordChanged = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MasterEmployees", x => x.ValueId);
+                    table.UniqueConstraint("AK_MasterEmployees_Email", x => x.Email);
                     table.UniqueConstraint("AK_MasterEmployees_EmployeeCode", x => x.EmployeeCode);
+                    table.UniqueConstraint("AK_MasterEmployees_EmployeeMobile", x => x.EmployeeMobile);
                 });
 
             migrationBuilder.CreateTable(
@@ -748,8 +750,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEOBEQEpNcauDBqADgJqnrSjMdxxHrnkx/w442sOz7D0iyJnyMY3fIj0Scz/zXULvSw==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJAkMaxXsbz8yDp8fmLU5051/Rg0uc5a7O+hOiWzlxxG0zvn1LhQzDnOxaCPAPbjKg==", "MOU_User", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==", "MOU_User", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(

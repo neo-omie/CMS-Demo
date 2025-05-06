@@ -7,16 +7,26 @@ import { Pagination } from '../../utils/pagination';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { FormsModule, NgForm } from '@angular/forms';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-master-department',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule],
+  imports: [CommonModule, LoaderComponent, FormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './master-department.component.html',
   styleUrl: './master-department.component.css'
 })
 export class MasterDepartmentComponent {
   loading: boolean = true
+  displayedColumns: string[] = ['departmentName', 'action'];
+    dataSource = new MatTableDataSource<GetAllDepartmentsDto>();
+    @ViewChild(MatSort) sort!: MatSort;
+    ngAfterViewInit() {
+      this.dataSource.sort = this.sort;
+    }
   pageNumbers: number[] = [];
   maxPage: number = 1;
   departments: GetAllDepartmentsDto[] = [];
@@ -34,6 +44,10 @@ export class MasterDepartmentComponent {
     this.departmentService.getAllDepartments(pageNumber, pageSize).subscribe({
       next: (response: GetAllDepartmentsDto[]) => {
         this.loading = false;
+        this.dataSource.data = response;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
         this.departments = response;
         if (this.departments != undefined && this.departments.length > 0) {
           let result = Pagination.paginator(pageNumber, this.departments[0].totalRecords, pageSize)

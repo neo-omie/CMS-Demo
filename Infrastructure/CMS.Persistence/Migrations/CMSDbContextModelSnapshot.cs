@@ -1173,15 +1173,14 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EmployeeExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmployeeExtension")
+                        .HasColumnType("int");
 
                     b.Property<long>("EmployeeMobile")
                         .HasColumnType("bigint");
@@ -1210,6 +1209,10 @@ namespace CMS.Persistence.Migrations
 
                     b.HasKey("ValueId");
 
+                    b.HasAlternateKey("Email");
+
+                    b.HasAlternateKey("EmployeeMobile");
+
                     b.ToTable("MasterEmployees");
 
                     b.HasData(
@@ -1219,12 +1222,12 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 1,
                             Email = "admin@cms.com",
                             EmployeeCode = "NEO1",
-                            EmployeeExtension = "Main person",
+                            EmployeeExtension = 2467,
                             EmployeeMobile = 7777766666L,
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEOBEQEpNcauDBqADgJqnrSjMdxxHrnkx/w442sOz7D0iyJnyMY3fIj0Scz/zXULvSw==",
+                            Password = "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1234,12 +1237,12 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 2,
                             Email = "sarthak@neosoft.com",
                             EmployeeCode = "NEO2",
-                            EmployeeExtension = "IT Smart",
+                            EmployeeExtension = 8976,
                             EmployeeMobile = 9999988888L,
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEJAkMaxXsbz8yDp8fmLU5051/Rg0uc5a7O+hOiWzlxxG0zvn1LhQzDnOxaCPAPbjKg==",
+                            Password = "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==",
                             Role = "MOU_User",
                             Unit = "Thane"
                         });

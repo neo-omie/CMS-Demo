@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,5 +10,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './contracts-screen.component.css'
 })
 export class ContractsScreenComponent {
-
+  constructor(private title:Title) {
+    this.title.setTitle("Contracts - CMS");
+  }
 }

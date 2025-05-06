@@ -1,9 +1,31 @@
-.container{
+.containerfirst {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    /* flex-wrap: wrap; */
+    gap: 1rem; 
+    padding: 0.625rem;
+    margin: 0 10px;
+    /* flex-wrap: wrap;  */
 }
+
+.containerfirst .add-btn {
+    display: flex;
+    align-items: center;
+    height: 2.375rem;
+    padding: 0.625rem 0.9375rem;
+    width:26%; 
+}
+  
+.containerfirst .input-group {
+    display: flex;
+    align-items: center;
+    height: 38px;
+}
+  
+.containerfirst .form-select,
+.containerfirst .form-control {
+    height: 38px;
+}
+
 h2 {
     color: #5f5fee;
     font-weight: 600;
@@ -40,7 +62,26 @@ td{
     color: whitesmoke;
 }
 
-.btn{
+.add-btn {
+    color: rgba(95, 95, 238);
+    background-color: whitesmoke;
+    border-color: #5f5fee;
+}
+.add-btn:hover{
+    background-color: #5f5fee;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+.modal-header{
+    background-color: #5f5fee;
     color: white;
-    background-color:#5f5fee ;
+}
+.close-btn{
+    border-color: whitesmoke;
+    color: whitesmoke;
+}
+.close-btn:hover{
+    background-color: whitesmoke;
+    color: #5f5fee;
 }
