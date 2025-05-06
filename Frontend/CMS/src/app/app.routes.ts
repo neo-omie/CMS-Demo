@@ -26,6 +26,7 @@ import { CreateClassifiedContractComponent } from './components/classifiedContra
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 import { MasterCompanyUpdateFormComponent } from './components/master-company-update-form/master-company-update-form.component';
 import { UpdateContractComponent } from './components/contracts/update-contract/update-contract.component';
+import { AddApostilleComponent } from './components/add-apostille/add-apostille.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 

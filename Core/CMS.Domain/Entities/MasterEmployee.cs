@@ -15,7 +15,7 @@ namespace CMS.Domain.Entities
         public string EmployeeCode { get; set; }
         public string Unit { get; set; }
         public long EmployeeMobile { get; set; }
-        public string EmployeeExtension { get; set; }
+        public int EmployeeExtension { get; set; }
         public int DepartmentId { get; set; }
         public DateTime LastPasswordChanged { get; set; }
     }

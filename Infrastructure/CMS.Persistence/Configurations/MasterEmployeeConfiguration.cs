@@ -21,7 +21,7 @@ namespace CMS.Persistence.Configurations
                     Unit = "Thane",
                     Role = "Admin",
                     EmployeeMobile = 7777766666,
-                    EmployeeExtension = "Main person",
+                    EmployeeExtension = 2467,
                     DepartmentId = 1,
                     Password = hasher.HashPassword(null, "Admin@123"),
                     LastPasswordChanged = new DateTime(2025, 04, 15)
@@ -36,7 +36,7 @@ namespace CMS.Persistence.Configurations
                     Unit = "Thane",
                     Role = "MOU_User",
                     EmployeeMobile = 9999988888,
-                    EmployeeExtension = "IT Smart",
+                    EmployeeExtension = 8976,
                     DepartmentId = 2,
                     Password = hasher.HashPassword(null, "Sarthak@12"),
                     LastPasswordChanged = new DateTime(2025, 01, 10)
