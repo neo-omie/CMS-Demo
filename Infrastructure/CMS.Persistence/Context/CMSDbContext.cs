@@ -73,7 +73,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<GetAllApprovalMatrixMOUByIdDto>().Entity<GetAllApprovalMatrixMOUByIdDto>().HasNoKey();
             modelBuilder.Ignore<GetAllApprovalMatrixMOUDto>().Entity<GetAllApprovalMatrixMOUDto>().HasNoKey();
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
-            modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);
+            modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.Email);
+            modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeMobile);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
