@@ -8,16 +8,26 @@ import { Pagination } from '../../utils/pagination';
 import { TYPE } from '../auth/login/values.constants';
 import { Alert } from '../../utils/alert';
 import { Title } from '@angular/platform-browser';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-approval-matrix-mou-screen',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './approval-matrix-mou-screen.component.html',
   styleUrl: './approval-matrix-mou-screen.component.css'
 })
 export class ApprovalMatrixMouScreenComponent implements OnInit {
   loading:boolean = true
+  displayedColumns: string[] = ['departmentName', 'approverName1', 'approverName2', 'approverName3', 'action'];
+  dataSource = new MatTableDataSource<ApprovalMatrixMou>();
+  @ViewChild(MatSort) sort!: MatSort;
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
   approvers1:MasterEmployee[] = [];
   approvers2:MasterEmployee[] = [];
   approvers3:MasterEmployee[] = [];
@@ -55,6 +65,10 @@ export class ApprovalMatrixMouScreenComponent implements OnInit {
       this.approverMatrixMouService.GetApprovalMatrixMOU(pageNumber, pageSize).subscribe({
         next:(response:ApprovalMatrixMou[]) => {
           this.loading = false;
+          this.dataSource.data = response;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
           this.approvalMatrixMOUs = response;
           if(this.approvalMatrixMOUs != undefined && this.approvalMatrixMOUs.length > 0){
             let result = Pagination.paginator(pageNumber,this.approvalMatrixMOUs[0].totalRecords,pageSize)
