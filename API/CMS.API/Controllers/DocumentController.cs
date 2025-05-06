@@ -61,66 +61,8 @@ namespace CMS.API.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
         {
-            if (model.File == null || model.File.Length == 0)
-            {
-                return BadRequest("No file uploaded.");
-            }
-
-            const long maxFileSize = 25 * 1024 * 1024;
-            if (model.File.Length > maxFileSize)
-            {
-                return BadRequest("File size exceeds the 25MB limit.");
-            }
-
-            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
-            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
-
-            if (!allowedExtensions.Contains(fileExtension))
-            {
-                return BadRequest("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png).");
-            }
-
-            using var memoryStream = new MemoryStream();
-            await model.File.CopyToAsync(memoryStream);
-            var fileBytes = memoryStream.ToArray();
-            var fileHash = Convert.ToBase64String(SHA256.Create().ComputeHash(fileBytes));
-
-            var existingDocument = await _context.MasterDocuments
-                .FirstOrDefaultAsync(d => d.UniqueDocumentName == fileHash);
-
-            if (existingDocument != null)
-            {
-                return BadRequest("A document with the same content has already been uploaded.");
-            }
-
-            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-            var originalFileName = Path.GetFileName(model.File.FileName);
-
-            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
-
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await model.File.CopyToAsync(stream);
-            }
-
-            var document = new MasterDocument
-            {
-                DocumentPath = $"uploads/{filePath}", 
-                DisplayDocumentName = originalFileName,
-                UniqueDocumentName = fileHash, 
-                status = model.Status
-            };
-
-            await _context.MasterDocuments.AddAsync(document);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "File uploaded successfully." });
+            var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model));
+            return Ok(uploadDoc);
         }
 
         [HttpPost]

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
+using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +20,11 @@ namespace CMS.Persistence.Repositories
     {
         private readonly CMSDbContext _context;
 
-        public DocumentRepository(CMSDbContext context)
+        private readonly IWebHostEnvironment _environment;
+        public DocumentRepository(CMSDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public async Task<(IEnumerable<MasterDocument> , int )> GetAllDocuments(int pageNumber, int pageSize)
@@ -67,16 +72,68 @@ namespace CMS.Persistence.Repositories
         }
 
 
-        public async Task<int> UploadDocument(MasterDocument masterDocument)
+        public async Task<string> UploadDocument(DocumentUploadDto model)
         {
-              await _context.MasterDocuments.AddAsync(masterDocument);
-            int  affectedRows = await _context.SaveChangesAsync();
-            if (affectedRows < 0)
+            if (model.File == null || model.File.Length == 0)
             {
-                throw new Exception("Something went wrong try again later");
-
+                throw new Exception("No file uploaded.");
             }
-            return affectedRows;
+
+            const long maxFileSize = 25 * 1024 * 1024;
+            if (model.File.Length > maxFileSize)
+            {
+                throw new Exception("File size exceeds the 25MB limit.");
+            }
+
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png).");
+            }
+
+            using var memoryStream = new MemoryStream();
+            await model.File.CopyToAsync(memoryStream);
+            var fileBytes = memoryStream.ToArray();
+            var fileHash = Convert.ToBase64String(SHA256.Create().ComputeHash(fileBytes));
+
+            var existingDocument = await _context.MasterDocuments
+                .FirstOrDefaultAsync(d => d.UniqueDocumentName == fileHash);
+
+            if (existingDocument != null)
+            {
+                throw new Exception("A document with the same content has already been uploaded.");
+            }
+
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+            var originalFileName = Path.GetFileName(model.File.FileName);
+
+            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
+
+            var document = new MasterDocument
+            {
+                DocumentPath = $"uploads/{filePath}",
+                DisplayDocumentName = originalFileName,
+                UniqueDocumentName = fileHash,
+                status = model.Status
+            };
+
+            await _context.MasterDocuments.AddAsync(document);
+            if (await _context.SaveChangesAsync() > 0)
+                return "Document uploaded successfully";
+            throw new Exception("For some reasons, document not uploaded");
         }
 
         public async Task<int> DeleteDocument(int id)
