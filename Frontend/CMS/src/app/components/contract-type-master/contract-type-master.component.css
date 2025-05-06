@@ -3,7 +3,17 @@ h2 {
     font-weight: 600;
     text-align: center;
 }
-
+.add-btn {
+    color: rgba(95, 95, 238);
+    background-color: whitesmoke;
+    border-color: #5f5fee;
+}
+.add-btn:hover{
+    background-color: #5f5fee;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}
 thead tr, thead tr th{
     background-color: #5f5fee;
 }

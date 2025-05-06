@@ -9,6 +9,7 @@ import { MasterEmployee } from '../../models/master-employee';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-escalation-matrix-contract',
@@ -49,8 +50,11 @@ export class EscalationMatrixContractComponent implements OnInit {
     private escalationService: EscalationMatrixContractService,
     private router: Router,
     private renderer : Renderer2,
-    private approverMatrixContractService : ApproverMatrixContractService
-  ) {}
+    private approverMatrixContractService : ApproverMatrixContractService,
+    private title:Title
+  ) {
+    this.title.setTitle("Escalation Matrix (Contract) - CMS");
+  }
 
   closeEditApproverCollapses() {
     this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');

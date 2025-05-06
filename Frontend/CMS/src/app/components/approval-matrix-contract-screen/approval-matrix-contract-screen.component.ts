@@ -14,6 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-approval-matrix-contract-screen',
   standalone: true,
@@ -48,7 +50,9 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   @ViewChild('editApproverId2') editApproverId2!: ElementRef;
   @ViewChild('editApproverId3') editApproverId3!: ElementRef;
   @ViewChild('editNumberOfDays') editNumberOfDays!: ElementRef;
-  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2){}
+  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2, private title:Title) {
+    this.title.setTitle("Approval Matrix (Contract) - CMS");
+  }
   ngOnInit(){
     this.GetApprovalMatrixContract(1,10);
   }

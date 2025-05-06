@@ -1,7 +1,7 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="mt-3">Contracts List - All</h2>
 <div *ngIf="!loading" class="table-responsive p-3">
-  <button class="btn btn-outline-primary mb-2">
+  <button class="add-btn btn btn-outline-primary mb-2">
     <a routerLink="/contracts/addNewContract"><i class="fa-solid fa-file-circle-plus"></i> Add New Contract</a>
   </button>
   <table class="table align-middle table-bordered table-striped">
@@ -187,7 +187,7 @@
           <div class="mb-3">
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>1</b></span>
-                <input *ngIf="contractDetails?.approver1Status == 1" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Pending Approval" style="background-color: yellow;" disabled>
+                <input *ngIf="contractDetails?.approver1Status == 1" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
                 <input *ngIf="contractDetails?.approver1Status == 2" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Active" style="background-color: greenyellow;" disabled>
                 <input *ngIf="contractDetails?.approver1Status == 3" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Rejected" style="background-color: orangered;" disabled>
                 <input *ngIf="contractDetails?.approver1Status == 4" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Terminated" disabled>
@@ -198,14 +198,22 @@
           <div class="mb-3">
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>2</b></span>
-                <input type="text" name="approver2Status" class="form-control" id="approver2Status" [value]="contractDetails?.approver2Status" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 1" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 2" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Active" style="background-color: greenyellow;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 3" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Rejected" style="background-color: orangered;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 4" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Terminated" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 5" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Expired" style="background-color: darkgray;" disabled>
             </div>
           </div>
           <h1 class="modal-title fs-6 mb-3">Approver L3 Status</h1>
           <div class="mb-3">
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span>
-                <input type="text" name="approver3Status" class="form-control" id="approver3Status" [value]="contractDetails?.approver3Status" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 1" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 2" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Active" style="background-color: greenyellow;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 3" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Rejected" style="background-color: orangered;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 4" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Terminated" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
             </div>
           </div>
           <h1 class="modal-title fs-6 mb-3">Does exists or deleted?</h1>
