@@ -55,7 +55,7 @@
              <td>
                <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#document-edit" (click)="GetDocument(doc.valueId)"></i>   
                <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#document-detail" (click)="GetDocument(doc.valueId)"></i>
-               <i class="fa-regular fa-trash-can icon" data-bs-toggle="modal" data-bs-target="#document-delete" (click)="deleteDocument(doc.valueId)"></i></td>
+               <i class="fa-regular fa-trash-can icon"  (click)="deleteDocument(doc.valueId)"></i></td>
 
         </tr>
     </tbody>

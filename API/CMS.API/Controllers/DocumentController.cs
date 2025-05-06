@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using Azure.Core;
 using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterDocuments;
@@ -54,6 +55,14 @@ namespace CMS.API.Controllers
         {
             var getDocs = await _mediator.Send(new GetDocumentByIdQuery(id));
             return Ok(getDocs);
+        }
+
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
+        {
+            var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model));
+            return Ok(uploadDoc);
         }
 
         [HttpPost]
