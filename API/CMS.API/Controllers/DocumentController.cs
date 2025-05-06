@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using Azure.Core;
 using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterDocuments;
@@ -65,41 +66,44 @@ namespace CMS.API.Controllers
                 return BadRequest("No file uploaded.");
             }
 
-            // Max file size = 25 MB
             const long maxFileSize = 25 * 1024 * 1024;
             if (model.File.Length > maxFileSize)
             {
                 return BadRequest("File size exceeds the 25MB limit.");
             }
 
-            // Allowed file extensions
             var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
             var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
 
             if (!allowedExtensions.Contains(fileExtension))
             {
-                return BadRequest("Unsupported file format. Allowed formats: PDF, Word (.doc, .docx), and Images (.jpg, .png).");
+                return BadRequest("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png).");
             }
 
-           
+            using var memoryStream = new MemoryStream();
+            await model.File.CopyToAsync(memoryStream);
+            var fileBytes = memoryStream.ToArray();
+            var fileHash = Convert.ToBase64String(SHA256.Create().ComputeHash(fileBytes));
+
+            var existingDocument = await _context.MasterDocuments
+                .FirstOrDefaultAsync(d => d.UniqueDocumentName == fileHash);
+
+            if (existingDocument != null)
+            {
+                return BadRequest("A document with the same content has already been uploaded.");
+            }
+
             var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
-
-
-            
-            // Generate a GUID filename
-            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
-
-            // Get original filename for display
             var originalFileName = Path.GetFileName(model.File.FileName);
 
-            // Combine path using the unique name
+            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            // Save the file
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await model.File.CopyToAsync(stream);
@@ -107,7 +111,9 @@ namespace CMS.API.Controllers
 
             var document = new MasterDocument
             {
-                DocumentName = $"uploads/{fileName}", // use just the relative path
+                DocumentPath = $"uploads/{filePath}", 
+                DisplayDocumentName = originalFileName,
+                UniqueDocumentName = fileHash, 
                 status = model.Status
             };
 

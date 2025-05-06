@@ -55,14 +55,15 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<int> AddDocument(MasterDocument masterDocument)
         {
-            string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
-           int affectedRows = await _context.Database.ExecuteSqlRawAsync(sql,null,masterDocument.DocumentName, masterDocument.status,masterDocument.DocumentType,masterDocument.DocumentData,masterDocument.IsDeleted);
-            if (affectedRows < 0)
-            {
-            throw new Exception("Something went wrong try again later");
-                
-            }
-            return affectedRows;
+            // string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
+            //int affectedRows = await _context.Database.ExecuteSqlRawAsync(sql,null,masterDocument.DocumentName, masterDocument.status,masterDocument.DocumentType,masterDocument.DocumentData,masterDocument.IsDeleted);
+            // if (affectedRows < 0)
+            // {
+            // throw new Exception("Something went wrong try again later");
+
+            // }
+            // return affectedRows;
+            return 1;
         }
 
 
@@ -94,15 +95,15 @@ namespace CMS.Persistence.Repositories
 
         public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
         {
-            string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
-            int affectedRows = await  _context.Database.ExecuteSqlRawAsync(sql,id,masterDocument.DocumentName, masterDocument.status, masterDocument.DocumentType, masterDocument.DocumentData, masterDocument.IsDeleted);
+            //string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
+            //int affectedRows = await  _context.Database.ExecuteSqlRawAsync(sql,id,masterDocument.DocumentName, masterDocument.status, masterDocument.DocumentType, masterDocument.DocumentData, masterDocument.IsDeleted);
 
-            if (affectedRows > 0)
-            {
-                return affectedRows;
-            }
-            throw new Exception("Something went wrong try again later");
-           
+            //if (affectedRows > 0)
+            //{
+            //    return affectedRows;
+            //}
+            //throw new Exception("Something went wrong try again later");
+            return 1;
         }
 
         

@@ -8,20 +8,22 @@ namespace CMS.Domain.Entities
 {
     public class MasterDocument
     {
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ValueId { get; set; }
 
         [Required]
-        public string DocumentName { get; set; }
+        public string DisplayDocumentName { get; set; }
         [Required]
-        public string DocumentType { get; set; }
+        public string DocumentPath { get; set; }
         [Required]
-        public byte[] DocumentData { get; set; }
+        public string UniqueDocumentName { get; set; }
         [Required]
-        public Status status { get; set; } 
-        public bool IsDeleted { get; set; } = false ;
-       
+        public Status status { get; set; }
+
+
+        public bool IsDeleted { get; set; } = false;
+
     }
 
-    
+
 }

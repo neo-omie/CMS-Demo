@@ -1137,20 +1137,20 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
-                    b.Property<byte[]>("DocumentData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("DocumentName")
+                    b.Property<string>("DisplayDocumentName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DocumentType")
+                    b.Property<string>("DocumentPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UniqueDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -1224,7 +1224,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEFUMI54Hhjm7jWwZhhC8f4euZj3DXwkZQBnfkfxeMzOiwYFzOCu9iHZUBhYExan8YQ==",
+                            Password = "AQAAAAIAAYagAAAAEOBEQEpNcauDBqADgJqnrSjMdxxHrnkx/w442sOz7D0iyJnyMY3fIj0Scz/zXULvSw==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1239,7 +1239,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIh7NJEwTgdlR83gNyP20xECeURyN7Ml6olUJfHsSdw3kvCt0vff41rQ0VNOT4IaPQ==",
+                            Password = "AQAAAAIAAYagAAAAEJAkMaxXsbz8yDp8fmLU5051/Rg0uc5a7O+hOiWzlxxG0zvn1LhQzDnOxaCPAPbjKg==",
                             Role = "MOU_User",
                             Unit = "Thane"
                         });
