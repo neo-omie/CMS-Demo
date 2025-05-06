@@ -7,7 +7,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
 {
-    public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, int>
+    public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, bool>
     {
         private readonly IDocumentRepository _repository;
         private readonly IMapper _mapper;
@@ -17,16 +17,16 @@ namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
             _repository = documentRepository;
             _mapper = mapper;
         }
-        public async  Task<int> Handle(UpdateDocumentCommand request, CancellationToken cancellationToken)
+        public async  Task<bool> Handle(UpdateDocumentCommand request, CancellationToken cancellationToken)
         {
             var document = await _repository.GetDocumentById(request.id);
             if (document == null)
             {
                 throw new DocumentNotFoundException("Document not found");
             }
-            var existingDocument = _mapper.Map<MasterDocument>(request.documentDTO);
+            //var existingDocument = _mapper.Map<MasterDocument>(request.documentDTO);
             //existingDocument.ValueId = request.id;
-            return await _repository.UpdateDocument(request.id, existingDocument);
+            return await _repository.UpdateDocument(request.id, request.model);
 
         }
     }

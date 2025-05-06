@@ -11,7 +11,7 @@ import {
   AddDocumentDto,
   GetDocumentById,
   MasterDocument,
-  MasterDocumentDto,
+  MasterDocumentDto
 } from '../../models/master-document';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -35,12 +35,14 @@ export class MasterDocumentComponent implements OnInit {
   pageNumbers = [1, 1, 2, 3, 4, 5];
   masterDocuments: MasterDocumentDto = new MasterDocumentDto([], 0);
   documentStatus = DocumentStatus;
-  document: AddDocumentDto = new AddDocumentDto(null, 0);
+  document: AddDocumentDto = new AddDocumentDto(null, 1);
   errorMsg?: string;
   getMasterDocumentById?: GetDocumentById;
   doc?: MasterDocument;
+  existingFilePath: string | null = null;
   @ViewChild('editDocumentName') editDocumentName!: ElementRef;
   @ViewChild('editDocumentStatus') editDocumentStatus!: ElementRef;
+  @ViewChild('addFile') addFile!: ElementRef;
 
   ngOnInit(): void {
     this.getDocuments(1, 10);
@@ -92,7 +94,7 @@ export class MasterDocumentComponent implements OnInit {
       alert('Form is invalid or file is missing');
       return;
     }
-    if (this.file.size > 1048576) {
+    if (this.file.size > 25*1048576) {
       alert("File too large. Max 1MB allowed.");
       return;
     }
@@ -101,17 +103,25 @@ export class MasterDocumentComponent implements OnInit {
     formData.append('Status',String(this.document.status))
 
     this.documentService.addDocument(formData).subscribe({
-      next: (response) => {
+      next: (res) => {
+        this.file = null;
+        this.addFile.nativeElement.value = "";
+        this.document.file = null;
+        this.document.status = 1;
         Alert.bigToast(
           'Success!',
           'Document added successfully.',
           TYPE.SUCCESS,
           'Ok'
         );
-        documentForm.reset();
+        // documentForm.reset();
         this.GetPage(this.maxPage);
       },
       error: (error) => {
+        this.file = null;
+        this.addFile.nativeElement.value = "";
+        this.document.file = null;
+        this.document.status = 1;
         console.error('Error adding Document:', error);
         Alert.bigToast(
           'Error!',
@@ -124,36 +134,103 @@ export class MasterDocumentComponent implements OnInit {
     });
   }
 
-  editDocument(id: number) {
-    if (!this.file) {
-      alert('File is missing');
-      return;
-    }
-    if (this.file.size > 1048576) {
-      alert("File too large. Max 1MB allowed.");
-      return;
+
+
+  
+    editDocument(id: number) {
+
+      // TODO this logic will be check inside upload functionality
+      // if (!this.file) {
+        // alert('File is missing');
+        // return;
+      // }
+      // if (this.file.size > 25*1048576) {
+      //   alert("File too large. Max 1MB allowed.");
+      //   return;
+      // }
+      // if(!Number(this.editDocumentStatus.nativeElement.value)){
+      //   alert('Invalid status');
+      //   return;
+      // }
+      
+      if(this.file){
+        const formData = new FormData();
+        formData.append('File',this.file)
+        formData.append('Status',String(this.editDocumentStatus.nativeElement.value))
+        this.documentService.updateDocument(id, formData).subscribe({
+          next: (response: string) => {
+            if (response) {
+              // this.file = null;
+              Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
+              this.getDocuments(1, 10);
+            }
+          },
+          error: (error) => {
+            // this.file = null;
+            console.error('Error :(', error);
+            this.errorMsg = JSON.stringify(
+              error.message !== undefined ? error.error.title : error.message
+            );
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          },
+        });
+      }
+      else{
+        const formData = new FormData();
+        formData.append('Status',String(this.editDocumentStatus.nativeElement.value))
+        this.documentService.updateDocumentWithoutFille(id, formData).subscribe({
+          next: (response: string) => {
+            if (response) {
+              // this.file = null;
+              Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
+              this.getDocuments(1, 10);
+            }
+          },
+          error: (error) => {
+            // this.file = null;
+            console.error('Error :(', error);
+            this.errorMsg = JSON.stringify(
+              error.message !== undefined ? error.error.title : error.message
+            );
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          },
+        });
+      }
+
+      this.closeEditApproverCollapses();
     }
 
-    const formData = new FormData();
-    formData.append('File',this.file)
-    formData.append('Status',String(this.editDocumentStatus.nativeElement.value))
-    this.documentService.updateDocument(id, formData).subscribe({
-      next: (response: string) => {
-        if (response) {
-          Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
-          this.getDocuments(1, 10);
-        }
-      },
-      error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      },
-    });
-    this.closeEditApproverCollapses();
-  }
+    // editDocument(id: number) {
+    //   if (!this.file) {
+    //     alert('File is missing');
+    //     return;
+    //   }
+    //   if (this.file.size > 25 * 1048576) { // 25 MB limit
+    //     alert("File too large. Max 25MB allowed.");
+    //     return;
+    //   }
+    
+    //   const formData = new FormData();
+    //   formData.append('File', this.file);
+    //   formData.append('Status', String(this.editDocumentStatus.nativeElement.value));
+    
+    //   this.documentService.updateDocument(id, formData).subscribe({
+    //     next: (response: string) => {
+    //       if (response) {
+    //         Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
+    //         this.getDocuments(1, 10); // Refresh the document list
+    //       }
+    //     },
+    //     error: (error) => {
+    //       console.error('Error :(', error);
+    //       this.errorMsg = JSON.stringify(
+    //         error.message !== undefined ? error.error.title : error.message
+    //       );
+    //       Alert.toast(TYPE.ERROR, true, this.errorMsg);
+    //     },
+    //   });
+    //   this.closeEditApproverCollapses();
+    // }
 
   deleteDocument(id?: number) {
     Alert.confirmToast(
@@ -185,6 +262,7 @@ export class MasterDocumentComponent implements OnInit {
             next:(response:GetDocumentById) => {
               this.getMasterDocumentById = response;
               this.doc = response;
+              // response.displayDocumentName
             }, 
             error:(error) => {
               console.error('Error :(', error);
@@ -193,10 +271,21 @@ export class MasterDocumentComponent implements OnInit {
           }});
         }
 
+  
+
         uploadFile(event: Event) {
           const input = event.target as HTMLInputElement;
           if (input.files?.length) {
+            // TODO check file size and type
             this.file = input.files[0];
+          }
+          if (!this.file) {
+            alert('File is missing');
+            return;
+          }
+          if (this.file.size > 25*1048576) {
+            alert("File too large. Max 25MB allowed.");
+            return;
           }
         }
 }

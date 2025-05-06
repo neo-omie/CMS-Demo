@@ -22,15 +22,19 @@ export class MasterDocumentService {
   }
 
   addDocument(masterDocument:FormData):Observable<any>{
-    return this.http.post<any>(this.apiUrl,masterDocument);
+    return this.http.post<any>(`${this.apiUrl}/upload`,masterDocument);
   }
 
   // uploadDocument()
 
-  updateDocument(docId?:number, data?:FormData):Observable<string>{
-    return this.http.put<string>(`${this.apiUrl}/${docId}`, data)
+  updateDocument(docId?:number, data?:FormData):Observable<any>{
+    return this.http.put<any>(`${this.apiUrl}/${docId}`, data)
+  }
+  updateDocumentWithoutFille(docId?:number, data?:FormData):Observable<any>{
+    return this.http.put<any>(`${this.apiUrl}/${docId}/updateWithoutFile`, data)
   }
 
+  
   deleteDocument(documentId:number):Observable<boolean>{
     return this.http.delete<boolean>(`${this.apiUrl}/${documentId}`);
   }
