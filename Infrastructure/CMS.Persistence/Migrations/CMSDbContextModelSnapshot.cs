@@ -823,18 +823,18 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("CompanyEmailId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("CompanyStatus")
                         .HasColumnType("bit");
 
                     b.Property<string>("CompanyWebsiteUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
@@ -844,7 +844,7 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("IFSCCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -854,14 +854,14 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("PanNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("PocContactNumber")
                         .HasColumnType("bigint");
 
                     b.Property<string>("PocEmailId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PocName")
                         .IsRequired()
@@ -874,6 +874,26 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ValueId");
+
+                    b.HasAlternateKey("BankAccNo");
+
+                    b.HasAlternateKey("CompanyContactNo");
+
+                    b.HasAlternateKey("CompanyEmailId");
+
+                    b.HasAlternateKey("CompanyName");
+
+                    b.HasAlternateKey("CompanyWebsiteUrl");
+
+                    b.HasAlternateKey("GSTno");
+
+                    b.HasAlternateKey("IFSCCode");
+
+                    b.HasAlternateKey("MSMERegistrationNo");
+
+                    b.HasAlternateKey("PanNo");
+
+                    b.HasAlternateKey("PocEmailId");
 
                     b.HasIndex("CityId");
 
@@ -1173,7 +1193,7 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
@@ -1209,10 +1229,6 @@ namespace CMS.Persistence.Migrations
 
                     b.HasKey("ValueId");
 
-                    b.HasAlternateKey("Email");
-
-                    b.HasAlternateKey("EmployeeMobile");
-
                     b.ToTable("MasterEmployees");
 
                     b.HasData(
@@ -1227,7 +1243,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==",
+                            Password = "AQAAAAIAAYagAAAAEIJdnQY1iMhSEQruYzBV5Qw8mezsE2lWyWNq6OY2NoePhFkKRNOmChEsE6NhpIqbiw==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1242,7 +1258,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==",
+                            Password = "AQAAAAIAAYagAAAAELMV5jrktbcQjWaNyvP06z+xH0Nf0PcMmU97aP7OoYimqoWZV4OvGaabFXLMmhzzHg==",
                             Role = "MOU_User",
                             Unit = "Thane"
                         });
