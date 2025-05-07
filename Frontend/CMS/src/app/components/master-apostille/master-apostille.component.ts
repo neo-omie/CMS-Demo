@@ -35,6 +35,10 @@ pageNumbers:number[] = []; //used now
 mode?:string; 
 formsValue:any;
 empId:number = 0;
+addApostilleForm: FormGroup= new FormGroup({
+  apostilleName:new FormControl('',[Validators.required]),
+  status:new FormControl('1',Validators.required)
+})
 
 constructor(private apostilleService: MasterApostilleService,private router: Router){}
 
@@ -42,10 +46,6 @@ ngOnInit(): void {
   this.fetchApostille();
 }
 
-addApostilleForm: FormGroup= new FormGroup({
-  apostilleName:new FormControl('',[Validators.required]),
-  status:new FormControl('1',Validators.required)
-})
 
 
 resetForm() {
