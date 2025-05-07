@@ -20,7 +20,7 @@ namespace CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedC
         public ContractStatus Status { get; set; }
         public string ApprovalPendingFrom { get; set; }
         public string RenewalContractPerson { get; set; }
-        public string? RenewalDueIn{ get; set; }
+        public string? RenewalDueIn { get; set; }
         public string Location { get; set; }
         public int TotalRecords { get; set; }
     }

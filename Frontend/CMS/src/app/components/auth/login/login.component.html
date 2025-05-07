@@ -1,5 +1,6 @@
 <div class="card login-form-card" style="width: 18rem;">
     <div class="card-body">
+        <h3 class="card-title login-title mb-3"><img src="CMS-logo.png" alt="CMS-logo" style="width: 50%;"></h3>
         <h3 class="card-title login-title mb-3">Login</h3>
         <form class="needs-validation" [formGroup]="loginForm" (ngSubmit)="loginUser()" >
         <div class="mb-3">
@@ -15,11 +16,11 @@
         <div class="mb-3">
             <div class="field-container">
                 <span class="error" *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)">*Required</span>
-                <span class="error" *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)">A-Z,a-z,0-9,&#64;#$%^&-+=() length:4-10</span>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
                     <input [type]="loginPasswordEyeOpen ? 'text' : 'password'" name="password" class="form-control" id="password" placeholder="Password" formControlName="password">
                 </div>
+                <span class="pswd-error" *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)">Should contain atleast 1 capital letter, 1 numeric, 1 small letter, and 1 alphanumeric character (And more than 4 digits)</span>
             </div>
         </div>
         <div class="mb-3 form-check">

@@ -7,21 +7,22 @@
             <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()" *ngIf="mode!=='view'">
               <div class="fields-container">
                 <div class="m-3">
-                  <label for="employeeName" class="form-label">Employee Name</label>
+                  <label for="employeeName" class="form-label">Employee Name<span style="color: red;">*</span></label>
                   <span *ngIf="employeeName?.hasError('required') && (employeeName?.dirty || employeeName?.touched)" style="color: red;">*Required</span>
-                  <input class="form-control" type="text" id="employeeName" placeholder="Enter company name" formControlName="employeeName">
+                  <input class="form-control" type="text" id="employeeName" placeholder="Enter employee name" formControlName="employeeName">
                 </div>
   
                 <div class="m-3" *ngIf="mode!=='edit'">
-                  <label for="password" class="form-label">Password</label>
+                  <label for="password" class="form-label">Password<span style="color: red;">*</span></label>
                   <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)" style="color: red;">*Required</span>
-                  <input class="form-control" type="text" id="password" placeholder="Enter company name" formControlName="password">
+                  <input class="form-control" type="text" id="password" placeholder="Enter employee password" formControlName="password">
                 </div>
   
                 <div class="m-3">
-                  <label for="role" class="form-label">Role</label>
+                  <label for="role" class="form-label">Role<span style="color: red;">*</span></label>
                   <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">*Required</span>
                   <select class="form-select" id="employeeCode" placeholder="Select Role"  formControlName="role">
+                    <option value="" disabled selected>--Select Role--</option>
                     <option value="Management User">Management User</option>
                     <option value="MOU_User">MOU_User</option>
                     <option value="MOU_Approver">MOU_Approver</option>
@@ -31,46 +32,47 @@
                 </div>
   
                 <div class="m-3">
-                  <label for="employeeCode" class="form-label">Employee Code</label>
+                  <label for="employeeCode" class="form-label">Employee Code<span style="color: red;">*</span></label>
                   <span *ngIf="employeeCode?.hasError('required') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">*Required</span>
-                  <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee Code" formControlName="employeeCode">
+                  <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee code" formControlName="employeeCode">
                 </div>
-  
+
                 <div class="m-3">
-                  <label for="unit" class="form-label">Unit</label>
+                  <label for="unit" class="form-label">Unit<span style="color: red;">*</span></label>
                   <span *ngIf="unit?.hasError('required') && (unit?.dirty || unit?.touched)" style="color: red;">*Required</span>
-                  <select class="form-select" id="unit" placeholder="Select unit" formControlName="unit">
+                  <select class="form-select" id="unit" placeholder="Select Unit"  formControlName="unit">
+                    <option value="" disabled selected>--Select Unit--</option>
                     <option value="Thane">Thane</option>
                     <option value="Indore">Indore</option>
-                    <option value="Pune">Pune</option>
+                    <option value="Pune">Pune</option>  
                   </select>
                 </div>
   
                 <div class="m-3">
-                  <label for="departmentId" class="form-label">Department</label>
+                  <label for="departmentId" class="form-label">Department<span style="color: red;">*</span></label>
                   <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)" style="color: red;">*Required</span>
                   <select class="form-select" id="departmentId" placeholder="Select department name" formControlName="departmentId">
-                    <option value="" disabled selected>--SELECT--</option>
+                    <option value="" disabled selected>--Select Department--</option>
                     <option *ngFor="let department of departments" [value]="department.departmentId">{{department.departmentName}}</option>
                   </select>
                 </div>
   
                 <div class="m-3">
-                  <label for="employeeMobile" class="form-label">Employee Mobile</label>
+                  <label for="employeeMobile" class="form-label">Employee Mobile<span style="color: red;">*</span></label>
                   <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">*Required</span>
-                  <input class="form-control" type="number" id="employeeMobile" placeholder="Enter Employee Mobile" formControlName="employeeMobile">
+                  <input class="form-control" type="number" id="employeeMobile" placeholder="Enter employee mobile" formControlName="employeeMobile">
                 </div>
   
                 <div class="m-3">
-                  <label for="email" class="form-label">Email</label>
+                  <label for="email" class="form-label">Email<span style="color: red;">*</span></label>
                   <span *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)" style="color: red;">*Required</span>
-                  <input class="form-control" type="email" id="email" placeholder="Enter your Email" formControlName="email">
+                  <input class="form-control" type="email" id="email" placeholder="Enter your email" formControlName="email">
                 </div>
   
                 <div class="m-3">
-                  <label for="employeeExtension" class="form-label">Employee Ext</label>
+                  <label for="employeeExtension" class="form-label">Employee Ext<span style="color: red;">*</span></label>
                   <span *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)" style="color: red;">*Required</span>
-                  <input class="form-control" type="text" id="employeeExtension" placeholder="Enter Employee extension" formControlName="employeeExtension">
+                  <input class="form-control" type="text" id="employeeExtension" placeholder="Enter employee extension" formControlName="employeeExtension">
                 </div>
 
               </div>

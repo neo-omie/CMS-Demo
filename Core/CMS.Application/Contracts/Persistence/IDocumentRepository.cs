@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
 using CMS.Domain.Entities;
 
 namespace CMS.Application.Contracts.Persistence
@@ -12,10 +13,9 @@ namespace CMS.Application.Contracts.Persistence
 
         Task<(IEnumerable<MasterDocument> Documents, int TotalCount)> GetAllDocuments(int pageNumber, int pageSize);
         Task<MasterDocument> GetDocumentById(int id);
-        Task<int> AddDocument(MasterDocument masterDocument);
-        Task<int> UploadDocument(MasterDocument masterDocument);
+        Task<string> UploadDocument(DocumentUploadDto model);
 
-        Task<int> UpdateDocument(int id, MasterDocument masterDocument);
-        Task<int> DeleteDocument(int id);
+        Task<bool> UpdateDocument(int id, DocumentFormDTO model);
+        Task<bool> DeleteDocument(int id);
     }
 }

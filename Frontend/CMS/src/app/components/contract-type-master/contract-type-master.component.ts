@@ -8,6 +8,7 @@ import { ContractTypeMasterService } from '../../services/contract-type-master.s
 import { Pagination } from '../../utils/pagination';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contract-type-master',
@@ -30,6 +31,12 @@ export class ContractTypeMasterComponent implements OnInit {
     private contractService: ContractTypeMasterService,
     private router: Router
   ) { }
+      private contractService: ContractTypeMasterService,
+      private router: Router,
+      private title:Title
+    ) {
+      this.title.setTitle("Contract Type Master - CMS");
+    }
 
   ngOnInit(): void {
     this.getContract(1, 10);

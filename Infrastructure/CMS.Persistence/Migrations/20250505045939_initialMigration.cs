@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -130,69 +130,6 @@ namespace CMS.Persistence.Migrations
                     ApproverName3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApproverId3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumberOfDays = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GetClassifiedContractByIdDtos",
-                columns: table => new
-                {
-                    ClassifiedContractId = table.Column<int>(type: "int", nullable: false),
-                    ClassifiedContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContractWithCompanyId = table.Column<int>(type: "int", nullable: false),
-                    ContractWithCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContractTypeId = table.Column<int>(type: "int", nullable: false),
-                    ContractTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApostilleTypeId = table.Column<int>(type: "int", nullable: false),
-                    ApostilleTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ActualDocRefNo = table.Column<int>(type: "int", nullable: false),
-                    RetainerContract = table.Column<int>(type: "int", nullable: false),
-                    TermsAndConditions = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RenewalFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    RenewalTill = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EmpCustodianId = table.Column<int>(type: "int", nullable: false),
-                    EmpCustodianName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver1Status = table.Column<int>(type: "int", nullable: false),
-                    Approver1Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver1EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver2Status = table.Column<int>(type: "int", nullable: false),
-                    Approver2Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver2EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver3Status = table.Column<int>(type: "int", nullable: false),
-                    Approver3Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver3EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GetClassifiedContractsDtos",
-                columns: table => new
-                {
-                    ClassifiedContractID = table.Column<int>(type: "int", nullable: false),
-                    ClassifiedContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContractType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EffectiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ToBeRenewedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    ApprovalPendingFrom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RenewalContractPerson = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RenewalDueIn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalRecords = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -586,24 +523,24 @@ namespace CMS.Persistence.Migrations
                 {
                     ValueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PocName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyStatus = table.Column<bool>(type: "bit", nullable: false),
                     PocContactNumber = table.Column<long>(type: "bigint", nullable: false),
-                    PocEmailId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PocEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Zipcode = table.Column<int>(type: "int", nullable: false),
                     CompanyContactNo = table.Column<long>(type: "bigint", nullable: false),
-                    CompanyEmailId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CompanyWebsiteUrl = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyWebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyBankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GSTno = table.Column<long>(type: "bigint", nullable: false),
                     BankAccNo = table.Column<long>(type: "bigint", nullable: false),
                     MSMERegistrationNo = table.Column<long>(type: "bigint", nullable: false),
-                    IFSCCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PanNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IFSCCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PanNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false),
@@ -612,77 +549,11 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MasterCompanies", x => x.ValueId);
-                    table.UniqueConstraint("AK_MasterCompanies_BankAccNo", x => x.BankAccNo);
-                    table.UniqueConstraint("AK_MasterCompanies_CompanyContactNo", x => x.CompanyContactNo);
-                    table.UniqueConstraint("AK_MasterCompanies_CompanyEmailId", x => x.CompanyEmailId);
-                    table.UniqueConstraint("AK_MasterCompanies_CompanyName", x => x.CompanyName);
-                    table.UniqueConstraint("AK_MasterCompanies_CompanyWebsiteUrl", x => x.CompanyWebsiteUrl);
-                    table.UniqueConstraint("AK_MasterCompanies_GSTno", x => x.GSTno);
-                    table.UniqueConstraint("AK_MasterCompanies_IFSCCode", x => x.IFSCCode);
-                    table.UniqueConstraint("AK_MasterCompanies_MSMERegistrationNo", x => x.MSMERegistrationNo);
-                    table.UniqueConstraint("AK_MasterCompanies_PanNo", x => x.PanNo);
-                    table.UniqueConstraint("AK_MasterCompanies_PocEmailId", x => x.PocEmailId);
                     table.ForeignKey(
                         name: "FK_MasterCompanies_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "CityId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClassifiedContracts",
-                columns: table => new
-                {
-                    ClassifiedContractId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClassifiedContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    ContractWithCompanyId = table.Column<int>(type: "int", nullable: false),
-                    ContractTypeId = table.Column<int>(type: "int", nullable: false),
-                    ApostilleTypeId = table.Column<int>(type: "int", nullable: false),
-                    ActualDocRefNo = table.Column<int>(type: "int", nullable: false),
-                    RetainerContract = table.Column<int>(type: "int", nullable: false),
-                    TermsAndConditions = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RenewalFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    RenewalTill = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EmpCustodianId = table.Column<int>(type: "int", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approver1Status = table.Column<int>(type: "int", nullable: false),
-                    Approver2Status = table.Column<int>(type: "int", nullable: false),
-                    Approver3Status = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClassifiedContracts", x => x.ClassifiedContractId);
-                    table.ForeignKey(
-                        name: "FK_ClassifiedContracts_MasterApostilles_ApostilleTypeId",
-                        column: x => x.ApostilleTypeId,
-                        principalTable: "MasterApostilles",
-                        principalColumn: "ValueId");
-                    table.ForeignKey(
-                        name: "FK_ClassifiedContracts_MasterApprovalMatrixContracts_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "MasterApprovalMatrixContracts",
-                        principalColumn: "MasterApprovalMatrixContractId");
-                    table.ForeignKey(
-                        name: "FK_ClassifiedContracts_MasterCompanies_ContractWithCompanyId",
-                        column: x => x.ContractWithCompanyId,
-                        principalTable: "MasterCompanies",
-                        principalColumn: "ValueId");
-                    table.ForeignKey(
-                        name: "FK_ClassifiedContracts_MasterEmployees_EmpCustodianId",
-                        column: x => x.EmpCustodianId,
-                        principalTable: "MasterEmployees",
-                        principalColumn: "ValueId");
-                    table.ForeignKey(
-                        name: "FK_ClassifiedContracts_contracts_ContractTypeId",
-                        column: x => x.ContractTypeId,
-                        principalTable: "contracts",
-                        principalColumn: "ValueId");
                 });
 
             migrationBuilder.CreateTable(
@@ -758,39 +629,14 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEI4nOXeB17L+4UKbjfeLQBEW4kUfRi6LUNRcqRjOQrlF1rdRMTs6ZPdX2ZDZ0vSLtg==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAECTnQw+YusPhXURBMFTTV2tKNpgSt6fk1nkt7twNXbmdnwR/iEeIlsEM8AWzAzcdTQ==", "MOU_User", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIHxB2LKRT2AA9H8ibMWZdHRawKkIw3uo5FwUzedmbQgDC4PWNgsH8HKLedskjG/uA==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEBU2bPRpVbL8aCym57OwfLRvL3zV6FNwOzbcZKzwgCfaDDA0Q5P1LvaDWDx/FgRKhw==", "MOU_User", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId",
                 table: "Cities",
                 column: "StateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassifiedContracts_ApostilleTypeId",
-                table: "ClassifiedContracts",
-                column: "ApostilleTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassifiedContracts_ContractTypeId",
-                table: "ClassifiedContracts",
-                column: "ContractTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassifiedContracts_ContractWithCompanyId",
-                table: "ClassifiedContracts",
-                column: "ContractWithCompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassifiedContracts_DepartmentId",
-                table: "ClassifiedContracts",
-                column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassifiedContracts_EmpCustodianId",
-                table: "ClassifiedContracts",
-                column: "EmpCustodianId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContractsEntity_ApostilleTypeId",
@@ -892,9 +738,6 @@ namespace CMS.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClassifiedContracts");
-
-            migrationBuilder.DropTable(
                 name: "ContractsEntity");
 
             migrationBuilder.DropTable(
@@ -911,12 +754,6 @@ namespace CMS.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "GetApprovalMatrixContractByIdDtos");
-
-            migrationBuilder.DropTable(
-                name: "GetClassifiedContractByIdDtos");
-
-            migrationBuilder.DropTable(
-                name: "GetClassifiedContractsDtos");
 
             migrationBuilder.DropTable(
                 name: "GetCompanyDtos");

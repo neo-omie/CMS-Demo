@@ -26,6 +26,7 @@ import { CreateClassifiedContractComponent } from './components/classifiedContra
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 
 import { UpdateContractComponent } from './components/contracts/update-contract/update-contract.component';
+import { AddApostilleComponent } from './components/add-apostille/add-apostille.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -40,6 +41,9 @@ export const routes: Routes = [
     {path: 'masters/employeeMasters/editEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
     {path: 'masters/employeeMasters/viewEmployee/:valueId', component: AddEmployeeComponent, canActivate:[authGuard]},
     {path:'masters/apostilleMasters', component:MasterApostilleComponent,canActivate:[authGuard]},
+    {path:'masters/apostilleMasters/addApostille', component:AddApostilleComponent, canActivate:[authGuard]},
+    {path: 'masters/apostilleMasters/editApostille/:valueId', component: AddApostilleComponent, canActivate:[authGuard]},
+    {path: 'masters/apostilleMasters/viewApostille/:valueId', component: AddApostilleComponent, canActivate:[authGuard]},
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
     {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},

@@ -4,6 +4,7 @@ using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504080225_ClassifiedContractAdded")]
+    partial class ClassifiedContractAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,171 +161,6 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("GetAllApprovalMatrixMOUByIdDtos");
-                });
-
-            modelBuilder.Entity("CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts.GetAllClassifiedContractsDto", b =>
-                {
-                    b.Property<DateTime?>("AddendumDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ApprovalPendingFrom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClassifiedContractID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClassifiedContractName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContractType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RenewalContractPerson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RenewalDueIn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ToBeRenewedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TotalRecords")
-                        .HasColumnType("int");
-
-                    b.ToTable("GetClassifiedContractsDtos");
-                });
-
-            modelBuilder.Entity("CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById.GetClassifiedContractByIdDto", b =>
-                {
-                    b.Property<int>("ActualDocRefNo")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("AddendumDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ApostilleTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApostilleTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Approver1Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Approver1EmployeeCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Approver1Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Approver2Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Approver2EmployeeCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Approver2Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Approver3Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Approver3EmployeeCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Approver3Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClassifiedContractId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClassifiedContractName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContractTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContractTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContractWithCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContractWithCompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmpCustodianId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EmpCustodianName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RenewalFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RenewalTill")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RetainerContract")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TermsAndConditions")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ValidTill")
-                        .HasColumnType("datetime2");
-
-                    b.ToTable("GetClassifiedContractByIdDtos");
                 });
 
             modelBuilder.Entity("CMS.Application.Features.Contracts.Queries.GetAllContracts.GetAllContractsDto", b =>
@@ -1137,20 +975,12 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
-                    b.Property<string>("DisplayDocumentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DocumentPath")
+                    b.Property<string>("DocumentName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("UniqueDocumentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -1158,6 +988,29 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterDocuments");
+
+                    b.HasData(
+                        new
+                        {
+                            ValueId = 1,
+                            DocumentName = "Doc 1",
+                            IsDeleted = false,
+                            status = 1
+                        },
+                        new
+                        {
+                            ValueId = 2,
+                            DocumentName = "Doc 2",
+                            IsDeleted = false,
+                            status = 1
+                        },
+                        new
+                        {
+                            ValueId = 3,
+                            DocumentName = "Doc 3",
+                            IsDeleted = false,
+                            status = 1
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>
@@ -1173,14 +1026,15 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("EmployeeExtension")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("EmployeeMobile")
                         .HasColumnType("bigint");
@@ -1209,10 +1063,6 @@ namespace CMS.Persistence.Migrations
 
                     b.HasKey("ValueId");
 
-                    b.HasAlternateKey("Email");
-
-                    b.HasAlternateKey("EmployeeMobile");
-
                     b.ToTable("MasterEmployees");
 
                     b.HasData(
@@ -1222,12 +1072,12 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 1,
                             Email = "admin@cms.com",
                             EmployeeCode = "NEO1",
-                            EmployeeExtension = 2467,
+                            EmployeeExtension = "Main person",
                             EmployeeMobile = 7777766666L,
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==",
+                            Password = "AQAAAAIAAYagAAAAEFLZ07muU5HPtjPDkGtvn00VD3YlhRVza1O5ACaaIezP3zK99/GDcCTtsx1BgWUvhA==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1237,12 +1087,12 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 2,
                             Email = "sarthak@neosoft.com",
                             EmployeeCode = "NEO2",
-                            EmployeeExtension = 8976,
+                            EmployeeExtension = "IT Smart",
                             EmployeeMobile = 9999988888L,
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==",
+                            Password = "AQAAAAIAAYagAAAAENWh7ar92/3gn6YDWejRNGIZagbXVhA/TgWZmUuY01Sck9s90wKVNEdUv3RGSXMt9g==",
                             Role = "MOU_User",
                             Unit = "Thane"
                         });

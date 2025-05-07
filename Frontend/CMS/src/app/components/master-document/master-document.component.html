@@ -11,13 +11,13 @@
         <form #documentForm="ngForm" (ngSubmit)="addDocument(documentForm)">
           <div class="form-group">
               <label for="documentName">Document Name</label>
-              <input type="file" class="form-control" id="file" name="file" (change)="uploadFile($event)" required />
+              <input #addFile type="file" class="form-control" id="file" name="file" (change)="uploadFile($event)" required />
             </div>
             <br>
             <div class="form-group">
               <label for="status">Document Status</label>
               <select name="status" id="status" class="form-select" [(ngModel)]="document.status">
-                <option selected value="1">Active</option>
+                <option value="1">Active</option>
                 <option value="0">InActive</option>
               </select>
             </div>
@@ -40,7 +40,7 @@
   <table class="table align-middle table-bordered table-striped">
     <thead>
       <tr>
-        <th>Value ID</th>
+        <!-- <th>Value ID</th> -->
         <th>Document Name</th>
         <th>Status</th>
         <th>Action</th>
@@ -48,14 +48,14 @@
     </thead>
       <tbody>    
         <tr  *ngFor="let doc of masterDocuments?.documents;">
-            <td>{{doc.valueId}}</td>
-            <td>{{doc.documentName}}</td>
+            <!-- <td>{{doc.valueId}}</td> -->
+            <td>{{doc.displayDocumentName}}</td>
             <td *ngIf="doc.status == 1">Active</td>
             <td *ngIf="doc.status == 0">InActive</td>
              <td>
                <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#document-edit" (click)="GetDocument(doc.valueId)"></i>   
                <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#document-detail" (click)="GetDocument(doc.valueId)"></i>
-               <i class="fa-regular fa-trash-can icon" data-bs-toggle="modal" data-bs-target="#document-delete" (click)="deleteDocument(doc.valueId)"></i></td>
+               <i class="fa-regular fa-trash-can icon"  (click)="deleteDocument(doc.valueId)"></i></td>
 
         </tr>
     </tbody>
@@ -86,6 +86,12 @@
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
               <input type="file" class="form-control" id="file-edit" name="file-edit" (change)="uploadFile($event)" required />
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
+              <input type="text" value="{{getMasterDocumentById?.displayDocumentName}}" class="form-control" id="file-name" name="file-name" disabled required />
             </div>
           </div>
           <div class="mb-3">
@@ -125,7 +131,7 @@
           <div class="mb-3">
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
-                <input type="text" name="departmentName" class="form-control" id="departmentName" [value]="getMasterDocumentById?.documentName" disabled>
+                <input type="text" name="departmentName" class="form-control" id="departmentName" [value]="getMasterDocumentById?.displayDocumentName" disabled>
             </div>
           </div>
           <h1 class="modal-title fs-6 mb-3">Document Status</h1>

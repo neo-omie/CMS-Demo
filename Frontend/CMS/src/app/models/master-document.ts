@@ -4,13 +4,15 @@ export class MasterDocument {
   // status?: number;
 
   valueId: number;
-  documentName: string;
+  displayDocumentName: string;
   status: number;
+  // displayDocumentName:string;
 
-  constructor(valueId:number, documentName: string, status: number) {
+
+  constructor(valueId:number, displayDocumentName: string, status: number) {
     this.valueId=valueId;
     this.status = status;
-    this.documentName = documentName;
+    this.displayDocumentName = displayDocumentName;
   }
 }
 export class MasterDocumentDto {
@@ -24,7 +26,7 @@ export class MasterDocumentDto {
 }
 
 export class AddDocumentDto {
-  file: File | null;
+  file: Blob | null;
   status: number;
   constructor(file: File | null, status: number) {
     this.file = file;
@@ -36,16 +38,16 @@ export class AddDocumentDto {
 
 export class GetDocumentById{
   valueId :number;
-  documentName : string;
-  documentType : string;
-  documentData : string;
+  displayDocumentName : string;
+  documentPath : string;
+  // documentData : string;
   status:number;
   
-  constructor(valueId:number,documentName:string,documentType:string,documentData:string,status:number){
+  constructor(valueId:number,displayDocumentName:string,documentPath:string,documentData:string,status:number){
     this.valueId=valueId;
-    this.documentName=documentName;
-    this.documentType=documentType;
-    this.documentData=documentData;
+    this.displayDocumentName=displayDocumentName;
+    this.documentPath=documentPath;
+    // this.documentData=documentData;
     this.status = status;
 
   }

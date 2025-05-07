@@ -11,6 +11,7 @@ import { GetAllDepartmentsDto } from '../../../models/master-department';
 import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
 import { CompanyMasterDto } from '../../../models/master-company';
 import { MasterApostille } from '../../../models/master-apostille';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-add-contract',
@@ -82,7 +83,9 @@ export class AddContractComponent {
   @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
   @ViewChild('editEmpCustodianName') editEmpCustodianName!: ElementRef;
   @ViewChild('editEmpCustodianId') editEmpCustodianId!: ElementRef;
-  constructor(private  contractsService:ContractsService,private route:Router, private renderer : Renderer2) {}
+  constructor(private  contractsService:ContractsService,private route:Router, private renderer : Renderer2, private title:Title) {
+    this.title.setTitle("Add New Contract - CMS");
+  }
   masterContractAddForm = new FormGroup({
     contractName : new FormControl('',[Validators.required]),
     departmentId : new FormControl('',[Validators.required,Validators.pattern('^[0-9]$')]),

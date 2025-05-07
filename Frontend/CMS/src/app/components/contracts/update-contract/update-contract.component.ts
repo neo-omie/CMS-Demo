@@ -11,6 +11,7 @@ import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
 import { AddContractDto, GetContractByIdDto } from '../../../models/contracts';
 import { MasterApostille } from '../../../models/master-apostille';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-update-contract',
@@ -81,7 +82,9 @@ export class UpdateContractComponent {
       }
     })
   }
-  constructor(private contractsService: ContractsService, private goTo:ActivatedRoute, private route: Router, private renderer: Renderer2) { }
+  constructor(private contractsService: ContractsService, private goTo:ActivatedRoute, private route: Router, private renderer: Renderer2, private title:Title) {
+    this.title.setTitle("Update Contract - CMS");
+  }
   getAllDepartments() {
     this.contractsService.GetDepartments().subscribe({
       next: (response: GetAllDepartmentsDto[]) => {

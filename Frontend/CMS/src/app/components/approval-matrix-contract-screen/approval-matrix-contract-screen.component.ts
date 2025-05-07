@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild, AfterViewInit } from '@angular/core';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
 import { ApprovalMatrixContract, EditApprovalMatrixContractDto } from '../../models/approval-matrix-contract';
 import { CommonModule } from '@angular/common';
@@ -8,15 +8,29 @@ import { FormsModule } from '@angular/forms';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { Pagination } from '../../utils/pagination';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-approval-matrix-contract-screen',
   standalone: true,
-  imports: [CommonModule,LoaderComponent,FormsModule],
+  imports: [CommonModule,LoaderComponent,FormsModule,MatTableModule,MatSortModule,MatFormFieldModule,MatInputModule],
   templateUrl: './approval-matrix-contract-screen.component.html',
   styleUrl: './approval-matrix-contract-screen.component.css'
 })
 export class ApprovalMatrixContractScreenComponent implements OnInit {
+  displayedColumns: string[] = ['departmentName', 'approverName1', 'approverName2', 'approverName3', 'action'];
+  approvalMatrixContracts:ApprovalMatrixContract[] = [];
+  dataSource = new MatTableDataSource<ApprovalMatrixContract>();
+  @ViewChild(MatSort) sort!: MatSort;
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
   isView:boolean = false;
   approvers1:MasterEmployee[] = [];
   approvers2:MasterEmployee[] = [];
@@ -24,7 +38,6 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   pageNumbers:number[] = [];
   loading:boolean = true;
   maxPage:number = 1;
-  approvalMatrixContracts:ApprovalMatrixContract[] = [];
   approvalMatrixContract?:ApprovalMatrixContract;
   errorMsg ?: string
   @ViewChild('editApproverCollapse1') editApproverCollapse1!: ElementRef;
@@ -37,9 +50,11 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   @ViewChild('editApproverId2') editApproverId2!: ElementRef;
   @ViewChild('editApproverId3') editApproverId3!: ElementRef;
   @ViewChild('editNumberOfDays') editNumberOfDays!: ElementRef;
-  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2){}
+  constructor(private approverMatrixContractService : ApproverMatrixContractService, private renderer : Renderer2, private title:Title) {
+    this.title.setTitle("Approval Matrix (Contract) - CMS");
+  }
   ngOnInit(){
-    this.GetApprovalMatrixContract(1 ,10);
+    this.GetApprovalMatrixContract(1,10);
   }
   closeEditApproverCollapses() {
       this.renderer.removeClass(this.editApproverCollapse1.nativeElement,'show');
@@ -54,6 +69,10 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     this.approverMatrixContractService.GetApprovalMatrixContract(pageNumber, pageSize).subscribe({
       next:(response:ApprovalMatrixContract[]) => {
         this.loading = false;
+        this.dataSource.data = response;
+        if (this.sort) {
+          this.dataSource.sort = this.sort;
+        }
         this.approvalMatrixContracts = response;
         if(this.approvalMatrixContracts != undefined && this.approvalMatrixContracts.length > 0){
           let result = Pagination.paginator(pageNumber,this.approvalMatrixContracts[0].totalRecords,pageSize)

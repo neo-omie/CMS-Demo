@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using Azure.Core;
-using CMS.Application.Features.Document;
+//using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterDocuments;
-using CMS.Application.Features.MasterDocuments.Command.AddDocument;
 using CMS.Application.Features.MasterDocuments.Command.DeleteDocument;
 using CMS.Application.Features.MasterDocuments.Command.UpdateDocument;
 using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
@@ -56,33 +56,13 @@ namespace CMS.API.Controllers
             return Ok(getDocs);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<int>> AddDocument(DocumentFormDTO documentForm)
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
         {
-            if (documentForm.File == null || documentForm.File.Length == 0)
-            {
-                return BadRequest("No file uploaded.");
-            }
-            if (documentForm.File.Length > 1048576)
-            {
-                return BadRequest("File size exceeds 1MB.");
-            }
-            using var memoryStream = new MemoryStream();
-            await documentForm.File.CopyToAsync(memoryStream);
-            var fileData = memoryStream.ToArray();
-            var document = new DocumentDTO
-            {
-                DocumentName = documentForm.File.FileName,
-                DocumentType = documentForm.File.ContentType,
-                DocumentData = fileData,
-                status = (Status)documentForm.Status
-            };
-            await _mediator.Send(new AddDocumentCommand(document));
-            return Ok(new { Message = "Added Document Successfully" });
+            var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model));
+            return Ok( new {  Message = uploadDoc});
         }
-
-
-
 
 
         [HttpDelete("{id}")]
@@ -96,29 +76,26 @@ namespace CMS.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<int>> UpdateDocument(int id, DocumentFormDTO documentForm)
         {
-            if (documentForm.File == null || documentForm.File.Length == 0)
-            {
-                return BadRequest("No file uploaded.");
-            }
-            if (documentForm.File.Length > 1048576)
-            {
-                return BadRequest("File size exceeds 1MB.");
-            }
-            using var memoryStream = new MemoryStream();
-            await documentForm.File.CopyToAsync(memoryStream);
-            var fileData = memoryStream.ToArray();
-            var document = new DocumentDTO
-            {
-                DocumentName = documentForm.File.FileName,
-                DocumentType = documentForm.File.ContentType,
-                DocumentData = fileData,
-                status = (Status)documentForm.Status
-            };
-            await _mediator.Send(new UpdateDocumentCommand(id, document));
+           
+            await _mediator.Send(new UpdateDocumentCommand(id, documentForm));
 
             return Ok(new { Message = "updated Document Successfully" });
         }
-
+        [Route("{id}/updateWithoutFile")]
+        [HttpPut]
+        public Task<IActionResult> UpdateDocumentWithoutFile(int id, DocumentUploadWithoutFileDto model)
+        {
+            var doc = _context.MasterDocuments.Where(d => d.ValueId == id).FirstOrDefault();
+            if(doc == null)
+            {
+                throw new Exception("Document not found");
+            }
+            doc.status = model.Status;
+            _context.MasterDocuments.Update(doc);
+            _context.SaveChanges();
+            //var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model));
+            return Task.FromResult<IActionResult>(Ok(new { Message = "Updated successfully" }));
+        }
 
     }
 }

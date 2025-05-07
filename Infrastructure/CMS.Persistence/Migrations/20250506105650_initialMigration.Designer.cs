@@ -12,8 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506080025_initialmigration.Designer.cs
     [Migration("20250506080025_initialmigration")]
     partial class initialmigration
+========
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.Designer.cs
+    [Migration("20250506090923_initialMigration")]
+========
+    [Migration("20250506105650_initialMigration")]
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
+    partial class initialMigration
+>>>>>>>> 162cff6bba120efb451136186475c72079a66020:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1160,11 +1169,19 @@ namespace CMS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
 
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506080025_initialmigration.Designer.cs
                     b.Property<byte[]>("DocumentData")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("DocumentName")
+========
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+>>>>>>>> 162cff6bba120efb451136186475c72079a66020:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1174,6 +1191,10 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UniqueDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -1196,15 +1217,14 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EmployeeExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmployeeExtension")
+                        .HasColumnType("int");
 
                     b.Property<long>("EmployeeMobile")
                         .HasColumnType("bigint");
@@ -1233,6 +1253,10 @@ namespace CMS.Persistence.Migrations
 
                     b.HasKey("ValueId");
 
+                    b.HasAlternateKey("Email");
+
+                    b.HasAlternateKey("EmployeeMobile");
+
                     b.ToTable("MasterEmployees");
 
                     b.HasData(
@@ -1242,12 +1266,20 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 1,
                             Email = "admin@cms.com",
                             EmployeeCode = "NEO1",
-                            EmployeeExtension = "Main person",
+                            EmployeeExtension = 2467,
                             EmployeeMobile = 7777766666L,
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506080025_initialmigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEI4nOXeB17L+4UKbjfeLQBEW4kUfRi6LUNRcqRjOQrlF1rdRMTs6ZPdX2ZDZ0vSLtg==",
+========
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.Designer.cs
+                            Password = "AQAAAAIAAYagAAAAEGJE7Yk2k+Zb8jaCdfTGI65Ig3S6Le+UIXLmiLX1SSKYU2CnkJvkqJN8Y0W/YNHh/A==",
+========
+                            Password = "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==",
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
+>>>>>>>> 162cff6bba120efb451136186475c72079a66020:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1257,12 +1289,20 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 2,
                             Email = "sarthak@neosoft.com",
                             EmployeeCode = "NEO2",
-                            EmployeeExtension = "IT Smart",
+                            EmployeeExtension = 8976,
                             EmployeeMobile = 9999988888L,
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506080025_initialmigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAECTnQw+YusPhXURBMFTTV2tKNpgSt6fk1nkt7twNXbmdnwR/iEeIlsEM8AWzAzcdTQ==",
+========
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.Designer.cs
+                            Password = "AQAAAAIAAYagAAAAEGsl2cSYcUQfSuCkRhzyesZflsQTzmfz60JVo6HIfRboKeHJJmecD58lH02ry3ibJQ==",
+========
+                            Password = "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==",
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
+>>>>>>>> 162cff6bba120efb451136186475c72079a66020:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
                             Role = "MOU_User",
                             Unit = "Thane"
                         });

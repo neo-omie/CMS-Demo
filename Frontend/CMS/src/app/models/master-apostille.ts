@@ -18,10 +18,12 @@ constructor(
 }
 
 export class MasterApostilleDto{
-allApostilles:MasterApostille[];
+data: MasterApostille[];
+  totalCount: number;
 
-constructor(allApostilles:MasterApostille[]){
-    this.allApostilles=allApostilles;
+  constructor(data: MasterApostille[], totalCount: number) {
+    this.data = data;
+    this.totalCount = totalCount;
 }
 }
 
