@@ -587,17 +587,17 @@
                       style="color: red;">Invalid Employee</span>
                       <div class="mb-3">
                         <div class="input-group">
-                          <input #editEmpCustodianName class="form-control edit-input dropdown-input" placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown" aria-expanded="false" readonly/>
+                          <input #addEmpCustodianName class="form-control edit-input dropdown-input" placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown" aria-expanded="false" readonly/>
                           <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
                           </div>
-                            <div #editEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
+                            <div #addEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
                               <div class="card card-body">
                                 <input type="text" class="form-control" placeholder="Search.." (input)="textChangeEmployeeCustodian(deptID != undefined ? deptID : 0,$event,1)">
                                 <button type="button" *ngFor="let emp of employeeCustodians" class="dropdown-btn btn" (click)="fillEmployeeCustodian(emp.valueId,emp.employeeName,1)">({{emp.employeeCode}}) {{emp.employeeName}}</button>
                               </div>
                           </div>
                         </div>
-                        <input #editEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId" formControlName="empCustodianId">
+                        <input #addEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId" formControlName="empCustodianId">
                   </div>
                   <div class="m-3">
                     <label for="termsAndConditions">Location<span style="color: red;">*</span></label>

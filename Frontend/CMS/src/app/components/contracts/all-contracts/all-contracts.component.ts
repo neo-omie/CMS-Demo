@@ -65,6 +65,10 @@ export class AllContractsComponent implements OnInit {
   @ViewChild('editEmpCustodianName') editEmpCustodianName!: ElementRef;
   @ViewChild('editEmpCustodianId') editEmpCustodianId!: ElementRef;
   @ViewChild('addContractModal') addContractModal!: ElementRef;
+  @ViewChild('addEmpCustodianName') addEmpCustodianName!: ElementRef;
+  @ViewChild('addEmpCustodianId') addEmpCustodianId!: ElementRef;
+  @ViewChild('addEmpCustodianCollapse') addEmpCustodianCollapse!: ElementRef;
+   
   
 
   GetAllContracts(pageNumber: number, pageSize: number) {
@@ -309,8 +313,11 @@ export class AllContractsComponent implements OnInit {
           console.log(input.value);
           this.employeeCustodians.length = 0;
           this.renderer.removeClass(this.editEmpCustodianCollapse.nativeElement,'show');
+          this.renderer.removeClass(this.addEmpCustodianCollapse.nativeElement,'show');
           this.editEmpCustodianName.nativeElement.value = employeeName;
           this.editEmpCustodianId.nativeElement.value = employeeId;
+          this.addEmpCustodianName.nativeElement.value = employeeName;
+          this.addEmpCustodianId.nativeElement.value = employeeId;
           console.log(employeeId);
         }
       }
