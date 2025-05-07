@@ -170,13 +170,19 @@ export class EscalationMatrixMouComponent {
       let nod1 = this.editNumberOfDays1.nativeElement.value;
       let nod2 = this.editNumberOfDays2.nativeElement.value;
       let nod3 = this.editNumberOfDays3.nativeElement.value;
+      let ap1 = this.editApproverId1.nativeElement.value;
+      let ap2 = this.editApproverId2.nativeElement.value;
+      let ap3 = this.editApproverId3.nativeElement.value;
       if(nod1 !== "" && Number(nod1) > 0 &&
       nod2 !== "" && Number(nod2) > 0 &&
-      nod3 !== "" && Number(nod3) > 0
-    ){
-        this.updateMatrixMou.escalationId1 = this.editApproverId1.nativeElement.value;
-        this.updateMatrixMou.escalationId2 = this.editApproverId2.nativeElement.value;
-        this.updateMatrixMou.escalationId3 = this.editApproverId3.nativeElement.value;
+      nod3 !== "" && Number(nod3) > 0){
+        if(ap1 == ap2 || ap1 == ap3 || ap2 == ap3){
+          Alert.toast(TYPE.ERROR,true,"Approvers cannot be same");
+          return;
+        }
+        this.updateMatrixMou.escalationId1 = ap1;
+        this.updateMatrixMou.escalationId2 = ap2;
+        this.updateMatrixMou.escalationId3 = ap3;
         this.updateMatrixMou.triggerDaysEscalation1 = nod1;
         this.updateMatrixMou.triggerDaysEscalation2 = nod2;
         this.updateMatrixMou.triggerDaysEscalation3 = nod3;

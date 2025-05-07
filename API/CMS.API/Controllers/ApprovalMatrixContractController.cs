@@ -1,4 +1,5 @@
-﻿using CMS.Application.Features.ApprovalMatrixContract.Commands;
+﻿using System.Security.Cryptography.Xml;
+using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
@@ -34,6 +35,10 @@ namespace CMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateApprovalMatrixContract([FromRoute]int id,[FromBody]UpdateApprovalMatrixContractDto contract)
         {
+            if(contract.ApproverId1 == contract.ApproverId2 || contract.ApproverId1 == contract.ApproverId3 || contract.ApproverId2 == contract.ApproverId3)
+            {
+                throw new Exception("Approvers cannot be same");
+            }
             var updatedApprovalMatrixContract = await _mediator.Send(new UpdateApprovalMatrixContractCommand(id, contract));
             return Ok(updatedApprovalMatrixContract);
         }
