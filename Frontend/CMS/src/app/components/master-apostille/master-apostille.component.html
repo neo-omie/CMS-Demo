@@ -5,10 +5,12 @@
 
 <div class="table-responsive p-md-5 p-3">
   <div class="searchheader row mb-2">
-    <div class="col-12 col-sm-2 col-md-3 col-lg-2 mb-2 mb-sm-0">
+    <div class="col-12 col-sm-4 col-md-4 col-lg-3 mb-2 mb-sm-0">
       <button data-bs-toggle="modal" data-bs-target="#apostille-add" class="add-btn btn btn-outline-primary" (click)="addApostille()">
         <i class="fa-solid fa-file-circle-plus"></i> Add Apostille
       </button>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-3 mb-2 mb-sm-0">
     </div>
     <div class="col-12 col-sm-6 col-md-6">
       <input type="text" class="form-control" placeholder="Search by Apostille Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
@@ -130,7 +132,6 @@
                       <label for="unit" class="form-label">Status<span style="color: red;">*</span></label>
                       <!-- <span *ngIf="status?.hasError('required') && (status?.dirty || status?.touched)" style="color: red;">Required</span> -->
                       <select class="form-select" id="status" placeholder="Select status"  formControlName="status">
-                        <option value="" disabled selected>--Select status--</option>
                         <option value="1">Active</option>
                         <option value="0">InActive</option>
                       </select>
@@ -153,7 +154,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="apostilleDetailLabel"  >Apostille Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"></button>
       </div>
 
       <div class="modal-body">
@@ -180,7 +181,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm()">Close</button>
       </div>
     </div>
   </div>

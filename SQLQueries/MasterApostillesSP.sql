@@ -30,7 +30,7 @@ go
 EXEC SP_GetApostilleByID @id = 1;
 go
 
-Create or alter procedure sp_AddApostille 
+Create  or alter procedure sp_AddApostille 
 	@ApostilleName nvarchar(100),
 	@Status BIT,
 	@IsDeleted BIT,
