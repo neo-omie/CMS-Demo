@@ -44,7 +44,7 @@ ngOnInit(): void {
 
 addApostilleForm: FormGroup= new FormGroup({
   apostilleName:new FormControl('',[Validators.required]),
-  status:new FormControl('',Validators.required)
+  status:new FormControl('1',Validators.required)
 })
 
 
