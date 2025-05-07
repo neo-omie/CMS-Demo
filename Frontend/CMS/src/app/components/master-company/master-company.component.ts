@@ -11,16 +11,27 @@ import { LoaderComponent } from '../loader/loader.component';
 import { Pagination } from '../../utils/pagination';
 import { Cities, Countriess, States } from '../../models/company-cascade';
 import { CompanyCascadeService } from '../../services/company-cascade.service';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-master-company',
   standalone: true,
-  imports: [CommonModule,LoaderComponent,FormsModule,RouterModule,ReactiveFormsModule],
+  imports: [CommonModule,LoaderComponent,FormsModule,RouterModule,ReactiveFormsModule,
+            MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './master-company.component.html',
   styleUrl: './master-company.component.css'
 })
 export class MasterCompanyComponent implements OnInit{
   loading: boolean = true;
+  displayedColumns: string[] = ['companyName', 'companyLocation', 'status', 'action'];
+        dataSource = new MatTableDataSource<CompanyMasterDto>();
+        @ViewChild(MatSort) sort!: MatSort;
+        ngAfterViewInit() {
+          this.dataSource.sort = this.sort;
+        }
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
   masterCompany: CompanyListResponse[]=[];
@@ -93,6 +104,10 @@ export class MasterCompanyComponent implements OnInit{
     .subscribe({
       next:(res:CompanyMasterDto[]) => {
       this.loading = false;
+      this.dataSource.data = res;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
       this.showCompanies = res;
       console.log(res);
         if(this.showCompanies != undefined && this.showCompanies.length > 0){
@@ -122,12 +137,23 @@ export class MasterCompanyComponent implements OnInit{
       this.getCompanies();
     }
   }
-
+  countryName?:string;
+  stateName?:string;
+  cityName?:string;
   GetCompany(id:number){
     console.log("ftech id",id);
     this.companyService.getCompanyById(id).subscribe({
       next:(res:MasterCompany)=>{
       this.comp=res;
+      this.companyCascadeService.getCountryById(res.countryId).subscribe((resp) => {
+        this.countryName = resp.countries;
+      });
+      this.companyCascadeService.getStateById(res.stateId).subscribe((resp) => {
+        this.stateName = resp.state;
+      });
+      this.companyCascadeService.getCityById(res.cityId).subscribe((resp) => {
+        this.cityName = resp.city;
+      });
       },
       error:(error)=>{
         console.error('Error :(', error);

@@ -20,7 +20,7 @@
                     <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
                     <input [type]="loginPasswordEyeOpen ? 'text' : 'password'" name="password" class="form-control" id="password" placeholder="Password" formControlName="password">
                 </div>
-                <span class="pswd-error" *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)">Should contain atleast 1 capital letter, 1 numeric, 1 small letter, and 1 alphanumeric character (And more than 4 digits)</span>
+                <span class="pswd-error" *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)">Should contain atleast 1 capital letter, 1 numeric, 1 small letter, and 1 alphanumeric character (Between 4-10 digits)</span>
             </div>
         </div>
         <div class="mb-3 form-check">

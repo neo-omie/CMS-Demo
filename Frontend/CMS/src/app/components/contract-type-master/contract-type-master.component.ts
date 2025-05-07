@@ -9,16 +9,27 @@ import { Pagination } from '../../utils/pagination';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { Title } from '@angular/platform-browser';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-contract-type-master',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule,
+            MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './contract-type-master.component.html',
   styleUrl: './contract-type-master.component.css'
 })
 export class ContractTypeMasterComponent implements OnInit {
   loading: boolean = true;
+  displayedColumns: string[] = ['contractTypeName', 'status', 'action'];
+      dataSource = new MatTableDataSource<ContractTypeMasterDTO>();
+      @ViewChild(MatSort) sort!: MatSort;
+      ngAfterViewInit() {
+        this.dataSource.sort = this.sort;
+      }
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
   masterContract: ContractListResponse[] = [];
@@ -44,6 +55,10 @@ export class ContractTypeMasterComponent implements OnInit {
       .subscribe({
         next: (res: ContractTypeMasterDTO[]) => {
           this.loading = false;
+          this.dataSource.data = res;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
           this.showContract = res;
           console.log(res);
           if (this.showContract != undefined && this.showContract.length > 0) {
