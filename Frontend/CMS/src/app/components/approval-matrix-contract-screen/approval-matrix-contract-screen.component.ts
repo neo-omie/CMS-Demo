@@ -161,10 +161,6 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     let ap2 = this.editApproverId2.nativeElement.value;
     let ap3 = this.editApproverId3.nativeElement.value;
     if(nod !== "" && Number(nod) > 0){
-      if(ap1 == ap2 || ap1 == ap3 || ap2 == ap3){
-        Alert.toast(TYPE.ERROR,true,"Approvers cannot be same");
-        return;
-      }
       this.editApprovalMatrixContractDto.approverId1 = ap1;
       this.editApprovalMatrixContractDto.approverId2 = ap2;
       this.editApprovalMatrixContractDto.approverId3 = ap3;
@@ -179,7 +175,7 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
         },
         error:(error)=>{
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
           Alert.toast(TYPE.ERROR,true,this.errorMsg);
         }
       })

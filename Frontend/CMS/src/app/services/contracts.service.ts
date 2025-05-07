@@ -47,7 +47,7 @@ export class ContractsService {
   GetCompanies():Observable<CompanyMasterDto[]> {
     return this.http.get<CompanyMasterDto[]>(`https://localhost:7041/api/MasterCompany/1/100`);
   }
-  GetApostilleTypes() : Observable<MasterApostille[]> {
-    return this.http.get<MasterApostille[]>(`https://localhost:7041/api/Apostille/1/100`);
+  GetApostilleTypes() : Observable<MasterApostilleDto> {
+    return this.http.get<MasterApostilleDto>(`https://localhost:7041/api/Apostille/1/100`);
   }
 }

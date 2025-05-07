@@ -209,8 +209,7 @@ export class EscalationMatrixContractComponent implements OnInit {
         if(this.updateMatrixContract != undefined &&
         nod1 !== "" && Number(nod1) > 0 &&
         nod2 !== "" && Number(nod2) > 0 &&
-        nod3 !== "" && Number(nod3) > 0
-      ){
+        nod3 !== "" && Number(nod3) > 0){
           this.updateMatrixContract.escalationId1 = this.editApproverId1.nativeElement.value;
           this.updateMatrixContract.escalationId2 = this.editApproverId2.nativeElement.value;
           this.updateMatrixContract.escalationId3 = this.editApproverId3.nativeElement.value;
@@ -224,7 +223,7 @@ export class EscalationMatrixContractComponent implements OnInit {
             },
             error:(error)=>{
               console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
               Alert.toast(TYPE.ERROR,true,this.errorMsg);
             }
           })
