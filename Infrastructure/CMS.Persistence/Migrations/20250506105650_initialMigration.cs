@@ -750,8 +750,13 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.cs
                     { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEGJE7Yk2k+Zb8jaCdfTGI65Ig3S6Le+UIXLmiLX1SSKYU2CnkJvkqJN8Y0W/YNHh/A==", "Admin", "Thane" },
                     { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEGsl2cSYcUQfSuCkRhzyesZflsQTzmfz60JVo6HIfRboKeHJJmecD58lH02ry3ibJQ==", "MOU_User", "Thane" }
+========
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==", "MOU_User", "Thane" }
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.cs
                 });
 
             migrationBuilder.CreateIndex(

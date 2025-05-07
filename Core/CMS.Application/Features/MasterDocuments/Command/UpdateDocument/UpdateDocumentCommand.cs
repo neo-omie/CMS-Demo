@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CMS.Application.Features.Document;
+using CMS.Domain.Entities;
 using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
 {
-    public record UpdateDocumentCommand(int id, DocumentDTO documentDTO) : IRequest<int>;
+    public record UpdateDocumentCommand(int id, DocumentFormDTO model) : IRequest<bool>;
 
 
 }

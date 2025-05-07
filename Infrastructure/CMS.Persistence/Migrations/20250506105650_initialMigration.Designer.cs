@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.Designer.cs
     [Migration("20250506090923_initialMigration")]
+========
+    [Migration("20250506105650_initialMigration")]
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -1230,7 +1234,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEGJE7Yk2k+Zb8jaCdfTGI65Ig3S6Le+UIXLmiLX1SSKYU2CnkJvkqJN8Y0W/YNHh/A==",
+========
+                            Password = "AQAAAAIAAYagAAAAENuxC0hMXSRYVnIxPGRJ5ag/uttE1D85MwI0yvZ7r+5ZxadfCskOptsCvPB7tfPNXQ==",
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1245,7 +1253,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250506090923_initialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEGsl2cSYcUQfSuCkRhzyesZflsQTzmfz60JVo6HIfRboKeHJJmecD58lH02ry3ibJQ==",
+========
+                            Password = "AQAAAAIAAYagAAAAEDBa8Wiw/IIbOITdNXkBG1dqQP9iKrUnrfDS9WtTWrxEG6CdxRoQpWcNyDk5/gnb3Q==",
+>>>>>>>> 0c9bd9eabeac6ba314f4c38f8e8ca3d753988720:Infrastructure/CMS.Persistence/Migrations/20250506105650_initialMigration.Designer.cs
                             Role = "MOU_User",
                             Unit = "Thane"
                         });

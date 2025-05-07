@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CMS.Application.Features.ContractTypeMaster;
-using CMS.Application.Features.Document;
+//using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterCompanies;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
 using CMS.Domain.Entities;
@@ -24,7 +24,7 @@ namespace CMS.Application.Mappings
             CreateMap<UpdateEmployeeDto, MasterEmployee>().ReverseMap();
             CreateMap<GetEmployeeByIDDto, MasterEmployee>().ReverseMap();
             CreateMap<GetEmployeesByDepartmentIdAndEmpDetailsDto, MasterEmployee>().ReverseMap();
-            CreateMap<MasterDocument,DocumentDTO>().ReverseMap();
+            //CreateMap<MasterDocument,DocumentDTO>().ReverseMap();
             CreateMap<AddApostilleDto, MasterApostille>().ReverseMap();
             CreateMap<MasterApostille, GetAllApostilleDto>().ReverseMap();
             CreateMap<MasterApostille, UpdateApostilleDto>().ReverseMap();
