@@ -7,7 +7,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
 {
-    public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, bool>
+    public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, object>
     {
         private readonly IDocumentRepository _repository;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
             _repository = documentRepository;
             _mapper = mapper;
         }
-        public async  Task<bool> Handle(UpdateDocumentCommand request, CancellationToken cancellationToken)
+        public async  Task<object> Handle(UpdateDocumentCommand request, CancellationToken cancellationToken)
         {
             var document = await _repository.GetDocumentById(request.id);
             if (document == null)

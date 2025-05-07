@@ -7,6 +7,7 @@ using CMS.Application.Features.MasterDocuments;
 using CMS.Application.Features.MasterDocuments.Command.DeleteDocument;
 using CMS.Application.Features.MasterDocuments.Command.UpdateDocument;
 using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
+using CMS.Application.Features.MasterDocuments.Queries.CheckFileExists;
 using CMS.Application.Features.MasterDocuments.Queries.GetAllDocument;
 using CMS.Application.Features.MasterDocuments.Queries.GetDocumentById;
 using CMS.Domain.Constants;
@@ -74,13 +75,23 @@ namespace CMS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<int>> UpdateDocument(int id, DocumentFormDTO documentForm)
+        public async Task<IActionResult> UpdateDocument(int id, DocumentFormDTO documentForm)
         {
            
-            await _mediator.Send(new UpdateDocumentCommand(id, documentForm));
+            var result = await _mediator.Send(new UpdateDocumentCommand(id, documentForm));
 
-            return Ok(new { Message = "updated Document Successfully" });
+            return Ok(result);
         }
+
+        [HttpPut("checkFileExists")]
+        public async Task<IActionResult> CheckFileExists( DocumentFormDTO documentForm)
+        {
+            var query = new CheckFileNameExistsQuery(documentForm);
+            var exists = await _mediator.Send(query);
+            return Ok(exists);
+        }
+
+
         [Route("{id}/updateWithoutFile")]
         [HttpPut]
         public Task<IActionResult> UpdateDocumentWithoutFile(int id, DocumentUploadWithoutFileDto model)
@@ -90,10 +101,9 @@ namespace CMS.API.Controllers
             {
                 throw new Exception("Document not found");
             }
-            doc.status = model.Status;
+            doc.status = (Status)model.Status;
             _context.MasterDocuments.Update(doc);
             _context.SaveChanges();
-            //var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model));
             return Task.FromResult<IActionResult>(Ok(new { Message = "Updated successfully" }));
         }
 

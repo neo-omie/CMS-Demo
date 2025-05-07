@@ -15,7 +15,9 @@ namespace CMS.Application.Contracts.Persistence
         Task<MasterDocument> GetDocumentById(int id);
         Task<string> UploadDocument(DocumentUploadDto model);
 
-        Task<bool> UpdateDocument(int id, DocumentFormDTO model);
+        Task<object> UpdateDocument(int id, DocumentFormDTO model);
         Task<bool> DeleteDocument(int id);
+
+        Task<bool> CheckFileExists(DocumentFormDTO model);
     }
 }
