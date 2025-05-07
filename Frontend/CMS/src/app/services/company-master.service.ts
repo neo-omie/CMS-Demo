@@ -24,8 +24,8 @@ private apiUrl='https://localhost:7041/api/MasterCompany'
 
 
 
-  updateCompany(valueId:number, addCompanyDto:AddCompanyDto):Observable<boolean>{
-    return this.http.put<boolean>(`${this.apiUrl}/${valueId}`,addCompanyDto );
+  updateCompany(valueId:number, addCompanyDto:AddCompanyDto):Observable<MasterCompany>{
+    return this.http.put<MasterCompany>(`${this.apiUrl}/${valueId}`,addCompanyDto );
   }
 
   deleteCompany(valueId:number):Observable<boolean>{

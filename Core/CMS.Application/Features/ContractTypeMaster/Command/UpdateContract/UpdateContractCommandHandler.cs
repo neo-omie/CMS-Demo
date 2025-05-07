@@ -22,7 +22,7 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.UpdateContract
         }
         public async Task<ContractTypeMasters> Handle(UpdateContractCommand request, CancellationToken cancellationToken)
         {
-            var cont = _contractTypeMasterRepository.GetContractById(request.id);
+            var cont = await _contractTypeMasterRepository.GetContractById(request.id);
             if (cont==null)
             {
                 throw new Exception($"Contract not found");

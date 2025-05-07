@@ -26,3 +26,8 @@ export class ContractListResponse {
     totalCount: number = 0;
   }
 
+  export class AddContractDTO{
+    contractTypeName?:string | null;
+    status?:boolean | null;
+  }
+
