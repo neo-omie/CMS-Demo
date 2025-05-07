@@ -4,10 +4,10 @@
 <!-- <div class="" id="department-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header d-flex justify-content-between">
           <!--adding the company-->
-          <h1 class="modal-title fs-5 add-header"> Add New Company</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder"> Add New Company</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
           <form [formGroup] = "masterCompanyAddForm" (ngSubmit)="onAddFormSubmit()">
@@ -179,45 +179,51 @@
       </div>
     </div>
   </div>
-<div *ngIf="!loading" class="table-responsive p-3">
-  <div class="searchheader row mb-2">
-    <div class="col-12 col-sm-4 col-md-4 col-lg-3 mb-2 mb-sm-0">
-      <button class="add-btn btn btn-outline-primary">
-        <a data-bs-toggle="modal" data-bs-target="#company-add"><i class="fa-solid fa-file-circle-plus"></i> Add Company</a>
-      </button>
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-3">
 
+  <div class="table-responsive p-md-5 p-3">
+    <div class="searchheader row mb-2">
+      <div class="col-12 col-sm-4 col-md-4 col-lg-3 mb-2 mb-sm-0">
+        <button class="add-btn btn btn-outline-primary">
+          <a data-bs-toggle="modal" data-bs-target="#company-add"><i class="fa-solid fa-file-circle-plus"></i> Add Company</a>
+        </button>
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-3">
+  
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+        <input type="text" class="form-control" placeholder="Search by Company name"     [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
+      </div>
     </div>
-    <div class="col-12 col-sm-6 col-md-6">
-      <input type="text" class="form-control" placeholder="Search by Company name"     [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
-    </div>
+    <table mat-table [dataSource]="dataSource" matSort
+      class="table table-striped table-bordered align-middle mat-elevation-z8">
+  
+      <ng-container matColumnDef="companyName">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Company Name</th>
+        <td mat-cell *matCellDef="let company">{{ company.companyName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="companyLocation">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Company Location</th>
+        <td mat-cell *matCellDef="let company">{{ company.companyLocation }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let company">{{ company.status == true ? 'Active' : 'Inactive' }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="action">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
+        <td mat-cell *matCellDef="let company">
+          <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="fetchCompanyData(company.valueId)"></i>
+          <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
+          <i class="fa-regular fa-trash-can icon"  (click)="deleteCompany(company.valueId)"></i>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
+    </table>
+    <p class="fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
   </div>
-      <table class="table align-middle table-bordered table-striped">
-        <thead>
-          <tr>
-              <th>Company Name</th>
-              <th>Company Location</th>
-              <th>Status</th>
-              <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let company of showCompanies">
-              <td>{{company.companyName}}</td>   
-              <td>{{company.companyLocation}}</td>
-              <td *ngIf="company.status == true">Active</td>
-              <td *ngIf="company.status == false">Inactive</td>
-              <td>
-                <i class="fa-regular fa-pen-to-square icon me-4" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="fetchCompanyData(company.valueId)"></i>
-                <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
-                <i class="fa-regular fa-trash-can icon me-4"  (click)="deleteCompany(company.valueId)"></i>
-              </td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
-    </div>
     <nav class="d-flex justify-content-center" *ngIf="showCompanies.length > 0" aria-label="Page navigation example">
         <ul *ngIf="maxPage > 1" class="pagination">
           <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
@@ -240,7 +246,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="companyDetailLabel"  >Company Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
         <h1 class="model-title fs-6 mb-3">Company Name</h1>
@@ -439,7 +445,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="companyDetailLabel">Edit Company Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
         <form [formGroup] = "masterCompanyAddForm" (ngSubmit)="onUpdateFormSubmit(compID)">
@@ -602,7 +608,7 @@
               </div>
           </div>
           <div class="modal-footer">
-              <button class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
+              <button class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" id="btnadd" type="submit" style="max-width: 300px;">Update</button>
               <button class="btn btn-outline-danger" id="btncancel" type="reset" data-bs-dismiss="modal" style="max-width: 300px;" (click)="onClick()">Cancel</button>
             </div>
             
