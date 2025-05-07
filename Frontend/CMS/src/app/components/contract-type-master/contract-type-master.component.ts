@@ -29,11 +29,8 @@ export class ContractTypeMasterComponent implements OnInit {
 
   constructor(
     private contractService: ContractTypeMasterService,
-    private router: Router
-  ) { }
-      private contractService: ContractTypeMasterService,
-      private router: Router,
-      private title:Title
+    private router: Router,
+    private title:Title
     ) {
       this.title.setTitle("Contract Type Master - CMS");
     }
