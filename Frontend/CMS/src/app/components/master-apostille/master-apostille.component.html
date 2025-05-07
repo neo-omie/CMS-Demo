@@ -154,7 +154,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="apostilleDetailLabel"  >Apostille Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"></button>
       </div>
 
       <div class="modal-body">
@@ -181,7 +181,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm()">Close</button>
       </div>
     </div>
   </div>
