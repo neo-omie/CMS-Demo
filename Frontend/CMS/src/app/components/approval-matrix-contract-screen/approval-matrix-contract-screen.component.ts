@@ -157,10 +157,17 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   editApprovalMatrixContractDto:EditApprovalMatrixContractDto =new EditApprovalMatrixContractDto("","","",0);
   editApproverMatrixContractSubmit(id:number){
     let nod = this.editNumberOfDays.nativeElement.value;
+    let ap1 = this.editApproverId1.nativeElement.value;
+    let ap2 = this.editApproverId2.nativeElement.value;
+    let ap3 = this.editApproverId3.nativeElement.value;
     if(nod !== "" && Number(nod) > 0){
-      this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1.nativeElement.value;
-      this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2.nativeElement.value;
-      this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3.nativeElement.value;
+      if(ap1 == ap2 || ap1 == ap3 || ap2 == ap3){
+        Alert.toast(TYPE.ERROR,true,"Approver cannot be same");
+        return;
+      }
+      this.editApprovalMatrixContractDto.approverId1 = ap1;
+      this.editApprovalMatrixContractDto.approverId2 = ap2;
+      this.editApprovalMatrixContractDto.approverId3 = ap3;
       this.editApprovalMatrixContractDto.numberOfDays = nod;
       this.approverMatrixContractService.EditApproverMatrixContract(id,this.editApprovalMatrixContractDto).subscribe({
         next:(response:boolean)=>{
