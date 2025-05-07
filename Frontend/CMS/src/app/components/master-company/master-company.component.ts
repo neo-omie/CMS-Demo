@@ -122,12 +122,23 @@ export class MasterCompanyComponent implements OnInit{
       this.getCompanies();
     }
   }
-
+  countryName?:string;
+  stateName?:string;
+  cityName?:string;
   GetCompany(id:number){
     console.log("ftech id",id);
     this.companyService.getCompanyById(id).subscribe({
       next:(res:MasterCompany)=>{
       this.comp=res;
+      this.companyCascadeService.getCountryById(res.countryId).subscribe((resp) => {
+        this.countryName = resp.countries;
+      });
+      this.companyCascadeService.getStateById(res.stateId).subscribe((resp) => {
+        this.stateName = resp.state;
+      });
+      this.companyCascadeService.getCityById(res.cityId).subscribe((resp) => {
+        this.cityName = resp.city;
+      });
       },
       error:(error)=>{
         console.error('Error :(', error);

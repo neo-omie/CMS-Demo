@@ -24,4 +24,15 @@ export class CompanyCascadeService {
   return this.http.get<Cities[]>(`${this.apiUrl}/GetCities?stateId=${stateId}`);
 }
 
+// Get By ID
+getCountryById(id?:number):Observable<Countriess> {
+  return this.http.get<Countriess>(`${this.apiUrl}/GetCountryById?id=${id}`);
+}
+getStateById(id?:number):Observable<States> {
+  return this.http.get<States>(`${this.apiUrl}/GetStateById?id=${id}`);
+}
+getCityById(id?:number):Observable<Cities> {
+  return this.http.get<Cities>(`${this.apiUrl}/GetCityById?id=${id}`);
+}
+
 }

@@ -40,5 +40,26 @@ namespace CMS.Persistence.Repositories
                 throw new NotFoundException($"Cities with State Id {stateId} not found.");
             return cities;
         }
+        public async Task<ListOfCountries> GetCountryById(int id)
+        {
+            var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryId == id);
+            if(foundCountry == null)
+                throw new NotFoundException($"Country not found.");
+            return foundCountry;
+        }
+        public async Task<ListOfStates> GetStateById(int id)
+        {
+            var foundState = await _context.States.FirstOrDefaultAsync(c => c.StateId == id);
+            if (foundState == null)
+                throw new NotFoundException($"State not found.");
+            return foundState;
+        }
+        public async Task<ListofCity> GetCityById(int id)
+        {
+            var foundCity = await _context.Cities.FirstOrDefaultAsync(c => c.CityId == id);
+            if (foundCity == null)
+                throw new NotFoundException($"City not found.");
+            return foundCity;
+        }
     }
 }
