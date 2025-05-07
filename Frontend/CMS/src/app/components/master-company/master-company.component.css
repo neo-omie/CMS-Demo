@@ -3,7 +3,6 @@ h2 {
     font-weight: 600;
     text-align: center;
 }
-
 thead tr, thead tr th{
     background-color: #5f5fee;
 }
@@ -22,29 +21,56 @@ td{
 .icon:hover{
     color: #5f5fee;
 }
+.page-link{
+    color: #5f5fee;
+    cursor: pointer;
+}
+.page-link:hover, .active{
+    background-color: rgb(136, 136, 243);
+    color: whitesmoke;
+}
 .active{
     background-color: #5f5fee;
     color: whitesmoke;
 }
-
 .modal-header{
     border-color: #5f5fee;
     background-color: #5f5fee;
+}
+.modal-title{
+    color: #5f5fee;
+}
+.add-header {
+    color: whitesmoke;
+}
+.close-btn{
+    border-color: whitesmoke;
+    color: whitesmoke;
+}
+.close-btn:hover{
+    background-color: whitesmoke;
+    color: #5f5fee;
+}
+.dropdown-input{
+    background-color: white;
+    border-right: 0;
+}
+.dropdown-icon{
+    background-color: white;
+    border-left: 0;
+}
+.dropdown-btn{
+    text-align: start;
+    border-color: #dee2e6;
+}
+.dropdown-btn:hover{
+    color: #5f5fee;
+    border-color: #5f5fee ;
 }
 .form-control:focus{
     box-shadow: none;
     border-color: #dee2e6;
 }
-
-
-/* .searchbox{
-    text-align: center;
-} */
-
-#companyDetailLabel{
-    background-color: #5f5fee;
-}
-
 .add-btn {
     color: rgba(95, 95, 238);
     background-color: whitesmoke;
@@ -56,10 +82,21 @@ td{
     color: whitesmoke;
     border-radius: 5px;
 }
-.add-btn a {
-    color: #5f5fee;
-    text-decoration: none;
+.add-modal-btn{
+    display: flex;
+    justify-content: flex-end; 
 }
-.add-btn:hover a {
-    color: whitesmoke;
+.searchheader{
+    /* margin: ; */
+    /* display: flex; */
+    /* gap: 1.5rem; */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
+/* .searchheader input {
+    margin-bottom: 0.5%;
+    margin-left: 1%;
+    width: 50%;
+    align-items: center;
+} */

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ContractTypeMaster, ContractTypeMasterDTO } from '../models/contract-type-master';
+import { AddContractDTO, ContractTypeMaster, ContractTypeMasterDTO } from '../models/contract-type-master';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +19,12 @@ export class ContractTypeMasterService {
         return this.http.get<ContractTypeMaster>(`${this.apiUrl}/${valueId}`);
       }
   
-    addContract(addContractDto:ContractTypeMaster):Observable<ContractTypeMaster>{
-      return this.http.post<ContractTypeMaster>(`${this.apiUrl}`,addContractDto)
+    addContract(addContractDTO:AddContractDTO):Observable<ContractTypeMaster>{
+      return this.http.post<ContractTypeMaster>(`${this.apiUrl}`,addContractDTO)
     }
   
-    updateContract(valueId:number, ContractName:string):Observable<boolean>{
-      return this.http.put<boolean>(`${this.apiUrl}/${valueId}?contractName=${ContractName}`, null);
+    updateContract(valueId:number, contract:AddContractDTO):Observable<ContractTypeMaster>{
+      return this.http.put<ContractTypeMaster>(`${this.apiUrl}/${valueId}`, contract);
     }
   
     deleteContract(valueId:number):Observable<boolean>{

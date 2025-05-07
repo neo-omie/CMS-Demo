@@ -1,63 +1,137 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="mt-3">Contract Type Master</h2>
 <div *ngIf="!loading" class="table-responsive p-3">
-    <button class="add-btn btn btn-outline-primary mb-2 me-3">
-      <a data-bs-toggle="modal" data-bs-target="#document-add"><i class="fa-solid fa-file-circle-plus"></i> Add New Type</a>
-    </button>
-      <table class="table align-middle table-bordered table-striped">
-        <thead>
-          <tr>
-              <th>Value Id</th>
-              <th>Contract Type</th>
-              <th>Status</th>
-              <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let contract of showContract">
-              <td>{{contract.valueId}}</td>
-              <td>{{contract.contractTypeName}}</td>
-              <td>{{contract.status}}</td>
-              <td>
-                <!-- <i class="fa-regular fa-pen-to-square icon me-4" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="GetContract(contract.valueId)"></i> -->
-                <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#contract-detail" (click)="GetContract(contract.valueId)"></i>
-                <i class="fa-solid fa-trash icon me-4"  (click)="deleteContract(contract.valueId)"></i>
-              </td>
-          </tr>
-        </tbody>
-      </table>
-      
+  <button class="add-btn btn btn-outline-primary mb-2 me-3">
+    <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New
+      Type</a>
+  </button>
+
+  <table class="table align-middle table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Contract Type</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contract of showContract">
+        <td>{{contract.contractTypeName}}</td>
+        <td *ngIf="contract.status == false">Inactive</td>
+        <td *ngIf="contract.status == true">Active</td>
+        <td>
+          <i class="fa-regular fa-pen-to-square icon me-4" data-bs-toggle="modal" data-bs-target="#contract-edit"
+            (click)="fetchContractData(contract.valueId)"></i>
+          <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#contract-detail"
+            (click)="GetContract(contract.valueId)"></i>
+          <i class="fa-solid fa-trash icon me-4" (click)="deleteContract(contract.valueId)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<nav class="d-flex justify-content-center" *ngIf="showContract.length > 0" aria-label="Page navigation example">
+  <ul *ngIf="maxPage > 1" class="pagination">
+    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link"
+        aria-label="FirstPage">&laquo;</span></li>
+    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link"
+        aria-label="Previous">&lsaquo;</span></li>
+    <li class="page-item" (click)="GetPage(pageNumbers[1])"><span
+        [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
+    <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span
+        [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
+    <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span
+        [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
+    <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span
+        [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
+    <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span
+        [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
+    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link"
+        aria-label="Next">&rsaquo;</span></li>
+    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link"
+        aria-label="LastPage">&raquo;</span></li>
+  </ul>
+</nav>
+<div class="modal fade" id="contract-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <!--modal for adding the data -->
+      <form [formGroup]="contractTypeMasterAddForm" (ngSubmit)="onAddFormSubmitContract()">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Contract Details</h1>
+          <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="p-2">
+            <div class="fields-container">
+              <div class="m-3">
+                <label for="contractTypeName" class="form-label">Contract Type Name<span
+                    style="color: red;">*</span></label>
+                <span
+                  *ngIf="contractTypeName?.hasError('required') && (contractTypeName?.dirty || contractTypeName?.touched)"
+                  style="color: red;">Required</span>
+                <input class="form-control" type="text" id="contractTypeName" placeholder="Enter company name"
+                  formControlName="contractTypeName">
+              </div>
+              <div class="m-3">
+                <label for="status" class="form-label">Status<span style="color: red;">*</span></label>
+                <span *ngIf="status?.hasError('required') && (status?.dirty || status?.touched)"
+                  style="color: red;">Required</span>
+                <!-- <input class="form-control" type="text" id="contractTypeName" placeholder="Enter company name" formControlName="contractTypeName"> -->
+                <select class="form-select" name="status" id="status" formControlName="status">
+                  <option value="" disabled selected>--Select Status--</option>
+                  <option value="0">Inactive</option>
+                  <option value="1">Active</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" id="btnadd" type="submit"
+            style="max-width: 300px;">Add</button>
+          <button class="btn btn-outline-danger" id="btncancel" type="reset" data-bs-dismiss="modal"
+            style="max-width: 300px;">Cancel</button>
+        </div>
+      </form>
     </div>
-    <nav class="d-flex justify-content-center" *ngIf="showContract.length > 0" aria-label="Page navigation example">
-        <ul *ngIf="maxPage > 1" class="pagination">
-          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
-          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link" aria-label="Previous">&lsaquo;</span></li>
-          <li class="page-item" (click)="GetPage(pageNumbers[1])"><span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
-          <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
-          <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
-          <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
-          <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
-          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link" aria-label="Next">&rsaquo;</span></li>
-          <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
-        </ul>
-      </nav>
-
-      
+  </div>
+</div>
 
 
 
-      <!-- Modal for Viewing Contract Details -->
+<!-- Modal for Viewing Contract Details -->
 <div class="modal fade" id="contract-detail" tabindex="-1" aria-labelledby="contractDetailLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="contractDetailLabel">Contract Details</h5>
+      <div class="modal-header d-flex justify-content-between">
+        <h5 style="color:whitesmoke;" class="modal-title fs-5 fw-bolder" id="contractDetailLabel">Contract Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p><strong>Value ID:</strong> {{ cont?.valueId }}</p>
-        <p><strong>Contract Type:</strong> {{ cont?.contractTypeName }}</p>
-        <p><strong>Status:</strong> {{ cont?.status }}</p>
+        <h1 class="model-title fs-6 mb-3">Contract Name</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-certificate"></i></span>
+            <input type="text" name="contractTypeName" class="form-control" id="contractTypeName"
+              [value]="cont.contractTypeName" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3"> Status</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
+            <input *ngIf="cont.status == false" type="text" name="status" class="form-control" id="status"
+              value="Inactive" disabled>
+            <input *ngIf="cont.status == true" type="text" name="status" class="form-control" id="status" value="Active"
+              disabled>
+          </div>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -66,3 +140,50 @@
   </div>
 </div>
 
+<!--modal for editing the data -->
+
+<div class="modal fade" id="contract-edit" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <form [formGroup]="contractTypeMasterAddForm" (ngSubmit)="onUpdateFormSubmit()">
+      <div class="modal-header d-flex justify-content-between">
+        <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="companyDetailLabel">Edit Contract Details
+        </h5>
+        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-2">
+              <div class="fields-container">
+                <div class="m-3">
+                  <label for="contractTypeName" class="form-label">Contract Name<span
+                      style="color: red;">*</span></label>
+                  <span
+                    *ngIf="contractTypeName?.hasError('required') && (contractTypeName?.dirty || contractTypeName?.touched)"
+                    style="color: red;">Required</span>
+                  <input class="form-control" type="text" id="contractTypeName" placeholder="Enter contract name"
+                    formControlName="contractTypeName">
+                </div>
+                <div class="m-3">
+                  <label for="status" class="form-label">Status<span style="color: red;">*</span></label>
+                  <span *ngIf="status?.hasError('required') && (status?.dirty || status?.touched)"
+                    style="color: red;">Required</span>
+                  <!-- <input class="form-control" type="text" id="companyStatus" formControlName="companyStatus" placeholder="Choose eithe true or false"> -->
+                  <select class="form-select" name="status" id="status" formControlName="status">
+                    <option value="" selected disabled>--Select Status--</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                  </select>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" id="btnadd" type="submit"
+          style="max-width: 300px;">Update</button>
+        <button class="btn btn-outline-danger" id="btncancel" type="reset" data-bs-dismiss="modal"
+          style="max-width: 300px;">Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

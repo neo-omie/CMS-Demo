@@ -20,8 +20,10 @@ namespace CMS.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<GetAllApostilleDto>> GetAllMasterApostilleAsync(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<MasterApostille> Data, int TotalCount)> GetAllMasterApostilleAsync(int pageNumber, int pageSize, string? searchTerm)
         {
+            var query = _context.MasterApostilles.AsQueryable();
+            int totalCount = await query.Where(a => a.IsDeleted == false).CountAsync();
             if (pageNumber < 1)
             {
                 throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
@@ -32,9 +34,10 @@ namespace CMS.Persistence.Repositories
                 throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
             }
 
-            string sql = "EXEC SP_GetAllApostilles @PageNumber = {0}, @PageSize = {1}";
-            var allApostilles = await _context.GetApostillesDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
-            return allApostilles;
+            string sql = "EXEC SP_GetAllApostilles @PageNumber = {0}, @PageSize = {1}, @searchTerm={2}";
+            var data = await _context.MasterApostilles.FromSqlRaw(sql, pageNumber, pageSize, searchTerm).ToListAsync();
+
+            return (data, totalCount);
         }
 
         public async Task<MasterApostille> GetMasterApostilleByIdAsync(int id)
