@@ -37,7 +37,7 @@ namespace CMS.API.Controllers
         {
             if (updateDto.EscalationId1 == updateDto.EscalationId2 || updateDto.EscalationId1 == updateDto.EscalationId3 || updateDto.EscalationId2 == updateDto.EscalationId3)
             {
-                throw new Exception("Escalation cannot be same");
+                throw new Exception("Escalators cannot be same");
             }
             await _mediator.Send(new UpdateEscalationMatrixMouCommand(id, updateDto));
             return Ok(new { Message = "Updated successfully" });

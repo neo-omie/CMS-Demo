@@ -157,7 +157,6 @@ export class ApprovalMatrixMouScreenComponent implements OnInit {
     editApproverMatrixMOUSubmit(id:number){
       let nod = this.editNumberOfDays.nativeElement.value;
       if(nod !== "" && Number(nod) > 0){
-        console.log(nod);
         this.editApprovalMatrixMOUDto.approverId1 = this.editApproverId1.nativeElement.value;
         this.editApprovalMatrixMOUDto.approverId2 = this.editApproverId2.nativeElement.value;
         this.editApprovalMatrixMOUDto.approverId3 = this.editApproverId3.nativeElement.value;
@@ -172,7 +171,7 @@ export class ApprovalMatrixMouScreenComponent implements OnInit {
           },
           error:(error)=>{
             console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
             Alert.toast(TYPE.ERROR,true,this.errorMsg);
           }
         })

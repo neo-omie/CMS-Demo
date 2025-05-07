@@ -34,6 +34,10 @@ namespace CMS.API.Controllers
         [HttpPut("UpdateApprovalMatrixMOU")]
         public async Task<IActionResult> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
         {
+            if (mou.ApproverId1 == mou.ApproverId2 || mou.ApproverId1 == mou.ApproverId3 || mou.ApproverId2 == mou.ApproverId3)
+            {
+                throw new Exception("Approvers cannot be same");
+            }
             var updatedApprovalMatrixMOU = await _mediator.Send(new UpdateApprovalMatrixMOUCommand(id, mou));
             return Ok(updatedApprovalMatrixMOU);
         }
