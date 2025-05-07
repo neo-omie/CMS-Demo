@@ -42,7 +42,11 @@ namespace CMS.API.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> UpdateMatrixContract( int id, [FromBody] UpdateEscalationMatrixContractDto updateDto)
         {
-             await _mediator.Send(new UpdateEscalationMatrixContractCommand(id, updateDto));
+            if (updateDto.EscalationId1 == updateDto.EscalationId2 || updateDto.EscalationId1 == updateDto.EscalationId3 || updateDto.EscalationId2 == updateDto.EscalationId3)
+            {
+                throw new Exception("Escalation cannot be same");
+            }
+            await _mediator.Send(new UpdateEscalationMatrixContractCommand(id, updateDto));
             return Ok(new {Message = "SuccessFully updated"});
         }
 

@@ -10,11 +10,11 @@ import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { ApproverMatrixContractService } from '../../services/approver-matrix-contract.service';
 import { Title } from '@angular/platform-browser';
-import { ApprovalMatrixContract } from '../../models/approval-matrix-contract';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Pagination } from '../../utils/pagination';
 
 @Component({
   selector: 'app-escalation-matrix-contract',
@@ -89,43 +89,11 @@ export class EscalationMatrixContractComponent implements OnInit {
         this.pageNumbers[0] = pageNumber;
         console.log(res.getEscalationMatrixContractDto);
         if (this.matrixContracts != undefined && this.matrixContracts.getEscalationMatrixContractDto != undefined && this.matrixContracts.getEscalationMatrixContractDto.length > 0) {
-          if (pageNumber == 1) {
-            this.maxPage = Math.ceil(this.matrixContracts.totalCount / 10);
-          }
-          let diff = this.maxPage - pageNumber;
-          if (diff >= 0 && this.maxPage >= 5) {
-            if (this.pageNumbers[0] == 1) {
-              this.pageNumbers[1] = pageNumber;
-              this.pageNumbers[2] = pageNumber + 1;
-              this.pageNumbers[3] = pageNumber + 2;
-              this.pageNumbers[4] = pageNumber + 3;
-              this.pageNumbers[5] = pageNumber + 4;
-            } else if (this.pageNumbers[0] == 2) {
-              this.pageNumbers[1] = pageNumber - 1;
-              this.pageNumbers[2] = pageNumber;
-              this.pageNumbers[3] = pageNumber + 1;
-              this.pageNumbers[4] = pageNumber + 2;
-              this.pageNumbers[5] = pageNumber + 3;
-            } else if (diff == 0) {
-              this.pageNumbers[1] = pageNumber - 4;
-              this.pageNumbers[2] = pageNumber - 3;
-              this.pageNumbers[3] = pageNumber - 2;
-              this.pageNumbers[4] = pageNumber - 1;
-              this.pageNumbers[5] = pageNumber;
-            } else if (diff == 1) {
-              this.pageNumbers[1] = pageNumber - 3;
-              this.pageNumbers[2] = pageNumber - 2;
-              this.pageNumbers[3] = pageNumber - 1;
-              this.pageNumbers[4] = pageNumber;
-              this.pageNumbers[5] = pageNumber + 1;
-            } else {
-              this.pageNumbers[1] = pageNumber - 2;
-              this.pageNumbers[2] = pageNumber - 1;
-              this.pageNumbers[3] = pageNumber;
-              this.pageNumbers[4] = pageNumber + 1;
-              this.pageNumbers[5] = pageNumber + 2;
-            }
-          }
+          
+          let result = Pagination.paginator(pageNumber,this.matrixContracts.totalCount,pageSize)
+                    this.maxPage = result.maxPage;
+                    this.pageNumbers = result.pageNumbers;
+      
         }
       });
   }
