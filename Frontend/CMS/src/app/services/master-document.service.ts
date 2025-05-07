@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AddDocumentDto, GetDocumentById, MasterDocument, MasterDocumentDto } from '../models/master-document';
@@ -22,18 +22,28 @@ export class MasterDocumentService {
   }
 
   addDocument(masterDocument:FormData):Observable<any>{
+    console.log(masterDocument);
     return this.http.post<any>(`${this.apiUrl}/upload`,masterDocument);
   }
 
   // uploadDocument()
 
+
   updateDocument(docId?:number, data?:FormData):Observable<any>{
     return this.http.put<any>(`${this.apiUrl}/${docId}`, data)
   }
-  updateDocumentWithoutFille(docId?:number, data?:FormData):Observable<any>{
-    return this.http.put<any>(`${this.apiUrl}/${docId}/updateWithoutFile`, data)
+
+  updateDocumentWithoutFille(docId?:number, data?:any):Observable<any>{
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json' // Set the content type
+    });
+    return this.http.put<any>(`${this.apiUrl}/${docId}/updateWithoutFile`, data, {headers})
   }
 
+  checkDocumentExist(data?:FormData):Observable<boolean>{
+    
+    return this.http.put<boolean>(`${this.apiUrl}/checkFileExists`,data);
+  }
   
   deleteDocument(documentId:number):Observable<boolean>{
     return this.http.delete<boolean>(`${this.apiUrl}/${documentId}`);

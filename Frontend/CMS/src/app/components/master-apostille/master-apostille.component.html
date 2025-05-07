@@ -114,7 +114,7 @@
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Apostille' : mode==='edit' ? 'Edit Apostille' :'View Apostille'}}</h1>
+        <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Apostille' : 'Edit Apostille' }}</h1>
         <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
@@ -154,7 +154,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="apostilleDetailLabel"  >Apostille Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"></button>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="modal-body">

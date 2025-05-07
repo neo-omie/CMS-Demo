@@ -9,6 +9,6 @@ namespace CMS.Application.Features.MasterDocuments.Command.UploadDocument
 {
     public class DocumentUploadWithoutFileDto
     {
-        public Status Status { get; set; }
+        public int Status { get; set; }
     }
 }

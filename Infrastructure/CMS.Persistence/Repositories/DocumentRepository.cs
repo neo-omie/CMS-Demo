@@ -63,6 +63,14 @@ namespace CMS.Persistence.Repositories
 
         public async Task<string> UploadDocument(DocumentUploadDto model)
         {
+
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
+            }
             if (model.File == null || model.File.Length == 0)
             {
                 throw new Exception("No file uploaded.");
@@ -72,14 +80,6 @@ namespace CMS.Persistence.Repositories
             if (model.File.Length > maxFileSize)
             {
                 throw new Exception("File size exceeds the 25MB limit.");
-            }
-
-            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
-            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
-
-            if (!allowedExtensions.Contains(fileExtension))
-            {
-                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
             }
 
             var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
@@ -178,13 +178,16 @@ namespace CMS.Persistence.Repositories
             return true;
         }
         
-
         
-      
-
-        
-        public async Task<bool> UpdateDocument(int id, DocumentFormDTO model)
+        public async Task<object> UpdateDocument(int id, DocumentFormDTO model)
         {
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
+            }
             if (model.File == null || model.File.Length == 0)
             {
                 throw new Exception("No file uploaded.");
@@ -196,20 +199,16 @@ namespace CMS.Persistence.Repositories
                 throw new Exception("File size exceeds the 25MB limit.");
             }
 
-            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
-            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
-
-            if (!allowedExtensions.Contains(fileExtension))
-            {
-                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
-            }
 
             // Retrieve the existing document
-            var existingDocument = await _context.MasterDocuments.FindAsync(id);
+            var existingDocument = await _context.MasterDocuments.FirstOrDefaultAsync(f => f.DisplayDocumentName == model.File.FileName);
             if (existingDocument == null)
             {
                 throw new Exception("Document not found.");
             }
+            var currentPresentDoc = await GetDocumentById(id);
+            _context.MasterDocuments.Remove(currentPresentDoc);
+            
 
             // Delete the old file if exists
             var oldFilePath = existingDocument.DocumentPath;
@@ -232,6 +231,8 @@ namespace CMS.Persistence.Repositories
                 Directory.CreateDirectory(uploadsFolder);
             }
 
+            
+
             // Generate unique file name and save new file
             //var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
             var originalFileName = Path.GetFileName(model.File.FileName);
@@ -252,11 +253,23 @@ namespace CMS.Persistence.Repositories
             _context.MasterDocuments.Update(existingDocument);
             if (await _context.SaveChangesAsync() > 0)
             {
-                return true;
+                return new { Message = "Document updated" };
             }
 
             throw new Exception("Failed to update document.");
 
+        }
+
+        public async Task<bool> CheckFileExists( DocumentFormDTO model)
+        {
+            var existingDocumentName = await _context.MasterDocuments
+                            .FirstOrDefaultAsync(d => d.DisplayDocumentName == model.File.FileName);
+
+            if (existingDocumentName != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

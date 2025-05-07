@@ -136,7 +136,8 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="employeeDetailLabel"  >Employee Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button> -->
+        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="modal-body">
@@ -170,7 +171,7 @@
         <h1 class="model-title fs-6 mb-3">Unit</h1>
         <div class="mb-3">
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
             <input type="text" name="pocContactNumber" class="form-control" id="pocContactNumber"
             [value]="addEmployeeForm.get('unit')?.value" disabled>
           </div>
@@ -179,7 +180,7 @@
         <h1 class="model-title fs-6 mb-3">Department</h1>
         <div class="mb-3">
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
             <input type="text" name="pocEmailId" class="form-control" id="pocEmailId"
             [value]="addEmployeeForm.get('departmentName')?.value" disabled>
           </div>
@@ -188,7 +189,7 @@
         <h1 class="model-title fs-6 mb-3">Employee Mobile</h1>
         <div class="mb-3">
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i>
             </span>
             <input type="text" name="companyAddressLine1" class="form-control" id="companyAddressLine1"
             [value]="addEmployeeForm.get('employeeMobile')?.value" disabled>
@@ -198,7 +199,7 @@
         <h1 class="model-title fs-6 mb-3">Employee Email</h1>
         <div class="mb-3">
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i>
             </span>
             <input type="text" name="companyAddressLine2" class="form-control" id="companyAddressLine2"
             [value]="addEmployeeForm.get('email')?.value" disabled>
@@ -208,7 +209,7 @@
         <h1 class="model-title fs-6 mb-3">Employee Ext</h1>
         <div class="mb-3">
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i>
             </span>
             <input type="text" name="companyAddressLine3" class="form-control" id="companyAddressLine3"
             [value]="addEmployeeForm.get('employeeExtension')?.value" disabled>
@@ -222,7 +223,7 @@
   </div>
 </div>
 
-<!-- Add Employee Modal -->
+<!-- Add and Edit Employee Modal -->
 <div class="modal fade" id="employee-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -250,7 +251,7 @@
                     <div class="m-3">
                       <label for="role" class="form-label">Role<span style="color: red;">*</span></label>
                       <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">Required</span>
-                      <select class="form-select" id="roleSelect" placeholder="Select Role"  formControlName="role">
+                      <select class="form-select" id="roleSelect" placeholder="Select role"  formControlName="role">
                         <option value="" disabled selected>--Select Role--</option>
                         <option value="Management User">Management User</option>
                         <option value="MOU_User">MOU_User</option>
