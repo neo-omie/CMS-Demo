@@ -1,13 +1,20 @@
-.containerfirst {
+/* .containerfirst {
     display: flex;
     align-items: center;
     gap: 1rem; 
     padding: 0.625rem;
-    margin: 0 10px;
+    margin: 0 10px; */
     /* flex-wrap: wrap;  */
+/* } */
+.thead{
+    background-color: #5f5fee;
+    border-top-color: #5f5fee;
+    border-bottom-color: #5f5fee;
 }
-
-.containerfirst .add-btn {
+.mat-header-cell {
+    color: white;
+}
+/* .containerfirst .add-btn {
     display: flex;
     align-items: center;
     height: 2.375rem;
@@ -24,14 +31,14 @@
 .containerfirst .form-select,
 .containerfirst .form-control {
     height: 38px;
-}
+} */
 
 h2 {
     color: #5f5fee;
     font-weight: 600;
     text-align: center;
 }
-thead tr, thead tr th{
+/* thead tr, thead tr th{
     background-color: #5f5fee;
 }
 thead th{
@@ -40,7 +47,7 @@ thead th{
 td{
     font-weight: 400;
     color: rgb(61, 61, 61);
-}
+} */
 .icon{
     cursor: pointer;
     display: inline-block;
@@ -61,7 +68,6 @@ td{
     background-color: #5f5fee;
     color: whitesmoke;
 }
-
 .add-btn {
     color: rgba(95, 95, 238);
     background-color: whitesmoke;
@@ -72,6 +78,10 @@ td{
     border-color: whitesmoke;
     color: whitesmoke;
     border-radius: 5px;
+}
+.add-header {
+    color: whitesmoke;
+    font-weight: 600;
 }
 .modal-header{
     background-color: #5f5fee;

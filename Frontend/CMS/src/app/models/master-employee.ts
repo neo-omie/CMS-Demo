@@ -7,7 +7,7 @@ export class MasterEmployee {
     employeeCode: string;
     unit: string;
     employeeMobile: number;
-    employeeExtension: string;
+    employeeExtension: number;
     departmentId: number;
     lastPasswordChanged: Date;
     departmentName:string;
@@ -21,7 +21,7 @@ constructor(
     employeeCode: string='',
     unit: string='',
     employeeMobile: number=0,
-    employeeExtension: string='',
+    employeeExtension: number=0,
     departmentId: number=0,
     lastPasswordChanged: Date=new Date(),
     departmentName:string
@@ -52,25 +52,25 @@ export class MasterEmployeeDto {
 }
 
 export class AddEmployeeDto{
-  employeeName?:string
-      password?:string
-      role?:string
-      employeeCode?:string
-      unit?:string
-      departmentId?:number
-      employeeMobile?:number
-      email?:string
-      employeeExtension?:string
+  employeeName?:string;
+      password?:string;
+      role?:string;
+      employeeCode?:string;
+      unit?:string;
+      departmentId?:number;
+      employeeMobile?:number;
+      email?:string;
+      employeeExtension?:number;
 }
 
 export class EditEmployeeDto{
-  employeeName?:string
-      password?:string
-      role?:string
-      employeeCode?:string
-      unit?:string
-      departmentId?:number
-      employeeMobile?:number
-      email?:string
-      employeeExtension?:string
+  employeeName?:string;
+      password?:string;
+      role?:string;
+      employeeCode?:string;
+      unit?:string;
+      departmentId?:number;
+      employeeMobile?:number;
+      email?:string;
+      employeeExtension?:number;
 }

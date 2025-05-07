@@ -1,9 +1,7 @@
 <app-loader *ngIf="loading"></app-loader>
-<br>
-<h2>List Of Employees</h2>
-<br>
-<div class="containerfirst">
-  <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-primary">
+<h2 class="mt-3 fs-1">List Of Employees</h2>
+<!-- <div class="containerfirst">
+  <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-primary" (click)="addEmployee()">
     <a><i class="fa-solid fa-file-circle-plus"></i> Add Employee</a>
   </button>
   <div class="input-group">
@@ -16,8 +14,213 @@
     </select>
   </div>
   <input class="form-control" type="text" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
-</div>
+</div> -->
 
+<div class="table-responsive p-md-5 p-3">
+  <div class="searchheader row mb-2">
+    <div class="col-12 col-sm-2 col-md-3 col-lg-2 mb-2 mb-sm-0">
+      <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-outline-primary" (click)="addEmployee()">
+        <i class="fa-solid fa-file-circle-plus"></i> Add Employee
+      </button>
+    </div>
+    <div class="col-sm-4 col-md-3 col-lg-4 mb-2 mb-sm-0">
+      <div class="input-group">
+        <span class="input-group-text">Unit</span>
+        <select class="form-select" id="unitFilter" [(ngModel)]="selectedUnit" (change)="onFilterChange()">
+          <option value="All">All</option>
+          <option value="Thane">Thane</option>
+          <option value="Pune">Pune</option>
+          <option value="Indore">Indore</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-6">
+      <input type="text" class="form-control" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
+    </div>
+  </div>
+  <table mat-table [dataSource]="dataSource" matSort class="table table-striped table-bordered align-middle mat-elevation-z8">
+  
+    <ng-container matColumnDef="employeeName">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header style="border-left-color: #5f5fee;">Employee Name</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.employeeName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="unit">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Employee Location</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.unit }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="role">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Roles</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.role }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
+      <td mat-cell *matCellDef="let employee">
+        <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" aria-label="Edit Employee" data-bs-target="#employee-add"  (click)="editEmployee(employee)"></i>
+        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" aria-label="View Employee" data-bs-target="#employee-detail" (click)="viewEmployee(employee.valueId)"></i>
+        <i class="fa-regular fa-trash-can icon me-4" aria-label="Delete Employee"  title="Delete" (click)="deleteEmployee(employee)"></i>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
+  </table>
+
+  <!-- Pagination -->
+  <nav class="d-flex justify-content-center align-items-center" *ngIf="employees.length > 0" aria-label="Page navigation example">
+    <ul *ngIf="maxPage >= 1" class="pagination">
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(1)">
+        <span class="page-link" aria-label="FirstPage">&laquo;</span>
+      </li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[0] - 1)">
+        <span class="page-link" aria-label="Previous">&lsaquo;</span>
+      </li>
+      <li class="page-item" (click)="GetPage(pageNumbers[1])">
+        <span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{ pageNumbers[1] }}</span>
+      </li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])">
+        <span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{ pageNumbers[2] }}</span>
+      </li> 
+      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])">
+        <span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{ pageNumbers[3] }}</span>
+      </li>
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])">
+        <span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{ pageNumbers[4] }}</span>
+      </li>
+      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])">
+        <span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{ pageNumbers[5] }}</span>
+      </li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[0] + 1)">
+        <span class="page-link" aria-label="Next">&rsaquo;</span>
+      </li>
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(maxPage)">
+        <span class="page-link" aria-label="LastPage">&raquo;</span>
+      </li>
+    </ul>
+  </nav>
+</div> 
+
+<!-- Table  -->
+<!-- <div *ngIf="!loading" class="table-responsive p-3">
+    <table class="table align-middle table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Employee Location</th>
+                <th>Roles</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let employee of employees"> 
+                <td>{{employee.employeeName}}</td>
+                <td>{{employee.unit}}</td>
+                <td>{{employee.role}}</td>
+                <td>
+                    <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" aria-label="Edit Employee" data-bs-target="#employee-add"  (click)="editEmployee(employee)"></i>
+                    <i class="fa-regular fa-eye icon" data-bs-toggle="modal" aria-label="View Employee" data-bs-target="#employee-detail" (click)="viewEmployee(employee.valueId)"></i>
+                    <i class="fa-regular fa-trash-can icon me-4" aria-label="Delete Employee"  title="Delete" (click)="deleteEmployee(employee)"></i>
+                </td>
+            </tr> 
+        </tbody>
+    </table>
+    
+
+</div>   -->
+
+<!-- View Employee Modal -->
+<div class="modal fade" id="employee-detail" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="employeeDetailLabel"  >Employee Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <h1 class="model-title fs-6 mb-3">Employee Name</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <input type="text" name="employeeName" class="form-control" id="employeeName"
+            [value]="addEmployeeForm.get('employeeName')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Role</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <input type="text" name="pocName" class="form-control" id="pocName"
+            [value]="addEmployeeForm.get('role')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Employee Code</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
+            <input type="text" name="companyStatus" class="form-control" id="companyStatus"
+            [value]="addEmployeeForm.get('employeeCode')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Unit</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+            <input type="text" name="pocContactNumber" class="form-control" id="pocContactNumber"
+            [value]="addEmployeeForm.get('unit')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Department</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <input type="text" name="pocEmailId" class="form-control" id="pocEmailId"
+            [value]="addEmployeeForm.get('departmentName')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Employee Mobile</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            </span>
+            <input type="text" name="companyAddressLine1" class="form-control" id="companyAddressLine1"
+            [value]="addEmployeeForm.get('employeeMobile')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Employee Email</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            </span>
+            <input type="text" name="companyAddressLine2" class="form-control" id="companyAddressLine2"
+            [value]="addEmployeeForm.get('email')?.value" disabled>
+          </div>
+        </div>
+
+        <h1 class="model-title fs-6 mb-3">Employee Ext</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            </span>
+            <input type="text" name="companyAddressLine3" class="form-control" id="companyAddressLine3"
+            [value]="addEmployeeForm.get('employeeExtension')?.value" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Add Employee Modal -->
 <div class="modal fade" id="employee-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -25,7 +228,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Employee' : mode==='edit' ? 'Edit Employee' :'View Employee'}}</h1>
-        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
 
       </div>
       <div class="modal-body">
@@ -101,18 +304,17 @@
                       <span *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)" style="color: red;">Required</span>
                       <input class="form-control" type="text" id="employeeExtension" placeholder="Enter employee extension" formControlName="employeeExtension">
                     </div>
-    
                   </div>
     
                 
-                  <div class="d-flex justify-content-center gap-2">
-                    <button type="submit" class="btn btn-primary" style="background-color: #5f5fee;" [disabled]="addEmployeeForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" [disabled]="addEmployeeForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
+                    <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
                   </div>
                 </form>
     
-                <div class="view-mode" *ngIf="mode==='view'">
-                  <div class="m-3">
+                <!-- <div class="view-mode" *ngIf="mode==='view'"> -->
+                  <!-- <div class="m-3">
                     <strong>Employee Name: </strong>{{addEmployeeForm.get('employeeName')?.value}}
                   </div>
                   <div class="m-3">
@@ -137,68 +339,11 @@
                     <strong>Employee Extension:</strong> {{ addEmployeeForm.get('employeeExtension')?.value }}
                   </div>
                   <div class="d-flex justify-content-center gap-2">
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Back</button>
-                  </div>
-            </div>
+                    <button type="reset" data-bs-dismiss="modal" class="btn btn-secondary" (click)="resetForm()">Back</button>
+                  </div> -->
+                <!-- </div> -->
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- Table  -->
-<div *ngIf="!loading" class="table-responsive p-3">
-    <table class="table align-middle table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Employee Name</th>
-                <th>Employee Location</th>
-                <th>Roles</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let employee of employees"> 
-                <td>{{employee.employeeName}}</td>
-                <td>{{employee.unit}}</td>
-                <td>{{employee.role}}</td>
-                <td>
-                    <i class="fa-solid fa-pen-to-square icon" aria-label="Edit Employee"  title="Edit" (click)="editEmployee(employee)"></i>
-                    <i class="fa-solid fa-eye icon" aria-label="View Employee"  title="View" (click)="viewEmployee(employee)"></i>
-                    <i class="fa-solid fa-trash icon" aria-label="Delete Employee"  title="Delete" (click)="deleteEmployee(employee)"></i>
-                </td>
-            </tr> 
-        </tbody>
-    </table>
-    <!-- Pagination -->
-<nav class="d-flex justify-content-center align-items-center" *ngIf="employees.length > 0" aria-label="Page navigation example">
-  <ul *ngIf="maxPage >= 1" class="pagination">
-    <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(1)">
-      <span class="page-link" aria-label="FirstPage">&laquo;</span>
-    </li>
-    <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[0] - 1)">
-      <span class="page-link" aria-label="Previous">&lsaquo;</span>
-    </li>
-    <li class="page-item" (click)="GetPage(pageNumbers[1])">
-      <span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{ pageNumbers[1] }}</span>
-    </li>
-    <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])">
-      <span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{ pageNumbers[2] }}</span>
-    </li> 
-    <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])">
-      <span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{ pageNumbers[3] }}</span>
-    </li>
-    <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])">
-      <span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{ pageNumbers[4] }}</span>
-    </li>
-    <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])">
-      <span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{ pageNumbers[5] }}</span>
-    </li>
-    <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[0] + 1)">
-      <span class="page-link" aria-label="Next">&rsaquo;</span>
-    </li>
-    <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(maxPage)">
-      <span class="page-link" aria-label="LastPage">&raquo;</span>
-    </li>
-  </ul>
-</nav>
-</div>  

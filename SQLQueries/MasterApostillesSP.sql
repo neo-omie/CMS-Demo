@@ -1,10 +1,15 @@
-CREATE OR ALTER PROCEDURE SP_GetAllApostilles @PageNumber int, @PageSize int
+CREATE  OR ALTER PROCEDURE SP_GetAllApostilles @PageNumber int, @PageSize int, @SearchTerm nvarchar(255)=null
 AS
 DECLARE @TotalRecords int
 BEGIN
 	SELECT @TotalRecords = COUNT(ValueId) FROM MasterApostilles;
 	SELECT *, @TotalRecords as TotalRecords FROM MasterApostilles
-	WHERE IsDeleted = 0
+	WHERE IsDeleted = 0 
+	AND (
+	(@SearchTerm IS NOT NULL AND ApostilleName LIKE '%' + @SearchTerm + '%')
+	OR 
+	(@SearchTerm IS NULL)
+	)
 	ORDER BY ValueId
 	OFFSET(@PageNumber-1)*@PageSize ROWS
 	FETCH NEXT @PageSize ROWS ONLY

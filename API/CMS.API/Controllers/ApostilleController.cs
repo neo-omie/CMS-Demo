@@ -23,9 +23,10 @@ namespace CMS.API.Controllers
         [HttpGet("{pageNumber}/{pageSize}")]
         public async Task<ActionResult<IEnumerable<GetAllApostilleDto>>> GetAllApostilleAsync(
         [FromRoute] int pageNumber,
-        [FromRoute] int pageSize)
+        [FromRoute] int pageSize,
+        [FromQuery] string? searchTerm)
         {
-            var query= new GetAllApostilleQuery(pageNumber, pageSize);
+            var query= new GetAllApostilleQuery(pageNumber, pageSize, searchTerm);
             return Ok(await _mediator.Send(query));
         }
 
