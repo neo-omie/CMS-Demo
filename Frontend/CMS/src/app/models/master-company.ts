@@ -13,10 +13,10 @@ export class MasterCompany {
     companyEmailId?:string;
     companyWebsiteUrl?:string;
     companyBankName?:string;
-    gSTno?:number;
+    gsTno?:number;
     bankAccNo?:number;
-    mSMERegistrationNo?:number;
-    iFSCCode?:string;
+    msmeRegistrationNo?:number;
+    ifscCode?:string;
     panNo?:string;
     countryId?:number;
     stateId?:number;

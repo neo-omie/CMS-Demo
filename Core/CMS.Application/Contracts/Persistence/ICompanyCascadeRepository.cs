@@ -12,5 +12,9 @@ namespace CMS.Application.Contracts.Persistence
         Task<IEnumerable<ListOfCountries>> GetCountries();
         Task<IEnumerable<ListOfStates>> GetStates(int countryId);
         Task<IEnumerable<ListofCity>> GetCities(int stateId);
+
+        Task<ListOfCountries> GetCountryById(int id);
+        Task<ListOfStates> GetStateById(int id);
+        Task<ListofCity> GetCityById(int id);
     }
 }

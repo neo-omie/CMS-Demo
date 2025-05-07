@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE SP_GetAllDepartments @PageNumber int, @PageSize int
+CREATE or alter PROCEDURE SP_GetAllDepartments @PageNumber int, @PageSize int
 AS
 DECLARE @TotalRecords int
 BEGIN
@@ -10,7 +10,7 @@ BEGIN
 END
 EXEC SP_GetAllDepartments @PageNumber = 1, @PageSize = 10;
 
-CREATE OR ALTER PROCEDURE SP_GetDepartmentByID @id int
+CREATE or alter PROCEDURE SP_GetDepartmentByID @id int
 AS
 BEGIN
 	SELECT * FROM Departments
