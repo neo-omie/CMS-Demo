@@ -8,7 +8,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Command.DeleteDocument
 {
-    public class DeleteDocumentByIdQueryHandler : IRequestHandler<DeleteDocumentByIdQuery, int>
+    public class DeleteDocumentByIdQueryHandler : IRequestHandler<DeleteDocumentByIdQuery, bool>
     {
         private readonly IDocumentRepository _repository;
 
@@ -16,7 +16,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.DeleteDocument
         {
             _repository = repository;
         }
-        public Task<int> Handle(DeleteDocumentByIdQuery request, CancellationToken cancellationToken)
+        public Task<bool> Handle(DeleteDocumentByIdQuery request, CancellationToken cancellationToken)
         {
             return _repository.DeleteDocument(request.id);
 

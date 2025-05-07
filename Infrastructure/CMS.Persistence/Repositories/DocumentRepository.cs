@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
 using CMS.Application.Features.MasterDocuments.Command.UploadDocument;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.AspNetCore.Hosting;
@@ -44,32 +45,20 @@ namespace CMS.Persistence.Repositories
             string sql = "EXEC SP_GetAllDocuments @PageNumber = {0}, @PageSize = {1}";
             var docs = _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize);
 
+            //var docs = _context.MasterDocuments.ToListAsync();
             return (docs, totalCount);
         }
 
         public async Task<MasterDocument> GetDocumentById(int id)
-        {
-            string sql = "EXEC SP_GetDocumentByID @id = {0}";
-            var findingDocument = await _context.MasterDocuments.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
-            var document = findingDocument.FirstOrDefault();
+        { 
+            var document =await _context.MasterDocuments.FindAsync(id);
             if (document == null)
             {
                 throw new DocumentNotFoundException($"Document with id {id} not found");
             }
             return document;
         }
-        public async Task<int> AddDocument(MasterDocument masterDocument)
-        {
-            // string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
-            //int affectedRows = await _context.Database.ExecuteSqlRawAsync(sql,null,masterDocument.DocumentName, masterDocument.status,masterDocument.DocumentType,masterDocument.DocumentData,masterDocument.IsDeleted);
-            // if (affectedRows < 0)
-            // {
-            // throw new Exception("Something went wrong try again later");
 
-            // }
-            // return affectedRows;
-            return 1;
-        }
 
 
         public async Task<string> UploadDocument(DocumentUploadDto model)
@@ -90,20 +79,7 @@ namespace CMS.Persistence.Repositories
 
             if (!allowedExtensions.Contains(fileExtension))
             {
-                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png).");
-            }
-
-            using var memoryStream = new MemoryStream();
-            await model.File.CopyToAsync(memoryStream);
-            var fileBytes = memoryStream.ToArray();
-            var fileHash = Convert.ToBase64String(SHA256.Create().ComputeHash(fileBytes));
-
-            var existingDocument = await _context.MasterDocuments
-                .FirstOrDefaultAsync(d => d.UniqueDocumentName == fileHash);
-
-            if (existingDocument != null)
-            {
-                throw new Exception("A document with the same content has already been uploaded.");
+                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
             }
 
             var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
@@ -111,58 +87,176 @@ namespace CMS.Persistence.Repositories
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
+
+            var existingDocument = await _context.MasterDocuments
+                .FirstOrDefaultAsync(d => d.DisplayDocumentName == model.File.FileName);
+
             var originalFileName = Path.GetFileName(model.File.FileName);
-
             var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+            var filePath = Path.Combine(uploadsFolder, originalFileName);
 
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            if (existingDocument != null)
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath); 
+                }
+            }
+            else
+            {
+                //var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                filePath = Path.Combine(uploadsFolder, originalFileName);
+            }
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await model.File.CopyToAsync(stream);
             }
 
-            var document = new MasterDocument
+            if (existingDocument != null)
             {
-                DocumentPath = $"uploads/{filePath}",
-                DisplayDocumentName = originalFileName,
-                UniqueDocumentName = fileHash,
-                status = model.Status
-            };
+                existingDocument.DocumentPath = filePath;
+                existingDocument.DisplayDocumentName = originalFileName;
+                existingDocument.UniqueDocumentName = uniqueFileName;
+                //existingDocument.UniqueDocumentName = Path.GetFileName(filePath);
+                _context.MasterDocuments.Update(existingDocument);
+            }
+            else
+            {
+                var document = new MasterDocument
+                {
+                    DocumentPath = filePath,
+                    DisplayDocumentName = originalFileName,
+                    //UniqueDocumentName = Path.GetFileName(filePath),
+                    UniqueDocumentName =uniqueFileName,
+                    status = model.Status
+                };
+                await _context.MasterDocuments.AddAsync(document);
+            }
 
-            await _context.MasterDocuments.AddAsync(document);
             if (await _context.SaveChangesAsync() > 0)
+            {
                 return "Document uploaded successfully";
+            }
+
             throw new Exception("For some reasons, document not uploaded");
         }
 
-        public async Task<int> DeleteDocument(int id)
+
+        public async Task<bool> DeleteDocument(int id)
         {
-            string sql = "EXEC SP_DeleteDocumentById @id";
+            var document = await GetDocumentById(id);
+            if (document == null)
+            {
+                throw new Exception("Document not found.");
+            }
 
-            
-            var affectedRows = await _context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@id", id));
+            if (File.Exists(document.DocumentPath))
+            {
+                try
+                {
+                    File.Delete(document.DocumentPath);
+                }
+                catch (IOException ex)
+                {
+                    throw new Exception($"Failed to delete file '{document.DocumentPath}': {ex.Message}");
+                }
+            }
+            else
+            {
+                throw new Exception($"File '{document.DisplayDocumentName}' does not exist.");
+            }
 
-           
-            //await _context.SaveChangesAsync();
+            document.IsDeleted = true;
+            _context.Remove(document);
+            //_context.Update(document);
+            if (await _context.SaveChangesAsync() <= 0)
+            {
+                throw new Exception("Failed to update document status in the database.");
+            }
 
-            return affectedRows; 
+            return true;
         }
-
-
-        public async Task<int> UpdateDocument(int id, MasterDocument masterDocument)
-        {
-            //string sql = "EXEC SP_AddAndUpdateDocument @valueId={0},@documentName={1},@status={2},@documentType={3},@documentData={4},@isDeleted={5}";
-            //int affectedRows = await  _context.Database.ExecuteSqlRawAsync(sql,id,masterDocument.DocumentName, masterDocument.status, masterDocument.DocumentType, masterDocument.DocumentData, masterDocument.IsDeleted);
-
-            //if (affectedRows > 0)
-            //{
-            //    return affectedRows;
-            //}
-            //throw new Exception("Something went wrong try again later");
-            return 1;
-        }
+        
 
         
+      
+
+        
+        public async Task<bool> UpdateDocument(int id, DocumentFormDTO model)
+        {
+            if (model.File == null || model.File.Length == 0)
+            {
+                throw new Exception("No file uploaded.");
+            }
+
+            const long maxFileSize = 25 * 1024 * 1024;
+            if (model.File.Length > maxFileSize)
+            {
+                throw new Exception("File size exceeds the 25MB limit.");
+            }
+
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
+            }
+
+            // Retrieve the existing document
+            var existingDocument = await _context.MasterDocuments.FindAsync(id);
+            if (existingDocument == null)
+            {
+                throw new Exception("Document not found.");
+            }
+
+            // Delete the old file if exists
+            var oldFilePath = existingDocument.DocumentPath;
+            if (File.Exists(oldFilePath))
+            {
+                try
+                {
+                    File.Delete(oldFilePath);
+                }
+                catch (IOException ex)
+                {
+                    throw new Exception($"Failed to delete old file: {ex.Message}");
+                }
+            }
+
+            // Prepare uploads folder
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            // Generate unique file name and save new file
+            //var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+            var originalFileName = Path.GetFileName(model.File.FileName);
+
+            var newFilePath = Path.Combine(uploadsFolder, originalFileName);
+
+            using (var stream = new FileStream(newFilePath, FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
+
+            // Update document properties
+            existingDocument.DocumentPath = newFilePath;
+            existingDocument.DisplayDocumentName = Path.GetFileName(model.File.FileName);
+            //existingDocument.UniqueDocumentName = uniqueFileName;
+            existingDocument.status = (Status)model.Status;
+
+            _context.MasterDocuments.Update(existingDocument);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+
+            throw new Exception("Failed to update document.");
+
+        }
     }
 }

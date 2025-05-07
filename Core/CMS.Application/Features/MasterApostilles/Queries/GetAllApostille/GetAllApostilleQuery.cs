@@ -3,5 +3,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterApostilles.Queries.GetAllApostille
 {
-    public record GetAllApostilleQuery(int pageNumber, int pageSize) :IRequest<IEnumerable<GetAllApostilleDto>>;
+    public record GetAllApostilleQuery(int pageNumber, int pageSize, string? searchTerm) :IRequest<object>;
 }

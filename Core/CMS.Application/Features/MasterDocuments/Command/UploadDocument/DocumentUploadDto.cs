@@ -12,7 +12,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.UploadDocument
     {
        
         public Status Status { get; set; } 
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
 
         //public bool IsDeleted { get; set; } = false;
 

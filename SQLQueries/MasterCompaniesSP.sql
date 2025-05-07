@@ -47,7 +47,8 @@ CREATE OR ALTER PROCEDURE SP_UpdateCompany
 	@CompanyContactNo bigint, @CompanyEmailId nvarchar(255),
 	@CompanyWebsiteUrl nvarchar(255), @CompanyBankName nvarchar(255),
 	@GSTno bigint, @BankAccNo bigint,
-	@MSMERegistrationNo bigint, @IFSCCode bigint, @PanNo nvarchar(255)
+	@MSMERegistrationNo bigint, @IFSCCode nvarchar(255), @PanNo nvarchar(255),
+	@CountryId int, @StateId int, @CityId int
 AS
 BEGIN
 	SELECT * FROM MasterCompanies
@@ -56,9 +57,10 @@ BEGIN
 	SET CompanyName=@CompanyName,@PocName=@PocName,CompanyStatus=@CompanyStatus,PocContactNumber=@PocContactNumber,PocEmailId=@PocEmailId,
 	CompanyAddressLine1=@CompanyAddressLine1,CompanyAddressLine2=@CompanyAddressLine2,CompanyAddressLine3=@CompanyAddressLine3,Zipcode=@Zipcode,
 	CompanyContactNo=@CompanyContactNo,CompanyEmailId=@CompanyEmailId,CompanyWebsiteUrl=@CompanyWebsiteUrl,CompanyBankName=@CompanyBankName,
-	GSTno=@GSTno ,BankAccNo=@BankAccNo, MSMERegistrationNo=@MSMERegistrationNo,IFSCCode=@IFSCCode,PanNo=@PanNo
+	GSTno=@GSTno ,BankAccNo=@BankAccNo, MSMERegistrationNo=@MSMERegistrationNo,IFSCCode=@IFSCCode,PanNo=@PanNo,
+	CountryId=@CountryId, StateId=@StateId, CityId = @CityId
 	WHERE ValueId=@ValId;
-END
+END	
 
 EXEC SP_UpdateCompany @ValId=1, @CompanyName=null,
 	@PocName =null, @CompanyStatus =null,

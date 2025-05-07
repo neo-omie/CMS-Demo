@@ -4,9 +4,9 @@
 <!-- <div class="" id="department-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header d-flex justify-content-between">
           <h1 class="modal-title fs-5 add-header"><i class="fa-solid fa-file-circle-plus"></i> Add New Department</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
           <form #departmentForm="ngForm" (ngSubmit)="addDepartment(departmentForm)">
@@ -15,8 +15,7 @@
                 <input type="text" class="form-control" id="departmentName" name="departmentName" [(ngModel)]="addDept.departmentName" required />
               </div>
               <br>
-              <div class="add-modal-btn">
-    
+              <div class="modal-footer">
                 <button type="submit" class=" add-btn btn btn-primary add-modal-btn" data-bs-dismiss="modal">Save</button>
                 &nbsp;
                 <a class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</a>
@@ -26,29 +25,39 @@
       </div>
     </div>
   </div>
-<div *ngIf="!loading" class="table-responsive p-3">
-  <button class="add-btn btn btn-outline-primary mb-2">
-    <a data-bs-toggle="modal" data-bs-target="#department-add"><i class="fa-solid fa-file-circle-plus"></i> Add department</a>
-  </button>
-    <table class="table align-middle table-bordered table-striped">
-      <thead>
-        <tr>
-            <th>Department ID</th>
-            <th>Department</th>
-            <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let department of departments">
-            <td>{{department.departmentId}}</td>
-            <td>{{department.departmentName}}</td>
-            <td>
-              <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#department-edit" (click)="GetDepartment(department.departmentId)"></i>
-              <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#department-detail" (click)="GetDepartment(department.departmentId)"></i>
-              <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#department-delete" (click)="deleteDepartment(department.departmentId)"></i>
-            </td>
-        </tr>
-      </tbody>
+
+  <div class="table-responsive p-md-5 p-3">
+    <button class="add-btn btn btn-outline-primary mb-2">
+      <a data-bs-toggle="modal" data-bs-target="#department-add"><i class="fa-solid fa-file-circle-plus"></i> Add department</a>
+    </button>
+    <table mat-table [dataSource]="dataSource" matSort
+      class="table table-striped table-bordered align-middle mat-elevation-z8">
+  
+      <!-- <ng-container matColumnDef="departmentID">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header style="border-left-color: #5f5fee;">
+          Department ID</th>
+        <td mat-cell *matCellDef="let department">{{ department.departmentId }}</td>
+      </ng-container>
+   -->
+      <ng-container matColumnDef="departmentName">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Department Name</th>
+        <td mat-cell *matCellDef="let department">{{ department.departmentName }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="action">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
+        <td mat-cell *matCellDef="let department">
+          <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#department-edit"
+            (click)="GetDepartment(department.departmentId)"></i>
+          <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#department-detail"
+            (click)="GetDepartment(department.departmentId)"></i>
+          <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#department-delete"
+            (click)="deleteDepartment(department.departmentId)"></i>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
     </table>
   </div>
   <nav class="d-flex justify-content-center" *ngIf="departments.length > 0" aria-label="Page navigation example">

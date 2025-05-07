@@ -1,4 +1,4 @@
-.container{
+/* .container{
     margin: 0px;
     display: flex;
     justify-content: flex-start;
@@ -50,11 +50,73 @@ td{
 .tablefoot {
     display: flex;
 }
-  
-.pagination {
+   */
+/* .pagination {
     margin-left: 880px;
 }
 
 .totalapo{
     margin-left: 10px;
+} */
+
+.thead{
+    background-color: #5f5fee;
+    border-top-color: #5f5fee;
+    border-bottom-color: #5f5fee;
+}
+.mat-header-cell {
+    color: white;
+}
+h2 {
+    color: #5f5fee;
+    font-weight: 600;
+    text-align: center;
+}
+
+.icon{
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 1rem;
+}
+.icon:hover{
+    color: #5f5fee;
+}
+.page-link{
+    color: #5f5fee;
+    cursor: pointer;
+}
+.page-link:hover, .active{
+    background-color: rgb(136, 136, 243);
+    color: whitesmoke;
+}
+.active{
+    background-color: #5f5fee;
+    color: whitesmoke;
+}
+.add-btn {
+    color: rgba(95, 95, 238);
+    background-color: whitesmoke;
+    border-color: #5f5fee;
+}
+.add-btn:hover{
+    background-color: #5f5fee;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+.add-header {
+    color: whitesmoke;
+    font-weight: 600;
+}
+.modal-header{
+    background-color: #5f5fee;
+    color: white;
+}
+.close-btn{
+    border-color: whitesmoke;
+    color: whitesmoke;
+}
+.close-btn:hover{
+    background-color: whitesmoke;
+    color: #5f5fee;
 }

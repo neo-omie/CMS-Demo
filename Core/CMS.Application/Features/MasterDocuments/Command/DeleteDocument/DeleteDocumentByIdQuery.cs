@@ -7,6 +7,6 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Command.DeleteDocument
 {
-    public record DeleteDocumentByIdQuery (int id): IRequest<int>;
+    public record DeleteDocumentByIdQuery (int id): IRequest<bool>;
     
 }

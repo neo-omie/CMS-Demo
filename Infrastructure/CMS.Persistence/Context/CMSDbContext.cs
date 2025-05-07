@@ -74,6 +74,18 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<GetAllApprovalMatrixMOUDto>().Entity<GetAllApprovalMatrixMOUDto>().HasNoKey();
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);
+            //for companymaster unique constraint
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.CompanyName);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.PocEmailId);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.PocEmailId);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.CompanyContactNo);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.CompanyEmailId);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.CompanyWebsiteUrl);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.GSTno);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.BankAccNo);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.MSMERegistrationNo);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.IFSCCode);
+            modelBuilder.Entity<MasterCompany>().HasAlternateKey(u => u.PanNo);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);

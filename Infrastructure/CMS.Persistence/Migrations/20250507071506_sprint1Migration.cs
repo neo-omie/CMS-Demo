@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedDocumentEntity : Migration
+    public partial class sprint1Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -376,7 +376,7 @@ namespace CMS.Persistence.Migrations
                     EmployeeCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmployeeMobile = table.Column<long>(type: "bigint", nullable: false),
-                    EmployeeExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployeeExtension = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     LastPasswordChanged = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -586,24 +586,24 @@ namespace CMS.Persistence.Migrations
                 {
                     ValueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PocName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyStatus = table.Column<bool>(type: "bit", nullable: false),
                     PocContactNumber = table.Column<long>(type: "bigint", nullable: false),
-                    PocEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PocEmailId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CompanyAddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyAddressLine3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Zipcode = table.Column<int>(type: "int", nullable: false),
                     CompanyContactNo = table.Column<long>(type: "bigint", nullable: false),
-                    CompanyEmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyWebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyEmailId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyWebsiteUrl = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CompanyBankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GSTno = table.Column<long>(type: "bigint", nullable: false),
                     BankAccNo = table.Column<long>(type: "bigint", nullable: false),
                     MSMERegistrationNo = table.Column<long>(type: "bigint", nullable: false),
-                    IFSCCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PanNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IFSCCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PanNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false),
@@ -612,6 +612,16 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MasterCompanies", x => x.ValueId);
+                    table.UniqueConstraint("AK_MasterCompanies_BankAccNo", x => x.BankAccNo);
+                    table.UniqueConstraint("AK_MasterCompanies_CompanyContactNo", x => x.CompanyContactNo);
+                    table.UniqueConstraint("AK_MasterCompanies_CompanyEmailId", x => x.CompanyEmailId);
+                    table.UniqueConstraint("AK_MasterCompanies_CompanyName", x => x.CompanyName);
+                    table.UniqueConstraint("AK_MasterCompanies_CompanyWebsiteUrl", x => x.CompanyWebsiteUrl);
+                    table.UniqueConstraint("AK_MasterCompanies_GSTno", x => x.GSTno);
+                    table.UniqueConstraint("AK_MasterCompanies_IFSCCode", x => x.IFSCCode);
+                    table.UniqueConstraint("AK_MasterCompanies_MSMERegistrationNo", x => x.MSMERegistrationNo);
+                    table.UniqueConstraint("AK_MasterCompanies_PanNo", x => x.PanNo);
+                    table.UniqueConstraint("AK_MasterCompanies_PocEmailId", x => x.PocEmailId);
                     table.ForeignKey(
                         name: "FK_MasterCompanies_Cities_CityId",
                         column: x => x.CityId,
@@ -748,8 +758,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", "Main person", 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEOBEQEpNcauDBqADgJqnrSjMdxxHrnkx/w442sOz7D0iyJnyMY3fIj0Scz/zXULvSw==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", "IT Smart", 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJAkMaxXsbz8yDp8fmLU5051/Rg0uc5a7O+hOiWzlxxG0zvn1LhQzDnOxaCPAPbjKg==", "MOU_User", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIJdnQY1iMhSEQruYzBV5Qw8mezsE2lWyWNq6OY2NoePhFkKRNOmChEsE6NhpIqbiw==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELMV5jrktbcQjWaNyvP06z+xH0Nf0PcMmU97aP7OoYimqoWZV4OvGaabFXLMmhzzHg==", "MOU_User", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(

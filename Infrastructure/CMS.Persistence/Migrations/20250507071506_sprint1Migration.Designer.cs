@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250506043546_updatedDocumentEntity")]
-    partial class updatedDocumentEntity
+    [Migration("20250507071506_sprint1Migration")]
+    partial class sprint1Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -826,18 +826,18 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("CompanyEmailId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("CompanyStatus")
                         .HasColumnType("bit");
 
                     b.Property<string>("CompanyWebsiteUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
@@ -847,7 +847,7 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("IFSCCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -857,14 +857,14 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("PanNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("PocContactNumber")
                         .HasColumnType("bigint");
 
                     b.Property<string>("PocEmailId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PocName")
                         .IsRequired()
@@ -877,6 +877,26 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ValueId");
+
+                    b.HasAlternateKey("BankAccNo");
+
+                    b.HasAlternateKey("CompanyContactNo");
+
+                    b.HasAlternateKey("CompanyEmailId");
+
+                    b.HasAlternateKey("CompanyName");
+
+                    b.HasAlternateKey("CompanyWebsiteUrl");
+
+                    b.HasAlternateKey("GSTno");
+
+                    b.HasAlternateKey("IFSCCode");
+
+                    b.HasAlternateKey("MSMERegistrationNo");
+
+                    b.HasAlternateKey("PanNo");
+
+                    b.HasAlternateKey("PocEmailId");
 
                     b.HasIndex("CityId");
 
@@ -1182,9 +1202,8 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EmployeeExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmployeeExtension")
+                        .HasColumnType("int");
 
                     b.Property<long>("EmployeeMobile")
                         .HasColumnType("bigint");
@@ -1222,12 +1241,12 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 1,
                             Email = "admin@cms.com",
                             EmployeeCode = "NEO1",
-                            EmployeeExtension = "Main person",
+                            EmployeeExtension = 2467,
                             EmployeeMobile = 7777766666L,
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEOBEQEpNcauDBqADgJqnrSjMdxxHrnkx/w442sOz7D0iyJnyMY3fIj0Scz/zXULvSw==",
+                            Password = "AQAAAAIAAYagAAAAEIJdnQY1iMhSEQruYzBV5Qw8mezsE2lWyWNq6OY2NoePhFkKRNOmChEsE6NhpIqbiw==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1237,12 +1256,12 @@ namespace CMS.Persistence.Migrations
                             DepartmentId = 2,
                             Email = "sarthak@neosoft.com",
                             EmployeeCode = "NEO2",
-                            EmployeeExtension = "IT Smart",
+                            EmployeeExtension = 8976,
                             EmployeeMobile = 9999988888L,
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEJAkMaxXsbz8yDp8fmLU5051/Rg0uc5a7O+hOiWzlxxG0zvn1LhQzDnOxaCPAPbjKg==",
+                            Password = "AQAAAAIAAYagAAAAELMV5jrktbcQjWaNyvP06z+xH0Nf0PcMmU97aP7OoYimqoWZV4OvGaabFXLMmhzzHg==",
                             Role = "MOU_User",
                             Unit = "Thane"
                         });

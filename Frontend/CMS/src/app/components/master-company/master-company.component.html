@@ -1,35 +1,229 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="mt-3">Company Master</h2>
-<div *ngIf="!loading" class="table-responsive p-3">
-    <button class="add-btn btn btn-outline-primary mb-2 me-3">
-      <a routerLink="addCompany"><i class="fa-solid fa-file-circle-plus"></i> Add New Company </a>
-    </button>
-    <input type="text"  placeholder="Search by Company name" class="searchbox w-25    d-inline-block me-2" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
-      <table class="table align-middle table-bordered table-striped">
-        <thead>
-          <tr>
-              <th>Value Id</th>
-              <th>Company Name</th>
-              <th>Company Location</th>
-              <th>Status</th>
-              <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let company of showCompanies">
-              <td>{{company.valueId}}</td>
-              <td>{{company.companyName}}</td>   
-              <td>{{company.companyLocation}}</td>
-              <td>{{company.status}}</td>
-              <td>
-                <i class="fa-regular fa-pen-to-square icon me-4"  (click)="editCompany(company)"></i>
-                <i class="fa-regular fa-eye icon me-4" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
-                <i class="fa-regular fa-trash-can icon me-4"  (click)="deleteCompany(company.valueId)"></i>
-              </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="modal fade" id="company-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- <div class="" id="department-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <!--adding the company-->
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder"> Add New Company</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup] = "masterCompanyAddForm" (ngSubmit)="onAddFormSubmit()">
+            <div class="p-2">
+                <div class="card">
+                    <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-detail-container">
+                        <span>Company Details</span> <i class="fa-solid fa-angle-down"></i>
+                    </div>
+                    <div class="card-body collapse show" id="company-detail-container">
+                        <div class="fields-container">
+                            <div class="m-3">
+                              <label for="CompanyName" class="form-label">Company Name<span style="color: red;">*</span></label>
+                                <span *ngIf="companyName?.hasError('required') && (companyName?.dirty || companyName?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="companyName" placeholder="Enter company name" formControlName="companyName">
+                            </div>
+                            <div class="m-3">
+                              <label for="PocName" class="form-label">POC Name<span style="color: red;">*</span></label>
+                                <span *ngIf="pocName?.hasError('required') && (pocName?.dirty || pocName?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="pocName" placeholder="Enter poc Name" formControlName="pocName">
+                            </div>
+                            <div class="m-3">
+                                <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
+                            </div>
+                            <div class="m-3">
+                              <label for="pocContactNumber" class="form-label">POC ContactNo<span style="color: red;">*</span></label>
+                                <span *ngIf="pocContactNumber?.hasError('required') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Required</span>
+                                <span *ngIf="pocContactNumber?.hasError('pattern') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Invalid number</span>
+                                <input class="form-control" type="text" id="pocContactNumber" placeholder="Enter poc contact number" formControlName="pocContactNumber">
+                            </div>
+                            <div class="m-3">
+                              <label for="companyStatus">Status</label>
+                                <span *ngIf="companyStatus?.hasError('required') && (companyStatus?.dirty || companyStatus?.touched)" style="color: red;" >Required</span>
+                                <!-- <input class="form-control" type="text" id="companyStatus" formControlName="companyStatus" placeholder="Choose eithe true or false"> -->
+                                <select class="form-select" name="companyStatus" id="companyStatus" formControlName="companyStatus">
+                                  <option value="" selected disabled>--Select Status--</option>
+                                  <option value="1">Active</option>
+                                  <option value="0">Inactive</option>
+                                </select>
+                              </div>
+                            <div class="m-3">
+                              <label for="pocEmailId" class="form-label">POC EmailId<span style="color: red;">*</span></label>
+                                <span *ngIf="pocEmailId?.hasError('required') && (pocEmailId?.dirty || pocEmailId?.touched)" style="color: red;">Required</span>
+                                <span *ngIf="pocEmailId?.hasError('email') && (pocEmailId?.dirty || pocEmailId?.touched)" style="color: red;">Invalid email</span>
+                                <input class="form-control" type="text" id="pocEmailId" placeholder="Enter poc emailId" formControlName="pocEmailId">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="card">
+                    <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-contract-detail-container">
+                        <span>Company Contact Details</span> <i class="fa-solid fa-angle-down"></i>
+                    </div>
+                    <div class="card-body collapse show" id="company-contract-detail-container">
+                        <div class="fields-container">
+                            <div class="m-3">
+                              <label for="CompanyAddressLines" class="form-label">Company Address<span style="color: red;">*</span></label>
+                                <span *ngIf="companyAddressLine1?.hasError('required') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="companyAddressLine1" placeholder="Enter company address line 1" formControlName="companyAddressLine1">
+                            </div>
+                            <div class="m-3">
+                                <input class="form-control" type="text" id="companyAddressLine2" placeholder="Enter company address line 2" formControlName="companyAddressLine2">
+                            </div>
+                            <div class="m-3">
+                                <input class="form-control" type="text" id="companyAddressLine3" placeholder="Enter company address line 3" formControlName="companyAddressLine3">
+                            </div>
+                            <div class="m-3">
+                              <label for="Country" class="form-label">Country<span style="color: red;">*</span></label>
+                                <span *ngIf="countryId?.hasError('required') && (countryId?.dirty || countryId?.touched)" style="color: red;">Required</span>
+                                <!-- <input class="form-control" type="text" id="countryId" formControlName="countryId"> -->
+                                <select class="form-select" name="countryId" id="countryId" formControlName="countryId" (change)="getStateCascade($event)">
+                                  <option value="" disabled selected>--Select Country--</option>
+                                  <option *ngFor="let count of countryList" value="{{count.countryId}}">{{count.countries}}</option>
+                                </select>
+                            </div>
+                            <div class="m-3">
+                              <label for="States" class="form-label">State<span style="color: red;">*</span></label>
+                                <span *ngIf="stateId?.hasError('required') && (stateId?.dirty || stateId?.touched)" style="color: red;">Required</span>
+                                <!-- <input class="form-control" type="text" id="stateId" formControlName="stateId"> -->
+                                <select class="form-select" name="stateId" id="stateId" formControlName="stateId" (change)="getCityCascade($event)">
+                                  <option value="" disabled selected>--Select State--</option>
+                                  <option *ngFor="let state of stateList" value="{{state.stateId}}" >{{state.state}}</option>
+                                </select>
+                            </div>
+                            <div class="m-3">
+                              <label for="City" class="form-label">City<span style="color: red;">*</span></label>
+                                <span *ngIf="cityId?.hasError('required') && (cityId?.dirty || cityId?.touched)" style="color: red;">Required</span>
+                                <!-- <input class="form-control" type="text" id="cityId" formControlName="cityId"> -->
+                                <select class="form-select" name="cityId" id="cityId" formControlName="cityId">
+                                  <option value="" disabled selected>--Select City--</option>
+                                  <option *ngFor="let cit of cityList" value="{{cit.cityId}}">{{cit.city}}</option>
+                                </select>
+                            </div>
+                            <div class="m-3">
+                              <label for="Zipcode" class="form-label">Zipcode<span style="color: red;">*</span></label>
+                                <span *ngIf="zipcode?.hasError('required') && (zipcode?.dirty || zipcode?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="zipcode" placeholder="Enter zip code" formControlName="zipcode">
+                            </div>
+                            <div class="m-3">
+                              <label for="companyContactNo" class="form-label">Company ContactNo<span style="color: red;">*</span></label>
+                                <span *ngIf="companyContactNo?.hasError('required') && (companyContactNo?.dirty || companyContactNo?.touched)" style="color: red;">Required</span>
+                                <span *ngIf="(companyContactNo?.hasError('pattern') || companyContactNo?.hasError('minLength') || companyContactNo?.hasError('maxLength'))&& (companyContactNo?.dirty || companyContactNo?.touched)" style="color: red;">Invalid number</span>
+                                <input class="form-control" type="text" id="companyContactNo" placeholder="Enter company contact no." formControlName="companyContactNo">
+                            </div>
+                            <div class="m-3">
+                              <label for="companyEmailId" class="form-label">Company EmailId<span style="color: red;">*</span></label>
+                                <span *ngIf="companyEmailId?.hasError('required') && (companyEmailId?.dirty || companyEmailId?.touched)" style="color: red;">Required</span>
+                                <span *ngIf="companyEmailId?.hasError('email') && (companyEmailId?.dirty || companyEmailId?.touched)" style="color: red;">Invalid email</span>
+                                <input class="form-control" type="text" id="companyEmailId" placeholder="Enter company emailId" formControlName="companyEmailId">
+                            </div>
+                            <div class="m-3">
+                              <label for="companyWebsiteUrl" class="form-label">Company WebsiteUrl<span style="color: red;">*</span></label>
+                                <span *ngIf="companyWebsiteUrl?.hasError('required') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="companyWebsiteUrl" placeholder="Enter company website url" formControlName="companyWebsiteUrl">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="card fs-5">
+                    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#company-bank-detail-container">
+                        <span>Company Bank / Other Details</span> <i class="fa-solid fa-angle-down"></i>
+                    </div>
+                    <div class="card-body collapse show" id="company-bank-detail-container">
+                        <div class="fields-container">
+                            <div class="m-3">
+                              <label for="companyBankName" class="form-label">Company BankName<span style="color: red;">*</span></label>
+                                <span *ngIf="companyBankName?.hasError('required') && (companyBankName?.dirty || companyBankName?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="companyBankName" placeholder="Enter company bank name" formControlName="companyBankName">
+                            </div>
+                            <div class="m-3">
+                              <label for="gSTno" class="form-label">GST no<span style="color: red;">*</span></label>
+                                <span *ngIf="gSTno?.hasError('required') && (gSTno?.dirty || gSTno?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="gSTno" placeholder="Enter gst no." formControlName="gSTno">
+                            </div>
+                            <div class="m-3">
+                              <label for="bankAccNo" class="form-label">Bank AccNo<span style="color: red;">*</span></label>
+                                <span *ngIf="bankAccNo?.hasError('required') && (bankAccNo?.dirty || bankAccNo?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="bankAccNo" placeholder="Enter bank Acc no." formControlName="bankAccNo">
+                            </div>
+                            <div class="m-3">
+                              <label for="mSMERegistrationNo" class="form-label">MSME RegistrationNo<span style="color: red;">*</span></label>
+                                <span *ngIf="mSMERegistrationNo?.hasError('required') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="mSMERegistrationNo" placeholder="Enter msme registration no." formControlName="mSMERegistrationNo">
+                            </div>
+                            <div class="m-3">
+                              <label for="iFSCCode" class="form-label">IFSCCode<span style="color: red;">*</span></label>
+                                <span *ngIf="iFSCCode?.hasError('required') && (iFSCCode?.dirty || iFSCCode?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="iFSCCode" placeholder="Enter ifsc code" formControlName="iFSCCode">
+                            </div>
+                            <div class="m-3">
+                              <label for="panNo" class="form-label">Pan No<span style="color: red;">*</span></label>
+                                <span *ngIf="panNo?.hasError('required') && (panNo?.dirty || panNo?.touched)" style="color: red;">Required</span>
+                                <input class="form-control" type="text" id="panNo" placeholder="Enter pan no." formControlName="panNo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
+                <button class="btn btn-outline-danger" id="btncancel" type="reset" data-bs-dismiss="modal" style="max-width: 300px;" (click)="onClick()">Cancel</button>
+              </div>
+              
+        </form>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="table-responsive p-md-5 p-3">
+    <div class="searchheader row mb-2">
+      <div class="col-12 col-sm-4 col-md-4 col-lg-3 mb-2 mb-sm-0">
+        <button class="add-btn btn btn-outline-primary">
+          <a data-bs-toggle="modal" data-bs-target="#company-add"><i class="fa-solid fa-file-circle-plus"></i> Add Company</a>
+        </button>
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-3">
+  
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+        <input type="text" class="form-control" placeholder="Search by Company name"     [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
+      </div>
+    </div>
+    <table mat-table [dataSource]="dataSource" matSort
+      class="table table-striped table-bordered align-middle mat-elevation-z8">
+  
+      <ng-container matColumnDef="companyName">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Company Name</th>
+        <td mat-cell *matCellDef="let company">{{ company.companyName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="companyLocation">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Company Location</th>
+        <td mat-cell *matCellDef="let company">{{ company.companyLocation }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let company">{{ company.status == true ? 'Active' : 'Inactive' }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="action">
+        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
+        <td mat-cell *matCellDef="let company">
+          <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#company-edit" (click)="fetchCompanyData(company.valueId)"></i>
+          <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#company-detail" (click)="GetCompany(company.valueId)"></i>
+          <i class="fa-regular fa-trash-can icon"  (click)="deleteCompany(company.valueId)"></i>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
+    </table>
+    <p class="fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
+  </div>
     <nav class="d-flex justify-content-center" *ngIf="showCompanies.length > 0" aria-label="Page navigation example">
         <ul *ngIf="maxPage > 1" class="pagination">
           <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
@@ -48,40 +242,378 @@
 
 <!-- Modal for Viewing Company  Details -->
 <div class="modal fade" id="company-detail" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="companyDetailLabel">Contract Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header d-flex justify-content-between">
+        <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="companyDetailLabel"  >Company Details</h5>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
-        <p><strong>Value ID: </strong> {{ comp?.valueId }}</p>
-        <p><strong>Company Name: </strong> {{ comp?.companyName }}</p>
-        <p><strong>PocName: </strong> {{ comp?.pocName }}</p>
-        <p><strong>companyStatus: </strong>{{comp?.companyStatus}}</p>
-        <p><strong>PocContactNumber:</strong>{{comp?.pocContactNumber}}</p>
-        <p><strong>PocEmailId: </strong>{{comp?.pocEmailId}}</p>
-        <p><strong>CompanyAddressLine1: </strong>{{comp?.companyAddressLine1}}</p>
-        <p><strong>CompanyAddressLine2: </strong>{{comp?.companyAddressLine2}}</p>
-        <p><strong>CompanyAddressLine3: </strong>{{comp?.companyAddressLine3}}</p>
-        <p><strong>Zipcode: </strong>{{comp?.zipcode}}</p>
-        <p><strong>CompanyContactNo: </strong>{{comp?.companyContactNo}}</p>
-        <p><strong>CompanyEmailId: </strong>{{comp?.companyEmailId}}</p>
-        <p><strong>CompanyWebsiteUrl: </strong>{{comp?.companyWebsiteUrl}}</p>
-        <p><strong>CompanyBankName: </strong>{{comp?.companyBankName}}</p>
-        <p><strong>GSTno: </strong>{{comp?.gSTno}}</p>
-        <p><strong>BankAccNo: </strong>{{comp?.bankAccNo}}</p>
-        <p><strong>MSMERegistrationNo: </strong>{{comp?.mSMERegistrationNo}}</p>
-        <p><strong>IFSCCode: </strong>{{comp?.iFSCCode}}</p>
-        <p><strong>PanNo: </strong>{{comp?.panNo}}</p>
-        <p><strong>CountryId: </strong>{{comp?.countryId}}</p>
-        <p><strong>StateId: </strong>{{comp?.stateId}}</p>
-        <p><strong>CityId: </strong>{{comp?.cityId}}</p>
-        
+        <h1 class="model-title fs-6 mb-3">Company Name</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <input type="text" name="companyName" class="form-control" id="companyName" 
+            [value]="comp?.companyName" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">POC Name</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <input type="text" name="pocName" class="form-control" id="pocName" 
+            [value]="comp?.pocName" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">Company Status </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
+            <input type="text" name="companyStatus" class="form-control" id="companyStatus" 
+            [value]="comp?.companyStatus" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">POC Contact Number </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+            <input type="text" name="pocContactNumber" class="form-control" id="pocContactNumber" 
+            [value]="comp?.pocContactNumber" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">POC EmailId </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <input type="text" name="pocEmailId" class="form-control" id="pocEmailId" 
+            [value]="comp?.pocEmailId" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">companyAddressLine1 </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            </span>
+            <input type="text" name="companyAddressLine1" class="form-control" id="companyAddressLine1" 
+            [value]="comp?.companyAddressLine1" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">companyAddressLine2 </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            </span>
+            <input type="text" name="companyAddressLine2" class="form-control" id="companyAddressLine2" 
+            [value]="comp?.companyAddressLine2" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">companyAddressLine3 </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i>
+            </span>
+            <input type="text" name="companyAddressLine3" class="form-control" id="companyAddressLine3" 
+            [value]="comp?.companyAddressLine3" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">Zipcode </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-map-pin"></i>
+            </span>
+            <input type="text" name="zipcode" class="form-control" id="zipcode" 
+            [value]="comp?.zipcode" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">company ContactNo </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+            <input type="text" name="companyContactNo" class="form-control" id="companyContactNo" 
+            [value]="comp?.companyContactNo" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">Company EmailId  </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <input type="text" name="companyEmailId" class="form-control" id="companyEmailId" 
+            [value]="comp?.companyEmailId" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">Company WebsiteUrl </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </span>
+            <input type="text" name="companyWebsiteUrl" class="form-control" id="companyWebsiteUrl" 
+            [value]="comp?.companyWebsiteUrl" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">Company BankName </h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-building"></i>
+            </span>
+            <input type="text" name="companyBankName" class="form-control" id="companyBankName" 
+            [value]="comp?.companyBankName" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">GST no</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i>
+            </span>
+            <input type="text" name="gSTno" class="form-control" id="gSTno" 
+            [value]="comp?.gsTno" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">BankAcc No</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-credit-card"></i>
+            </span>
+            <input type="text" name="bankAccNo" class="form-control" id="bankAccNo" 
+            [value]="comp?.bankAccNo" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">MSME RegistrationNo</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-certificate"></i>
+            </span>
+            <input type="text" name="mSMERegistrationNo" class="form-control" id="mSMERegistrationNo" 
+            [value]="comp?.msmeRegistrationNo" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">IFSC Code</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-credit-card"></i>
+            </span>
+            <input type="text" name="iFSCCode" class="form-control" id="iFSCCode" 
+            [value]="comp?.ifscCode" disabled>
+          </div>
+        </div>
+        <h1 class="model-title fs-6 mb-3">Pan No</h1>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-id-card"></i>
+            </span>
+            <input type="text" name="panNo" class="form-control" id="panNo" 
+            [value]="comp?.panNo" disabled>
+          </div>
+          <h1 class="model-title fs-6 mb-3">Country</h1>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-id-card"></i>
+              </span>
+              <input type="text" name="panNo" class="form-control" id="countryId" 
+              [value]="countryName" disabled>
+            </div>
+          </div>
+          <h1 class="model-title fs-6 mb-3">State</h1>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-id-card"></i>
+              </span>
+              <input type="text" name="panNo" class="form-control" id="stateId" 
+              [value]="stateName" disabled>
+            </div>
+          </div>
+          <h1 class="model-title fs-6 mb-3">City</h1>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-id-card"></i>
+              </span>
+              <input type="text" name="panNo" class="form-control" id="cityId" 
+              [value]="cityName" disabled>
+            </div>
+          </div>
+            
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Modal for Editing Company  Details -->
+<div class="modal fade" id="company-edit" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="companyDetailLabel">Edit Company Details</h5>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup] = "masterCompanyAddForm" (ngSubmit)="onUpdateFormSubmit(compID)">
+          <div class="p-2">
+              <div class="card">
+                  <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-detail-container">
+                      <span>Company Details</span> <i class="fa-solid fa-angle-down"></i>
+                  </div>
+                  <div class="card-body collapse show" id="company-detail-container">
+                      <div class="fields-container">
+                          <div class="m-3">
+                            <label for="CompanyName" class="form-label">Company Name<span style="color: red;">*</span></label>
+                              <span *ngIf="companyName?.hasError('required') && (companyName?.dirty || companyName?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="companyName" placeholder="Enter company name" formControlName="companyName">
+                          </div>
+                          <div class="m-3">
+                            <label for="PocName" class="form-label">POC Name<span style="color: red;">*</span></label>
+                              <span *ngIf="pocName?.hasError('required') && (pocName?.dirty || pocName?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="pocName" placeholder="Enter poc Name" formControlName="pocName">
+                          </div>
+                          <div class="m-3">
+                              <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
+                          </div>
+                          <div class="m-3">
+                            <label for="pocContactNumber" class="form-label">POC ContactNo<span style="color: red;">*</span></label>
+                              <span *ngIf="pocContactNumber?.hasError('required') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Required</span>
+                              <span *ngIf="pocContactNumber?.hasError('pattern') && (pocContactNumber?.dirty || pocContactNumber?.touched)" style="color: red;">Invalid number</span>
+                              <input class="form-control" type="text" id="pocContactNumber" placeholder="Enter poc contact number" formControlName="pocContactNumber">
+                          </div>
+                          <div class="m-3">
+                              <label for="companyStatus">Status</label>
+                              <span *ngIf="companyStatus?.hasError('required') && (companyStatus?.dirty || companyStatus?.touched)" style="color: red;" >Required</span>
+                              <!-- <input class="form-control" type="text" id="companyStatus" formControlName="companyStatus" placeholder="Choose eithe true or false"> -->
+                              <select class="form-select" name="companyStatus" id="companyStatus" formControlName="companyStatus">
+                                <option value="" selected disabled>--Select Status--</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                              </select>
+                          </div>
+                          <div class="m-3">
+                            <label for="pocEmailId" class="form-label">POC EmailId<span style="color: red;">*</span></label>
+                              <span *ngIf="pocEmailId?.hasError('required') && (pocEmailId?.dirty || pocEmailId?.touched)" style="color: red;">Required</span>
+                              <span *ngIf="pocEmailId?.hasError('email') && (pocEmailId?.dirty || pocEmailId?.touched)" style="color: red;">Invalid email</span>
+                              <input class="form-control" type="text" id="pocEmailId" placeholder="Enter poc emailId" formControlName="pocEmailId">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="p-2">
+              <div class="card">
+                  <div class="card-header fs-5" data-bs-toggle="collapse" data-bs-target="#company-contract-detail-container">
+                      <span>Company Contact Details</span> <i class="fa-solid fa-angle-down"></i>
+                  </div>
+                  <div class="card-body collapse show" id="company-contract-detail-container">
+                      <div class="fields-container">
+                          <div class="m-3">
+                            <label for="CompanyAddressLines" class="form-label">Company Address<span style="color: red;">*</span></label>
+                              <span *ngIf="companyAddressLine1?.hasError('required') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="companyAddressLine1" placeholder="Enter company address line 1" formControlName="companyAddressLine1">
+                          </div>
+                          <div class="m-3">
+                              <input class="form-control" type="text" id="companyAddressLine2" placeholder="Enter company address line 2" formControlName="companyAddressLine2">
+                          </div>
+                          <div class="m-3">
+                              <input class="form-control" type="text" id="companyAddressLine3" placeholder="Enter company address line 3" formControlName="companyAddressLine3">
+                          </div>
+                          <div class="m-3">
+                            <label for="Country" class="form-label">Country<span style="color: red;">*</span></label>
+                              <span *ngIf="countryId?.hasError('required') && (countryId?.dirty || countryId?.touched)" style="color: red;">Required</span>
+                              <!-- <input class="form-control" type="text" id="countryId" formControlName="countryId"> -->
+                              <select class="form-select" name="countryId" id="countryId" formControlName="countryId" (change)="getStateCascade($event)">
+                                <option value="" disabled selected>--Select Country--</option>
+                                <option *ngFor="let count of countryList" value="{{count.countryId}}">{{count.countries}}</option>
+                              </select>
+                            </div>
+                          <div class="m-3">
+                            <label for="States" class="form-label">State<span style="color: red;">*</span></label>
+                              <span *ngIf="stateId?.hasError('required') && (stateId?.dirty || stateId?.touched)" style="color: red;">Required</span>
+                              <!-- <input class="form-control" type="text" id="stateId" formControlName="stateId"> -->
+                              <select class="form-select" name="stateId" id="stateId" formControlName="stateId" (change)="getCityCascade($event)">
+                                <option value="" disabled selected>--Select State--</option>
+                                <option *ngFor="let state of stateList" value="{{state.stateId}}" >{{state.state}}</option>
+                              </select>
+                            </div>
+                          <div class="m-3">
+                            <label for="City" class="form-label">City<span style="color: red;">*</span></label>
+                              <span *ngIf="cityId?.hasError('required') && (cityId?.dirty || cityId?.touched)" style="color: red;">Required</span>
+                              <!-- <input class="form-control" type="text" id="cityId" formControlName="cityId"> -->
+                              <select class="form-select" name="cityId" id="cityId" formControlName="cityId">
+                                <option value="" disabled selected>--Select City--</option>
+                                <option *ngFor="let cit of cityList" value="{{cit.cityId}}">{{cit.city}}</option>
+                              </select>
+                            </div>
+                          <div class="m-3">
+                            <label for="Zipcode" class="form-label">Zipcode<span style="color: red;">*</span></label>
+                              <span *ngIf="zipcode?.hasError('required') && (zipcode?.dirty || zipcode?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="zipcode" placeholder="Enter zip code" formControlName="zipcode">
+                          </div>
+                          <div class="m-3">
+                            <label for="companyContactNo" class="form-label">Company ContactNo<span style="color: red;">*</span></label>
+                              <span *ngIf="companyContactNo?.hasError('required') && (companyContactNo?.dirty || companyContactNo?.touched)" style="color: red;">Required</span>
+                              <span *ngIf="(companyContactNo?.hasError('pattern') || companyContactNo?.hasError('minLength') || companyContactNo?.hasError('maxLength'))&& (companyContactNo?.dirty || companyContactNo?.touched)" style="color: red;">Invalid number</span>
+                              <input class="form-control" type="text" id="companyContactNo" placeholder="Enter company contact no." formControlName="companyContactNo">
+                          </div>
+                          <div class="m-3">
+                            <label for="companyEmailId" class="form-label">Company EmailId<span style="color: red;">*</span></label>
+                              <span *ngIf="companyEmailId?.hasError('required') && (companyEmailId?.dirty || companyEmailId?.touched)" style="color: red;">Required</span>
+                              <span *ngIf="companyEmailId?.hasError('email') && (companyEmailId?.dirty || companyEmailId?.touched)" style="color: red;">Invalid email</span>
+                              <input class="form-control" type="text" id="companyEmailId" placeholder="Enter company emailId" formControlName="companyEmailId">
+                          </div>
+                          <div class="m-3">
+                            <label for="companyWebsiteUrl" class="form-label">Company WebsiteUrl<span style="color: red;">*</span></label>
+                              <span *ngIf="companyWebsiteUrl?.hasError('required') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="companyWebsiteUrl" placeholder="Enter company website url" formControlName="companyWebsiteUrl">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="p-2">
+              <div class="card fs-5">
+                  <div class="card-header" data-bs-toggle="collapse" data-bs-target="#company-bank-detail-container">
+                      <span>Company Bank / Other Details</span> <i class="fa-solid fa-angle-down"></i>
+                  </div>
+                  <div class="card-body collapse show" id="company-bank-detail-container">
+                      <div class="fields-container">
+                          <div class="m-3">
+                            <label for="companyBankName" class="form-label">Company BankName<span style="color: red;">*</span></label>
+                              <span *ngIf="companyBankName?.hasError('required') && (companyBankName?.dirty || companyBankName?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="companyBankName" placeholder="Enter company bank name" formControlName="companyBankName">
+                          </div>
+                          <div class="m-3">
+                            <label for="gSTno" class="form-label">GST no<span style="color: red;">*</span></label>
+                              <span *ngIf="gSTno?.hasError('required') && (gSTno?.dirty || gSTno?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="gSTno" placeholder="Enter gst no." formControlName="gSTno">
+                          </div>
+                          <div class="m-3">
+                            <label for="bankAccNo" class="form-label">Bank AccNo<span style="color: red;">*</span></label>
+                              <span *ngIf="bankAccNo?.hasError('required') && (bankAccNo?.dirty || bankAccNo?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="bankAccNo" placeholder="Enter bank Acc no." formControlName="bankAccNo">
+                          </div>
+                          <div class="m-3">
+                            <label for="mSMERegistrationNo" class="form-label">MSME RegistrationNo<span style="color: red;">*</span></label>
+                              <span *ngIf="mSMERegistrationNo?.hasError('required') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="mSMERegistrationNo" placeholder="Enter msme registration no." formControlName="mSMERegistrationNo">
+                          </div>
+                          <div class="m-3">
+                            <label for="iFSCCode" class="form-label">IFSCCode<span style="color: red;">*</span></label>
+                              <span *ngIf="iFSCCode?.hasError('required') && (iFSCCode?.dirty || iFSCCode?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="iFSCCode" placeholder="Enter ifsc code" formControlName="iFSCCode">
+                          </div>
+                          <div class="m-3">
+                            <label for="panNo" class="form-label">Pan No<span style="color: red;">*</span></label>
+                              <span *ngIf="panNo?.hasError('required') && (panNo?.dirty || panNo?.touched)" style="color: red;">Required</span>
+                              <input class="form-control" type="text" id="panNo" placeholder="Enter pan no." formControlName="panNo">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" id="btnadd" type="submit" style="max-width: 300px;">Update</button>
+              <button class="btn btn-outline-danger" id="btncancel" type="reset" data-bs-dismiss="modal" style="max-width: 300px;" (click)="onClick()">Cancel</button>
+            </div>
+            
+      </form>
+    </div>
     </div>
   </div>
 </div>

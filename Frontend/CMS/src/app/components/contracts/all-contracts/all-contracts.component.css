@@ -3,21 +3,16 @@ h2 {
     font-weight: 600;
     text-align: center;
 }
-a {
-    text-decoration: none;
+div::-webkit-scrollbar {
+    display: none;
 }
-a:hover {
-    color: white;
-}
-thead tr, thead tr th{
+.thead{
     background-color: #5f5fee;
+    border-top-color: #5f5fee;
+    border-bottom-color: #5f5fee;
 }
-thead th{
-    color: whitesmoke;
-}
-td{
-    font-weight: 400;
-    color: rgb(61, 61, 61);
+.mat-header-cell {
+    color: white;
 }
 .icon{
     cursor: pointer;
@@ -79,15 +74,13 @@ td{
     background-color: whitesmoke;
     border-color: #5f5fee;
 }
-.add-btn a {
-    color: #5f5fee;
-}
 .add-btn:hover{
     background-color: #5f5fee;
     border-color: whitesmoke;
     color: whitesmoke;
     border-radius: 5px;
 }
-.add-btn:hover a {
+.add-header {
     color: whitesmoke;
+    font-weight: 600;
 }
