@@ -20,9 +20,10 @@ namespace CMS.Persistence.Repositories
     {
         readonly CMSDbContext _context;
         readonly IEmailService _emailService;
-        public ClassifiedContractRepository(CMSDbContext context)
+        public ClassifiedContractRepository(CMSDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
         public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize)
         {
@@ -52,6 +53,11 @@ namespace CMS.Persistence.Repositories
             string sql = "EXEC SP_GetClassifiedContractByID @ID = {0}";
             var findingContract = await _context.GetClassifiedContractByIdDtos.FromSqlRaw(sql, cp.ClassifiedContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
+            // To Employee Custodian
+            await SendMail(
+                foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName
+            );
+            // To Approver L1
             await SendMail(
                 foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ClassifiedContractId, cp.ClassifiedContractName
             );

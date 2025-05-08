@@ -50,7 +50,9 @@ namespace CMS.API.Controllers
             _logger.LogInformation("AddClassifiedContract method initiated");
             var addedContract = await _mediator.Send(new CreateNewClassifiedContractCommand(cont));
             _logger.LogInformation("AddClassifiedContract method performed");
-            return Ok(addedContract);
+            if (addedContract != null)
+                return Ok(true);
+            return Ok(false);
         }
         [Route("{id}")]
         [HttpPut]

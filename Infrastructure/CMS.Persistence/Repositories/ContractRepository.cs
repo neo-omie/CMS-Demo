@@ -72,14 +72,17 @@ namespace CMS.Persistence.Repositories
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, cp.ContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
-            // To Employee Custodian
-            await SendMail(
-                foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ContractId, cp.ContractName
-            );
             // To Approver L1
-            await SendMail(
-                foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ContractId, cp.ContractName
-            );
+            if(foundContract != null)
+            {
+                await SendMail(
+                    foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ContractId, cp.ContractName
+                );
+                // To Employee Custodian
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ContractId, cp.ContractName
+                );
+            }
             return cp;
         }
         private string GenerateEmailBody(string name, int contractID, string contractName)
