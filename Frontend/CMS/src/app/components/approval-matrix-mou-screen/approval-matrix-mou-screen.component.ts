@@ -22,17 +22,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 })
 export class ApprovalMatrixMouScreenComponent implements OnInit {
   loading:boolean = true
+  maxPage:number = 1;
+  pageNumbers:number[] = [];
+  approvers1:MasterEmployee[] = [];
+  approvers2:MasterEmployee[] = [];
+  approvers3:MasterEmployee[] = [];
   displayedColumns: string[] = ['departmentName', 'approverName1', 'approverName2', 'approverName3', 'action'];
   dataSource = new MatTableDataSource<ApprovalMatrixMou>();
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-  approvers1:MasterEmployee[] = [];
-  approvers2:MasterEmployee[] = [];
-  approvers3:MasterEmployee[] = [];
-  pageNumbers:number[] = [];
-  maxPage:number = 1;
   approvalMatrixMOUs:ApprovalMatrixMou[] = [];
   approvalMatrixMou?:ApprovalMatrixMou;
     errorMsg ?: string
