@@ -253,6 +253,12 @@
             </div>
           </div>
         </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
+          <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
+          <button class="btn btn-outline-primary">+ Add Addendum</button>
+          <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+        </div>
       </div>
     </div>
   </div>

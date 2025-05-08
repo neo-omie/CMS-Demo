@@ -39,7 +39,8 @@ BEGIN
 	c.ValidFrom as ValidFrom, c.ValidTill as ValidTill,
 	c.RenewalFrom as RenewalFrom, c.RenewalTill as RenewalTill,
 	c.AddendumDate as AddendumDate,
-	c.EmpCustodianId as EmpCustodianId, me.EmployeeName as EmpCustodianName,
+	c.EmpCustodianId as EmpCustodianId, me.EmployeeName as EmpCustodianName, me.Email as EmpCustodianEmail,
+	me.EmployeeCode as EmpCustodianCode,
 	c.Location as Location, c.Approver1Status as Approver1Status,
 	c.Approver2Status as Approver2Status, c.Approver3Status as Approver3Status,
 	me1.EmployeeCode as Approver1EmployeeCode, me1.Email as Approver1Email,
@@ -58,7 +59,7 @@ BEGIN
 	INNER JOIN MasterEmployees me3 ON me3.EmployeeCode = d.ApproverId3
 	WHERE c.ContractId = @ID;
 END
-EXEC SP_GetContractEntityByID @ID = 2;
+EXEC SP_GetContractEntityByID @ID = 3;
 
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;

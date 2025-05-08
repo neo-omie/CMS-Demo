@@ -43,7 +43,7 @@ export class AllContractsComponent implements OnInit {
   errorMsg:string = "";
   allContracts: ContractsEntity[] = [];
   contractDetails?: GetContractByIdDto;
-
+  approverCheck: boolean = true;
   mode:any;
   deptID?:number;
   // Dropdowns
@@ -113,6 +113,13 @@ export class AllContractsComponent implements OnInit {
         next: (response: GetContractByIdDto) => {
           this.contractDetails = response;
           console.log(response);
+          // Checking if the approver is the one who's logged in or not
+          if(this.contractDetails.approver1Email == localStorage.getItem('email')) {
+            this.approverCheck = false;
+            console.log(this.approverCheck);
+          } else {
+            this.approverCheck = true;
+          }
         },
         error: (error) => {
           console.error('Error :(', error);
