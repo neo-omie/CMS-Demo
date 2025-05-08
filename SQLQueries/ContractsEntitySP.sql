@@ -1,3 +1,4 @@
+-- Get All
 CREATE PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
 AS
 DECLARE @TotalRecords int
@@ -26,6 +27,7 @@ EXEC SP_GetAllContractsEntity @PageNumber = 1, @PageSize = 10;
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;
 
+-- Get By ID
 CREATE PROCEDURE SP_GetContractEntityByID @ID int
 AS
 BEGIN
@@ -63,3 +65,81 @@ EXEC SP_GetContractEntityByID @ID = 3;
 
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;
+
+-- Active Contracts
+CREATE PROCEDURE SP_GetActiveContractsEntity @PageNumber int, @PageSize int
+AS
+DECLARE @TotalRecords int
+BEGIN
+	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+
+	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+	cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+	c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+	c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+	c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+	me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+	c.Location as Location, @TotalRecords as TotalRecords
+	FROM ContractsEntity c
+	LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+	LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+	LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+	LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+	WHERE c.IsDeleted = 0 AND c.Approver3Status = 2
+	ORDER BY c.ContractId
+	OFFSET(@PageNumber-1)*@PageSize ROWS
+	FETCH NEXT @PageSize ROWS ONLY
+END
+EXEC SP_GetActiveContractsEntity @PageNumber = 1, @PageSize = 10;
+
+-- Terminated Contracts
+CREATE PROCEDURE SP_GetTerminatedContractsEntity @PageNumber int, @PageSize int
+AS
+DECLARE @TotalRecords int
+BEGIN
+	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+
+	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+	cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+	c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+	c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+	c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+	me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+	c.Location as Location, @TotalRecords as TotalRecords
+	FROM ContractsEntity c
+	LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+	LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+	LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+	LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+	WHERE c.IsDeleted = 0 AND c.Approver3Status = 4
+	ORDER BY c.ContractId
+	OFFSET(@PageNumber-1)*@PageSize ROWS
+	FETCH NEXT @PageSize ROWS ONLY
+END
+EXEC SP_GetTerminatedContractsEntity @PageNumber = 1, @PageSize = 10;
+
+-- Pending Approval Contracts
+CREATE PROCEDURE SP_GetPendingApprovalContractsEntity @PageNumber int, @PageSize int
+AS
+DECLARE @TotalRecords int
+BEGIN
+	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+
+	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+	cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+	c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+	c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+	c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+	me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+	c.Location as Location, @TotalRecords as TotalRecords
+	FROM ContractsEntity c
+	LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+	LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+	LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+	LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+	WHERE c.IsDeleted = 0 AND c.Approver3Status = 1
+	ORDER BY c.ContractId
+	OFFSET(@PageNumber-1)*@PageSize ROWS
+	FETCH NEXT @PageSize ROWS ONLY
+END
+EXEC SP_GetPendingApprovalContractsEntity @PageNumber = 1, @PageSize = 10;

@@ -30,6 +30,27 @@ namespace CMS.Persistence.Repositories
             var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return allContracts;
         }
+        public async Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetActiveContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
+        public async Task<IEnumerable<GetAllContractsDto>> GetTerminatedContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetTerminatedContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
+        public async Task<IEnumerable<GetAllContractsDto>> GetPendingApprovalContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetPendingApprovalContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
         {
