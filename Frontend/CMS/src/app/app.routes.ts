@@ -25,6 +25,9 @@ import { CreateClassifiedContractComponent } from './components/classifiedContra
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 
 import { AddApostilleComponent } from './components/add-apostille/add-apostille.component';
+import { ActiveContractsComponent } from './components/contracts/active-contracts/active-contracts.component';
+import { PendingApprovalContractsComponent } from './components/contracts/pending-approval-contracts/pending-approval-contracts.component';
+import { TerminatedContractsComponent } from './components/contracts/terminated-contracts/terminated-contracts.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -52,8 +55,12 @@ export const routes: Routes = [
 
     {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
     {path: 'contracts/allContracts', component: AllContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts', component: ClassifiedContractsScreenComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate:[authGuard]},
+    
     {path: 'classifiedContract/createNewClassifiedContract', component: CreateClassifiedContractComponent, canActivate:[authGuard]},
 
     {path: '**', component: NotFoundComponent}

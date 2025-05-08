@@ -1,0 +1,457 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="mt-3">Contracts List - Active</h2>
+<div class="table-responsive p-md-5 p-3">
+  <table mat-table [dataSource]="dataSource" matSort
+    class="table table-striped table-bordered align-middle mat-elevation-z8">
+    <ng-container matColumnDef="contractID">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract ID</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.contractID }}</td>
+    </ng-container>
+    <ng-container matColumnDef="contractName">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Name</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.contractName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="contractType">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Type</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.contractType }}</td>
+    </ng-container>
+    <ng-container matColumnDef="departmentName">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Department Name</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.departmentName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="effectiveDate">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expiryDate">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate }}</td>
+    </ng-container>
+    <ng-container matColumnDef="toBeRenewedOn">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>To Be Renewed On</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn }}</td>
+    </ng-container>
+    <ng-container matColumnDef="addendumDate">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Addendum Date</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let cont">
+        @if(cont.status == 1){ <button class="btn btn-warning" disabled><b>Pending Approval</b></button> }
+        @if(cont.status == 2){ <button class="btn btn-success" disabled><b>Active</b></button> }
+        @if(cont.status == 3){ <button class="btn btn-danger" disabled><b>Rejected</b></button> }
+        @if(cont.status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
+        @if(cont.status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="approvalPendingFrom">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Approval Pending From</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.approvalPendingFrom }}</td>
+    </ng-container>
+    <ng-container matColumnDef="renewalContractPerson">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Renewal Contract Person</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.renewalContractPerson }}</td>
+    </ng-container>
+    <ng-container matColumnDef="renewalDueIn">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Renewal Due In</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.renewalDueIn }}</td>
+    </ng-container>
+    <ng-container matColumnDef="location">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.location }}</td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
+      <td mat-cell *matCellDef="let cont">
+        <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit"
+          (click)="fetchContractData(cont.contractID)"></i>
+        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
+          (click)="GetContract(cont.contractID)"></i>
+        <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
+          (click)="DeleteContract(cont.contractID)"></i>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
+    
+</table>
+<p class="fs-5" *ngIf="allContracts.length == 0" style="text-align: center;">No active records.</p>
+</div>
+<div *ngIf="!loading" class="table-responsive p-3">
+  <nav class="d-flex justify-content-center" *ngIf="allContracts!=undefined && allContracts.length > 0" aria-label="Page navigation example">
+    <ul *ngIf="maxPage > 1" class="pagination">
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link" aria-label="Previous">&lsaquo;</span></li>
+      <li class="page-item" (click)="GetPage(pageNumbers[1])"><span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
+      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
+      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link" aria-label="Next">&rsaquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
+    </ul>
+  </nav>
+
+  <div class="modal fade" id="contract-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Contract Details</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <h1 class="modal-title fs-6 mb-3">Contract Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><b>{{contractDetails?.contractId}}</b></span>
+                <input type="text" name="contractName" class="form-control" id="contractName" [value]="contractDetails?.contractName" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Department Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><b>{{contractDetails?.departmentId}}</b></span>
+                <input type="text" name="departmentName" class="form-control" id="departmentName" [value]="contractDetails?.departmentName" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Contract With Company Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><b>{{contractDetails?.contractWithCompanyId}}</b></span>
+                <input type="text" name="contractWithCompanyName" class="form-control" id="contractWithCompanyName" [value]="contractDetails?.contractWithCompanyName" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Contract Type Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><b>{{contractDetails?.contractTypeId}}</b></span>
+                <input type="text" name="contractTypeName" class="form-control" id="contractTypeName" [value]="contractDetails?.contractTypeName" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Apostille Type Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><b>{{contractDetails?.apostilleTypeId}}</b></span>
+                <input type="text" name="apostilleTypeName" class="form-control" id="apostilleTypeName" [value]="contractDetails?.apostilleTypeName" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Actual Document Reference No.</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-file-lines"></i></span>
+                <input type="text" name="actualDocRefNo" class="form-control" id="actualDocRefNo" [value]="contractDetails?.actualDocRefNo" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Retainer Contract Type</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
+                <input type="text" *ngIf="contractDetails?.retainerContract == 1" name="retainerContract" class="form-control" id="retainerContract" value="None" disabled>
+                <input type="text" *ngIf="contractDetails?.retainerContract == 2" name="retainerContract" class="form-control" id="retainerContract" value="Weekly" disabled>
+                <input type="text" *ngIf="contractDetails?.retainerContract == 3" name="retainerContract" class="form-control" id="retainerContract" value="Monthly" disabled>
+                <input type="text" *ngIf="contractDetails?.retainerContract == 4" name="retainerContract" class="form-control" id="retainerContract" value="Quarterly" disabled>
+                <input type="text" *ngIf="contractDetails?.retainerContract == 5" name="retainerContract" class="form-control" id="retainerContract" value="Yearly" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Terms & Conditions</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-receipt"></i></span>
+                <textarea name="termsAndConditions" class="form-control" id="termsAndConditions" [value]="contractDetails?.termsAndConditions" disabled></textarea>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Valid From</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                <input type="datetime-local" name="validFrom" class="form-control" id="validFrom" [value]="contractDetails?.validFrom" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Valid Till</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
+                <input type="datetime-local" name="validTill" class="form-control" id="validTill" [value]="contractDetails?.validTill" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Renewal From</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                <input type="datetime-local" name="renewalFrom" class="form-control" id="renewalFrom" [value]="contractDetails?.renewalFrom" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Renewal Till</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
+                <input type="datetime-local" name="renewalTill" class="form-control" id="renewalTill" [value]="contractDetails?.renewalTill" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Addendum Date</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-plus"></i></span>
+                <input type="datetime-local" name="addendumDate" class="form-control" id="addendumDate" [value]="contractDetails?.addendumDate" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Employee Custodian Name</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><b>{{contractDetails?.empCustodianId}}</b></span>
+                <input type="text" name="empCustodianName" class="form-control" id="empCustodianName" [value]="contractDetails?.empCustodianName" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Location</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                <input type="text" name="location" class="form-control" id="location" [value]="contractDetails?.location" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Approver L1 Status</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>1</b></span>
+                <input *ngIf="contractDetails?.approver1Status == 1" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
+                <input *ngIf="contractDetails?.approver1Status == 2" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Active" style="background-color: greenyellow;" disabled>
+                <input *ngIf="contractDetails?.approver1Status == 3" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Rejected" style="background-color: orangered;" disabled>
+                <input *ngIf="contractDetails?.approver1Status == 4" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Terminated" disabled>
+                <input *ngIf="contractDetails?.approver1Status == 5" type="text" name="approver1Status" class="form-control" id="approver1Status" value="Expired" style="background-color: darkgray;" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Approver L2 Status</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>2</b></span>
+                <input *ngIf="contractDetails?.approver2Status == 1" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 2" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Active" style="background-color: greenyellow;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 3" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Rejected" style="background-color: orangered;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 4" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Terminated" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 5" type="text" name="approver2Status" class="form-control" id="approver2Status" value="Expired" style="background-color: darkgray;" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Approver L3 Status</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span>
+                <input *ngIf="contractDetails?.approver3Status == 1" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 2" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Active" style="background-color: greenyellow;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 3" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Rejected" style="background-color: orangered;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 4" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Terminated" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
+            </div>
+          </div>
+          <h1 class="modal-title fs-6 mb-3">Does exists or deleted?</h1>
+          <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-toggle-on"></i></span>
+                <input type="text" name="isDeleted" class="form-control" id="isDeleted" [value]="contractDetails?.isDeleted" disabled>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
+          <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
+          <button class="btn btn-outline-primary">+ Add Addendum</button>
+          <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="contract-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Edit Contract</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="masterContractAddForm" (ngSubmit)="onUpdateFormSubmit(contID)">
+            <div class="p-2">
+                  <div class="fields-container">
+                    <div class="m-3">
+                      <label for="termsAndConditions">Contract Name</label>
+                      <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
+                        formControlName="contractName">
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Department</label>
+                      <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="departmentId?.hasError('pattern') && (departmentId?.dirty || departmentId?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <!-- <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID" formControlName="departmentId" [(ngModel)]="deptID"> -->
+                      <select class="form-select" name="departmentId" id="departmentId" formControlName="departmentId" [(ngModel)]="deptID">
+                        <option value="" disabled selected>--Select one Department--</option>
+                        <option *ngFor="let department of departments" value="{{department.departmentId}}">{{department.departmentName}}</option>
+                      </select>
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Contract with Company</label>
+                      <span *ngIf="contractWithCompanyId?.hasError('required') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="contractWithCompanyId?.hasError('pattern') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
+                        <select class="form-select" name="contractWithCompanyId" id="contractWithCompanyId" formControlName="contractWithCompanyId">
+                          <option value="" disabled selected>--Select one Company--</option>
+                          <option *ngFor="let company of companies" value="{{company.valueId}}">{{company.companyName}}</option>
+                        </select>
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Contract Type</label>
+                      <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
+                        style="color: red;">Required</span>
+                      <!-- <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID" formControlName="contractTypeId"> -->
+                      <select class="form-select" name="contractTypeId" id="contractTypeId" formControlName="contractTypeId">
+                        <option value="" disabled selected>--Select one Contract Type--</option>
+                        <option *ngFor="let contractType of contractTypes" value="{{contractType.valueId}}">{{contractType.contractTypeName}}</option>
+                      </select>
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Apostille Type</label>
+                      <span *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <!-- <input class="form-control" type="text" id="apostilleTypeId" placeholder="Enter Apostille ID" formControlName="apostilleTypeId"> -->
+                      <select class="form-select" name="apostilleTypeId" id="apostilleTypeId" formControlName="apostilleTypeId">
+                          <option value="" selected disabled>--Select one Apostille Type--</option>
+                          <option *ngFor="let apostille of apostilleTypes" value="{{apostille.valueId}}">{{apostille.apostilleName}}</option>
+                      </select>
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Actual Document Reference Number</label>
+                      <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <input class="form-control" type="text" id="actualDocRefNo" placeholder="Enter Actual Document Reference Number"
+                        formControlName="actualDocRefNo">
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Retainer Contract Type</label>
+                      <span *ngIf="retainerContract?.hasError('required') && (retainerContract?.dirty || retainerContract?.touched)"
+                        style="color: red;">Required</span>
+                        <span *ngIf="retainerContract?.hasError('pattern') && (retainerContract?.dirty || retainerContract?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <!-- <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract"> -->
+                      <select class="form-select" name="retainerContract" id="retainerContract" formControlName="retainerContract">
+                        <option value="1">None</option>
+                        <option value="2">Weekly</option>
+                        <option value="3">Monthly</option>
+                        <option value="4">Quarterly</option>
+                        <option value="5">Yearly</option>
+                      </select>
+                    </div>
+                    <!-- <div class="m-3">
+                      <input class="form-control" type="text" id="valueId" placeholder="ValueId" disabled>
+                    </div> -->
+                    <div class="m-3">
+                      <label for="termsAndConditions">Terms and Conditions</label>
+                      <span *ngIf="termsAndConditions?.hasError('required') && (termsAndConditions?.dirty || termsAndConditions?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="text" placeholder="Terms and Conditions" id="termsAndConditions" formControlName="termsAndConditions">
+                    </div>
+                    <div class="m-3">
+                      <label for="validFrom">Valid from</label>
+                      <span *ngIf="validFrom?.hasError('required') && (validFrom?.dirty || validFrom?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="date" id="validFrom" formControlName="validFrom">
+                    </div>
+                    <div class="m-3">
+                      <label for="validTill">Valid till</label>
+                      <span *ngIf="validTill?.hasError('required') && (validTill?.dirty || validTill?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="date" id="validTill" formControlName="validTill">
+                    </div>
+                    <div class="m-3">
+                      <label for="renewalFrom">Renewal from</label>
+                      <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="date" id="renewalFrom" formControlName="renewalFrom">
+                    </div>
+                    <div class="m-3">
+                      <label for="renewalTill">Renewal till</label>
+                      <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="date" id="renewalTill" formControlName="renewalTill">
+                    </div>
+                    <div class="m-3">
+                      <label for="addendumDate">Addendum Date</label>
+                      <span *ngIf="addendumDate?.hasError('required') && (addendumDate?.dirty || addendumDate?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Employee Custodian Name</label>
+                      <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
+                        style="color: red;">Invalid Employee</span>
+                        <div class="mb-3">
+                          <div class="input-group">
+                            <input #editEmpCustodianName class="form-control edit-input dropdown-input" placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown" aria-expanded="false" readonly/>
+                            <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
+                            </div>
+                              <div #editEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
+                                <div class="card card-body">
+                                  <input type="text" class="form-control" placeholder="Search.." (input)="textChangeEmployeeCustodian(deptID != undefined ? deptID : 0,$event,1)">
+                                  <button type="button" *ngFor="let emp of employeeCustodians" class="dropdown-btn btn" (click)="fillEmployeeCustodian(emp.valueId,emp.employeeName,1)">({{emp.employeeCode}}) {{emp.employeeName}}</button>
+                                </div>
+                            </div>
+                          </div>
+                          <input #editEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId" formControlName="empCustodianId">
+                    </div>
+                    <div class="m-3">
+                      <label for="termsAndConditions">Location</label>
+                      <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
+                        style="color: red;">Required</span>
+                      <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
+                    </div>
+                    <!-- <div class="m-3">
+                      <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <input class="form-control" type="text" id="approver1Status" placeholder="Enter Approver 1 Status"
+                        formControlName="approver1Status">
+                    </div>
+                    <div class="m-3">
+                      <span *ngIf="approver2Status?.hasError('required') && (approver2Status?.dirty || approver2Status?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="approver2Status?.hasError('pattern') && (approver2Status?.dirty || approver2Status?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <input class="form-control" type="text" id="approver2Status" placeholder="Enter Approver 2 Status"
+                        formControlName="approver2Status">
+                    </div>
+                    <div class="m-3">
+                      <span *ngIf="approver3Status?.hasError('required') && (approver3Status?.dirty || approver3Status?.touched)"
+                        style="color: red;">Required</span>
+                      <span *ngIf="approver3Status?.hasError('pattern') && (approver3Status?.dirty || approver3Status?.touched)"
+                        style="color: red;">Invalid number</span>
+                      <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
+                        formControlName="approver3Status">
+                    </div> -->
+                  </div>
+                
+              
+            </div>
+            <div class="modal-footer">
+              <button data-bs-dismiss="modal" class="btn add-btn btn-outline-primary" id="btnadd" type="submit" style="max-width: 300px;">Update</button>
+              <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;" (click)="onClick()">Cancel</button>
+              
+              </div>
+          
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

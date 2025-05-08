@@ -18,6 +18,16 @@ export class ContractsService {
   getContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
     return this.http.get<ContractsEntity[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
   }
+  getActiveContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
+    return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetActiveContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+  getTerminatedContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
+    return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetTerminatedContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+  getPendingApprovalContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
+    return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetPendingApprovalContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
   getContractByID(contractID: number) : Observable<GetContractByIdDto> {
     return this.http.get<GetContractByIdDto>(`${this.apiUrl}/${contractID}`);
   }

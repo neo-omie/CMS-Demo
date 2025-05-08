@@ -2,8 +2,11 @@
 using CMS.Application.Features.Contracts.Commands.CreateNewContract;
 using CMS.Application.Features.Contracts.Commands.EditContract;
 using CMS.Application.Features.Contracts.Commands.RemoveContract;
+using CMS.Application.Features.Contracts.Queries.GetActiveContracts;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Application.Features.Contracts.Queries.GetPendingApprovalContracts;
+using CMS.Application.Features.Contracts.Queries.GetTerminatedContracts;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +34,33 @@ namespace CMS.API.Controllers
             _logger.LogInformation("GetAllContracts method performed");
             return Ok(allContracts);
         }
+        [HttpGet("GetActiveContracts")]
+        public async Task<IActionResult> GetActiveContracts(int pageNumber, int pageSize)
+        {
+            _logger.LogInformation("GetActiveContracts method initiated");
+            var activeContracts = await _mediator.Send(new GetActiveContractsQuery(pageNumber, pageSize));
+            _logger.LogInformation("GetActiveContracts method performed");
+            return Ok(activeContracts);
+        }
+        [HttpGet("GetTerminatedContracts")]
+        public async Task<IActionResult> GetTerminatedContracts(int pageNumber, int pageSize)
+        {
+            _logger.LogInformation("GetTerminatedContracts method initiated");
+            var terminatedContracts = await _mediator.Send(new GetTerminatedContractsQuery(pageNumber, pageSize));
+            _logger.LogInformation("GetTerminatedContracts method performed");
+            return Ok(terminatedContracts);
+        }
+        [HttpGet("GetPendingApprovalContracts")]
+        public async Task<IActionResult> GetPendingApprovalContracts(int pageNumber, int pageSize)
+        {
+            _logger.LogInformation("GetPendingApprovalContracts method initiated");
+            var pendingApprovalContracts = await _mediator.Send(new GetPendingApprovalContractsQuery(pageNumber, pageSize));
+            _logger.LogInformation("GetPendingApprovalContracts method performed");
+            return Ok(pendingApprovalContracts);
+        }
+
+
+
         [Route("{id}")]
         [HttpGet]
         public async Task<IActionResult> GetContractById([FromRoute]int id)
