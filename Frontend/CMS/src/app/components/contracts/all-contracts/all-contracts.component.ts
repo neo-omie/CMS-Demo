@@ -224,9 +224,11 @@ export class AllContractsComponent implements OnInit {
         approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')])
       })
       onAddFormSubmit(){
+        
         this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
         if(this.masterContractAddForm.invalid){
           this.masterContractAddForm.markAllAsTouched();
+          // Alert.toast(TYPE.WARNING, true, 'There is still few fields to fill out. Please fill all the required fields.');
           return;
         }
         else{
