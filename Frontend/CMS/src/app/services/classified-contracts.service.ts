@@ -28,6 +28,12 @@ export class ClassifiedContractsService {
       return this.http.post<boolean>(`${this.apiUrl}`,addContractDto);
     }
 
+    editContract(contractID:number, contract:AddClassifiedContractDto) : Observable<boolean> {
+        return this.http.put<boolean>(`${this.apiUrl}/${contractID}`, contract);
+      }
+    fetchContractData(contractID:number):Observable<AddClassifiedContractDto> {
+        return this.http.get<AddClassifiedContractDto>(`${this.apiUrl}/${contractID}`);
+      }
      // For dropdowns and inputs from other tables
       GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
           return this.http.get<MasterEmployee[]>(`https://localhost:7041/api/Employee/search/${departmentId}/${inputText}`)
