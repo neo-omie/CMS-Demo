@@ -1,0 +1,17 @@
+.thead{
+    background-color: #5f5fee;
+    border-top-color: #5f5fee;
+    border-bottom-color: #5f5fee;
+}
+.mat-header-cell {
+    color: white;
+}
+
+.icon{
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 1rem;
+}
+.icon:hover{
+    color: #5f5fee;
+}

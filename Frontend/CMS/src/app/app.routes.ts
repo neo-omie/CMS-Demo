@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginScreenComponent } from './components/auth/login-screen/login-screen.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MastersScreenComponent } from './components/masters-screen/masters-screen.component';
-import { ApprovalMatrixContractScreenComponent } from './components/approval-matrix-contract-screen/approval-matrix-contract-screen.component';
+import { ApprovalMatrixContractScreenComponent } from './components/ApprovalMatrixContract/approval-matrix-contract-screen/approval-matrix-contract-screen.component';
 import { MasterDocumentComponent } from './components/master-document/master-document.component';
 import { RenewPasswordComponent } from './components/auth/renew-password/renew-password.component';
 import { NotFoundComponent } from './components/misc/not-found/not-found.component';

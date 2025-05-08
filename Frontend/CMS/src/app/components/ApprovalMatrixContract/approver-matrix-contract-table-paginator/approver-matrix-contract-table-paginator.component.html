@@ -1,0 +1,13 @@
+<nav class="d-flex justify-content-center" *ngIf="records > 0" aria-label="Page navigation example">
+    <ul *ngIf="maxPage > 1" class="pagination">
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link" aria-label="FirstPage">&laquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link" aria-label="Previous">&lsaquo;</span></li>
+      <li class="page-item" (click)="GetPage(pageNumbers[1])"><span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
+      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
+      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
+      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
+      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link" aria-label="Next">&rsaquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
+    </ul>
+</nav>
