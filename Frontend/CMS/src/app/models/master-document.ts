@@ -6,13 +6,15 @@ export class MasterDocument {
   valueId: number;
   displayDocumentName: string;
   status: number;
+  documentPath: string;
   // displayDocumentName:string;
 
 
-  constructor(valueId:number, displayDocumentName: string, status: number) {
+  constructor(valueId:number, displayDocumentName: string, status: number, documentPath:string) {
     this.valueId=valueId;
     this.status = status;
     this.displayDocumentName = displayDocumentName;
+    this.documentPath = documentPath;
   }
 }
 export class MasterDocumentDto {
