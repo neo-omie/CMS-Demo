@@ -68,8 +68,11 @@ export class GetContractByIdDto {
     empCustodianName?: string;
     location?: string;
     approver1Status?: number;
+    approver1Email?:string;
     approver2Status?: number;
+    approver2Email?:string;
     approver3Status?: number;
+    approver3Email?:string;
     isDeleted?: boolean;
 }
 export class AddContractDto {

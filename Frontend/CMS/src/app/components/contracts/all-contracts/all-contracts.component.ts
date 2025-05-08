@@ -12,12 +12,13 @@ import { Title } from '@angular/platform-browser';
 import { MasterEmployee } from '../../../models/master-employee';
 import { GetAllDepartmentsDto } from '../../../models/master-department';
 import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
-import { MasterApostille } from '../../../models/master-apostille';
+import { MasterApostille, MasterApostilleDto } from '../../../models/master-apostille';
 import { CompanyMasterDto } from '../../../models/master-company';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MasterApostilleService } from '../../../services/master-apostille.service';
 
 @Component({
   selector: 'app-all-contracts',
@@ -42,7 +43,7 @@ export class AllContractsComponent implements OnInit {
   errorMsg:string = "";
   allContracts: ContractsEntity[] = [];
   contractDetails?: GetContractByIdDto;
-
+  approverCheck: boolean = true;
   mode:any;
   deptID?:number;
   // Dropdowns
@@ -58,7 +59,7 @@ export class AllContractsComponent implements OnInit {
     this.getAllApostilleTypes();
     this.getAllCompanies();
   }
-  constructor(private contractsService: ContractsService, private router: Router,private renderer : Renderer2, private title:Title) {
+  constructor(private contractsService: ContractsService, private router: Router,private renderer : Renderer2, private title:Title, private masterApostilleService : MasterApostilleService ) {
     this.title.setTitle("All Contracts - CMS");
   }
   @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
@@ -76,6 +77,7 @@ export class AllContractsComponent implements OnInit {
         next: (res: ContractsEntity[]) => {
           this.loading = false;
           this.dataSource.data = res;
+          console.log(this.dataSource.data)
           if (this.sort) {
             this.dataSource.sort = this.sort;
           }
@@ -111,6 +113,13 @@ export class AllContractsComponent implements OnInit {
         next: (response: GetContractByIdDto) => {
           this.contractDetails = response;
           console.log(response);
+          // Checking if the approver is the one who's logged in or not
+          if(this.contractDetails.approver1Email == localStorage.getItem('email')) {
+            this.approverCheck = false;
+            console.log(this.approverCheck);
+          } else {
+            this.approverCheck = true;
+          }
         },
         error: (error) => {
           console.error('Error :(', error);
@@ -179,9 +188,10 @@ export class AllContractsComponent implements OnInit {
       });
     }
     getAllApostilleTypes() {
-      this.contractsService.GetApostilleTypes().subscribe({
-        next: (response:MasterApostille[]) => {
-          this.apostilleTypes = response;
+      this.masterApostilleService.getApostilles(1,100).subscribe({
+        next: (response:MasterApostilleDto) => {
+          this.apostilleTypes = response.data;
+          console.log(this.apostilleTypes)
         }, error: (error) => {
           console.error('Error :(', error);
           this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
@@ -221,9 +231,11 @@ export class AllContractsComponent implements OnInit {
         approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')])
       })
       onAddFormSubmit(){
+        
         this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
         if(this.masterContractAddForm.invalid){
           this.masterContractAddForm.markAllAsTouched();
+          // Alert.toast(TYPE.WARNING, true, 'There is still few fields to fill out. Please fill all the required fields.');
           return;
         }
         else{

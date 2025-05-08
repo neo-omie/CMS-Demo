@@ -22,8 +22,8 @@
       <td mat-cell *matCellDef="let contract">
         <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit"
             (click)="fetchContractData(contract.valueId)"></i>
-          <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
-            (click)="GetContract(contract.valueId)"></i>
+          <!-- <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
+            (click)="GetContract(contract.valueId)"></i> -->
           <i class="fa-solid fa-trash icon" (click)="deleteContract(contract.valueId)"></i>
       </td>
     </ng-container>

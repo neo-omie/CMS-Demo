@@ -32,6 +32,8 @@ namespace CMS.Application.Features.Contracts.Queries.GetContractById
         //Property for uploading documents here
         public int EmpCustodianId { get; set; }
         public string EmpCustodianName { get; set; }
+        public string EmpCustodianEmail { get; set; }
+        public string EmpCustodianCode { get; set; }
         public string Location { get; set; }
         public ContractStatus Approver1Status { get; set; } = ContractStatus.PendingApproval;
         public string Approver1Email { get; set; }

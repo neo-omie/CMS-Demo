@@ -1,18 +1,15 @@
 <app-loader *ngIf="loading"></app-loader>
-<h2 class="mt-3">All Classified Contracts</h2>
+<h2 class="mt-3">Contracts List - Active</h2>
 <div class="table-responsive p-md-5 p-3">
-  <button class="add-btn btn btn-outline-primary mb-2">
-    <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New Contract</a>
-  </button>
   <table mat-table [dataSource]="dataSource" matSort
     class="table table-striped table-bordered align-middle mat-elevation-z8">
-    <ng-container matColumnDef="classifiedContractID">
+    <ng-container matColumnDef="contractID">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract ID</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.classifiedContractID }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.contractID }}</td>
     </ng-container>
-    <ng-container matColumnDef="classifiedContractName">
+    <ng-container matColumnDef="contractName">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Name</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.classifiedContractName }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.contractName }}</td>
     </ng-container>
     <ng-container matColumnDef="contractType">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Type</th>
@@ -68,17 +65,19 @@
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
       <td mat-cell *matCellDef="let cont">
         <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit"
-          (click)="fetchContractData(cont.classifiedContractID)"></i>
+          (click)="fetchContractData(cont.contractID)"></i>
         <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
-          (click)="GetContract(cont.classifiedContractID)"></i>
+          (click)="GetContract(cont.contractID)"></i>
         <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
-          (click)="DeleteContract(cont.classifiedContractID)"></i>
+          (click)="DeleteContract(cont.contractID)"></i>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
-  </table>
+    
+</table>
+<p class="fs-5" *ngIf="allContracts.length == 0" style="text-align: center;">No active records.</p>
 </div>
 <div *ngIf="!loading" class="table-responsive p-3">
   <nav class="d-flex justify-content-center" *ngIf="allContracts!=undefined && allContracts.length > 0" aria-label="Page navigation example">
@@ -106,8 +105,8 @@
           <h1 class="modal-title fs-6 mb-3">Contract Name</h1>
           <div class="mb-3">
             <div class="input-group">
-                <span class="input-group-text"><b>{{contractDetails?.classifiedContractID}}</b></span>
-                <input type="text" name="contractName" class="form-control" id="contractName" [value]="contractDetails?.classifiedContractName" disabled>
+                <span class="input-group-text"><b>{{contractDetails?.contractId}}</b></span>
+                <input type="text" name="contractName" class="form-control" id="contractName" [value]="contractDetails?.contractName" disabled>
             </div>
           </div>
           <h1 class="modal-title fs-6 mb-3">Department Name</h1>
@@ -253,6 +252,12 @@
             </div>
           </div>
         </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
+          <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
+          <button class="btn btn-outline-primary">+ Add Addendum</button>
+          <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+        </div>
       </div>
     </div>
   </div>
@@ -269,10 +274,10 @@
                   <div class="fields-container">
                     <div class="m-3">
                       <label for="termsAndConditions">Contract Name</label>
-                      <span *ngIf="classifiedContractName?.hasError('required') && (classifiedContractName?.dirty || classifiedContractName?.touched)"
+                      <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
                         style="color: red;">Required</span>
                       <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
-                        formControlName="classifiedContractName">
+                        formControlName="contractName">
                     </div>
                     <div class="m-3">
                       <label for="termsAndConditions">Department</label>
@@ -449,198 +454,4 @@
     </div>
   </div>
 
-</div>
-<div #addContractModal class="modal fade" id="contract-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-content">
-      <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add New Contract</h1>
-        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="onClick()"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="masterContractAddForm" (ngSubmit)="onAddFormSubmit()">
-          <div class="p-2">
-            <div class="card-body">
-                <div class="fields-container">
-                  <div class="m-3">
-                    <label for="classifiedContractName">Contract Name<span style="color: red;">*</span></label>
-                    <span *ngIf="classifiedContractName?.hasError('required') && (classifiedContractName?.dirty || classifiedContractName?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="text" id="classifiedContractName" placeholder="Enter contract name"
-                      formControlName="classifiedContractName">
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Department<span style="color: red;">*</span></label>
-                    <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="departmentId?.hasError('pattern') && (departmentId?.dirty || departmentId?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <!-- <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID" formControlName="departmentId" [(ngModel)]="deptID"> -->
-                    <select class="form-select" name="departmentId" id="departmentId" formControlName="departmentId" [(ngModel)]="deptID">
-                      <option value="" disabled selected>--Select one Department--</option>
-                      <option *ngFor="let department of departments" value="{{department.departmentId}}">{{department.departmentName}}</option>
-                    </select>
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Contract with Company<span style="color: red;">*</span></label>
-                    <span *ngIf="contractWithCompanyId?.hasError('required') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="contractWithCompanyId?.hasError('pattern') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
-                      <select class="form-select" name="contractWithCompanyId" id="contractWithCompanyId" formControlName="contractWithCompanyId">
-                        <option value="" disabled selected>--Select one Company--</option>
-                        <option *ngFor="let company of companies" value="{{company.valueId}}">{{company.companyName}}</option>
-                      </select>
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Contract Type<span style="color: red;">*</span></label>
-                    <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
-                      style="color: red;">Required</span>
-                    <!-- <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID" formControlName="contractTypeId"> -->
-                    <select class="form-select" name="contractTypeId" id="contractTypeId" formControlName="contractTypeId">
-                      <option value="" disabled selected>--Select one Contract Type--</option>
-                      <option *ngFor="let contractType of contractTypes" value="{{contractType.valueId}}">{{contractType.contractTypeName}}</option>
-                    </select>
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Apostille Type<span style="color: red;">*</span></label>
-                    <span *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <!-- <input class="form-control" type="text" id="apostilleTypeId" placeholder="Enter Apostille ID" formControlName="apostilleTypeId"> -->
-                    <select class="form-select" name="apostilleTypeId" id="apostilleTypeId" formControlName="apostilleTypeId">
-                      <option value="" selected disabled>--Select one Apostille Type--</option>
-                      <option *ngFor="let apostille of apostilleTypes" value="{{apostille.valueId}}">{{apostille.apostilleName}}</option>
-                    </select>
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Actual Document Reference Number<span style="color: red;">*</span></label>
-                    <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="actualDocRefNo" placeholder="Enter Actual Document Reference Number"
-                      formControlName="actualDocRefNo">
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Retainer Contract Type<span style="color: red;">*</span></label>
-                    <span *ngIf="retainerContract?.hasError('required') && (retainerContract?.dirty || retainerContract?.touched)"
-                      style="color: red;">Required</span>
-                      <span *ngIf="retainerContract?.hasError('pattern') && (retainerContract?.dirty || retainerContract?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <!-- <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract"> -->
-                    <select class="form-select" name="retainerContract" id="retainerContract" formControlName="retainerContract">
-                      <option value="" selected disabled>--Select Retainer Type--</option>
-                      <option value="1">None</option>
-                      <option value="2">Weekly</option>
-                      <option value="3">Monthly</option>
-                      <option value="4">Quarterly</option>
-                      <option value="5">Yearly</option>
-                    </select>
-                  </div>
-                  <!-- <div class="m-3">
-                    <input class="form-control" type="text" id="valueId" placeholder="ValueId" disabled>
-                  </div> -->
-                  <div class="m-3">
-                    <label for="termsAndConditions">Terms and Conditions<span style="color: red;">*</span></label>
-                    <span *ngIf="termsAndConditions?.hasError('required') && (termsAndConditions?.dirty || termsAndConditions?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="text" placeholder="Terms and Conditions" id="termsAndConditions" formControlName="termsAndConditions">
-                  </div>
-                  <div class="m-3">
-                    <label for="validFrom">Valid from<span style="color: red;">*</span></label>
-                    <span *ngIf="validFrom?.hasError('required') && (validFrom?.dirty || validFrom?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="date" id="validFrom" formControlName="validFrom">
-                  </div>
-                  <div class="m-3">
-                    <label for="validTill">Valid till<span style="color: red;">*</span></label>
-                    <span *ngIf="validTill?.hasError('required') && (validTill?.dirty || validTill?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="date" id="validTill" formControlName="validTill">
-                  </div>
-                  <div class="m-3">
-                    <label for="renewalFrom">Renewal from<span style="color: red;">*</span></label>
-                    <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="date" id="renewalFrom" formControlName="renewalFrom">
-                  </div>
-                  <div class="m-3">
-                    <label for="renewalTill">Renewal till<span style="color: red;">*</span></label>
-                    <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="date" id="renewalTill" formControlName="renewalTill">
-                  </div>
-                  <div class="m-3">
-                    <label for="addendumDate">Addendum Date<span style="color: red;">*</span></label>
-                    <span *ngIf="addendumDate?.hasError('required') && (addendumDate?.dirty || addendumDate?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Employee Custodian Name<span style="color: red;">*</span></label>
-                    <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
-                      style="color: red;">Invalid Employee</span>
-                      <div class="mb-3">
-                        <div class="input-group">
-                          <input #addEmpCustodianName class="form-control edit-input dropdown-input" placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown" aria-expanded="false" readonly/>
-                          <span class="input-group-text dropdown-icon"  data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown"><i class="fa-solid fa-angle-down"></i></span>  
-                          </div>
-                            <div #addEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
-                              <div class="card card-body">
-                                <input type="text" class="form-control" placeholder="Search.." (input)="textChangeEmployeeCustodian(deptID != undefined ? deptID : 0,$event,1)">
-                                <button type="button" *ngFor="let emp of employeeCustodians" class="dropdown-btn btn" (click)="fillEmployeeCustodian(emp.valueId,emp.employeeName,1)">({{emp.employeeCode}}) {{emp.employeeName}}</button>
-                              </div>
-                          </div>
-                        </div>
-                        <input #addEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId" formControlName="empCustodianId">
-                  </div>
-                  <div class="m-3">
-                    <label for="termsAndConditions">Location<span style="color: red;">*</span></label>
-                    <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
-                      style="color: red;">Required</span>
-                    <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
-                  </div>
-                  <!-- <div class="m-3">
-                    <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver1Status" placeholder="Enter Approver 1 Status"
-                      formControlName="approver1Status">
-                  </div>
-                  <div class="m-3">
-                    <span *ngIf="approver2Status?.hasError('required') && (approver2Status?.dirty || approver2Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver2Status?.hasError('pattern') && (approver2Status?.dirty || approver2Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver2Status" placeholder="Enter Approver 2 Status"
-                      formControlName="approver2Status">
-                  </div>
-                  <div class="m-3">
-                    <span *ngIf="approver3Status?.hasError('required') && (approver3Status?.dirty || approver3Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver3Status?.hasError('pattern') && (approver3Status?.dirty || approver3Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
-                      formControlName="approver3Status">
-                  </div> -->
-                </div>
-            </div>
-          </div>
-      <div class="modal-footer">
-        <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
-        <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;" (click)="onClick()">Cancel</button>
-        <!-- <button type="button" class="btn add-btn add-modal-btn" data-bs-dismiss="modal"
-          (click)="editApproverMatrixMOUSubmit(approvalMatrixMou != undefined ? approvalMatrixMou.masterApprovalMatrixMOUId : 0)">Save</button>
-        <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal"
-          (click)="closeEditApproverCollapses()">Cancel</button> -->
-      </div>
-    </form>
-      </div>
-  </div>
 </div>

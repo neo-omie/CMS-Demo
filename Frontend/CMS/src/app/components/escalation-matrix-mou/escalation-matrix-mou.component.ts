@@ -176,10 +176,6 @@ export class EscalationMatrixMouComponent {
       if(nod1 !== "" && Number(nod1) > 0 &&
       nod2 !== "" && Number(nod2) > 0 &&
       nod3 !== "" && Number(nod3) > 0){
-        if(ap1 == ap2 || ap1 == ap3 || ap2 == ap3){
-          Alert.toast(TYPE.ERROR,true,"Approvers cannot be same");
-          return;
-        }
         this.updateMatrixMou.escalationId1 = ap1;
         this.updateMatrixMou.escalationId2 = ap2;
         this.updateMatrixMou.escalationId3 = ap3;
@@ -193,7 +189,7 @@ export class EscalationMatrixMouComponent {
           },
           error:(error)=>{
             console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
             Alert.toast(TYPE.ERROR,true,this.errorMsg);
           }
         })

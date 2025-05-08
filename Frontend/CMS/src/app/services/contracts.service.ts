@@ -18,6 +18,16 @@ export class ContractsService {
   getContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
     return this.http.get<ContractsEntity[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
   }
+  getActiveContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
+    return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetActiveContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+  getTerminatedContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
+    return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetTerminatedContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+  getPendingApprovalContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
+    return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetPendingApprovalContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
   getContractByID(contractID: number) : Observable<GetContractByIdDto> {
     return this.http.get<GetContractByIdDto>(`${this.apiUrl}/${contractID}`);
   }
@@ -47,7 +57,7 @@ export class ContractsService {
   GetCompanies():Observable<CompanyMasterDto[]> {
     return this.http.get<CompanyMasterDto[]>(`https://localhost:7041/api/MasterCompany/1/100`);
   }
-  GetApostilleTypes() : Observable<MasterApostille[]> {
-    return this.http.get<MasterApostille[]>(`https://localhost:7041/api/Apostille/1/100`);
+  GetApostilleTypes() : Observable<MasterApostilleDto> {
+    return this.http.get<MasterApostilleDto>(`https://localhost:7041/api/Apostille/1/100`);
   }
 }

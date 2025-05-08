@@ -30,6 +30,27 @@ namespace CMS.Persistence.Repositories
             var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return allContracts;
         }
+        public async Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetActiveContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
+        public async Task<IEnumerable<GetAllContractsDto>> GetTerminatedContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetTerminatedContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
+        public async Task<IEnumerable<GetAllContractsDto>> GetPendingApprovalContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetPendingApprovalContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
         {
@@ -51,6 +72,11 @@ namespace CMS.Persistence.Repositories
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, cp.ContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
+            // To Employee Custodian
+            await SendMail(
+                foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ContractId, cp.ContractName
+            );
+            // To Approver L1
             await SendMail(
                 foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ContractId, cp.ContractName
             );

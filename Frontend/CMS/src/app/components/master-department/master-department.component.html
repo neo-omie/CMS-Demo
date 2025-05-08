@@ -24,8 +24,8 @@
       <td mat-cell *matCellDef="let department">
         <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#department-edit"
           (click)="GetDepartment(department.departmentId)"></i>
-        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#department-detail"
-          (click)="GetDepartment(department.departmentId)"></i>
+        <!-- <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#department-detail"
+          (click)="GetDepartment(department.departmentId)"></i> -->
         <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#department-delete"
           (click)="deleteDepartment(department.departmentId)"></i>
       </td>
