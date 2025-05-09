@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper.Internal;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.DTOs;
 using CMS.Application.Exceptions;
@@ -18,10 +19,12 @@ namespace CMS.Persistence.Repositories
     {
         readonly CMSDbContext _context;
         readonly IEmailService _emailService;
-        public ContractRepository(CMSDbContext context, IEmailService emailService)
+        readonly INotificationRepository _notificationRepository;
+        public ContractRepository(CMSDbContext context, IEmailService emailService, INotificationRepository notificationRepository)
         {
             _emailService = emailService;
             _context = context;
+            _notificationRepository = notificationRepository;
         }
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
         {
@@ -72,18 +75,34 @@ namespace CMS.Persistence.Repositories
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, cp.ContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
-            // To Approver L1
             if(foundContract != null)
             {
+                // To Approver L1
+                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                                          $"New Contract called '{foundContract.ContractName}' Added!",
+                                          "New Contract has been added under your department. You can access and change the approvals for this contract.");
                 await SendMail(
                     foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ContractId, cp.ContractName
                 );
                 // To Employee Custodian
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          $"You have added new Contract called '{foundContract.ContractName}'!",
+                                          "New Contract has been added under your department.");
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ContractId, cp.ContractName
                 );
             }
             return cp;
+        }
+        private async Task AddNewNotifications(string name, string subject, string message)
+        {
+            Notification createNewNotif = new Notification
+            {
+                EmployeeCode = name,
+                NotficationSubject = subject,
+                NotficationMessage = message
+            };
+            await _notificationRepository.NewNotification(createNewNotif);
         }
         private string GenerateEmailBody(string name, int contractID, string contractName)
         {

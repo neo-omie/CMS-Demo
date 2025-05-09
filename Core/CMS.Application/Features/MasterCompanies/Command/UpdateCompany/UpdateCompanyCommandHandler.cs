@@ -22,7 +22,7 @@ namespace CMS.Application.Features.MasterCompanies.Command.UpdateCompany
             var company =await _comprepo.GetCompanyByIdAsync(request.id);
             if (company==null)
             {
-                //throw new CompanyNotFound($"Company Not Found");
+                throw new Exception($"Company Not Found");
             }
             return await _comprepo.UpdateCompanyAsync(request.id, request.comp);
         }
