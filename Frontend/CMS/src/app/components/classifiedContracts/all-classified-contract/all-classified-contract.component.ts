@@ -384,7 +384,7 @@ export class AllClassifiedContractComponent implements OnInit{
           }
         
           onClick(){
-            this.router.navigate(['contracts/allContracts']);
+            this.router.navigate(['classifiedContracts/allContracts']);
             this.masterContractAddForm.reset();
           }
           contID:number = 0;
