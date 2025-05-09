@@ -55,6 +55,8 @@ namespace CMS.Persistence.Context
         public DbSet<GetAllClassifiedContractsDto> GetClassifiedContractsDtos { get; set; }
         public DbSet<GetClassifiedContractByIdDto> GetClassifiedContractByIdDtos { get; set; }
 
+        public DbSet<Notification> ContractNotifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -125,7 +127,10 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<Contract>().HasOne(c => c.ContractType).WithMany().HasForeignKey(c => c.ContractTypeId).HasPrincipalKey(ct => ct.ValueId);
             modelBuilder.Entity<Contract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
             modelBuilder.Entity<Contract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
-            
+
+            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
+            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
+
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
 

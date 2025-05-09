@@ -34,6 +34,7 @@ namespace CMS.Persistence
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<JwtSettings>>().Value);
             services.AddTransient<IAuthRepository, AuthRepository>();
