@@ -57,6 +57,7 @@
           <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="closeEditApproverCollapses()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
+          <p class="m-1">Esclastors</p>
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
@@ -99,6 +100,7 @@
                   </div>
               </div>
           </div>
+          <p class="m-1">Trigger after days</p>
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
@@ -134,7 +136,7 @@
           <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
-          <h1 class="modal-title fs-6 mb-3">{{escalationMatrixContract?.departmentName}} Escalators</h1>
+         <p>{{escalationMatrixContract?.departmentName}} Escalators</p>
        
           <div class="mb-3">
             <div class="input-group">
@@ -154,8 +156,8 @@
                 <input type="text" name="escalatorName3" class="form-control" id="escalatorName3" [value]="escalationMatrixContract != undefined ? escalationMatrixContract.escalation3 : ''" disabled>
             </div>
           </div>
-          <h1 class="modal-title fs-6 mb-3">Trigger After</h1>
           <div class="mb-3">
+           <p>Trigger After</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
                 <input type="text" name="triggerDaysEscalation1" class="form-control" id="triggerDaysEscalation1" [value]="escalationMatrixContract != undefined ? escalationMatrixContract.triggerDaysEscalation1 : ''" disabled>

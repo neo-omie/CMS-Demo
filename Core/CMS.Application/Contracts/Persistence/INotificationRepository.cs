@@ -11,5 +11,6 @@ namespace CMS.Application.Contracts.Persistence
     {
         Task<IEnumerable<Notification>> GetAllNotifications(string employeeCode);
         Task<Notification> GetNotificationDetails(int id, string employeeCode);
+        Task<bool> NewNotification(Notification notification);
     }
 }

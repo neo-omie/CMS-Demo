@@ -125,22 +125,22 @@
           <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
-          <h1 class="modal-title fs-6 mb-3">Document ID</h1>
           <div class="mb-3">
+            <p class="m-1">Document ID</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
                 <input type="text" name="documentId" class="form-control" id="documentId" [value]=" getMasterDocumentById?.valueId" disabled>
             </div>
           </div>
-          <h1 class="modal-title fs-6 mb-3">Document Name</h1>
           <div class="mb-3">
+            <p class="m-1">Document Name</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
                 <input type="text" name="documentName" class="form-control" id="documentName" [value]="getMasterDocumentById?.displayDocumentName" disabled>
             </div>
           </div>
-          <h1 class="modal-title fs-6 mb-3">Document Status</h1>
           <div class="mb-3">
+            <p class="m-1">Document Status</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-toggle-on"></i></span>
                 <input type="text" name="documentStatus" class="form-control" id="documentStatus" [value]="getMasterDocumentById?.status == 1 ? 'Active' : 'InActive'" disabled>

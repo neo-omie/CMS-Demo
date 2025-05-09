@@ -14,5 +14,6 @@ namespace CMS.Domain.Entities
         public string EmployeeCode { get; set; }
         public string NotficationSubject { get; set; }
         public string NotficationMessage { get; set; }
+        public DateTime NotificationDate { get; set; } = DateTime.Now;
     }
 }
