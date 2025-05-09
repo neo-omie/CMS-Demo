@@ -117,7 +117,7 @@ export class MasterDepartmentComponent {
         this.departmentService.deleteDepartment(id).subscribe({
           next: (response: boolean) => {
             if (response) {
-              Alert.toast(TYPE.SUCCESS, true, "Deleted successfully");
+              // Alert.toast(TYPE.SUCCESS, true, "Deleted successfully");
               this.GetAllDepartments(1, 10);
             }
 
