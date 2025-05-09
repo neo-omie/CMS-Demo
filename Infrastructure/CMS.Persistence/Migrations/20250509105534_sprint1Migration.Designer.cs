@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250509064028_sprint1Migration")]
+    [Migration("20250509105534_sprint1Migration")]
     partial class sprint1Migration
     {
         /// <inheritdoc />
@@ -1262,7 +1262,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIaspasOfiPvqamMoDI5JUTJU028BFtxmKt3/faBtnnX0ixYwZ0Iys5qSk96kN8x6A==",
+                            Password = "AQAAAAIAAYagAAAAEG+2Yrs1Br72F80IgJNBxGEEw/6oA5+46FMMv78oIFLyMAZ6lk9WITwBenQUSBhr5Q==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1277,7 +1277,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIwVUeQyu7VLeM8WlbSM2nGtmTdF/KdyQJXLO5dopqVMLh7kybfVUdx3/jRfhp9I9g==",
+                            Password = "AQAAAAIAAYagAAAAEClKV+eK50BnPBqGOWvhtkEdWefgp+G7oENuV2GVo8fU/No/sVoYrZIRpa0g0QwDFQ==",
                             Role = "MOU_Approver",
                             Unit = "Thane"
                         });
@@ -1383,7 +1383,7 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NotficationMessage")
                         .IsRequired()
@@ -1397,8 +1397,6 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ValueId");
-
-                    b.HasAlternateKey("EmployeeCode");
 
                     b.ToTable("ContractNotifications");
                 });

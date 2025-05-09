@@ -19,7 +19,7 @@ namespace CMS.Persistence.Migrations
                 {
                     ValueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotficationSubject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotficationMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotificationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -27,7 +27,6 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ContractNotifications", x => x.ValueId);
-                    table.UniqueConstraint("AK_ContractNotifications_EmployeeCode", x => x.EmployeeCode);
                 });
 
             migrationBuilder.CreateTable(
@@ -779,8 +778,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIaspasOfiPvqamMoDI5JUTJU028BFtxmKt3/faBtnnX0ixYwZ0Iys5qSk96kN8x6A==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIwVUeQyu7VLeM8WlbSM2nGtmTdF/KdyQJXLO5dopqVMLh7kybfVUdx3/jRfhp9I9g==", "MOU_Approver", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG+2Yrs1Br72F80IgJNBxGEEw/6oA5+46FMMv78oIFLyMAZ6lk9WITwBenQUSBhr5Q==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEClKV+eK50BnPBqGOWvhtkEdWefgp+G7oENuV2GVo8fU/No/sVoYrZIRpa0g0QwDFQ==", "MOU_Approver", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(

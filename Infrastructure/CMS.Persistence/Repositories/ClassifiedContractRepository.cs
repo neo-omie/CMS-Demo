@@ -20,10 +20,13 @@ namespace CMS.Persistence.Repositories
     {
         readonly CMSDbContext _context;
         readonly IEmailService _emailService;
-        public ClassifiedContractRepository(CMSDbContext context, IEmailService emailService)
+        readonly INotificationRepository _notificationRepository;
+
+        public ClassifiedContractRepository(CMSDbContext context, IEmailService emailService, INotificationRepository notificationRepository)
         {
             _context = context;
             _emailService = emailService;
+            _notificationRepository = notificationRepository;
         }
         public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize)
         {
@@ -47,21 +50,41 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<ClassifiedContract> AddClassifiedContractAsync(ClassifiedContract cp)
         {
+
             var addedContract = await _context.ClassifiedContracts.AddAsync(cp);
             if (await _context.SaveChangesAsync() <= 0)
                 throw new Exception("For some reasons, contract has not been added.");
             string sql = "EXEC SP_GetClassifiedContractByID @ID = {0}";
             var findingContract = await _context.GetClassifiedContractByIdDtos.FromSqlRaw(sql, cp.ClassifiedContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
-            // To Employee Custodian
-            await SendMail(
-                foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName
-            );
-            // To Approver L1
-            await SendMail(
-                foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ClassifiedContractId, cp.ClassifiedContractName
-            );
+            if (foundContract != null)
+            {
+                // To Approver L1
+                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                                          $"New Contract called '{foundContract.ClassifiedContractName}' Added!",
+                                          "New Contract has been added under your department. You can access and change the approvals for this contract.");
+                await SendMail(
+                    foundContract.Approver1Email, foundContract.Approver1EmployeeCode, cp.ClassifiedContractId, cp.ClassifiedContractName
+                );
+                // To Employee Custodian
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          $"You have added new Contract called '{foundContract.ClassifiedContractName}'!",
+                                          "New Contract has been added under your department.");
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName
+                );
+            }
             return cp;
+        }
+        private async Task AddNewNotifications(string name, string subject, string message)
+        {
+            Notification createNewNotif = new Notification
+            {
+                EmployeeCode = name,
+                NotficationSubject = subject,
+                NotficationMessage = message
+            };
+            await _notificationRepository.NewNotification(createNewNotif);
         }
 
         private string GenerateEmailBody(string name, int contractID, string contractName)

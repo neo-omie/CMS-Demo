@@ -138,7 +138,7 @@ export class AllClassifiedContractComponent implements OnInit{
           this.masterApostilleService.getApostilles(1,100).subscribe({
             next: (response:MasterApostilleDto) => {
               this.apostilleTypes = response.data;
-              console.log(this.apostilleTypes)
+              // console.log(this.apostilleTypes)
             }, error: (error) => {
               console.error('Error :(', error);
               this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
