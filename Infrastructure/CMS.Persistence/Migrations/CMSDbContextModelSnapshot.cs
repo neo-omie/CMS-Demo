@@ -1259,7 +1259,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAELSXX+O6LaEwljgft0KuhUkQUl5UxnPtUMcFQUwmCP1enGWnD5ro5IYuZplwDp01CA==",
+                            Password = "AQAAAAIAAYagAAAAEIaspasOfiPvqamMoDI5JUTJU028BFtxmKt3/faBtnnX0ixYwZ0Iys5qSk96kN8x6A==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1274,7 +1274,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAELcIU4atteadyw57Pc8ckvcwjfusmUSM1xYpUQ7kchFZDJKIqd6GxRphRguBldeA3A==",
+                            Password = "AQAAAAIAAYagAAAAEIwVUeQyu7VLeM8WlbSM2nGtmTdF/KdyQJXLO5dopqVMLh7kybfVUdx3/jRfhp9I9g==",
                             Role = "MOU_Approver",
                             Unit = "Thane"
                         });
@@ -1389,6 +1389,9 @@ namespace CMS.Persistence.Migrations
                     b.Property<string>("NotficationSubject")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NotificationDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ValueId");
 
