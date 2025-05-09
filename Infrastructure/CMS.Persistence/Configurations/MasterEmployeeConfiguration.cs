@@ -34,7 +34,7 @@ namespace CMS.Persistence.Configurations
                     IsDeleted = false,
                     EmployeeCode = "NEO2",
                     Unit = "Thane",
-                    Role = "MOU_User",
+                    Role = "MOU_Approver",
                     EmployeeMobile = 9999988888,
                     EmployeeExtension = 8976,
                     DepartmentId = 2,

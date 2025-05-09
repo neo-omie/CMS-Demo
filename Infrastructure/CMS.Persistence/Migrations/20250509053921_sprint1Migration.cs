@@ -14,6 +14,22 @@ namespace CMS.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ContractNotifications",
+                columns: table => new
+                {
+                    ValueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NotficationSubject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NotficationMessage = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContractNotifications", x => x.ValueId);
+                    table.UniqueConstraint("AK_ContractNotifications_EmployeeCode", x => x.EmployeeCode);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "contracts",
                 columns: table => new
                 {
@@ -159,6 +175,8 @@ namespace CMS.Persistence.Migrations
                     AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EmpCustodianId = table.Column<int>(type: "int", nullable: false),
                     EmpCustodianName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmpCustodianEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmpCustodianCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Approver1Status = table.Column<int>(type: "int", nullable: false),
                     Approver1Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -236,6 +254,8 @@ namespace CMS.Persistence.Migrations
                     AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EmpCustodianId = table.Column<int>(type: "int", nullable: false),
                     EmpCustodianName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmpCustodianEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmpCustodianCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Approver1Status = table.Column<int>(type: "int", nullable: false),
                     Approver1Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -758,8 +778,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIJdnQY1iMhSEQruYzBV5Qw8mezsE2lWyWNq6OY2NoePhFkKRNOmChEsE6NhpIqbiw==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELMV5jrktbcQjWaNyvP06z+xH0Nf0PcMmU97aP7OoYimqoWZV4OvGaabFXLMmhzzHg==", "MOU_User", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELSXX+O6LaEwljgft0KuhUkQUl5UxnPtUMcFQUwmCP1enGWnD5ro5IYuZplwDp01CA==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELcIU4atteadyw57Pc8ckvcwjfusmUSM1xYpUQ7kchFZDJKIqd6GxRphRguBldeA3A==", "MOU_Approver", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -893,6 +913,9 @@ namespace CMS.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ClassifiedContracts");
+
+            migrationBuilder.DropTable(
+                name: "ContractNotifications");
 
             migrationBuilder.DropTable(
                 name: "ContractsEntity");
