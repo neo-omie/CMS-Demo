@@ -30,6 +30,7 @@ namespace CMS.Persistence
             services.AddScoped<IContractTypeMasterRepository, ContractTypeMasterRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IClassifiedContractRepository, ClassifiedContractRepository>();
+            services.AddScoped<IAddendumContractRepository, AddendumContractRepository>();
             services.AddScoped<ICompanyCascadeRepository, CompanyCascadeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));

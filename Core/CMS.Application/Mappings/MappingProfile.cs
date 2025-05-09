@@ -13,6 +13,7 @@ using CMS.Domain.Entities.CompanyMaster;
 using CMS.Application.Features.MasterApostilles.ApostilleDtos;
 using CMS.Application.Features.Contracts;
 using CMS.Application.Features.ClassifiedContracts;
+using CMS.Application.Features.AddendumContract.AddendumContractDto;
 
 namespace CMS.Application.Mappings
 {
@@ -35,6 +36,7 @@ namespace CMS.Application.Mappings
             CreateMap<ContractTypeMasters, UpdateContractDTO>().ReverseMap();
             CreateMap<ContractDTO, Contract>().ReverseMap();
             CreateMap<ClassifiedContractDTO, ClassifiedContract>().ReverseMap();
+            CreateMap<AddAddendumContractDto, AddendumContract>().ReverseMap();
 
         }
     }

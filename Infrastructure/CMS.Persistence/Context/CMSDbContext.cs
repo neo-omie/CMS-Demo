@@ -55,6 +55,7 @@ namespace CMS.Persistence.Context
         public DbSet<GetAllClassifiedContractsDto> GetClassifiedContractsDtos { get; set; }
         public DbSet<GetClassifiedContractByIdDto> GetClassifiedContractByIdDtos { get; set; }
 
+
         public DbSet<Notification> ContractNotifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
