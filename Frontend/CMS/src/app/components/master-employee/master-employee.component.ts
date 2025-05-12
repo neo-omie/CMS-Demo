@@ -1,7 +1,6 @@
 import { Component,OnInit, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../loader/loader.component';
 import { CommonModule } from '@angular/common';
-import { ControlContainer, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {  FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddEmployeeDto, EditEmployeeDto, MasterEmployee, MasterEmployeeDto } from '../../models/master-employee';
 import { MasterEmployeeService } from '../../services/master-employee.service';
 import { Pagination } from '../../utils/pagination';
@@ -14,6 +13,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-master-employee',

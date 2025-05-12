@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 import { ApprovalMatrixMou, EditApprovalMatrixMOUDto } from '../../models/approval-matrix-mou';
 import { ApprovalMatrixMouService } from '../../services/approval-matrix-mou.service';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../loader/loader.component';
 import { MasterEmployee } from '../../models/master-employee';
 import { Pagination } from '../../utils/pagination';
 import { TYPE } from '../auth/login/values.constants';
@@ -12,6 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-approval-matrix-mou-screen',

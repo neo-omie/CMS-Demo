@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 import { EscalationMatrixContract, GetMasterEscalationMatrixContractByIdDto, MasterEscalationMatrixContractDto, UpdateMatrixContractDto } from '../../models/escalation-matrix-contract';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../loader/loader.component';
 import { Router, RouterModule } from '@angular/router';
 import { EscalationMatrixContractService } from '../../services/escalation-matrix-contract.service';
 import { MasterEmployee } from '../../models/master-employee';
@@ -15,6 +14,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Pagination } from '../../utils/pagination';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-escalation-matrix-contract',
@@ -171,36 +171,37 @@ export class EscalationMatrixContractComponent implements OnInit {
         }
       }
       editApproverMatrixContractSubmit(id:number){
-        let nod1 = this.editNumberOfDays1.nativeElement.value;
-        let nod2 = this.editNumberOfDays2.nativeElement.value;
-        let nod3 = this.editNumberOfDays3.nativeElement.value;
-        if(this.updateMatrixContract != undefined &&
-        nod1 !== "" && Number(nod1) > 0 &&
-        nod2 !== "" && Number(nod2) > 0 &&
-        nod3 !== "" && Number(nod3) > 0){
-          this.updateMatrixContract.escalationId1 = this.editApproverId1.nativeElement.value;
-          this.updateMatrixContract.escalationId2 = this.editApproverId2.nativeElement.value;
-          this.updateMatrixContract.escalationId3 = this.editApproverId3.nativeElement.value;
-          this.updateMatrixContract.triggerDaysEscalation1 = nod1;
-          this.updateMatrixContract.triggerDaysEscalation2 = nod2;
-          this.updateMatrixContract.triggerDaysEscalation3 = nod3;
-          this.escalationService.postMatrixContractById(id,this.updateMatrixContract).subscribe({
-            next:(response:any)=>{
-              Alert.toast(TYPE.SUCCESS,true,response.message);
-              this.getMatrixContracts(1, 10);
-            },
-            error:(error)=>{
-              console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
-            }
-          })
+          let updateMatrixMouDto = new UpdateMatrixContractDto('','','','','','',0,0,0);
+          let nod1 = this.editNumberOfDays1.nativeElement.value;
+          let nod2 = this.editNumberOfDays2.nativeElement.value;
+          let nod3 = this.editNumberOfDays3.nativeElement.value;
+          let ap1 = this.editApproverId1.nativeElement.value;
+          let ap2 = this.editApproverId2.nativeElement.value;
+          let ap3 = this.editApproverId3.nativeElement.value;
+          if(nod1 !== "" && Number(nod1) > 0 &&
+          nod2 !== "" && Number(nod2) > 0 &&
+          nod3 !== "" && Number(nod3) > 0){
+            updateMatrixMouDto.escalationId1 = ap1;
+            updateMatrixMouDto.escalationId2 = ap2;
+            updateMatrixMouDto.escalationId3 = ap3;
+            updateMatrixMouDto.triggerDaysEscalation1 = nod1;
+            updateMatrixMouDto.triggerDaysEscalation2 = nod2;
+            updateMatrixMouDto.triggerDaysEscalation3 = nod3;
+            this.escalationService.postMatrixContractById(id,updateMatrixMouDto).subscribe({
+              next:(response:any)=>{
+                Alert.toast(TYPE.SUCCESS,true,response.message);
+                this.getMatrixContracts(1, 10);
+              },
+              error:(error)=>{
+                console.error('Error :(', error);
+                this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
+                Alert.toast(TYPE.ERROR,true,this.errorMsg);
+              }
+            })
+          }
+          else{
+            Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
+          }
+          this.closeEditApproverCollapses();
         }
-        else{
-          console.log(this.updateMatrixContract);
-          Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
-        }
-        this.closeEditApproverCollapses();
-      }
-  
 }

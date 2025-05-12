@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-approver-matrix-contract-table-paginator',
+  selector: 'app-pagination',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './approver-matrix-contract-table-paginator.component.html',
-  styleUrl: './approver-matrix-contract-table-paginator.component.css'
+  templateUrl: './pagination.component.html',
+  styleUrl: './pagination.component.css'
 })
-export class ApproverMatrixContractTablePaginatorComponent {
+export class PaginationComponent {
   @Input() maxPage:number = 1;
   @Input() records:number = 1;
   @Input() pageNumbers: number[] = [];

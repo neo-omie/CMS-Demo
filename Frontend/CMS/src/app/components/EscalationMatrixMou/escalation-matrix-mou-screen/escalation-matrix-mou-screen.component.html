@@ -1,0 +1,17 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="mt-3 fs-1">Escalation Matrix Master - MOUs</h2>
+
+<app-table [data]="matrixMous" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+
+<app-pagination [maxPage]="maxPage" [records]="this.matrixMous.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage"></app-pagination>
+
+<ng-template #actionTemplateRef let-row>
+  <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#escalation-matrix-mou-modal"
+    (click)="GetMatrixMouById(row.matrixMouId,true)"></i>
+  <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#escalation-matrix-mou-modal"
+    (click)="GetMatrixMouById(row.matrixMouId,false)"></i>
+</ng-template>
+
+<app-escalation-matrix-mou-modal [getMatrixMous]="getMatrixMous.bind(this)" [escalationMatrixMou]="escalationMatrixMou"
+  [isEdit]="isEdit"></app-escalation-matrix-mou-modal>

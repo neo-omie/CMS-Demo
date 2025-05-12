@@ -16,7 +16,6 @@ import {
 } from '../../models/master-document';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../loader/loader.component';
 import { DocumentStatus } from '../../constants';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
@@ -25,6 +24,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-master-document',
