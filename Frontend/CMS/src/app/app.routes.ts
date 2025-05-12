@@ -33,6 +33,7 @@ export const routes: Routes = [
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
     {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
     {path: 'masters', component: MastersScreenComponent, canActivate:[authGuard]},
+    
 
     {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate:[authGuard]},
     {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate:[authGuard]},
