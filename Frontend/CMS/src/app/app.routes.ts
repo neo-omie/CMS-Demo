@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginScreenComponent } from './components/auth/login-screen/login-screen.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { MastersScreenComponent } from './components/masters-screen/masters-screen.component';
+import { MastersScreenComponent } from './components/Masters/masters-screen/masters-screen.component';
 import { ApprovalMatrixContractScreenComponent } from './components/ApprovalMatrixContract/approval-matrix-contract-screen/approval-matrix-contract-screen.component';
 import { MasterDocumentComponent } from './components/master-document/master-document.component';
 import { RenewPasswordComponent } from './components/auth/renew-password/renew-password.component';
@@ -14,7 +14,6 @@ import { authGuard } from './auth.guard';
 import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
 //import { MasterCompanyComponent } from './components/master-company/master-company.component';
-import { EscalationMatrixMouComponent } from './components/escalation-matrix-mou/escalation-matrix-mou.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 import { AllContractsComponent } from './components/contracts/all-contracts/all-contracts.component';
@@ -26,6 +25,7 @@ import { MasterApostilleComponent } from './components/master-apostille/master-a
 import { ActiveContractsComponent } from './components/contracts/active-contracts/active-contracts.component';
 import { PendingApprovalContractsComponent } from './components/contracts/pending-approval-contracts/pending-approval-contracts.component';
 import { TerminatedContractsComponent } from './components/contracts/terminated-contracts/terminated-contracts.component';
+import { EscalationMatrixMouScreenComponent } from './components/EscalationMatrixMou/escalation-matrix-mou-screen/escalation-matrix-mou-screen.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 
 export const routes: Routes = [
@@ -44,7 +44,7 @@ export const routes: Routes = [
     {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
     
     {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
-    {path:'masters/escalationMOUs', component: EscalationMatrixMouComponent, canActivate:[authGuard]},
+    {path:'masters/escalationMOUs', component: EscalationMatrixMouScreenComponent, canActivate:[authGuard]},
     
     
     {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},

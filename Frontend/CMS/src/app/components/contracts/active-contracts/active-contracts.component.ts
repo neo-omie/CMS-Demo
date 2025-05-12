@@ -16,14 +16,14 @@ import { MasterApostilleService } from '../../../services/master-apostille.servi
 import { Pagination } from '../../../utils/pagination';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../../loader/loader.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { LoaderComponent } from '../../loader/loader.component';
 
 @Component({
   selector: 'app-active-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent , ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './active-contracts.component.html',
   styleUrl: './active-contracts.component.css'
 })

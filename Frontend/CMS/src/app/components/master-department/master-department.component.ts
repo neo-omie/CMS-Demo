@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../loader/loader.component';
 import { AddDepartmentDto, GetAllDepartmentsDto, MasterDepartment } from '../../models/master-department';
 import { MasterDepartmentService } from '../../services/master-department.service';
 import { Pagination } from '../../utils/pagination';
@@ -11,6 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-master-department',
