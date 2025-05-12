@@ -24,19 +24,19 @@
     </ng-container>
     <ng-container matColumnDef="effectiveDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="expiryDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="toBeRenewedOn">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>To Be Renewed On</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="addendumDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Addendum Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="status">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
