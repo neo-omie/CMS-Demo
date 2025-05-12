@@ -81,6 +81,7 @@ export class EscalationMatrixContractComponent implements OnInit {
       .getAllMatrixContract(pageNumber, pageSize)
       .subscribe((res) => {
         this.loading = false;
+        console.log(res.getEscalationMatrixContractDto);
         this.dataSource.data = res.getEscalationMatrixContractDto;
         if (this.sort) {
           this.dataSource.sort = this.sort;

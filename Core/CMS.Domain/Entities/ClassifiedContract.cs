@@ -9,7 +9,7 @@ using CMS.Domain.Entities.CompanyMaster;
 
 namespace CMS.Domain.Entities
 {
-    public class ClassifiedContract
+    public class ClassifiedContract 
     {
         [Key]
         public int ClassifiedContractId { get; set; }
@@ -37,6 +37,14 @@ namespace CMS.Domain.Entities
         public ContractStatus Approver1Status { get; set; } = ContractStatus.PendingApproval;
         public ContractStatus Approver2Status { get; set; } = ContractStatus.PendingApproval;
         public ContractStatus Approver3Status { get; set; } = ContractStatus.PendingApproval;
+
         public bool IsDeleted { get; set; }
+
+        //public bool SkipApproval { get; set; }
+        //public DateTime CreatedAt { get; set; }=DateTime.UtcNow;
+        //public DateTime? UpdatedAt { get; set; } 
+        //public string  CreatedBy { get; set; }
+        //public string?  UpdatedBy { get; set; }
+
     }
 }

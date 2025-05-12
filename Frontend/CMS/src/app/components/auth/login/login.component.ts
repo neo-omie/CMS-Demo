@@ -44,6 +44,7 @@ export class LoginComponent {
             localStorage.setItem('token', response.token);
             localStorage.setItem('email', response.email);
             localStorage.setItem('name', response.name);
+            localStorage.setItem('empCode', response.userId);
             Alert.toast(TYPE.SUCCESS, true, 'Signed in successfully');
             this.route.goToDashboard();
           }, error:(error) => {
