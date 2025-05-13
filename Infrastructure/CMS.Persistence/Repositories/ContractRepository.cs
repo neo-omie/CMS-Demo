@@ -76,10 +76,12 @@ namespace CMS.Persistence.Repositories
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, cp.ContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
+            string empCode;
             if(foundContract != null)
             {
+                empCode = foundContract.Approver1EmployeeCode;
                 // To Approver L1
-                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                await AddNewNotifications(empCode,
                                           $"New Contract called '{foundContract.ContractName}' Added!",
                                           "New Contract has been added under your department. You can access and change the approvals for this contract.");
                 string subject = $"Contract Added";
@@ -294,7 +296,13 @@ namespace CMS.Persistence.Repositories
                 NotficationMessage = message
             };
             await _notificationRepository.NewNotification(createNewNotif);
-            //_context.ChangeTracker.Entries<Notification>()
+            var existing = _context.ChangeTracker.Entries<Notification>().FirstOrDefault(e => e.Entity.EmployeeCode == name);
+
+            if (existing != null)
+            {
+                existing.State = EntityState.Detached;
+            }
+
         }
         private string GenerateEmailBody(string name, int contractID, string contractName)
         {

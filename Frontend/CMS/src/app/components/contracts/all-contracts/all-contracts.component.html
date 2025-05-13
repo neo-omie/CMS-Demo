@@ -24,19 +24,19 @@
     </ng-container>
     <ng-container matColumnDef="effectiveDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="expiryDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="toBeRenewedOn">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>To Be Renewed On</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="addendumDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Addendum Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="status">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
@@ -256,7 +256,7 @@
         <div class="modal-footer">
           <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
           <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
-          <button class="btn btn-outline-primary">+ Add Addendum</button>
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button>
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>
       </div>
@@ -266,7 +266,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header d-flex justify-content-between">
-          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Edit Contract</h1>
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add Addendum</h1>
           <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
