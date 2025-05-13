@@ -15,6 +15,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetTerminatedContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetPendingApprovalContractsAsync(int pageNumber, int pageSize);
+        public Task<Contract> ApproveContract(int id, string empCode);
         Task<GetContractByIdDto> GetContractByIdAsync(int id);
         Task<Contract> AddContractAsync(Contract cp);
         Task<bool> UpdateContractAsync(int id, Contract cp);

@@ -129,11 +129,19 @@ export class AllContractsComponent implements OnInit {
           this.contractDetails = response;
           console.log(response);
           // Checking if the approver is the one who's logged in or not
-          if(this.contractDetails.approver1Email == localStorage.getItem('email')) {
-            this.approverCheck = false;
-            console.log(this.approverCheck);
-          } else {
+          if((this.contractDetails.approver1Email == localStorage.getItem('email') && 
+            this.contractDetails.approver1Status == 1) || 
+            (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 2 &&
+            this.contractDetails.approver2Status == 1) ||
+            (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 2 &&
+            this.contractDetails.approver2Status == 2 &&
+            this.contractDetails.approver3Status == 1)
+          ) {
             this.approverCheck = true;
+          } else {
+            this.approverCheck = false;
           }
         },
         error: (error) => {
@@ -711,5 +719,26 @@ export class AllContractsComponent implements OnInit {
     // this.document.file = null;
     // this.document.status = 1;
 
+      }
+      contractApprove(id?:number){
+        console.log('came here')
+        let email = localStorage.getItem('email');
+        if(email){
+          this.contractsService.contractApprove(id,email).subscribe({
+            next:(res)=>{
+              if(res){
+                Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+              }
+            },
+            error:(err) =>{
+              console.error('Error :(', err);
+                this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
+                Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            }
+          })
+        }
+        else{
+          this.router.navigate(['/']);        
+        }
       }
 }

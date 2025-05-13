@@ -1,4 +1,6 @@
 ﻿using CMS.Application.Features.Contracts;
+using CMS.Application.Features.Contracts.Commands.ContractApprove;
+using CMS.Application.Features.Contracts.Commands.ContractApproveApprover;
 using CMS.Application.Features.Contracts.Commands.CreateNewContract;
 using CMS.Application.Features.Contracts.Commands.EditContract;
 using CMS.Application.Features.Contracts.Commands.RemoveContract;
@@ -97,6 +99,17 @@ namespace CMS.API.Controllers
             var deletedContract = await _mediator.Send(new RemoveContractCommand(id));
             _logger.LogInformation("DeleteContract method performed");
             return Ok(deletedContract); // bool
+        }
+        [Route("{id}/approver/{empCode}")]
+        [HttpPost]
+        public async Task<IActionResult> ContractApprove([FromRoute] int id, [FromRoute] string empCode)
+        {
+            _logger.LogInformation("ContractApprove method initiated");
+            var contract = await _mediator.Send(new ContractApproveCommand(id, empCode));
+            _logger.LogInformation("ContractApprove method performed");
+            if (contract != null)
+                return Ok(true);
+            return Ok(false);
         }
     }
 }
