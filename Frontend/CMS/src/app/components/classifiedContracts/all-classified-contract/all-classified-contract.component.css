@@ -84,3 +84,8 @@ div::-webkit-scrollbar {
     color: whitesmoke;
     font-weight: 600;
 }
+.classifiedImg{
+    min-width: 60px;
+    width: 3vw;
+    aspect-ratio: 1/1;
+}

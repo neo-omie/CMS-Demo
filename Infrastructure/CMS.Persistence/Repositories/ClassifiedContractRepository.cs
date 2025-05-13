@@ -10,6 +10,7 @@ using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContr
 using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -50,12 +51,28 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<ClassifiedContract> AddClassifiedContractAsync(ClassifiedContract cp)
         {
+            if (cp.SkipApproval)
+            {
+                cp.Approver1Status = ContractStatus.Active;
+                cp.Approver2Status = ContractStatus.Active;
+                cp.Approver3Status = ContractStatus.Active;
+            }
+            // Set the creator of the contract
+            cp.CreatedBy = "Admin@cms.com";
+            // Add the contract to the context
+          
+            var addedContract =await  _context.ClassifiedContracts.AddAsync(cp);
 
-            var addedContract = await _context.ClassifiedContracts.AddAsync(cp);
             if (await _context.SaveChangesAsync() <= 0)
+            {
                 throw new Exception("For some reasons, contract has not been added.");
+            }
+            // Retrieve the added contract by ID
             string sql = "EXEC SP_GetClassifiedContractByID @ID = {0}";
-            var findingContract = await _context.GetClassifiedContractByIdDtos.FromSqlRaw(sql, cp.ClassifiedContractId).AsNoTracking().ToListAsync();
+            var findingContract = await _context.GetClassifiedContractByIdDtos
+                .FromSqlRaw(sql, cp.ClassifiedContractId)
+                .AsNoTracking()
+                .ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
             if (foundContract != null)
             {

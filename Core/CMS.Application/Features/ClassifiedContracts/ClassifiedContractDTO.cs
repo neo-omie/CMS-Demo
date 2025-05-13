@@ -19,6 +19,7 @@ namespace CMS.Application.Features.ClassifiedContracts
         public string TermsAndConditions { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTill { get; set; }
+        //public DateOnly ValidTill { get; set; }
         public DateTime? RenewalFrom { get; set; }
         public DateTime? RenewalTill { get; set; }
         public DateTime? AddendumDate { get; set; }
@@ -28,6 +29,8 @@ namespace CMS.Application.Features.ClassifiedContracts
         public ContractStatus Approver1Status { get; set; } = ContractStatus.PendingApproval;
         public ContractStatus Approver2Status { get; set; } = ContractStatus.PendingApproval;
         public ContractStatus Approver3Status { get; set; } = ContractStatus.PendingApproval;
+
+        public bool SkipApproval { get; set; }
         public bool IsDeleted { get; set; } = false;
     }
 }

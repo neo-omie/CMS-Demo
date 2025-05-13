@@ -696,6 +696,13 @@ namespace CMS.Persistence.Migrations
                     b.Property<int>("ContractWithCompanyId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
@@ -717,6 +724,9 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<int>("RetainerContract")
                         .HasColumnType("int");
+
+                    b.Property<bool>("SkipApproval")
+                        .HasColumnType("bit");
 
                     b.Property<string>("TermsAndConditions")
                         .IsRequired()
@@ -1259,7 +1269,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEG+2Yrs1Br72F80IgJNBxGEEw/6oA5+46FMMv78oIFLyMAZ6lk9WITwBenQUSBhr5Q==",
+                            Password = "AQAAAAIAAYagAAAAELzyc/cSzsWwhZi0MO0CxXE6vTu2G0seBUQmIM+lyLTIoqv/HbEFN5hnzf+z0/gang==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1274,7 +1284,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEClKV+eK50BnPBqGOWvhtkEdWefgp+G7oENuV2GVo8fU/No/sVoYrZIRpa0g0QwDFQ==",
+                            Password = "AQAAAAIAAYagAAAAEPZUMu6ubng2xJue/rXlQ/czq9ypFzYd0rROBe5dNbfy4mmUXrBFILHmnipMMvA6Pw==",
                             Role = "MOU_Approver",
                             Unit = "Thane"
                         });
@@ -1421,6 +1431,7 @@ namespace CMS.Persistence.Migrations
                     b.HasOne("CMS.Domain.Entities.MasterApprovalMatrixContract", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
+                        .HasPrincipalKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

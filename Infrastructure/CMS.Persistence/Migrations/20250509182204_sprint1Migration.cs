@@ -673,7 +673,10 @@ namespace CMS.Persistence.Migrations
                     Approver1Status = table.Column<int>(type: "int", nullable: false),
                     Approver2Status = table.Column<int>(type: "int", nullable: false),
                     Approver3Status = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    SkipApproval = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -687,7 +690,7 @@ namespace CMS.Persistence.Migrations
                         name: "FK_ClassifiedContracts_MasterApprovalMatrixContracts_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "MasterApprovalMatrixContracts",
-                        principalColumn: "MasterApprovalMatrixContractId");
+                        principalColumn: "DepartmentId");
                     table.ForeignKey(
                         name: "FK_ClassifiedContracts_MasterCompanies_ContractWithCompanyId",
                         column: x => x.ContractWithCompanyId,
@@ -778,8 +781,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEG+2Yrs1Br72F80IgJNBxGEEw/6oA5+46FMMv78oIFLyMAZ6lk9WITwBenQUSBhr5Q==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEClKV+eK50BnPBqGOWvhtkEdWefgp+G7oENuV2GVo8fU/No/sVoYrZIRpa0g0QwDFQ==", "MOU_Approver", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELzyc/cSzsWwhZi0MO0CxXE6vTu2G0seBUQmIM+lyLTIoqv/HbEFN5hnzf+z0/gang==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPZUMu6ubng2xJue/rXlQ/czq9ypFzYd0rROBe5dNbfy4mmUXrBFILHmnipMMvA6Pw==", "MOU_Approver", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(
