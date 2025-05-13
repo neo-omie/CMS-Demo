@@ -79,8 +79,6 @@ export class AllClassifiedContractComponent implements OnInit{
          next: (res: ClassifiedContracts[]) => {
            this.loading = false;
            this.dataSource.data = res;
-          //  console.log(res[0].totalRecords);
-           
            console.log(this.dataSource.data)
            if (this.sort) {
              this.dataSource.sort = this.sort;

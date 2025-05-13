@@ -73,6 +73,27 @@ namespace CMS.Persistence.Repositories
             await _context.Departments.AddAsync(newDepartment);
             if (await _context.SaveChangesAsync() > 0)
             {
+                MasterApprovalMatrixContract cApprovers = new MasterApprovalMatrixContract
+                {
+                    DepartmentId = newDepartment.DepartmentId, ApproverId1 = "NEO1", ApproverId2 = "NEO1", ApproverId3 = "NEO1"
+                };
+                _context.MasterApprovalMatrixContracts.Add(cApprovers);
+                MasterApprovalMatrixMOU mApprovers = new MasterApprovalMatrixMOU
+                {
+                    DepartmentId = newDepartment.DepartmentId, ApproverId1 = "NEO1", ApproverId2 = "NEO1", ApproverId3 = "NEO1"
+                };
+                _context.MasterApprovalMatrixMOUs.Add(mApprovers);
+                MasterEscalationMatrixContract cEscalators = new MasterEscalationMatrixContract
+                {
+                    DepartmentId = newDepartment.DepartmentId, EscalationId1 = "NEO1", EscalationId2 = "NEO1", EscalationId3 = "NEO1"
+                };
+                _context.MasterEscalationMatrixContracts.Add(cEscalators);
+                MasterEscalationMatrixMou mEscalators = new MasterEscalationMatrixMou
+                {
+                    DepartmentId = newDepartment.DepartmentId, EscalationId1 = "NEO1", EscalationId2 = "NEO1", EscalationId3 = "NEO1"
+                };
+                _context.MasterEscalationMatrixMous.Add(mEscalators);
+                await _context.SaveChangesAsync();
                 return newDepartment;
             }
             else
@@ -83,11 +104,23 @@ namespace CMS.Persistence.Repositories
 
         public async Task<bool> DeleteDepartment(int id)
         {
+
             var checkDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
             if (checkDepartment == null)
             {
                 throw new NotFoundException($"Department with {id} not found.");
             }
+            var meContract = await _context.MasterEscalationMatrixContracts.FirstOrDefaultAsync(memc => memc.DepartmentId == id);
+            _context.MasterEscalationMatrixContracts.Remove(meContract);
+            var meMOU = await _context.MasterEscalationMatrixMous.FirstOrDefaultAsync(memc => memc.DepartmentId == id);
+            _context.MasterEscalationMatrixMous.Remove(meMOU);
+
+            var maContract = await _context.MasterApprovalMatrixContracts.FirstOrDefaultAsync(memc => memc.DepartmentId == id);
+            _context.MasterApprovalMatrixContracts.Remove(maContract);
+            var maMOU = await _context.MasterApprovalMatrixMOUs.FirstOrDefaultAsync(memc => memc.DepartmentId == id);
+            _context.MasterApprovalMatrixMOUs.Remove(maMOU);
+
+            // Deleting Department After deleting there approvers
             _context.Departments.Remove(checkDepartment);
             if (await _context.SaveChangesAsync() > 0)
             {

@@ -1,20 +1,26 @@
-import { Component, OnInit, ElementRef, Renderer2, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import { ApproverMatrixContractService } from '../../../services/approver-matrix-contract.service';
 import { ApprovalMatrixContract } from '../../../models/approval-matrix-contract';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../../loader/loader.component';
 import { FormsModule } from '@angular/forms';
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
-import { Pagination } from '../../../utils/pagination';
 import { Title } from '@angular/platform-browser';
-import { ApproverMatrixContractTableComponent } from '../approver-matrix-contract-table/approver-matrix-contract-table.component';
 import { ApproverMatrixContractModalComponent } from '../approver-matrix-contract-modal/approver-matrix-contract-modal.component';
+import { LoaderComponent } from '../../loader/loader.component';
+import { TableComponent } from '../../UtilComponents/table/table.component';
+import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
+import { Pagination } from '../../../utils/pagination';
 
 @Component({
   selector: 'app-approval-matrix-contract-screen',
   standalone: true,
-  imports: [ApproverMatrixContractModalComponent ,ApproverMatrixContractTableComponent, CommonModule, LoaderComponent, FormsModule],
+  imports: [
+    TableComponent,
+    ApproverMatrixContractModalComponent,
+    CommonModule, LoaderComponent, FormsModule,
+    PaginationComponent
+  ],
   templateUrl: './approval-matrix-contract-screen.component.html',
   styleUrl: './approval-matrix-contract-screen.component.css'
 })
@@ -26,15 +32,49 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
   approvalMatrixContract?: ApprovalMatrixContract;
   pageNumbers: number[] = [];
   approvalMatrixContracts: ApprovalMatrixContract[] = [];
+  displayedColumns: string[] = ['departmentName', 'approverName1', 'approverName2', 'approverName3', 'action'];
+  columnsInfo:{[key:string]:{
+    'title' ?: string,
+    'isSort' ?: boolean,
+    'templateRef' : TemplateRef<any> | null,
+  }} = {};
 
-  constructor(private approverMatrixContractService: ApproverMatrixContractService, private renderer: Renderer2, private title: Title) {
+  @ViewChild('actionTemplateRef', { static: true }) actionTemplateRef!: TemplateRef<any>;
+
+  constructor(private approverMatrixContractService: ApproverMatrixContractService, private title: Title) {
     this.title.setTitle("Approval Matrix (Contract) - CMS");
   }
 
   ngOnInit() {
     this.GetApprovalMatrixContract(1, 10);
+    this.columnsInfo = {
+      'departmentName': {
+        'title': 'Department',
+        'isSort': true,
+        'templateRef': null
+      },
+      'approverName1': {
+        'title': 'Approver 1',
+        'isSort': true,
+        'templateRef': null
+      },
+      'approverName2': {
+        'title': 'Approver 2',
+        'isSort': true,
+        'templateRef': null
+      },
+      'approverName3': {
+        'title': 'Approver 3',
+        'isSort': true,
+        'templateRef': null
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionTemplateRef
+      }
+    };
   }
-  
+
   GetApprovalMatrixContract(pageNumber: number, pageSize: number) {
     this.approverMatrixContractService.GetApprovalMatrixContract(pageNumber, pageSize).subscribe({
       next: (response: ApprovalMatrixContract[]) => {
@@ -61,7 +101,7 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
     }
   }
 
-  GetContract(id: number, isEdit:boolean) {
+  GetContract(id: number, isEdit: boolean) {
     this.isEdit = isEdit;
     this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
       next: (response: ApprovalMatrixContract) => {

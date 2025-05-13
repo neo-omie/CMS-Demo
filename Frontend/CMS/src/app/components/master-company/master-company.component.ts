@@ -7,7 +7,6 @@ import { AddCompanyDto, CompanyListResponse, CompanyMasterDto, MasterCompany } f
 import { Router, RouterModule } from '@angular/router';
 import { TYPE } from '../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../loader/loader.component';
 import { Pagination } from '../../utils/pagination';
 import { Cities, Countriess, States } from '../../models/company-cascade';
 import { CompanyCascadeService } from '../../services/company-cascade.service';
@@ -15,6 +14,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-master-company',

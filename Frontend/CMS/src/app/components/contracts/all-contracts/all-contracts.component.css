@@ -73,6 +73,7 @@ div::-webkit-scrollbar {
     color: rgba(95, 95, 238);
     background-color: whitesmoke;
     border-color: #5f5fee;
+    margin: 2px;
 }
 .add-btn:hover{
     background-color: #5f5fee;
