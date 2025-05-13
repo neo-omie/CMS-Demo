@@ -16,6 +16,7 @@ using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById;
+using CMS.Application.Features.PostTermination.Command.AddCommand;
 
 namespace CMS.Persistence.Context
 {
@@ -54,6 +55,8 @@ namespace CMS.Persistence.Context
         public DbSet<ClassifiedContract> ClassifiedContracts { get; set; }
         public DbSet<GetAllClassifiedContractsDto> GetClassifiedContractsDtos { get; set; }
         public DbSet<GetClassifiedContractByIdDto> GetClassifiedContractByIdDtos { get; set; }
+
+        public DbSet<PostTerminationNotice> PostTerminationNotices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -102,6 +105,7 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Approver3).WithMany().HasForeignKey(mamc => mamc.ApproverId3).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Department).WithMany().HasForeignKey(mamc => mamc.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
 
+            modelBuilder.Entity<PostTerminationNotice>().HasOne(ptn => ptn.Contract).WithMany().HasForeignKey(ptn => ptn.ContractId).HasPrincipalKey(c => c.ContractId);
             //mastercompany location
             modelBuilder.Entity<ListOfStates>().HasOne(st => st.listofcountries).WithMany().HasForeignKey(st => st.CountryId);
             modelBuilder.Entity<ListofCity>().HasOne(ct => ct.listofStates).WithMany().HasForeignKey(ct=> ct.StateId);
