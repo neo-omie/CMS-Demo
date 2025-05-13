@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../loader/loader.component';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AddContractDTO, ContractListResponse, ContractTypeMaster, ContractTypeMasterDTO } from '../../models/contract-type-master';
@@ -13,6 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-contract-type-master',

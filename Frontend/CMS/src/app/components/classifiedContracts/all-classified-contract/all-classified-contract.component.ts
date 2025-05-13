@@ -5,7 +5,7 @@ import { AddClassifiedContractDto, ClassifiedContracts, GetClassifiedContractByI
 import { Pagination } from '../../../utils/pagination';
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
-import { LoaderComponent } from "../../loader/loader.component";
+import { LoaderComponent } from '../../loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -384,7 +384,7 @@ export class AllClassifiedContractComponent implements OnInit{
           }
         
           onClick(){
-            this.router.navigate(['contracts/allContracts']);
+            this.router.navigate(['classifiedContracts/allContracts']);
             this.masterContractAddForm.reset();
           }
           contID:number = 0;

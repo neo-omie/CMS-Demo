@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { AddApostilleDto, EditApostilleDto, MasterApostille, MasterApostilleDto } from '../../models/master-apostille';
 import { MasterApostilleService } from '../../services/master-apostille.service';
@@ -12,7 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { EditEmployeeDto } from '../../models/master-employee';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-master-apostille',

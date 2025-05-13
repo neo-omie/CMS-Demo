@@ -289,6 +289,14 @@ namespace CMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmpCustodianCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmpCustodianEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EmpCustodianId")
                         .HasColumnType("int");
 
@@ -451,6 +459,14 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmpCustodianCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmpCustodianEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1243,7 +1259,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIJdnQY1iMhSEQruYzBV5Qw8mezsE2lWyWNq6OY2NoePhFkKRNOmChEsE6NhpIqbiw==",
+                            Password = "AQAAAAIAAYagAAAAEIaspasOfiPvqamMoDI5JUTJU028BFtxmKt3/faBtnnX0ixYwZ0Iys5qSk96kN8x6A==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1258,8 +1274,8 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAELMV5jrktbcQjWaNyvP06z+xH0Nf0PcMmU97aP7OoYimqoWZV4OvGaabFXLMmhzzHg==",
-                            Role = "MOU_User",
+                            Password = "AQAAAAIAAYagAAAAEIwVUeQyu7VLeM8WlbSM2nGtmTdF/KdyQJXLO5dopqVMLh7kybfVUdx3/jRfhp9I9g==",
+                            Role = "MOU_Approver",
                             Unit = "Thane"
                         });
                 });
@@ -1352,6 +1368,36 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixMous");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.Notification", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<string>("EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NotficationMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NotficationSubject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NotificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ValueId");
+
+                    b.HasAlternateKey("EmployeeCode");
+
+                    b.ToTable("ContractNotifications");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.ClassifiedContract", b =>

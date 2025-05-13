@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { LoaderComponent } from '../../loader/loader.component';
 import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../../../models/contracts';
 import { ContractsService } from '../../../services/contracts.service';
 import { Pagination } from '../../../utils/pagination';
@@ -21,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
 import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
 import { PostTerminationService } from '../../../services/post-termination.service';
+import { LoaderComponent } from '../../loader/loader.component';
 
 @Component({
   selector: 'app-all-contracts',
@@ -169,6 +169,7 @@ export class AllContractsComponent implements OnInit {
         }
       );
     }
+
     editContract(contract:ContractsEntity){
       console.log('Navigating to editContract with valueId:', contract.contractID);
       this.router.navigate(['contracts/editContract', contract.contractID]);
