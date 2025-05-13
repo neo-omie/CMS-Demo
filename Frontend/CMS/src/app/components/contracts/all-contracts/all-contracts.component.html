@@ -313,7 +313,7 @@
         <div class="modal-footer">
           <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
           <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
-          <button class="btn btn-outline-primary">+ Add Addendum</button>
+          <!-- <button class="btn btn-outline-primary">+ Add Addendum</button> -->
           <button data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;"
             data-bs-target="#Termination-Notice-Detail" data-bs-toggle="modal"
             *ngIf="contractDetails?.approver3Status == 2" (click)="getContractIdforPostTerm(contractDetails?.contractId)">Post Termination</button>
@@ -332,8 +332,8 @@
           <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Edit Contract</h1>
           <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
               class="fa-solid fa-xmark"></i></button>
-          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add Addendum</h1>
-          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+          <!-- <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add Addendum</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button> -->
         </div>
         <div class="modal-body">
           <form [formGroup]="masterContractAddForm" (ngSubmit)="onUpdateFormSubmit(contID)">
@@ -805,7 +805,7 @@
   (click)="triggerFileInput()" -->
         <div>
           <h1 class="modal-title fs-6 mb-3">
-            Notice Duration 
+            End date 
             <!-- <span style="color: red;">*</span> -->
           </h1>
         </div>
@@ -815,20 +815,16 @@
               placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date">
           </div>
         </div>
-
-        <div>
-          or
-        </div>
         <div>
           <h1 class="modal-title fs-6 mb-3">
-            Ends 
+            Notice Duration 
             <!-- <span style="color: red;">*</span> -->
           </h1>
         </div>
         <div class="mb-3">
           <div class="input-group">
-            <input type="number" name="Ending" class="form-control" id="EndDate" min="0"
-              placeholder="Enter the end date">
+            <input type="number" name="notice_Duration" class="form-control" id="notice_Duration" min="0"
+              placeholder="Enter the end date" [(ngModel)]="postTerm.notice_Duration">
           </div>
         </div>
 
@@ -844,8 +840,8 @@
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-outline-danger" type="reset">Cancel</button>
-          <button class="btn btn-outline-primary" type="submit">Save</button>
+          <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
         </div>
       </form>
 

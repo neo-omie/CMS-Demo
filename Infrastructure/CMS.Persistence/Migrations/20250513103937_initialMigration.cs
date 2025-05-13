@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class sprint1Migration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,7 +27,6 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ContractNotifications", x => x.ValueId);
-                    table.UniqueConstraint("AK_ContractNotifications_EmployeeCode", x => x.EmployeeCode);
                 });
 
             migrationBuilder.CreateTable(
@@ -762,6 +761,29 @@ namespace CMS.Persistence.Migrations
                         principalColumn: "ValueId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PostTerminationNotices",
+                columns: table => new
+                {
+                    ValueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContractId = table.Column<int>(type: "int", nullable: false),
+                    DisplayDocumentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocumentPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notice_Duration = table.Column<int>(type: "int", nullable: false),
+                    End_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostTerminationNotices", x => x.ValueId);
+                    table.ForeignKey(
+                        name: "FK_PostTerminationNotices_ContractsEntity_ContractId",
+                        column: x => x.ContractId,
+                        principalTable: "ContractsEntity",
+                        principalColumn: "ContractId");
+                });
+
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "DepartmentName" },
@@ -779,8 +801,8 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIaspasOfiPvqamMoDI5JUTJU028BFtxmKt3/faBtnnX0ixYwZ0Iys5qSk96kN8x6A==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIwVUeQyu7VLeM8WlbSM2nGtmTdF/KdyQJXLO5dopqVMLh7kybfVUdx3/jRfhp9I9g==", "MOU_Approver", "Thane" }
+                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELb6hlaHPFANfUqeZra6xcTB3xeLepe9Kcb7FSxgaD2cjv+/5S/bIrapRDPBm6g4og==", "Admin", "Thane" },
+                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAENnwLVeOl7bbhBVoIWuJ2qvd4379Iv/ZOvocCe9+BU1/UbrLqF01OoUKcJrbq5Ckww==", "MOU_Approver", "Thane" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -904,6 +926,11 @@ namespace CMS.Persistence.Migrations
                 column: "EscalationId3");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PostTerminationNotices_ContractId",
+                table: "PostTerminationNotices",
+                column: "ContractId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId",
                 table: "States",
                 column: "CountryId");
@@ -917,9 +944,6 @@ namespace CMS.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "ContractNotifications");
-
-            migrationBuilder.DropTable(
-                name: "ContractsEntity");
 
             migrationBuilder.DropTable(
                 name: "GetAllApprovalMatrixContractDTOs");
@@ -971,6 +995,12 @@ namespace CMS.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "MasterEscalationMatrixMous");
+
+            migrationBuilder.DropTable(
+                name: "PostTerminationNotices");
+
+            migrationBuilder.DropTable(
+                name: "ContractsEntity");
 
             migrationBuilder.DropTable(
                 name: "MasterApostilles");

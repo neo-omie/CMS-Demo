@@ -133,7 +133,6 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<Contract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
             modelBuilder.Entity<Contract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
 
-            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
             modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
 
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());

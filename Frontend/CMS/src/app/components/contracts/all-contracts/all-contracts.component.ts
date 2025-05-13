@@ -592,17 +592,17 @@ export class AllContractsComponent implements OnInit {
              
         Alert.bigToast(
           'Success!',
-          'Document added successfully.',
+          'Posted Termination successfully.',
           TYPE.SUCCESS,
           'Ok'
         );
         this.GetPage(this.maxPage);
       },
       error: (error) => {
-        console.error('Error adding Document:', error);
+        console.error('Error in creating Notice:', error);
         Alert.bigToast(
           'Error!',
-          'There was an error adding the Document.',
+          'There was an error posting termination notice.',
           TYPE.ERROR,
           'Try Again'
         );

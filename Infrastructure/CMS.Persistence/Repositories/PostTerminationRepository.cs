@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Contracts.Persistence;
+using CMS.Application.DTOs;
 using CMS.Application.Exceptions;
 using CMS.Application.Features.PostTermination.Command.AddCommand;
 using CMS.Domain.Constants;
@@ -23,11 +24,13 @@ namespace CMS.Persistence.Repositories
         private readonly IWebHostEnvironment _environment;
 
         readonly IEmailService _emailService;
-        public PostTerminationRepository(CMSDbContext context, IWebHostEnvironment environment, IEmailService emailService)
+        readonly INotificationRepository _notificationRepository;
+        public PostTerminationRepository(CMSDbContext context, IWebHostEnvironment environment, IEmailService emailService, INotificationRepository notificationRepository)
         {
             _context = context;
             _environment = environment;
             _emailService = emailService;
+            _notificationRepository = notificationRepository;
         }
         public async Task<bool> AddTerminationDetailsAsync(int contractId, TerminationDocumentUploadDto _terminationDocumentUploadDto)
         {
@@ -86,9 +89,23 @@ namespace CMS.Persistence.Repositories
             };
 
             await _context.PostTerminationNotices.AddAsync(document);
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, document.ContractId).AsNoTracking().ToListAsync();
+            var forNotif = findingContract.FirstOrDefault();
             if ( _context.SaveChanges()>0)
             {
-
+                await AddNewNotifications(forNotif.EmpCustodianCode,
+                                          $"Notice for Termination of contract '{forNotif.ContractName}'!",
+                                          $"NOTICE: Termination for the contract ID {forNotif.ContractId} is initialized. Please check the portal.");
+                await SendMail(
+                    forNotif.EmpCustodianEmail, forNotif.EmpCustodianCode, forNotif.ContractId, forNotif.ContractName
+                );
+                await AddNewNotifications(forNotif.Approver1EmployeeCode,
+                                          $"Notice for Termination of contract '{forNotif.ContractName}'!",
+                                          $"NOTICE: Termination for the contract ID {forNotif.ContractId} is initialized. Please check the portal.");
+                await SendMail(
+                    forNotif.Approver1Email, forNotif.Approver1EmployeeCode, forNotif.ContractId, forNotif.ContractName
+                );
 
                 return true;
             }
@@ -98,6 +115,43 @@ namespace CMS.Persistence.Repositories
             }
 
                 
+        }
+        private async Task AddNewNotifications(string name, string subject, string message)
+        {
+            Notification createNewNotif = new Notification
+            {
+                EmployeeCode = name,
+                NotficationSubject = subject,
+                NotficationMessage = message
+            };
+            await _notificationRepository.NewNotification(createNewNotif);
+            var existing = _context.ChangeTracker.Entries<Notification>().FirstOrDefault(e => e.Entity.EmployeeCode == name);
+
+            if (existing != null)
+            {
+                existing.State = EntityState.Detached;
+            }
+
+        }
+        private string GenerateEmailBody(string name, int contractID, string contractName)
+        {
+            string emailBody = string.Empty;
+            emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+            emailBody += $"<h1>NOTICE FOR {name}</h1>";
+            emailBody += $"<h2>NOTICE: Termination for the contract ID {contractID} is initialized. Please check the portal.</h2>";
+            emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+            emailBody += "</div>";
+            return emailBody;
+        }
+        public async Task SendMail(string email, string name, int contractID, string contractName)
+        {
+            var mailRequest = new MailRequest
+            {
+                Email = email,
+                Subject = "Termination Notice Post Contract! 🚨",
+                EmailBody = GenerateEmailBody(name, contractID, contractName)
+            };
+            await _emailService.SendEmail(mailRequest);
         }
 
 
