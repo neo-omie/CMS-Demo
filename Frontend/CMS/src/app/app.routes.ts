@@ -25,6 +25,7 @@ import { MasterApostilleComponent } from './components/master-apostille/master-a
 import { ActiveContractsComponent } from './components/contracts/active-contracts/active-contracts.component';
 import { PendingApprovalContractsComponent } from './components/contracts/pending-approval-contracts/pending-approval-contracts.component';
 import { TerminatedContractsComponent } from './components/contracts/terminated-contracts/terminated-contracts.component';
+import { PostTerminationNoticeComponent } from './components/contracts/post-termination-notice/post-termination-notice.component';
 import { EscalationMatrixMouScreenComponent } from './components/EscalationMatrixMou/escalation-matrix-mou-screen/escalation-matrix-mou-screen.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 
@@ -55,6 +56,7 @@ export const routes: Routes = [
     {path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},
+    // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts', component: ClassifiedContractsScreenComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate:[authGuard]},
     

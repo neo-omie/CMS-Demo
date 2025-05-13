@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../../../models/contracts';
 import { ContractsService } from '../../../services/contracts.service';
@@ -18,6 +18,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
+import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
+import { PostTerminationService } from '../../../services/post-termination.service';
 import { LoaderComponent } from '../../loader/loader.component';
 import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { AddAddendumContract } from '../../../models/add-addendum-contract';
@@ -39,6 +41,7 @@ export class AllContractsComponent implements OnInit {
         this.dataSource.sort = this.sort;
       }
       addBtn:string = '';
+      file:File|null = null;
   loading: boolean = true;
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
@@ -54,6 +57,8 @@ export class AllContractsComponent implements OnInit {
   contractTypes:ContractTypeMasterDTO[] = [];
   apostilleTypes:MasterApostille[] = [];
   companies:CompanyMasterDto[] =[]
+  postTerm:PostTerminationNoticeUploadDTO=new PostTerminationNoticeUploadDTO(null,0,new Date(),'');
+  contIdForPostTerm?:number = 0;
   ngOnInit(): void {
     this.GetAllContracts(1, 10);
     this.getAllDepartments();
@@ -61,7 +66,11 @@ export class AllContractsComponent implements OnInit {
     this.getAllApostilleTypes();
     this.getAllCompanies();
   }
-  constructor(private contractsService: ContractsService, private router: Router,private renderer : Renderer2, private title:Title, private masterApostilleService : MasterApostilleService, private addAddendumContractsService: AddAddendumContractsService) {
+  constructor(private contractsService: ContractsService, private router: Router,
+    private renderer : Renderer2, private title:Title, 
+    private masterApostilleService : MasterApostilleService,
+    private postTermService:PostTerminationService,
+    private addAddendumContractsService: AddAddendumContractsService ) {
     this.title.setTitle("All Contracts - CMS");
   }
   @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
@@ -74,6 +83,7 @@ export class AllContractsComponent implements OnInit {
   @ViewChild('addAddendumEmpCustodianName') addAddendumEmpCustodianName!: ElementRef;
   @ViewChild('addAddendumEmpCustodianCollapse') addAddendumEmpCustodianCollapse!: ElementRef;
   @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
+   @ViewChild('addFile') addFile!: ElementRef;
    
   
 
@@ -592,6 +602,114 @@ export class AllContractsComponent implements OnInit {
               console.error('Form is invalid');
           }
         }
-        });
+      });
+    }
+      uploadFile(event: Event) {
+          const input = event.target as HTMLInputElement;
+          if (input.files?.length) {
+            // TODO check file size and type
+            this.file = input.files[0];
+          }
+          
+          if (!this.file) {
+            Alert.toast(TYPE.WARNING, true, "Please select a file and fill the form correctly.");
+            return;
+          }
+          
+          const allowedExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+        
+          if (!allowedExtensions.includes(fileExtension)) {
+            Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg, .jpeg and .png.");
+            return;
+          }
+          
+          if (this.file.size > 25 * 1048576) {
+            Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+            return;
+          }
+        }
+        
+  getContractIdforPostTerm(contractId?: number) {
+    this.contIdForPostTerm = contractId;
+    console.log(this.contIdForPostTerm, contractId);
   }
+      //uploading the Post Termination Notice 
+      OnSavePostTermination(documentForm:NgForm){
+        console.log(documentForm.value);
+        console.log(this.file);
+        
+          if (!this.file || !documentForm.valid) {
+            this.addFile.nativeElement.value="";
+            this.postTerm.file=null
+            this.postTerm.notice_Duration=1;
+            this.postTerm.end_Date=new Date();
+            this.postTerm.Remark="";
+            Alert.toast(TYPE.WARNING,true,"Please select a file and fill the Form Correctly");
+            return;
+          }
+
+
+          const allowedExtensions=['.pdf', '.doc', '.docx'];
+          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+
+          if (!allowedExtensions.includes(fileExtension)) {
+            this.addFile.nativeElement.value="";
+             this.postTerm.file=null;
+             this.postTerm.notice_Duration=1;
+             this.postTerm.end_Date=new Date();
+             this.postTerm.Remark=""; 
+            Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
+      return;
+          }
+          if (this.file.size > 25 * 1048576) {
+      this.addFile.nativeElement.value = "";
+      this.postTerm.file=null ;
+      Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file',this.file)
+    formData.append('contractId',String(this.contIdForPostTerm))
+    formData.append('notice_Duration',String(this.postTerm.notice_Duration))
+    formData.append('end_Date',String(this.postTerm.end_Date))
+    formData.append('Remark',String(this.postTerm.Remark))
+    this.postTermService.UploadDoc(formData).subscribe({
+      next: (res) => {
+        this.file = null;
+        documentForm.reset();
+        // this.addFile.nativeElement.value = "";
+        //      this.postTerm.file=null;
+             
+        Alert.bigToast(
+          'Success!',
+          'Posted Termination successfully.',
+          TYPE.SUCCESS,
+          'Ok'
+        );
+        this.GetPage(this.maxPage);
+      },
+      error: (error) => {
+        console.error('Error in creating Notice:', error);
+        Alert.bigToast(
+          'Error!',
+          'There was an error posting termination notice.',
+          TYPE.ERROR,
+          'Try Again'
+        );
+        // this.file = null;
+        // documentForm.reset();
+        // this.addFile.nativeElement.value = "";
+        // this.postTerm.file = null;
+        // this.document.status = 1;
+      },
+    });
+    // this.file = null;
+    // documentForm.reset();
+    // this.addFile.nativeElement.value = "";
+    // this.document.file = null;
+    // this.document.status = 1;
+
+      }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250509064028_sprint1Migration")]
-    partial class sprint1Migration
+    [Migration("20250513103937_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1262,7 +1262,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIaspasOfiPvqamMoDI5JUTJU028BFtxmKt3/faBtnnX0ixYwZ0Iys5qSk96kN8x6A==",
+                            Password = "AQAAAAIAAYagAAAAELb6hlaHPFANfUqeZra6xcTB3xeLepe9Kcb7FSxgaD2cjv+/5S/bIrapRDPBm6g4og==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1277,7 +1277,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIwVUeQyu7VLeM8WlbSM2nGtmTdF/KdyQJXLO5dopqVMLh7kybfVUdx3/jRfhp9I9g==",
+                            Password = "AQAAAAIAAYagAAAAENnwLVeOl7bbhBVoIWuJ2qvd4379Iv/ZOvocCe9+BU1/UbrLqF01OoUKcJrbq5Ckww==",
                             Role = "MOU_Approver",
                             Unit = "Thane"
                         });
@@ -1401,6 +1401,42 @@ namespace CMS.Persistence.Migrations
                     b.HasAlternateKey("EmployeeCode");
 
                     b.ToTable("ContractNotifications");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.PostTerminationNotice", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("End_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Notice_Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("PostTerminationNotices");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.ClassifiedContract", b =>
@@ -1673,6 +1709,17 @@ namespace CMS.Persistence.Migrations
                     b.Navigation("Escalation2");
 
                     b.Navigation("Escalation3");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.PostTerminationNotice", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.Contract", "Contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
                 });
 #pragma warning restore 612, 618
         }

@@ -69,7 +69,7 @@ namespace CMS.Persistence.Repositories
 
             if (!allowedExtensions.Contains(fileExtension))
             {
-                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png.");
+                throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png."); 
             }
             if (model.File == null || model.File.Length == 0)
             {
