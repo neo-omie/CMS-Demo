@@ -254,8 +254,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
-          <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
+          <button class="btn btn-primary" *ngIf="approverCheck" (click)="contractApprove(contractDetails?.contractId)">Approve</button>
+          <button class="btn btn-danger" *ngIf="approverCheck">Reject</button>
           <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button>
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>
@@ -267,7 +267,7 @@
       <div class="modal-content">
         <div class="modal-header d-flex justify-content-between">
           <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add Addendum</h1>
-          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" data-bs-target="contract-edit" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
           <form [formGroup]="masterContractAddForm" (ngSubmit)="onUpdateFormSubmit(contID)">

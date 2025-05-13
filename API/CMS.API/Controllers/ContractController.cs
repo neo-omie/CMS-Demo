@@ -107,7 +107,9 @@ namespace CMS.API.Controllers
             _logger.LogInformation("ContractApprove method initiated");
             var contract = await _mediator.Send(new ContractApproveCommand(id, empCode));
             _logger.LogInformation("ContractApprove method performed");
-            return Ok(contract);
+            if (contract != null)
+                return Ok(true);
+            return Ok(false);
         }
     }
 }

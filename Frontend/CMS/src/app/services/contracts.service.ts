@@ -43,6 +43,9 @@ export class ContractsService {
   fetchContractData(contractID:number):Observable<AddContractDto> {
     return this.http.get<AddContractDto>(`${this.apiUrl}/${contractID}`);
   }
+  contractApprove(id?:number, empCode?:string) : Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/${id}/approver/${empCode}`,{});
+  }
 
   // For dropdowns and inputs from other tables
   GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{

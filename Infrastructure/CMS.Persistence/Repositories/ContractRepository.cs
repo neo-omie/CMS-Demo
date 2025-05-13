@@ -126,7 +126,7 @@ namespace CMS.Persistence.Repositories
             {
                 throw new NotFoundException("Contract not found");
             }
-            if(foundContract.Approver1EmployeeCode == empCode)
+            if(foundContract.Approver1Email == empCode)
             {
 
                 if(contract.Approver1Status != ContractStatus.PendingApproval)
@@ -169,7 +169,7 @@ namespace CMS.Persistence.Repositories
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName,subject,emailBody
                 );
             }
-            else if(foundContract.Approver2EmployeeCode == empCode)
+            else if(foundContract.Approver2Email == empCode)
             {
                 if (contract.Approver1Status != ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingApproval)
                 {
@@ -225,7 +225,7 @@ namespace CMS.Persistence.Repositories
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
                 );
             }
-            else if( foundContract.Approver3EmployeeCode == empCode)
+            else if( foundContract.Approver3Email == empCode)
             {
                 if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status != ContractStatus.Active || contract.Approver3Status != ContractStatus.PendingApproval)
                 {
