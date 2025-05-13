@@ -1,0 +1,45 @@
+export class AddAddendumContract {
+    addendumContractId:number;
+    contractId:number;
+    departmentId:number;
+    contractWithCompanyId:number;
+    contractTypeId:number;
+    apostilleTypeId:number;
+    actualDocRefNo:number;
+    retainerContract:number;
+    termsAndConditions:string;
+    validFrom:string;
+    validTill:string;
+    empCustodianId:number;
+    isDeleted:boolean;
+
+constructor(
+    addendumContractId:number=0,
+    contractId:number=0,
+    departmentId:number=0,
+    contractWithCompanyId:number=0,
+    contractTypeId:number=0,
+    apostilleTypeId:number=0,
+    actualDocRefNo:number=0,
+    retainerContract:number=0,
+    termsAndConditions:string='',
+    validFrom:string='',
+    validTill:string='',
+    empCustodianId:number=0,
+    isDeleted:boolean=false
+){
+    this.addendumContractId=addendumContractId;
+    this.contractId=contractId;
+    this.departmentId=departmentId;
+    this.contractWithCompanyId=contractWithCompanyId;
+    this.contractTypeId=contractTypeId;
+    this.apostilleTypeId=apostilleTypeId;
+    this.actualDocRefNo=actualDocRefNo;
+    this.retainerContract=retainerContract;
+    this.termsAndConditions=termsAndConditions;
+    this.validFrom=validFrom;
+    this.validTill=validTill;
+    this.empCustodianId=empCustodianId;
+    this.isDeleted=isDeleted
+}
+}

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../../../models/contracts';
 import { ContractsService } from '../../../services/contracts.service';
@@ -18,7 +18,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
+import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
+import { PostTerminationService } from '../../../services/post-termination.service';
 import { LoaderComponent } from '../../loader/loader.component';
+import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
+import { AddAddendumContract } from '../../../models/add-addendum-contract';
 
 @Component({
   selector: 'app-all-contracts',
@@ -37,6 +41,7 @@ export class AllContractsComponent implements OnInit {
         this.dataSource.sort = this.sort;
       }
       addBtn:string = '';
+      file:File|null = null;
   loading: boolean = true;
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
@@ -52,6 +57,8 @@ export class AllContractsComponent implements OnInit {
   contractTypes:ContractTypeMasterDTO[] = [];
   apostilleTypes:MasterApostille[] = [];
   companies:CompanyMasterDto[] =[]
+  postTerm:PostTerminationNoticeUploadDTO=new PostTerminationNoticeUploadDTO(null,0,new Date(),'');
+  contIdForPostTerm?:number = 0;
   ngOnInit(): void {
     this.GetAllContracts(1, 10);
     this.getAllDepartments();
@@ -59,7 +66,11 @@ export class AllContractsComponent implements OnInit {
     this.getAllApostilleTypes();
     this.getAllCompanies();
   }
-  constructor(private contractsService: ContractsService, private router: Router,private renderer : Renderer2, private title:Title, private masterApostilleService : MasterApostilleService ) {
+  constructor(private contractsService: ContractsService, private router: Router,
+    private renderer : Renderer2, private title:Title, 
+    private masterApostilleService : MasterApostilleService,
+    private postTermService:PostTerminationService,
+    private addAddendumContractsService: AddAddendumContractsService ) {
     this.title.setTitle("All Contracts - CMS");
   }
   @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
@@ -69,6 +80,10 @@ export class AllContractsComponent implements OnInit {
   @ViewChild('addEmpCustodianName') addEmpCustodianName!: ElementRef;
   @ViewChild('addEmpCustodianId') addEmpCustodianId!: ElementRef;
   @ViewChild('addEmpCustodianCollapse') addEmpCustodianCollapse!: ElementRef;
+  @ViewChild('addAddendumEmpCustodianName') addAddendumEmpCustodianName!: ElementRef;
+  @ViewChild('addAddendumEmpCustodianCollapse') addAddendumEmpCustodianCollapse!: ElementRef;
+  @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
+   @ViewChild('addFile') addFile!: ElementRef;
    
   
 
@@ -173,7 +188,7 @@ export class AllContractsComponent implements OnInit {
       console.log('Navigating to editContract with valueId:', contract.contractID);
       this.router.navigate(['contracts/editContract', contract.contractID]);
     }
-
+    
     getAllDepartments() {
       this.contractsService.GetDepartments().subscribe({
         next: (response:GetAllDepartmentsDto[]) => {
@@ -219,6 +234,8 @@ export class AllContractsComponent implements OnInit {
         }
       });
     }
+    
+
     masterContractAddForm = new FormGroup({
         contractName : new FormControl('',[Validators.required]),
         departmentId : new FormControl('',[Validators.required]),
@@ -238,9 +255,9 @@ export class AllContractsComponent implements OnInit {
         approver1Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
         approver2Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
         approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')])
-      })
+      });
+
       onAddFormSubmit(){
-        
         this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
         if(this.masterContractAddForm.invalid){
           this.masterContractAddForm.markAllAsTouched();
@@ -335,12 +352,20 @@ export class AllContractsComponent implements OnInit {
           this.employeeCustodians.length = 0;
           this.renderer.removeClass(this.editEmpCustodianCollapse.nativeElement,'show');
           this.renderer.removeClass(this.addEmpCustodianCollapse.nativeElement,'show');
+          this.renderer.removeClass(this.addAddendumEmpCustodianCollapse.nativeElement,'show');
           this.editEmpCustodianName.nativeElement.value = employeeName;
           this.editEmpCustodianId.nativeElement.value = employeeId;
           this.addEmpCustodianName.nativeElement.value = employeeName;
           this.addEmpCustodianId.nativeElement.value = employeeId;
+          this.addAddendumEmpCustodianName.nativeElement.value = employeeName;
+          this.addAddendumEmpCustodianId.nativeElement.value = employeeId;
           console.log(employeeId);
+          console.log(this.addEmpCustodianCollapse.nativeElement.value);
+          
         }
+      }
+      get contractId(){
+        return this.addaddendumForm.get('contractId');
       }
       get contractName(){
         return this.masterContractAddForm.get('contractName');
@@ -401,13 +426,30 @@ export class AllContractsComponent implements OnInit {
         this.router.navigate(['contracts/allContracts']);
         this.masterContractAddForm.reset();
       }
+
+      addaddendumForm=new FormGroup({
+        addendumContractId: new FormControl('',[Validators.required]),
+        contractId:new FormControl('', [Validators.required]),
+        departmentId : new FormControl('',[Validators.required]),
+        contractWithCompanyId : new FormControl('',[Validators.required]),
+        contractTypeId : new FormControl('',[Validators.required]),
+        apostilleTypeId : new FormControl('',[Validators.required]),
+        actualDocRefNo : new FormControl('',[Validators.required]),
+        retainerContract : new FormControl('',[Validators.required]),
+        termsAndConditions : new FormControl('',[Validators.required]),
+        validFrom : new FormControl('',[Validators.required]),
+        validTill : new FormControl('',[Validators.required]),
+        empCustodianId: new FormControl('',[Validators.required])
+      });
+
       contID:number = 0;
-      fetchContractData(contractID:number) {
+
+      fetchContractData(contractID:number|any) {
         this.contID = contractID;
-        this.contractsService.fetchContractData(contractID).subscribe({
+        this.addAddendumContractsService.fetchContractData(contractID).subscribe({
           next: (response) => {
-            this.masterContractAddForm.patchValue({
-              contractName: response.contractName,
+            this.addaddendumForm.patchValue({
+              contractId: String(contractID),
               departmentId: String(response.departmentId),
               contractWithCompanyId: String(response.contractWithCompanyId),
               contractTypeId: String(response.contractTypeId),
@@ -417,20 +459,22 @@ export class AllContractsComponent implements OnInit {
               termsAndConditions: response.termsAndConditions,
               validFrom: this.formatDate(String(response.validFrom)),
               validTill: this.formatDate(String(response.validTill)),
-              renewalFrom: this.formatDate(String(response.renewalFrom)),
-              renewalTill: this.formatDate(String(response.renewalTill)),
-              addendumDate: this.formatDate(String(response.addendumDate)),
-              empCustodianId: String(response.empCustodianId),
-              location: response.location,
-              approver1Status: String(response.approver1Status),
-              approver2Status: String(response.approver2Status),
-              approver3Status: String(response.approver3Status)
+              empCustodianId: String(response.empCustodianId)
             });
             this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
             this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
+            return true;
+          },
+          error:(err)=>{
+            console.error('No Contract with this id exist', err);
+            this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            return false;
           }
         })
+        return false;
       }
+
       private formatDate(date:string) {
         const d = new Date(date);
         let month = '' + (d.getMonth() + 1);
@@ -440,75 +484,241 @@ export class AllContractsComponent implements OnInit {
         if (day.length < 2) day = '0' + day;
         return [year, month, day].join('-');
         }
-      onUpdateFormSubmit(contractID:number) {
-        this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
-        if (this.masterContractAddForm.invalid) {
-          this.masterContractAddForm.markAllAsTouched();
-          return;
+
+        onUpdateFormSubmit(contID:number){
+          // this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
+          // if (this.masterContractAddForm.invalid) {
+          //   this.masterContractAddForm.markAllAsTouched();
+          //   return;
+          // }
+          // else {
+          //   const departmentId = this.masterContractAddForm.value.departmentId;
+          //   const contractWithCompanyId = this.masterContractAddForm.value.contractWithCompanyId;
+          //   const contractTypeId = this.masterContractAddForm.value.contractTypeId;
+          //   const apostilleTypeId = this.masterContractAddForm.value.apostilleTypeId;
+          //   const actualDocRefNo = this.masterContractAddForm.value.actualDocRefNo;
+          //   const retainerContract = this.masterContractAddForm.value.retainerContract;
+          //   const empCustodianId = this.masterContractAddForm.value.empCustodianId;
+          //   const approver1Status = this.masterContractAddForm.value.approver1Status;
+          //   const approver2Status = this.masterContractAddForm.value.approver2Status;
+          //   const approver3Status = this.masterContractAddForm.value.approver3Status;
+          //   if (departmentId && Number(departmentId) &&
+          //     contractWithCompanyId && Number(contractWithCompanyId) &&
+          //     contractTypeId && Number(contractTypeId) &&
+          //     apostilleTypeId && Number(apostilleTypeId) &&
+          //     actualDocRefNo && Number(actualDocRefNo) &&
+          //     retainerContract && Number(retainerContract) &&
+          //     empCustodianId && Number(empCustodianId) &&
+          //     approver1Status && Number(approver1Status) &&
+          //     approver2Status && Number(approver2Status) &&
+          //     approver3Status && Number(approver3Status)
+          //   ) {
+          //     const addFormValues: AddContractDto = new AddContractDto();
+          //     addFormValues.contractName = this.masterContractAddForm.value.contractName;
+          //     addFormValues.departmentId = Number(departmentId);
+          //     addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
+          //     addFormValues.contractTypeId = Number(contractTypeId);
+          //     addFormValues.apostilleTypeId = Number(apostilleTypeId);
+          //     addFormValues.actualDocRefNo = Number(actualDocRefNo);
+          //     addFormValues.retainerContract = Number(retainerContract);
+          //     addFormValues.termsAndConditions = this.masterContractAddForm.value.termsAndConditions;
+          //     addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
+          //     addFormValues.validTill = this.masterContractAddForm.value.validTill;
+          //     addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom;
+          //     addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill;
+          //     addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
+          //     addFormValues.empCustodianId = Number(empCustodianId);
+          //     addFormValues.location = this.masterContractAddForm.value.location;
+          //     addFormValues.approver1Status = Number(approver1Status);
+          //     addFormValues.approver2Status = Number(approver2Status);
+          //     addFormValues.approver3Status = Number(approver3Status);
+          //     console.log(addFormValues);
+          //     this.contractsService.editContract(contractID, addFormValues).subscribe({
+          //       next: (response: boolean) => {
+          //         if (response !== false) {
+          //           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+          //           // this.router.navigate(['contracts/allContracts'])
+          //           this.GetAllContracts(1, 10);
+          //           //this.renderer.removeClass(this.addContractModal.nativeElement, 'show');
+          //           this.masterContractAddForm.reset();
+          //         }
+          //       },
+          //       error: (error) => {
+          //         console.error('Error :(', error);
+          //         this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+          //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          //       }
+          //     });
+          //   }
+          //   else {
+          //     console.log("should not come here ", this.masterContractAddForm.value)
+          //   }
+          // }
         }
-        else {
-          const departmentId = this.masterContractAddForm.value.departmentId;
-          const contractWithCompanyId = this.masterContractAddForm.value.contractWithCompanyId;
-          const contractTypeId = this.masterContractAddForm.value.contractTypeId;
-          const apostilleTypeId = this.masterContractAddForm.value.apostilleTypeId;
-          const actualDocRefNo = this.masterContractAddForm.value.actualDocRefNo;
-          const retainerContract = this.masterContractAddForm.value.retainerContract;
-          const empCustodianId = this.masterContractAddForm.value.empCustodianId;
-          const approver1Status = this.masterContractAddForm.value.approver1Status;
-          const approver2Status = this.masterContractAddForm.value.approver2Status;
-          const approver3Status = this.masterContractAddForm.value.approver3Status;
-          if (departmentId && Number(departmentId) &&
-            contractWithCompanyId && Number(contractWithCompanyId) &&
-            contractTypeId && Number(contractTypeId) &&
-            apostilleTypeId && Number(apostilleTypeId) &&
-            actualDocRefNo && Number(actualDocRefNo) &&
-            retainerContract && Number(retainerContract) &&
-            empCustodianId && Number(empCustodianId) &&
-            approver1Status && Number(approver1Status) &&
-            approver2Status && Number(approver2Status) &&
-            approver3Status && Number(approver3Status)
-          ) {
-            const addFormValues: AddContractDto = new AddContractDto();
-            addFormValues.contractName = this.masterContractAddForm.value.contractName;
-            addFormValues.departmentId = Number(departmentId);
-            addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
-            addFormValues.contractTypeId = Number(contractTypeId);
-            addFormValues.apostilleTypeId = Number(apostilleTypeId);
-            addFormValues.actualDocRefNo = Number(actualDocRefNo);
-            addFormValues.retainerContract = Number(retainerContract);
-            addFormValues.termsAndConditions = this.masterContractAddForm.value.termsAndConditions;
-            addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
-            addFormValues.validTill = this.masterContractAddForm.value.validTill;
-            addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom;
-            addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill;
-            addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
-            addFormValues.empCustodianId = Number(empCustodianId);
-            addFormValues.location = this.masterContractAddForm.value.location;
-            addFormValues.approver1Status = Number(approver1Status);
-            addFormValues.approver2Status = Number(approver2Status);
-            addFormValues.approver3Status = Number(approver3Status);
-            console.log(addFormValues);
-            this.contractsService.editContract(contractID, addFormValues).subscribe({
-              next: (response: boolean) => {
-                if (response !== false) {
-                  Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-                  // this.router.navigate(['contracts/allContracts'])
-                  this.GetAllContracts(1, 10);
-                  //this.renderer.removeClass(this.addContractModal.nativeElement, 'show');
-                  this.masterContractAddForm.reset();
-                }
-              },
-              error: (error) => {
-                console.error('Error :(', error);
-                this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-                Alert.toast(TYPE.ERROR, true, this.errorMsg);
-              }
-            });
+
+      onAddAddendumFormSubmit(contractID:number) {
+        const addendum=new AddAddendumContract();
+        addendum.contractId=Number(this.addaddendumForm.value.contractId);
+        addendum.departmentId=Number(this.addaddendumForm.value.departmentId);
+        addendum.contractWithCompanyId=Number(this.addaddendumForm.value.contractWithCompanyId);
+        addendum.contractTypeId=Number(this.addaddendumForm.value.contractTypeId);
+        addendum.apostilleTypeId=Number(this.addaddendumForm.value.apostilleTypeId);
+        addendum.actualDocRefNo=Number(this.addaddendumForm.value.actualDocRefNo);
+        addendum.retainerContract = Number(this.addaddendumForm.value.retainerContract);
+        addendum.termsAndConditions = String(this.addaddendumForm.value.termsAndConditions);
+        addendum.validFrom = String(this.addaddendumForm.value.validFrom);
+        addendum.validTill = String(this.addaddendumForm.value.validTill);
+        addendum.empCustodianId=Number(this.addaddendumForm.value.empCustodianId);
+
+        this.addAddendumContractsService.AddAddendum(contractID, addendum).subscribe({
+          next:()=>{
+            Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
+            this.GetAllContracts(1, 10); 
+            this.masterContractAddForm.reset(); 
+          },
+          error:(err)=>{
+            console.error('Error adding addendum:', err);
+            this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.title : err.message);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
           }
-          else {
-            console.log("should not come here ", this.masterContractAddForm.value)
+        })
+
+      }
+
+      checkContractId= new FormGroup({
+        contractId: new FormControl('',[Validators.required])
+      });
+
+      onSubmitCheck(){
+        const enteredValue= this.checkContractId.value.contractId;
+        this.contractsService.getContracts(1,100).subscribe({
+        next: (res: ContractsEntity[]) => {
+          this.dataSource.data = res;
+          console.log(this.dataSource.data);
+          this.allContracts = res;
+          if(this.checkContractId.valid){
+            const foundContract= this.allContracts.find((contract)=>contract.contractID.toString()===enteredValue
+            || contract.contractName===enteredValue);
+
+            if(foundContract){
+              console.log('Contract Found: ',foundContract);
+            }else{
+              console.error("Contract not found");
+            }
+            }
+          else{
+              console.error('Form is invalid');
           }
         }
+      });
+    }
+      uploadFile(event: Event) {
+          const input = event.target as HTMLInputElement;
+          if (input.files?.length) {
+            // TODO check file size and type
+            this.file = input.files[0];
+          }
+          
+          if (!this.file) {
+            Alert.toast(TYPE.WARNING, true, "Please select a file and fill the form correctly.");
+            return;
+          }
+          
+          const allowedExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+        
+          if (!allowedExtensions.includes(fileExtension)) {
+            Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg, .jpeg and .png.");
+            return;
+          }
+          
+          if (this.file.size > 25 * 1048576) {
+            Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+            return;
+          }
+        }
+        
+  getContractIdforPostTerm(contractId?: number) {
+    this.contIdForPostTerm = contractId;
+    console.log(this.contIdForPostTerm, contractId);
+  }
+      //uploading the Post Termination Notice 
+      OnSavePostTermination(documentForm:NgForm){
+        console.log(documentForm.value);
+        console.log(this.file);
+        
+          if (!this.file || !documentForm.valid) {
+            this.addFile.nativeElement.value="";
+            this.postTerm.file=null
+            this.postTerm.notice_Duration=1;
+            this.postTerm.end_Date=new Date();
+            this.postTerm.Remark="";
+            Alert.toast(TYPE.WARNING,true,"Please select a file and fill the Form Correctly");
+            return;
+          }
+
+
+          const allowedExtensions=['.pdf', '.doc', '.docx'];
+          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+
+          if (!allowedExtensions.includes(fileExtension)) {
+            this.addFile.nativeElement.value="";
+             this.postTerm.file=null;
+             this.postTerm.notice_Duration=1;
+             this.postTerm.end_Date=new Date();
+             this.postTerm.Remark=""; 
+            Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
+      return;
+          }
+          if (this.file.size > 25 * 1048576) {
+      this.addFile.nativeElement.value = "";
+      this.postTerm.file=null ;
+      Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file',this.file)
+    formData.append('contractId',String(this.contIdForPostTerm))
+    formData.append('notice_Duration',String(this.postTerm.notice_Duration))
+    formData.append('end_Date',String(this.postTerm.end_Date))
+    formData.append('Remark',String(this.postTerm.Remark))
+    this.postTermService.UploadDoc(formData).subscribe({
+      next: (res) => {
+        this.file = null;
+        documentForm.reset();
+        // this.addFile.nativeElement.value = "";
+        //      this.postTerm.file=null;
+             
+        Alert.bigToast(
+          'Success!',
+          'Posted Termination successfully.',
+          TYPE.SUCCESS,
+          'Ok'
+        );
+        this.GetPage(this.maxPage);
+      },
+      error: (error) => {
+        console.error('Error in creating Notice:', error);
+        Alert.bigToast(
+          'Error!',
+          'There was an error posting termination notice.',
+          TYPE.ERROR,
+          'Try Again'
+        );
+        // this.file = null;
+        // documentForm.reset();
+        // this.addFile.nativeElement.value = "";
+        // this.postTerm.file = null;
+        // this.document.status = 1;
+      },
+    });
+    // this.file = null;
+    // documentForm.reset();
+    // this.addFile.nativeElement.value = "";
+    // this.document.file = null;
+    // this.document.status = 1;
+
       }
       contractApprove(id?:number){
         console.log('came here')
