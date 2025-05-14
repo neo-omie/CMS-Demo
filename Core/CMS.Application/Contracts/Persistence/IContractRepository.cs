@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 
 namespace CMS.Application.Contracts.Persistence
@@ -15,7 +16,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetTerminatedContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetPendingApprovalContractsAsync(int pageNumber, int pageSize);
-        public Task<Contract> ApproveContract(int id, string empCode);
+        public Task<Contract> ApproveRejectContract(int id, string empCode, ContractStatus status);
         Task<GetContractByIdDto> GetContractByIdAsync(int id);
         Task<Contract> AddContractAsync(Contract cp);
         Task<bool> UpdateContractAsync(int id, Contract cp);
