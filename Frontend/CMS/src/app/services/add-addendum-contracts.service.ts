@@ -17,7 +17,7 @@ export class AddAddendumContractsService {
     return this.http.put<AddAddendumContract>(`${this.apiUrl}/AddendumContract/${id}`,addendum);
   }
 
-  fetchContractData(contractID:number):Observable<AddContractDto> {
+  fetchContractData(contractID:string):Observable<AddContractDto> {
       return this.http.get<AddContractDto>(`${this.apiUrl}/Contract/${contractID}`);
   }
 }

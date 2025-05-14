@@ -89,6 +89,11 @@ namespace CMS.Persistence.Repositories
             };
 
             await _context.PostTerminationNotices.AddAsync(document);
+            var updateStatus = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == document.ContractId);
+            updateStatus.Approver1Status = ContractStatus.PendingTermination;
+            updateStatus.Approver2Status = ContractStatus.PendingTermination;
+            updateStatus.Approver3Status = ContractStatus.PendingTermination;
+            _context.ContractsEntity.Update(updateStatus);
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, document.ContractId).AsNoTracking().ToListAsync();
             var forNotif = findingContract.FirstOrDefault();
@@ -138,7 +143,7 @@ namespace CMS.Persistence.Repositories
             string emailBody = string.Empty;
             emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
             emailBody += $"<h1>NOTICE FOR {name}</h1>";
-            emailBody += $"<h2>NOTICE: Termination for the contract ID {contractID} is initialized. Please check the portal.</h2>";
+            emailBody += $"<h2>NOTICE: Termination for the contract ID {contractID} is initialized. Please check the portal for Approval or Rejection.</h2>";
             emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
             emailBody += "</div>";
             return emailBody;

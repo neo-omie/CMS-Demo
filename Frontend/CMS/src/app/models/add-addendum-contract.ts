@@ -1,6 +1,7 @@
 export class AddAddendumContract {
     addendumContractId:number;
     contractId:number;
+    contractName:string;
     departmentId:number;
     contractWithCompanyId:number;
     contractTypeId:number;
@@ -16,6 +17,7 @@ export class AddAddendumContract {
 constructor(
     addendumContractId:number=0,
     contractId:number=0,
+    contractName:string='',
     departmentId:number=0,
     contractWithCompanyId:number=0,
     contractTypeId:number=0,
@@ -30,6 +32,7 @@ constructor(
 ){
     this.addendumContractId=addendumContractId;
     this.contractId=contractId;
+    this.contractName=contractName;
     this.departmentId=departmentId;
     this.contractWithCompanyId=contractWithCompanyId;
     this.contractTypeId=contractTypeId;
