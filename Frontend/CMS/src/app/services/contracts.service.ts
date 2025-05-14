@@ -43,8 +43,8 @@ export class ContractsService {
   fetchContractData(contractID:number):Observable<AddContractDto> {
     return this.http.get<AddContractDto>(`${this.apiUrl}/${contractID}`);
   }
-  contractApprove(id?:number, empCode?:string) : Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/${id}/approver/${empCode}`,{});
+  approveRejectContract(id?:number, empCode?:string, status?:number) : Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/${id}/approveRejectContract/${empCode}/${status}`,{});
   }
 
   // For dropdowns and inputs from other tables

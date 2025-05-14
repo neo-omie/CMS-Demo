@@ -756,11 +756,11 @@ export class AllContractsComponent implements OnInit {
     // this.document.status = 1;
 
       }
-      contractApprove(id?:number){
+      approveRejectContract(id?:number, status?:number){
         console.log('came here')
         let email = localStorage.getItem('email');
         if(email){
-          this.contractsService.contractApprove(id,email).subscribe({
+          this.contractsService.approveRejectContract(id,email,status).subscribe({
             next:(res)=>{
               if(res){
                 Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
