@@ -49,6 +49,7 @@ export class AllContractsComponent implements OnInit {
   allContracts: ContractsEntity[] = [];
   contractDetails?: GetContractByIdDto;
   approverCheck: boolean = true;
+  terminationCheck:boolean=true;
   mode:any;
   deptID?:number;
   // Dropdowns
@@ -142,6 +143,20 @@ export class AllContractsComponent implements OnInit {
             this.approverCheck = true;
           } else {
             this.approverCheck = false;
+          }
+          if((this.contractDetails.approver1Email == localStorage.getItem('email') && 
+            this.contractDetails.approver1Status == 6) || 
+            (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 4 &&
+            this.contractDetails.approver2Status == 6) ||
+            (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 4 &&
+            this.contractDetails.approver2Status == 4 &&
+            this.contractDetails.approver3Status == 6)
+          ) {
+            this.terminationCheck = true;
+          } else {
+            this.terminationCheck = false;
           }
         },
         error: (error) => {
@@ -656,8 +671,6 @@ export class AllContractsComponent implements OnInit {
             Alert.toast(TYPE.WARNING,true,"Please select a file and fill the Form Correctly");
             return;
           }
-
-
           const allowedExtensions=['.pdf', '.doc', '.docx'];
           const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
 
