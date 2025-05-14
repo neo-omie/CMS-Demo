@@ -15,7 +15,7 @@ namespace CMS.Persistence.Configurations
                 {
                     ValueId = 1,
                     EmployeeName = "Admin",
-                    Email = "admin@cms.com",
+                    Email = "omigaming3123@gmail.com",
                     IsDeleted = false,
                     EmployeeCode = "NEO1",
                     Unit = "Thane",
@@ -30,17 +30,77 @@ namespace CMS.Persistence.Configurations
                 {
                     ValueId = 2,
                     EmployeeName = "Sarthak Lembhe",
-                    Email = "sarthak@neosoft.com",
+                    Email = "sarthak.lembhe@neosoftmail.com",
                     IsDeleted = false,
                     EmployeeCode = "NEO2",
                     Unit = "Thane",
-                    Role = "MOU_Approver",
+                    Role = "Contract_Approver",
                     EmployeeMobile = 9999988888,
                     EmployeeExtension = 8976,
                     DepartmentId = 2,
                     Password = hasher.HashPassword(null, "Sarthak@12"),
                     LastPasswordChanged = new DateTime(2025, 01, 10)
-                }         
+                },
+                new MasterEmployee
+                {
+                    ValueId = 3,
+                    EmployeeName = "Sakthish Nadar",
+                    Email = "sakthish.nadar@neosoftmail.com",
+                    IsDeleted = false,
+                    EmployeeCode = "NEO3",
+                    Unit = "Pune",
+                    Role = "Contract_Approver",
+                    EmployeeMobile = 8888899999,
+                    EmployeeExtension = 6969,
+                    DepartmentId = 3,
+                    Password = hasher.HashPassword(null, "Sakt@12"),
+                    LastPasswordChanged = new DateTime(2025, 04, 15)
+                },
+                new MasterEmployee
+                {
+                    ValueId = 4,
+                    EmployeeName = "Shreekant Panigrahi",
+                    Email = "shreekant.panigrahi@neosoftmail.com",
+                    IsDeleted = false,
+                    EmployeeCode = "NEO4",
+                    Unit = "Pune",
+                    Role = "Contract_Approver",
+                    EmployeeMobile = 7777788888,
+                    EmployeeExtension = 1111,
+                    DepartmentId = 4,
+                    Password = hasher.HashPassword(null, "Shreek@12"),
+                    LastPasswordChanged = new DateTime(2025, 04, 15)
+                },
+                new MasterEmployee
+                {
+                    ValueId = 5,
+                    EmployeeName = "Govind Lohar",
+                    Email = "govind.lohar@neosoftmail.com",
+                    IsDeleted = false,
+                    EmployeeCode = "NEO5",
+                    Unit = "Indore",
+                    Role = "Contract_Approver",
+                    EmployeeMobile = 7676587876,
+                    EmployeeExtension = 4321,
+                    DepartmentId = 5,
+                    Password = hasher.HashPassword(null, "Govind@12"),
+                    LastPasswordChanged = new DateTime(2025, 04, 15)
+                },
+                new MasterEmployee
+                {
+                    ValueId = 6,
+                    EmployeeName = "Om Auti",
+                    Email = "om.auti@neosoftmail.com",
+                    IsDeleted = false,
+                    EmployeeCode = "NEO6",
+                    Unit = "Indore",
+                    Role = "Contract_Approver",
+                    EmployeeMobile = 9876543210,
+                    EmployeeExtension = 1234,
+                    DepartmentId = 2,
+                    Password = hasher.HashPassword(null, "omie@12"),
+                    LastPasswordChanged = new DateTime(2025, 04, 15)
+                }
             );
         }
     }
