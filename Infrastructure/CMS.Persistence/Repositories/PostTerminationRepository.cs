@@ -143,7 +143,7 @@ namespace CMS.Persistence.Repositories
             string emailBody = string.Empty;
             emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
             emailBody += $"<h1>NOTICE FOR {name}</h1>";
-            emailBody += $"<h2>NOTICE: Termination for the contract ID {contractID} is initialized. Please check the portal.</h2>";
+            emailBody += $"<h2>NOTICE: Termination for the contract ID {contractID} is initialized. Please check the portal for Approval or Rejection.</h2>";
             emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
             emailBody += "</div>";
             return emailBody;

@@ -50,8 +50,9 @@ export class AllContractsComponent implements OnInit {
   allContracts: ContractsEntity[] = [];
   contractDetails?: GetContractByIdDto;
   approverCheck: boolean = true;
-  mode: any;
-  deptID?: number;
+  terminationCheck:boolean=true;
+  mode:any;
+  deptID?:number;
   // Dropdowns
   employeeCustodians: MasterEmployee[] = [];
   departments: GetAllDepartmentsDto[] = [];
@@ -140,51 +141,65 @@ export class AllContractsComponent implements OnInit {
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 1)
-        ) {
-          this.approverCheck = true;
-        } else {
-          this.approverCheck = false;
+          ) {
+            this.approverCheck = true;
+          } else {
+            this.approverCheck = false;
+          }
+          if((this.contractDetails.approver1Email == localStorage.getItem('email') && 
+            this.contractDetails.approver1Status == 6) || 
+            (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 4 &&
+            this.contractDetails.approver2Status == 6) ||
+            (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 4 &&
+            this.contractDetails.approver2Status == 4 &&
+            this.contractDetails.approver3Status == 6)
+          ) {
+            this.terminationCheck = true;
+          } else {
+            this.terminationCheck = false;
+          }
+        },
+        error: (error) => {
+          console.error('Error :(', error);
+          if (error.message !== undefined) {
+            this.errorMsg = JSON.stringify(error.error.message);
+            console.log(this.errorMsg);
+          }
+          else {
+            this.errorMsg = JSON.stringify(error.message);
+            console.log(this.errorMsg);
+          }
         }
-      },
-      error: (error) => {
-        console.error('Error :(', error);
-        if (error.message !== undefined) {
-          this.errorMsg = JSON.stringify(error.error.message);
-          console.log(this.errorMsg);
+      });
+    }
+    DeleteContract(id?: number) {
+      Alert.confirmToast(
+        'Are you sure you want to delete this contract?',
+        "You won't be able to revert this!!",
+        TYPE.WARNING,
+        'Yes ,Delete it',
+        'Deleted Successfully',
+        'Contract has been Deleted',
+        TYPE.SUCCESS,
+        () => {
+          if (id !== undefined) {
+            this.contractsService.deleteContract(id).subscribe({
+              next: () => {
+                // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
+                this.GetAllContracts(1, 10);
+              },
+              error: (error) => {
+                console.error('Deletion Failed', error);
+                this.errorMsg = JSON.stringify(error.error.message);
+                Alert.toast(TYPE.ERROR, true, this.errorMsg);
+              },
+            });
+          }
         }
-        else {
-          this.errorMsg = JSON.stringify(error.message);
-          console.log(this.errorMsg);
-        }
-      }
-    });
-  }
-  DeleteContract(id?: number) {
-    Alert.confirmToast(
-      'Are you sure you want to delete this contract?',
-      "You won't be able to revert this!!",
-      TYPE.WARNING,
-      'Yes ,Delete it',
-      'Deleted Successfully',
-      'Contract has been Deleted',
-      TYPE.SUCCESS,
-      () => {
-        if (id !== undefined) {
-          this.contractsService.deleteContract(id).subscribe({
-            next: () => {
-              // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
-              this.GetAllContracts(1, 10);
-            },
-            error: (error) => {
-              console.error('Deletion Failed', error);
-              this.errorMsg = JSON.stringify(error.error.message);
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
-            },
-          });
-        }
-      }
-    );
-  }
+      );
+    }
 
   editContract(contract: ContractsEntity) {
     console.log('Navigating to editContract with valueId:', contract.contractID);
@@ -699,24 +714,22 @@ export class AllContractsComponent implements OnInit {
     this.contIdForPostTerm = Number(contractId);
     console.log(this.contIdForPostTerm, contractId);
   }
-  //uploading the Post Termination Notice 
-  OnSavePostTermination(documentForm: NgForm) {
-    console.log(documentForm.value);
-    console.log(this.file);
-
-    if (!this.file || !documentForm.valid) {
-      this.addFile.nativeElement.value = "";
-      this.postTerm.file = null
-      this.postTerm.notice_Duration = 1;
-      this.postTerm.end_Date = new Date();
-      this.postTerm.Remark = "";
-      Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
-      return;
-    }
-
-
-    const allowedExtensions = ['.pdf', '.doc', '.docx'];
-    const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+      //uploading the Post Termination Notice 
+      OnSavePostTermination(documentForm:NgForm){
+        console.log(documentForm.value);
+        console.log(this.file);
+        
+          if (!this.file || !documentForm.valid) {
+            this.addFile.nativeElement.value="";
+            this.postTerm.file=null
+            this.postTerm.notice_Duration=1;
+            this.postTerm.end_Date=new Date();
+            this.postTerm.Remark="";
+            Alert.toast(TYPE.WARNING,true,"Please select a file and fill the Form Correctly");
+            return;
+          }
+          const allowedExtensions=['.pdf', '.doc', '.docx'];
+          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
 
     if (!allowedExtensions.includes(fileExtension)) {
       this.addFile.nativeElement.value = "";
