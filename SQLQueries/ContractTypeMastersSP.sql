@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE SP_GetAllContractsTypes @PageNumber int, @PageSize int
+CREATE  OR ALTER PROCEDURE SP_GetAllContractsTypes @PageNumber int, @PageSize int
 AS
 BEGIN
 	SELECT * FROM contracts
@@ -34,7 +34,7 @@ Exec SP_AddContractType @ContractTypeName='CSMR',@Status=1
 
 
 --deleting company by id
-CREATE OR Alter PROCEDURE SP_DeleteContractyId @ValId int
+CREATE  OR Alter PROCEDURE SP_DeleteContractyId @ValId int
 AS 
 BEGIN
 	update contracts

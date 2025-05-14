@@ -68,6 +68,18 @@ namespace CMS.Persistence.Repositories
             return foundContract;
 
         }
+        public async Task<GetContractByIdDto> GetContractByNameAsync(string name)
+        {
+            string sql = "EXEC SP_GetContractEntityByName @Name = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, name).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
+            if (foundContract == null)
+            {
+                throw new NotFoundException($"Contract with name {name} not found");
+            }
+            return foundContract;
+
+        }
         public async Task<Contract> AddContractAsync(Contract cp)
         {
             var addedContract = await _context.ContractsEntity.AddAsync(cp);
@@ -112,7 +124,7 @@ namespace CMS.Persistence.Repositories
             }
             return cp;
         }
-        public async Task<Contract> ApproveContract(int id, string empCode)
+        public async Task<Contract> ApproveRejectContract(int id, string empCode, ContractStatus status)
         {
             var contract = await _context.ContractsEntity.Where(c => c.ContractId == id).FirstOrDefaultAsync();
             if(contract == null)
@@ -126,28 +138,30 @@ namespace CMS.Persistence.Repositories
             {
                 throw new NotFoundException("Contract not found");
             }
-            if(foundContract.Approver1Email == empCode)
+            string approveOrReject = (status == ContractStatus.Active) ? "Approved" : "Rejected";
+            string notificationSubject = (status == ContractStatus.Active) ? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been rejected under your department.";
+            if (foundContract.Approver1Email == empCode)
             {
 
                 if(contract.Approver1Status != ContractStatus.PendingApproval)
                 {
                     throw new Exception("Invalid approval action");
                 }
-                contract.Approver1Status = ContractStatus.Active;
+                string subject = $"Contract:{foundContract.ContractName}({id}),{approveOrReject} by Approver 1";
+                contract.Approver1Status = status;
 
                 if (await _context.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception("For some reasons, contract is not approved");
+                    throw new Exception("For some reasons, contract is not updated");
                 }
 
                 await AddNewNotifications(foundContract.Approver2EmployeeCode,
-                                            $"Contract called '{foundContract.ContractName}' Approved by '{foundContract.Approver1EmployeeCode}'(Approver 1)!",
-                                            "Contract has been approved under your department. You can access and change the approvals for this contract.");
-                string subject = $"Contract:{foundContract.ContractName}({id}),Approved by Approver 1";
+                                          notificationSubject,
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
                 string emailBody = string.Empty;
                 emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
                 emailBody += $"<h1>Hello {foundContract.Approver2EmployeeCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), Approved by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
                 emailBody += "<h3>Please check your CMS portal.</h3>";
                 emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
                 emailBody += "</div>";
@@ -156,12 +170,12 @@ namespace CMS.Persistence.Repositories
                 );
 
                 await AddNewNotifications(foundContract.EmpCustodianCode,
-                                            $"You have added new Contract called '{foundContract.ContractName}'!",
-                                            "New Contract has been added under your department.");
+                                          notificationSubject.Split('.')[0]+".",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
                 emailBody = string.Empty;
                 emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
                 emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), Approved by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
                 emailBody += "<h3>Please check your CMS portal.</h3>";
                 emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
                 emailBody += "</div>";
@@ -170,6 +184,182 @@ namespace CMS.Persistence.Repositories
                 );
             }
             else if(foundContract.Approver2Email == empCode)
+            {
+                if (contract.Approver1Status != ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingApproval)
+                {
+                    throw new Exception("Invalid approval action");
+                }
+                string subject = $"Contract:{foundContract.ContractName}({id}),{approveOrReject} by Approver 2";
+                contract.Approver2Status = status;
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception("For some reasons, contract is not approved");
+                }
+
+                await AddNewNotifications(foundContract.Approver3EmployeeCode,
+                                          notificationSubject,
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
+                string emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.Approver3EmployeeCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.Approver3Email, foundContract.Approver3EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                                          notificationSubject.Split('.')[0]+" by approver 2.",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
+                emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}),  {approveOrReject}  by '{foundContract.Approver2EmployeeCode}'(Approver 2)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.Approver1Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          notificationSubject.Split('.')[0]+".",
+                                            $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
+                emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), Approved by '{foundContract.Approver2EmployeeCode}'(Approver 2)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
+                );
+            }
+            else if( foundContract.Approver3Email == empCode)
+            {
+                if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status != ContractStatus.Active || contract.Approver3Status != ContractStatus.PendingApproval)
+                {
+                    throw new Exception("Invalid approval action");
+                }
+                string subject = $"Contract:{foundContract.ContractName}({id}),{approveOrReject} by Approver 3";
+                contract.Approver3Status = status;
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception("For some reasons, contract is not approved");
+                }
+                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                                          notificationSubject.Split('.')[0]+" by approver 3.",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
+                string emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.Approver1Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.Approver2EmployeeCode,
+                                          notificationSubject.Split('.')[0] + " by approver 3.",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
+                emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.Approver2Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          notificationSubject.Split('.')[0] + ".",
+                                            $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 3)!");
+                emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
+                );
+            }
+            else
+            {
+                throw new Exception("Unauthorized Action");
+            }
+                return contract;
+        }
+
+        public async Task<Contract> RejectContract(int id, string empCode)
+        {
+            var contract = await _context.ContractsEntity.Where(c => c.ContractId == id).FirstOrDefaultAsync();
+            if (contract == null)
+            {
+                throw new NotFoundException("Contract not found");
+            }
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
+            if (foundContract == null)
+            {
+                throw new NotFoundException("Contract not found");
+            }
+            if (foundContract.Approver1Email == empCode)
+            {
+
+                if (contract.Approver1Status != ContractStatus.PendingApproval)
+                {
+                    throw new Exception("Invalid approval action");
+                }
+                contract.Approver1Status = ContractStatus.Rejected;
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception("For some reasons, contract is not approved");
+                }
+
+                await AddNewNotifications(foundContract.Approver2EmployeeCode,
+                                            "Contract has been Rejected under your department.",
+                                            $"Contract called '{foundContract.ContractName}' Rejected by '{foundContract.Approver1EmployeeCode}'(Approver 1)!"
+                                            );
+                string subject = $"Contract:{foundContract.ContractName}({id}),Rejected by Approver 1";
+                string emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.Approver2EmployeeCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), Rejected by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.Approver2Email, foundContract.Approver2EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                            "Contract has been rejected by Approver 1.",
+                                            $"Contract called '{foundContract.ContractName}' Rejected by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
+                emailBody = string.Empty;
+                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
+                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), Rejected by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
+                emailBody += "<h3>Please check your CMS portal.</h3>";
+                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                emailBody += "</div>";
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
+                );
+            }
+            else if (foundContract.Approver2Email == empCode)
             {
                 if (contract.Approver1Status != ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingApproval)
                 {
@@ -225,7 +415,7 @@ namespace CMS.Persistence.Repositories
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
                 );
             }
-            else if( foundContract.Approver3Email == empCode)
+            else if (foundContract.Approver3Email == empCode)
             {
                 if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status != ContractStatus.Active || contract.Approver3Status != ContractStatus.PendingApproval)
                 {
@@ -284,7 +474,7 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Unauthorized Action");
             }
-                return contract;
+            return contract;
         }
 
         private async Task AddNewNotifications(string name, string subject, string message)
