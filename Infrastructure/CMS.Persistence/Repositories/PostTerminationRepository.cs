@@ -98,13 +98,13 @@ namespace CMS.Persistence.Repositories
                                           $"Notice for Termination of contract '{forNotif.ContractName}'!",
                                           $"NOTICE: Termination for the contract ID {forNotif.ContractId} is initialized. Please check the portal.");
                 await SendMail(
-                    forNotif.EmpCustodianEmail, forNotif.EmpCustodianCode, forNotif.ContractId, forNotif.ContractName
+                    forNotif.EmpCustodianEmail, forNotif.EmpCustodianCode, forNotif.ContractId, forNotif.ContractName,document.DocumentPath
                 );
                 await AddNewNotifications(forNotif.Approver1EmployeeCode,
                                           $"Notice for Termination of contract '{forNotif.ContractName}'!",
                                           $"NOTICE: Termination for the contract ID {forNotif.ContractId} is initialized. Please check the portal.");
                 await SendMail(
-                    forNotif.Approver1Email, forNotif.Approver1EmployeeCode, forNotif.ContractId, forNotif.ContractName
+                    forNotif.Approver1Email, forNotif.Approver1EmployeeCode, forNotif.ContractId, forNotif.ContractName, document.DocumentPath
                 );
 
                 return true;
@@ -143,15 +143,16 @@ namespace CMS.Persistence.Repositories
             emailBody += "</div>";
             return emailBody;
         }
-        public async Task SendMail(string email, string name, int contractID, string contractName)
+        public async Task SendMail(string email, string name, int contractID, string contractName,string attachmentpath)
         {
-            var mailRequest = new MailRequest
+            var mailRequest = new MailRequestWithAttachment
             {
                 Email = email,
                 Subject = "Termination Notice Post Contract! 🚨",
-                EmailBody = GenerateEmailBody(name, contractID, contractName)
+                EmailBody = GenerateEmailBody(name, contractID, contractName),
+                Attachments=attachmentpath
             };
-            await _emailService.SendEmail(mailRequest);
+            await _emailService.SendEmailWithAttachment(mailRequest);
         }
 
 
