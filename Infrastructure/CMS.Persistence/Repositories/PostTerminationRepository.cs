@@ -89,6 +89,11 @@ namespace CMS.Persistence.Repositories
             };
 
             await _context.PostTerminationNotices.AddAsync(document);
+            var updateStatus = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == document.ContractId);
+            updateStatus.Approver1Status = ContractStatus.PendingTermination;
+            updateStatus.Approver2Status = ContractStatus.PendingTermination;
+            updateStatus.Approver3Status = ContractStatus.PendingTermination;
+            _context.ContractsEntity.Update(updateStatus);
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, document.ContractId).AsNoTracking().ToListAsync();
             var forNotif = findingContract.FirstOrDefault();
