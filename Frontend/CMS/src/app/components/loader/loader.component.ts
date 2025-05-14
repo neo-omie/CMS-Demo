@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-loader',
@@ -7,6 +8,17 @@ import { Component } from '@angular/core';
   templateUrl: './loader.component.html',
   styleUrl: './loader.component.css'
 })
-export class LoaderComponent {
+export class LoaderComponent implements OnInit, OnDestroy {
+  constructor(
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
+  ngOnInit() {
+    this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
+  }
+
+  ngOnDestroy() {
+    this.renderer.removeStyle(this.document.body, 'overflow');
+  }
 }

@@ -321,8 +321,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
-          <button class="btn btn-danger" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
+          <button data-bs-dismiss="modal" class="btn btn-primary" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
+          <button data-bs-dismiss="modal" class="btn btn-danger" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
           <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button>
           <!-- <button class="btn btn-outline-primary">+ Add Addendum</button> -->
           <button data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;"

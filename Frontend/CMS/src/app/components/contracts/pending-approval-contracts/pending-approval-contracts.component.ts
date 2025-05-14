@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../../loader/loader.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-pending-approval-contracts',
@@ -438,22 +439,23 @@ export class PendingApprovalContractsComponent implements OnInit {
       }
     }
   }
-  approveRejectContract(id?: number, status?: number) {
-    console.log('came here')
+  async approveRejectContract(id?: number, status?: number) {
+    this.loading = true;
     let email = localStorage.getItem('email');
     if (email) {
-      this.contractsService.approveRejectContract(id, email, status).subscribe({
-        next: (res) => {
-          if (res) {
-            Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-          }
-        },
-        error: (err) => {
-          console.error('Error :(', err);
-          this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      try {
+        const response = await firstValueFrom(this.contractsService.approveRejectContract(id, email, status))
+        if (response !== false) {
+          Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
         }
-      })
+      }
+      catch (error) {
+        this.errorMsg = JSON.stringify(error);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      }
+      finally {
+        this.loading = false
+      }
     }
     else {
       this.router.navigate(['/']);
