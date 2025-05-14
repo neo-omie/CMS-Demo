@@ -790,13 +790,13 @@ export class AllContractsComponent implements OnInit {
     // this.document.status = 1;
 
   }
-  async approveRejectContract(id?: number, status?: number) {
+  async approveRejectContract(id?: string, status?: number) {
     this.loading = true;
     console.log('came here')
     let email = localStorage.getItem('email');
     if (email) {
       try{
-        const response = await firstValueFrom(this.contractsService.approveRejectContract(id, email, status))
+        const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
         if(response !== false){
           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
         }
