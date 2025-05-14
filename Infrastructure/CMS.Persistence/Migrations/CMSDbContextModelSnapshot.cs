@@ -1376,7 +1376,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEDRambTatKA2kEWEXpE9D26CzvjryeFwCfg5xaPJiOzkQIr66+H7RnXhfQMPdm9PzQ==",
+                            Password = "AQAAAAIAAYagAAAAEAZLdCu6K2WXSzvhx3BagzvknHwfZPqCMR5i6Rs/UAVHzWFmeAyrhkCioXE49R5ejQ==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1391,7 +1391,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEMctb2+8kY8m1taeFHOI6lOjVRZa1qMfA5ugKJgPXSdBTN+9h05Q+1CvdjoMg6S/cA==",
+                            Password = "AQAAAAIAAYagAAAAEGoo9oRgAS2H54OeF/Bi0qwM+wdasjRF6EvZkCYjKH2FAGUZLowcU7glaNPmyGTexQ==",
                             Role = "Contract_Approver",
                             Unit = "Thane"
                         },
@@ -1406,7 +1406,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sakthish Nadar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEApd7kPDe6iWMGd6+GqVxM4036USpq3/PHkRo0U8aMd9j9pSJwuighQu5dje02Uwug==",
+                            Password = "AQAAAAIAAYagAAAAEAawGFP447lhMC3Qx8iTCmi8lOsa1wlKAh2L4ImaFRkqyMJml/2b9O3D+lN76mG+Zw==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1421,7 +1421,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Shreekant Panigrahi",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEMZNBbV77eO7U0//RG7NE/0SirJV15MKMLwsG7t0oxVOlHQcy+GzwP8oKo0NqDWKKQ==",
+                            Password = "AQAAAAIAAYagAAAAEKZXvZX4bbS+oU5tw3lKdu2obnQjO2Pe2MXsYDy5Mf9wPFYoMYiVUSBTyn5XHnMwmQ==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1436,7 +1436,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Govind Lohar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEB6TjmvJCdphHBOD7iuAmet3M8GWoMFnPuwBn2Ws25gZI5YUrm8CaYg3aBxVSi9+dg==",
+                            Password = "AQAAAAIAAYagAAAAEBu5OYuTNtyXJHY6d93oC2YDMaDpE5kr8Cc9jaykSKpEgBHgbkZz7UEOOE6bCJhbrg==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         },
@@ -1451,7 +1451,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Om Auti",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEH0Cj0mBoXSIvzrYC84sLkKZ4c5d/9eUfm3fFEOakkbsiOETE7J0R/L1gCzCzRTZGw==",
+                            Password = "AQAAAAIAAYagAAAAEIHZ/Afx5hdWb9z62doPMYFeruP/5M0Ih1EPe2aKzAy1s9B7uoxzPG3EEpreV832Yg==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         });

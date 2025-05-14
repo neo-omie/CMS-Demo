@@ -68,6 +68,18 @@ namespace CMS.Persistence.Repositories
             return foundContract;
 
         }
+        public async Task<GetContractByIdDto> GetContractByNameAsync(string name)
+        {
+            string sql = "EXEC SP_GetContractEntityByName @Name = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, name).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
+            if (foundContract == null)
+            {
+                throw new NotFoundException($"Contract with name {name} not found");
+            }
+            return foundContract;
+
+        }
         public async Task<Contract> AddContractAsync(Contract cp)
         {
             var addedContract = await _context.ContractsEntity.AddAsync(cp);

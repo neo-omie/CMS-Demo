@@ -27,8 +27,8 @@ namespace CMS.Persistence.Repositories
             {
                 throw new NotFoundException($"Contract with id {id} not found. Please enter correct id");
             }
-
-            //contractIdCheck.ContractName = cp.ContractName;
+            //contractIdCheck.ContractId = addendumContract.ContractId;
+            contractIdCheck.ContractName = addendumContract.ContractName;
             contractIdCheck.DepartmentId = addendumContract.DepartmentId;
             contractIdCheck.ContractWithCompanyId = addendumContract.ContractWithCompanyId;
             contractIdCheck.ContractTypeId = addendumContract.ContractTypeId;

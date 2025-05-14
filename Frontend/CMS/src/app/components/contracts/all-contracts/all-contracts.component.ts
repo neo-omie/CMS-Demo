@@ -430,6 +430,7 @@ export class AllContractsComponent implements OnInit {
       addaddendumForm=new FormGroup({
         addendumContractId: new FormControl('',[Validators.required]),
         contractId:new FormControl('', [Validators.required]),
+        contractName:new FormControl('', [Validators.required]),
         departmentId : new FormControl('',[Validators.required]),
         contractWithCompanyId : new FormControl('',[Validators.required]),
         contractTypeId : new FormControl('',[Validators.required]),
@@ -444,12 +445,46 @@ export class AllContractsComponent implements OnInit {
 
       contID:number = 0;
 
-      fetchContractData(contractID:number|any) {
-        this.contID = contractID;
+      fetchContractData(contractID?:string) {
+        if(contractID != null) {
         this.addAddendumContractsService.fetchContractData(contractID).subscribe({
           next: (response) => {
             this.addaddendumForm.patchValue({
-              contractId: String(contractID),
+              contractId: String(response.contractId),
+              contractName: String(response.contractName),
+              departmentId: String(response.departmentId),
+              contractWithCompanyId: String(response.contractWithCompanyId),
+              contractTypeId: String(response.contractTypeId),
+              apostilleTypeId: String(response.apostilleTypeId),
+              actualDocRefNo: String(response.actualDocRefNo),
+              retainerContract: String(response.retainerContract),
+              termsAndConditions: response.termsAndConditions,
+              validFrom: this.formatDate(String(response.validFrom)),
+              validTill: this.formatDate(String(response.validTill)),
+              empCustodianId: String(response.empCustodianId)
+            });
+            this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
+            this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
+            // console.log(response);
+            return true;
+          },
+          error:(err)=>{
+            console.error('No Contract with this id exist', err);
+            this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            return false;
+          }
+        })
+          return false;
+        } else { return false; }
+      }
+
+      fetchContractdata(contractID:any) {
+        this.addAddendumContractsService.fetchContractData(contractID).subscribe({
+          next: (response) => {
+            this.addaddendumForm.patchValue({
+              contractId: String(response.contractId),
+              contractName: String(response.contractName),
               departmentId: String(response.departmentId),
               contractWithCompanyId: String(response.contractWithCompanyId),
               contractTypeId: String(response.contractTypeId),
@@ -596,6 +631,7 @@ export class AllContractsComponent implements OnInit {
           this.dataSource.data = res;
           console.log(this.dataSource.data);
           this.allContracts = res;
+          console.log(this.allContracts);
           if(this.checkContractId.valid){
             const foundContract= this.allContracts.find((contract)=>contract.contractID.toString()===enteredValue
             || contract.contractName===enteredValue);
@@ -638,8 +674,8 @@ export class AllContractsComponent implements OnInit {
           }
         }
         
-  getContractIdforPostTerm(contractId?: number) {
-    this.contIdForPostTerm = contractId;
+  getContractIdforPostTerm(contractId?: string) {
+    this.contIdForPostTerm = Number(contractId);
     console.log(this.contIdForPostTerm, contractId);
   }
       //uploading the Post Termination Notice 

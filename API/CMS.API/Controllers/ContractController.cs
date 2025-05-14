@@ -6,6 +6,7 @@ using CMS.Application.Features.Contracts.Commands.EditContract;
 using CMS.Application.Features.Contracts.Commands.RemoveContract;
 using CMS.Application.Features.Contracts.Queries.GetActiveContracts;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
+using CMS.Application.Features.Contracts.Queries.GetContractByContractName;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
 using CMS.Application.Features.Contracts.Queries.GetPendingApprovalContracts;
 using CMS.Application.Features.Contracts.Queries.GetTerminatedContracts;
@@ -65,11 +66,20 @@ namespace CMS.API.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public async Task<IActionResult> GetContractById([FromRoute]int id)
+        public async Task<IActionResult> GetContractById([FromRoute]string id)
         {
+            bool isId = int.TryParse(id,out int actualId);
             _logger.LogInformation("GetContractById method initiated");
-            var foundContract = await _mediator.Send(new GetContractByIdQuery(id));
-            _logger.LogInformation("GetContractById method performed");
+            GetContractByIdDto foundContract = null;
+            if (isId)
+            {
+                foundContract = await _mediator.Send(new GetContractByIdQuery(actualId));
+            }
+            else
+            {
+                foundContract = await _mediator.Send(new GetContractByContractNameQuery(id));
+            }
+                _logger.LogInformation("GetContractById method performed");
             return Ok(foundContract);
         }
         [HttpPost]

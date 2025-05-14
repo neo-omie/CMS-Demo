@@ -7,6 +7,7 @@ namespace CMS.Application.Features.AddendumContract.AddendumContractDto
     {
         //Contracts Details 
         public int ContractId { get; set; }
+        public string ContractName { get; set; }
         public int DepartmentId { get; set; }
         public int ContractWithCompanyId { get; set; }
         public int ContractTypeId { get; set; }

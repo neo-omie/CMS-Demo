@@ -98,7 +98,7 @@ namespace CMS.Persistence.Configurations
                     EmployeeMobile = 9876543210,
                     EmployeeExtension = 1234,
                     DepartmentId = 2,
-                    Password = hasher.HashPassword(null, "omie@12"),
+                    Password = hasher.HashPassword(null, "Omie@12"),
                     LastPasswordChanged = new DateTime(2025, 04, 15)
                 }
             );
