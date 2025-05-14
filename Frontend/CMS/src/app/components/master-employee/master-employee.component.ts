@@ -77,7 +77,7 @@ addEmployeeForm: FormGroup= new FormGroup({
   unit:new FormControl("",Validators.required),
   departmentId: new FormControl("", Validators.required),
   departmentName: new FormControl(""),
-  employeeMobile:new FormControl("", Validators.required),
+  employeeMobile:new FormControl("", [Validators.required, Validators.pattern('^[0-9]{10}$')]),
   email: new FormControl("", [Validators.required, Validators.email]),
   employeeExtension: new FormControl("", Validators.required)
 })
@@ -241,7 +241,7 @@ onSubmit(){
         }, 
         error:(error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
           Alert.toast(TYPE.ERROR,true,this.errorMsg);
         }
       });

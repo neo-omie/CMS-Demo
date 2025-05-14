@@ -13,7 +13,6 @@ import { MasterDepartmentComponent } from './components/master-department/master
 import { authGuard } from './auth.guard';
 import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
-//import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 import { AllContractsComponent } from './components/contracts/all-contracts/all-contracts.component';
