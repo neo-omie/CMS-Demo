@@ -19,7 +19,7 @@ namespace CMS.Persistence.Migrations
                 {
                     ValueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotficationSubject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotficationMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotificationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -673,7 +673,10 @@ namespace CMS.Persistence.Migrations
                     Approver1Status = table.Column<int>(type: "int", nullable: false),
                     Approver2Status = table.Column<int>(type: "int", nullable: false),
                     Approver3Status = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    SkipApproval = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -687,7 +690,7 @@ namespace CMS.Persistence.Migrations
                         name: "FK_ClassifiedContracts_MasterApprovalMatrixContracts_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "MasterApprovalMatrixContracts",
-                        principalColumn: "MasterApprovalMatrixContractId");
+                        principalColumn: "DepartmentId");
                     table.ForeignKey(
                         name: "FK_ClassifiedContracts_MasterCompanies_ContractWithCompanyId",
                         column: x => x.ContractWithCompanyId,
@@ -785,6 +788,15 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "CountryId", "Countries" },
+                values: new object[,]
+                {
+                    { 1, "India" },
+                    { 2, "USA" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "DepartmentName" },
                 values: new object[,]
@@ -797,12 +809,57 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "MasterApostilles",
+                columns: new[] { "ValueId", "ApostilleName", "IsDeleted", "Status" },
+                values: new object[,]
+                {
+                    { 1, "Stamp Paper", false, false },
+                    { 2, "Frankin", false, false },
+                    { 3, "Notary", false, true },
+                    { 4, "Affidavit", false, false }
+                });
+
+            migrationBuilder.InsertData(
                 table: "MasterEmployees",
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@cms.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELb6hlaHPFANfUqeZra6xcTB3xeLepe9Kcb7FSxgaD2cjv+/5S/bIrapRDPBm6g4og==", "Admin", "Thane" },
-                    { 2, 2, "sarthak@neosoft.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAENnwLVeOl7bbhBVoIWuJ2qvd4379Iv/ZOvocCe9+BU1/UbrLqF01OoUKcJrbq5Ckww==", "MOU_Approver", "Thane" }
+                    { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEDRambTatKA2kEWEXpE9D26CzvjryeFwCfg5xaPJiOzkQIr66+H7RnXhfQMPdm9PzQ==", "Admin", "Thane" },
+                    { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEMctb2+8kY8m1taeFHOI6lOjVRZa1qMfA5ugKJgPXSdBTN+9h05Q+1CvdjoMg6S/cA==", "Contract_Approver", "Thane" },
+                    { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEApd7kPDe6iWMGd6+GqVxM4036USpq3/PHkRo0U8aMd9j9pSJwuighQu5dje02Uwug==", "Contract_Approver", "Pune" },
+                    { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEMZNBbV77eO7U0//RG7NE/0SirJV15MKMLwsG7t0oxVOlHQcy+GzwP8oKo0NqDWKKQ==", "Contract_Approver", "Pune" },
+                    { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEB6TjmvJCdphHBOD7iuAmet3M8GWoMFnPuwBn2Ws25gZI5YUrm8CaYg3aBxVSi9+dg==", "Contract_Approver", "Indore" },
+                    { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEH0Cj0mBoXSIvzrYC84sLkKZ4c5d/9eUfm3fFEOakkbsiOETE7J0R/L1gCzCzRTZGw==", "Contract_Approver", "Indore" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "contracts",
+                columns: new[] { "ValueId", "ContractTypeName", "IsDeleted", "Status" },
+                values: new object[,]
+                {
+                    { 1, "Service", false, true },
+                    { 2, "AMC", false, true },
+                    { 3, "NDA", false, false },
+                    { 4, "CSR", false, false },
+                    { 5, "HR", true, true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "States",
+                columns: new[] { "StateId", "CountryId", "State" },
+                values: new object[,]
+                {
+                    { 1, 1, "Maharashtra" },
+                    { 2, 2, "California" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Cities",
+                columns: new[] { "CityId", "City", "StateId" },
+                values: new object[,]
+                {
+                    { 1, "Mumbai", 1 },
+                    { 2, "Los Angeles", 2 }
                 });
 
             migrationBuilder.CreateIndex(

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities.CompanyMaster;
+using Microsoft.VisualBasic;
 
 namespace CMS.Domain.Entities
 {
@@ -26,6 +28,8 @@ namespace CMS.Domain.Entities
         public RetainerType RetainerContract { get; set; }
         public string TermsAndConditions { get; set; }
         public DateTime ValidFrom { get; set; }
+        //public DateTime ValidTill { get; set; }
+        [DataType(DataType.Date)]
         public DateTime ValidTill { get; set; }
         public DateTime? RenewalFrom { get; set; }
         public DateTime? RenewalTill { get; set; }
@@ -40,11 +44,11 @@ namespace CMS.Domain.Entities
 
         public bool IsDeleted { get; set; }
 
-        //public bool SkipApproval { get; set; }
-        //public DateTime CreatedAt { get; set; }=DateTime.UtcNow;
-        //public DateTime? UpdatedAt { get; set; } 
-        //public string  CreatedBy { get; set; }
-        //public string?  UpdatedBy { get; set; }
+        public bool SkipApproval { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        //public DateTime? UpdatedAt { get; set; }
+        //public string? UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
     }
 }

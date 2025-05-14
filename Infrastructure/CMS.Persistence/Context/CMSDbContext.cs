@@ -133,10 +133,22 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<Contract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
             modelBuilder.Entity<Contract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
 
+            modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.Department).WithMany().HasForeignKey(c => c.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
+            modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.ContractWithCompany).WithMany().HasForeignKey(c => c.ContractWithCompanyId).HasPrincipalKey(cc => cc.ValueId);
+            modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.ContractType).WithMany().HasForeignKey(c => c.ContractTypeId).HasPrincipalKey(ct => ct.ValueId);
+            modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
+            modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
+
+            //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
             modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
 
-            modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new ApostilleConfiguration());
+            modelBuilder.ApplyConfiguration<ListOfCountries>(new CompanyCascadeConfiguration());
+            modelBuilder.ApplyConfiguration<ListOfStates>(new CompanyCascadeConfiguration());
+            modelBuilder.ApplyConfiguration<ListofCity>(new CompanyCascadeConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
 
         }
     }

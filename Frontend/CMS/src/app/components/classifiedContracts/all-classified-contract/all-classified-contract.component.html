@@ -1,6 +1,6 @@
 <app-loader *ngIf="loading"></app-loader>
-<h2 class="mt-3">All Classified Contracts</h2>
-<div class="table-responsive p-md-5 p-3">
+<h2 class="mt-3 fs-1">All Classified Contracts<img class="classifiedImg" src="ClassifiedContract.png" alt="CMS-logo" ></h2>
+<div *ngIf="!loading" class="table-responsive p-md-5 p-3">
   <button class="add-btn btn btn-outline-primary mb-2">
     <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New Contract</a>
   </button>
@@ -24,19 +24,19 @@
     </ng-container>
     <ng-container matColumnDef="effectiveDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="expiryDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate.toString().split('T')[0] }}</td>
     </ng-container>
     <ng-container matColumnDef="toBeRenewedOn">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>To Be Renewed On</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn != null ? cont.toBeRenewedOn.toString().split('T')[0] : '-' }}</td>
     </ng-container>
     <ng-container matColumnDef="addendumDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Addendum Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate != null ? cont.addendumDate.toString().split('T')[0] : '-' }}</td>
     </ng-container>
     <ng-container matColumnDef="status">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
@@ -50,15 +50,15 @@
     </ng-container>
     <ng-container matColumnDef="approvalPendingFrom">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Approval Pending From</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.approvalPendingFrom }}</td>
+      <td mat-cell *matCellDef="let cont">{{cont.status==1 ? cont.approvalPendingFrom : "-"}}</td>
     </ng-container>
     <ng-container matColumnDef="renewalContractPerson">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Renewal Contract Person</th>
       <td mat-cell *matCellDef="let cont">{{ cont.renewalContractPerson }}</td>
     </ng-container>
     <ng-container matColumnDef="renewalDueIn">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Renewal Due In</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.renewalDueIn }}</td>
+       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Renewal Due In</th>
+      <td mat-cell *matCellDef="let cont">{{ cont.renewalDueIn > 0 ? cont.renewalDueIn : '-' }}</td>
     </ng-container>
     <ng-container matColumnDef="location">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
@@ -66,13 +66,14 @@
     </ng-container>
     <ng-container matColumnDef="action">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
-      <td mat-cell *matCellDef="let cont">
-        <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit"
-          (click)="fetchContractData(cont.classifiedContractID)"></i>
+      <td mat-cell *matCellDef="let contr">
+        <!-- <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit"
+          (click)="fetchContractData(contr.classifiedContractID)"></i> -->
         <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
-          (click)="GetContract(cont.classifiedContractID)"></i>
-        <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
-          (click)="DeleteContract(cont.classifiedContractID)"></i>
+          (click)="GetContract(contr.classifiedContractID)"></i>
+        <i class="fa-solid fa-trash icon" data-bs-toggle="modal" *ngIf="contr.status == 1" data-bs-target="#contract-delete"
+         (click)="DeleteContract(contr.classifiedContractID)"></i>
+         
       </td>
     </ng-container>
 
@@ -169,35 +170,36 @@
           <div class="mb-3">
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                <input type="datetime-local" name="validFrom" class="form-control" id="validFrom" [value]="contractDetails?.validFrom" disabled>
+                <input type="date" name="validFrom" class="form-control" id="validFrom" [value]="contractDetails?.validFrom" disabled>
+
             </div>
           </div>
           <div class="mb-3">
            <p class="m-1">Valid Till</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
-                <input type="datetime-local" name="validTill" class="form-control" id="validTill" [value]="contractDetails?.validTill" disabled>
+                <input type="date" name="validTill" class="form-control" id="validTill" [value]="contractDetails?.validTill" disabled>
             </div>
           </div>
           <div class="mb-3">
            <p class="m-1">Renewal From</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                <input type="datetime-local" name="renewalFrom" class="form-control" id="renewalFrom" [value]="contractDetails?.renewalFrom" disabled>
+                <input type="date" name="renewalFrom" class="form-control" id="renewalFrom" [value]="contractDetails?.renewalFrom" disabled>
             </div>
           </div>
           <div class="mb-3">
            <p class="m-1">Renewal Till</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
-                <input type="datetime-local" name="renewalTill" class="form-control" id="renewalTill" [value]="contractDetails?.renewalTill" disabled>
+                <input type="date" name="renewalTill" class="form-control" id="renewalTill" [value]="contractDetails?.renewalTill" disabled>
             </div>
           </div>
           <div class="mb-3">
            <p class="m-1">Addendum Date</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-calendar-plus"></i></span>
-                <input type="datetime-local" name="addendumDate" class="form-control" id="addendumDate" [value]="contractDetails?.addendumDate" disabled>
+                <input type="date" name="addendumDate" class="form-control" id="addendumDate" [value]="contractDetails?.addendumDate" disabled>
             </div>
           </div>
           <div class="mb-3">
@@ -247,13 +249,13 @@
                 <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status" class="form-control" id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
             </div>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
            <p class="m-1">Does exists or deleted?</p>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-toggle-on"></i></span>
                 <input type="text" name="isDeleted" class="form-control" id="isDeleted" [value]="contractDetails?.isDeleted" disabled>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -406,35 +408,12 @@
                           <input #editEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId" formControlName="empCustodianId">
                     </div>
                     <div class="m-3">
-                      <label for="termsAndConditions">Location</label>
+                      <label for="Location">Location</label>
                       <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
                         style="color: red;">Required</span>
                       <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
                     </div>
-                    <!-- <div class="m-3">
-                      <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
-                        style="color: red;">Required</span>
-                      <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
-                        style="color: red;">Invalid number</span>
-                      <input class="form-control" type="text" id="approver1Status" placeholder="Enter Approver 1 Status"
-                        formControlName="approver1Status">
-                    </div>
-                    <div class="m-3">
-                      <span *ngIf="approver2Status?.hasError('required') && (approver2Status?.dirty || approver2Status?.touched)"
-                        style="color: red;">Required</span>
-                      <span *ngIf="approver2Status?.hasError('pattern') && (approver2Status?.dirty || approver2Status?.touched)"
-                        style="color: red;">Invalid number</span>
-                      <input class="form-control" type="text" id="approver2Status" placeholder="Enter Approver 2 Status"
-                        formControlName="approver2Status">
-                    </div>
-                    <div class="m-3">
-                      <span *ngIf="approver3Status?.hasError('required') && (approver3Status?.dirty || approver3Status?.touched)"
-                        style="color: red;">Required</span>
-                      <span *ngIf="approver3Status?.hasError('pattern') && (approver3Status?.dirty || approver3Status?.touched)"
-                        style="color: red;">Invalid number</span>
-                      <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
-                        formControlName="approver3Status">
-                    </div> -->
+
                   </div>
                 
               
@@ -564,21 +543,21 @@
                     <input class="form-control" type="date" id="validTill" formControlName="validTill">
                   </div>
                   <div class="m-3">
-                    <label for="renewalFrom">Renewal from<span style="color: red;">*</span></label>
-                    <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
-                      style="color: red;">Required</span>
+                    <label for="renewalFrom">Renewal from</label>
+                    <!-- <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
+                      style="color: red;">Required</span> -->
                     <input class="form-control" type="date" id="renewalFrom" formControlName="renewalFrom">
                   </div>
                   <div class="m-3">
-                    <label for="renewalTill">Renewal till<span style="color: red;">*</span></label>
-                    <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
-                      style="color: red;">Required</span>
+                    <label for="renewalTill">Renewal till</label>
+                    <!-- <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
+                      style="color: red;">Required</span> -->
                     <input class="form-control" type="date" id="renewalTill" formControlName="renewalTill">
                   </div>
                   <div class="m-3">
-                    <label for="addendumDate">Addendum Date<span style="color: red;">*</span></label>
-                    <span *ngIf="addendumDate?.hasError('required') && (addendumDate?.dirty || addendumDate?.touched)"
-                      style="color: red;">Required</span>
+                    <label for="addendumDate">Addendum Date</label>
+                    <!-- <span *ngIf="addendumDate?.hasError('required') && (addendumDate?.dirty || addendumDate?.touched)"
+                      style="color: red;">Required</span> -->
                     <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
                   </div>
                   <div class="m-3">
@@ -607,40 +586,20 @@
                       style="color: red;">Required</span>
                     <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
                   </div>
-                  <!-- <div class="m-3">
-                    <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver1Status" placeholder="Enter Approver 1 Status"
-                      formControlName="approver1Status">
-                  </div>
-                  <div class="m-3">
-                    <span *ngIf="approver2Status?.hasError('required') && (approver2Status?.dirty || approver2Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver2Status?.hasError('pattern') && (approver2Status?.dirty || approver2Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver2Status" placeholder="Enter Approver 2 Status"
-                      formControlName="approver2Status">
-                  </div>
-                  <div class="m-3">
-                    <span *ngIf="approver3Status?.hasError('required') && (approver3Status?.dirty || approver3Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver3Status?.hasError('pattern') && (approver3Status?.dirty || approver3Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
-                      formControlName="approver3Status">
-                  </div> -->
+                  <!-- <span>Default Approver will be Admin</span>   -->
+                  <div class="mb-3 form-check">
+                    <!-- <span> Default Approver will be Admin</span><br> -->
+                    <label for="skipApproval">Skip Approval</label>&nbsp;
+                    <input type="checkbox" formControlName="skipApproval" id="skipApproval"><br>
+                    <span *ngIf="(skipApproval?.value)" style="color: gray;">Default Approver will be based on Department</span>
+                </div>
                 </div>
             </div>
           </div>
       <div class="modal-footer">
         <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
         <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;" (click)="onClick()">Cancel</button>
-        <!-- <button type="button" class="btn add-btn add-modal-btn" data-bs-dismiss="modal"
-          (click)="editApproverMatrixMOUSubmit(approvalMatrixMou != undefined ? approvalMatrixMou.masterApprovalMatrixMOUId : 0)">Save</button>
-        <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal"
-          (click)="closeEditApproverCollapses()">Cancel</button> -->
+        
       </div>
     </form>
       </div>

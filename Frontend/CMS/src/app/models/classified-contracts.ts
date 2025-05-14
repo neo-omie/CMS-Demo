@@ -1,3 +1,4 @@
+
 export class ClassifiedContracts {
    
         classifiedContractID: number;
@@ -5,7 +6,7 @@ export class ClassifiedContracts {
         contractType: string;
         departmentName: string;
         effectiveDate: Date;
-        expiryDate: Date;
+        expiryDate: string;
         toBeRenewedOn: Date;
         addendumDate: Date;
         status: number;
@@ -20,7 +21,7 @@ export class ClassifiedContracts {
             contractType: string,
             departmentName: string,
             effectiveDate: Date,
-            expiryDate: Date,
+            expiryDate: string,
             toBeRenewedOn: Date,
             addendumDate: Date,
             status: number,
@@ -45,8 +46,9 @@ export class ClassifiedContracts {
             this.location = location;
             this.totalRecords = totalRecords;
         }
+        
     }
-    export class GetClassifiedContractByIdDto {
+export class GetClassifiedContractByIdDto {
         classifiedContractID?: number;
         classifiedContractName?: string;
         departmentId?: number;
@@ -60,11 +62,11 @@ export class ClassifiedContracts {
         actualDocRefNo?: number;
         retainerContract?: number;
         termsAndConditions?: string;
-        validFrom?: Date;
-        validTill?: Date;
-        renewalFrom?: Date;
-        renewalTill?: Date;
-        addendumDate?: Date;
+        validFrom?: string;
+        validTill?: string;  
+        renewalFrom?: string;
+        renewalTill?: string;
+        addendumDate?: string;
         empCustodianId?: number;
         empCustodianName?: string;
         location?: string;
@@ -73,7 +75,7 @@ export class ClassifiedContracts {
         approver3Status?: number;
         isDeleted?: boolean;
     }
-    export class AddClassifiedContractDto {
+export class AddClassifiedContractDto {
         classifiedContractName?: string | null;
       departmentId?: number | null;
       contractWithCompanyId?: number | null;
@@ -92,6 +94,7 @@ export class ClassifiedContracts {
       approver1Status?: number | null;
       approver2Status?: number | null;
       approver3Status?: number | null;
+      skipApproval?: boolean | null;
       isDeleted: boolean = false;
     }
 

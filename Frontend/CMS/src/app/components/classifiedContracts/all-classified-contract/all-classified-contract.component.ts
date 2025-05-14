@@ -5,8 +5,8 @@ import { AddClassifiedContractDto, ClassifiedContracts, GetClassifiedContractByI
 import { Pagination } from '../../../utils/pagination';
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
-import { LoaderComponent } from '../../loader/loader.component';
-import { CommonModule } from '@angular/common';
+import { LoaderComponent } from "../../loader/loader.component";
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -138,7 +138,7 @@ export class AllClassifiedContractComponent implements OnInit{
           this.masterApostilleService.getApostilles(1,100).subscribe({
             next: (response:MasterApostilleDto) => {
               this.apostilleTypes = response.data;
-              console.log(this.apostilleTypes)
+              // console.log(this.apostilleTypes)
             }, error: (error) => {
               console.error('Error :(', error);
               this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
@@ -162,6 +162,11 @@ export class AllClassifiedContractComponent implements OnInit{
       this.contractsService.getContractByID(contractID).subscribe({
         next: (response: GetClassifiedContractByIdDto) => {
           this.contractDetails = response;
+          this.contractDetails.validFrom = response.validFrom?.toString().split('T')[0]
+          this.contractDetails.validTill = response.validTill?.toString().split('T')[0]
+          this.contractDetails.renewalFrom = response.renewalFrom != null ? response.renewalFrom?.toString().split('T')[0] : ""
+          this.contractDetails.renewalTill = response.renewalTill != null ? response.renewalTill?.toString().split('T')[0] : ""
+          this.contractDetails.addendumDate = response.addendumDate != null ? response.addendumDate?.toString().split('T')[0] : ""
           console.log(response);
         },
         error: (error: { message: undefined; error: { message: any; }; }) => {
@@ -216,20 +221,22 @@ export class AllClassifiedContractComponent implements OnInit{
             termsAndConditions : new FormControl('',[Validators.required]),
             validFrom : new FormControl('',[Validators.required]),
             validTill : new FormControl('',[Validators.required]),
-            renewalFrom : new FormControl('',[Validators.required]),
-            renewalTill : new FormControl('',[Validators.required]),
-            addendumDate : new FormControl('',[Validators.required]),
+            renewalFrom : new FormControl(''),
+            renewalTill : new FormControl(''),
+            addendumDate : new FormControl(''),
             empCustodianId : new FormControl('',[Validators.required]),
             location : new FormControl('',[Validators.required]),
             approver1Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
             approver2Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
-            approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')])
+            approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
+            skipApproval : new FormControl(true,[Validators.required])
           })
           onAddFormSubmit(){
             
             this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
             if(this.masterContractAddForm.invalid){
               this.masterContractAddForm.markAllAsTouched();
+              console.log("bla bla bla",this.masterContractAddForm.value)
               // Alert.toast(TYPE.WARNING, true, 'There is still few fields to fill out. Please fill all the required fields.');
               return;
             }
@@ -255,6 +262,8 @@ export class AllClassifiedContractComponent implements OnInit{
               approver2Status && Number(approver2Status) &&
               approver3Status && Number(approver3Status) 
               ){
+                // console.log(this.masterContractAddForm.value.addendumDate);
+                
                 const addFormValues:AddClassifiedContractDto = new AddClassifiedContractDto();
                 addFormValues.classifiedContractName = this.masterContractAddForm.value.classifiedContractName;
                 addFormValues.departmentId = Number(departmentId);
@@ -266,35 +275,66 @@ export class AllClassifiedContractComponent implements OnInit{
                 addFormValues.termsAndConditions = this.masterContractAddForm.value.termsAndConditions;
                 addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
                 addFormValues.validTill = this.masterContractAddForm.value.validTill;
-                addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom;
-                addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill;
-                addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
+                addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom != "" ? String(this.masterContractAddForm.value.renewalFrom) : null;
+                addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill != "" ? String(this.masterContractAddForm.value.renewalTill) : null;
+                addFormValues.addendumDate = this.masterContractAddForm.value.addendumDate != "" ? String(this.masterContractAddForm.value.addendumDate) : null;
+                addFormValues.skipApproval =this.masterContractAddForm.value.skipApproval;
                 addFormValues.empCustodianId = Number(empCustodianId);
                 addFormValues.location = this.masterContractAddForm.value.location;
                 addFormValues.approver1Status = Number(approver1Status);
                 addFormValues.approver2Status = Number(approver2Status);
                 addFormValues.approver3Status = Number(approver3Status);
-                console.log(addFormValues);
+                //console.log("bula bula bule",addFormValues);                 
                 this.contractsService.addContract(addFormValues).subscribe({
                   next:(response:boolean) => {
                     if( response !== false){
+                      // console.log(this.skipApproval);
                       Alert.toast(TYPE.SUCCESS,true,'Added successfully');
+                      this.masterContractAddForm.reset({
+                      skipApproval : true,
+                      approver1Status : "1",
+                      approver2Status : "1",
+                      approver3Status : "1",
+                      renewalFrom : "",
+                      renewalTill : "",
+                      addendumDate : ""
+                    });
+                    console.log("After rest : ",this.masterContractAddForm.value);
                       this.GetAllContracts(1, 10);
                       //this.renderer.removeClass(this.addContractModal.nativeElement, 'show');
-                      this.masterContractAddForm.reset();
                     }
                   }, 
                   error:(error) => {
                     console.error('Error :(', error);
                     this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+                    console.log(this.skipApproval);
                     Alert.toast(TYPE.ERROR,true,this.errorMsg);
+                    this.masterContractAddForm.reset();
+                    this.masterContractAddForm.patchValue({
+                      skipApproval : true,
+                      approver1Status : "1",
+                      approver2Status : "1",
+                      approver3Status : "1",
+                      renewalFrom : "",
+                      renewalTill : "",
+                      addendumDate : ""
+                    })
                   }
                 });
               }
               else{
-                console.log("should not come here ", this.masterContractAddForm.value)
+                console.log("should not come here 1", this.masterContractAddForm.value)
               }
             }
+            // console.log("should not come here 2 ", this.masterContractAddForm.value)
+            // console.log(this.skipApproval);
+            // this.masterContractAddForm.reset();
+            // this.masterContractAddForm.patchValue({
+            //           skipApproval : true,
+            //           approver1Status : "1",
+            //           approver2Status : "1",
+            //           approver3Status : "1",
+            //         })
           }
           textChangeEmployeeCustodian(departmentId:number, event:Event, approverNumber:number){
             let input = event.target as HTMLInputElement;
@@ -317,7 +357,7 @@ export class AllClassifiedContractComponent implements OnInit{
             if(inputNumber == 1){
               const input = this.editEmpCustodianCollapse.nativeElement.querySelector('input');
               input.value = "";
-              console.log(input.value);
+              // console.log(input.value);
               this.employeeCustodians.length = 0;
               this.renderer.removeClass(this.editEmpCustodianCollapse.nativeElement,'show');
               this.renderer.removeClass(this.addEmpCustodianCollapse.nativeElement,'show');
@@ -382,6 +422,9 @@ export class AllClassifiedContractComponent implements OnInit{
           get approver3Status(){
             return this.masterContractAddForm.get('approver3Status');
           }
+          get skipApproval(){
+            return this.masterContractAddForm.get('skipApproval');
+          }
         
           onClick(){
             this.router.navigate(['classifiedContracts/allContracts']);
@@ -391,7 +434,11 @@ export class AllClassifiedContractComponent implements OnInit{
           fetchContractData(classifiedContractID:number) {
             this.contID = classifiedContractID;
             this.contractsService.fetchContractData(classifiedContractID).subscribe({
-              next: (response) => {
+              next: (response) => {     
+                
+                // response.validTill = this.formatDate(response.validTill);
+
+                
                 this.masterContractAddForm.patchValue({
                   classifiedContractName: response.classifiedContractName,
                   departmentId: String(response.departmentId),
@@ -401,8 +448,9 @@ export class AllClassifiedContractComponent implements OnInit{
                   actualDocRefNo: String(response.actualDocRefNo),
                   retainerContract: String(response.retainerContract),
                   termsAndConditions: response.termsAndConditions,
-                  validFrom: this.formatDate(String(response.validFrom)),
-                  validTill: this.formatDate(String(response.validTill)),
+                  validFrom: this.formatDate(String(response.validFrom)),  
+                  // validTill: this.formatDate(response.validTill),                    
+                  validTill: this.formatDate(String(response.validTill)),                    
                   renewalFrom: this.formatDate(String(response.renewalFrom)),
                   renewalTill: this.formatDate(String(response.renewalTill)),
                   addendumDate: this.formatDate(String(response.addendumDate)),
@@ -424,7 +472,7 @@ export class AllClassifiedContractComponent implements OnInit{
             const year = d.getFullYear();
             if (month.length < 2) month = '0' + month;
             if (day.length < 2) day = '0' + day;
-            return [year, month, day].join('-');
+             return [year, month, day].join('-');
             }
           onUpdateFormSubmit(contractID:number) {
             this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)

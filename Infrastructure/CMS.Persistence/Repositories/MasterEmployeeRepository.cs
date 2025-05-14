@@ -92,7 +92,9 @@ namespace CMS.Persistence.Repositories
             //{
             //    throw new Exception("Employee not added. Failed :(");
             //}
-
+            var checkEmployee = await _context.MasterEmployees.FirstOrDefaultAsync(e => (e.Email == employee.Email) || (e.EmployeeCode == employee.EmployeeCode) || (e.EmployeeMobile == employee.EmployeeMobile));
+            if (checkEmployee != null)
+                throw new Exception($"User credentials entered already exists. Please enter different email/employee code/mobile number.");
             var hasher = new PasswordHasher<MasterEmployee>();
             var hashedPswd = hasher.HashPassword(null, employee.Password);
             employee.Password = hashedPswd;

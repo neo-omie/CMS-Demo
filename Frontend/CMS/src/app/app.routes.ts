@@ -13,13 +13,10 @@ import { MasterDepartmentComponent } from './components/master-department/master
 import { authGuard } from './auth.guard';
 import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
-//import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 import { AllContractsComponent } from './components/contracts/all-contracts/all-contracts.component';
-import { ClassifiedContractsScreenComponent } from './components/classifiedContracts/classified-contracts-screen/classified-contracts-screen.component';
 import { AllClassifiedContractComponent } from './components/classifiedContracts/all-classified-contract/all-classified-contract.component';
-import { CreateClassifiedContractComponent } from './components/classifiedContracts/create-classified-contract/create-classified-contract.component';
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
 
 import { ActiveContractsComponent } from './components/contracts/active-contracts/active-contracts.component';
@@ -57,10 +54,8 @@ export const routes: Routes = [
     {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
-    {path: 'classifiedContracts', component: ClassifiedContractsScreenComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate:[authGuard]},
     
-    {path: 'classifiedContract/createNewClassifiedContract', component: CreateClassifiedContractComponent, canActivate:[authGuard]},
 
     {path: 'notifications', component: NotificationsComponent, canActivate:[authGuard]},
     {path: '**', component: NotFoundComponent}

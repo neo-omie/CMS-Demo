@@ -290,7 +290,8 @@
                     <div class="m-3">
                       <label for="employeeMobile" class="form-label">Employee Mobile<span style="color: red;">*</span></label>
                       <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">Required</span>
-                      <input class="form-control" type="tel" id="employeeMobile" placeholder="Enter employee mobile" formControlName="employeeMobile">
+                      <span *ngIf="employeeMobile?.hasError('pattern') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">Invalid mobile number</span>
+                      <input class="form-control" type="number" id="employeeMobile" placeholder="Enter employee mobile" formControlName="employeeMobile">
                     </div>
       
                     <div class="m-3">

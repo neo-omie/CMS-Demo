@@ -50,6 +50,7 @@
         @if(cont.status == 3){ <button class="btn btn-danger" disabled><b>Rejected</b></button> }
         @if(cont.status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
         @if(cont.status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }
+        @if(cont.status == 6){ <button class="btn btn-warning" disabled><b>Pending Termination</b></button> }
       </td>
     </ng-container>
     <ng-container matColumnDef="approvalPendingFrom">
@@ -264,6 +265,8 @@
                 class="form-control" id="approver1Status" value="Terminated" disabled>
               <input *ngIf="contractDetails?.approver1Status == 5" type="text" name="approver1Status"
                 class="form-control" id="approver1Status" value="Expired" style="background-color: darkgray;" disabled>
+              <input *ngIf="contractDetails?.approver1Status == 6" type="text" name="approver1Status"
+                class="form-control" id="approver1Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
             </div>
           </div>
           <div class="mb-3">
@@ -283,6 +286,8 @@
                 class="form-control" id="approver2Status" value="Terminated" disabled>
               <input *ngIf="contractDetails?.approver2Status == 5" type="text" name="approver2Status"
                 class="form-control" id="approver2Status" value="Expired" style="background-color: darkgray;" disabled>
+                <input *ngIf="contractDetails?.approver2Status == 6" type="text" name="approver2Status"
+                class="form-control" id="approver2Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
             </div>
           </div>
           <div class="mb-3">
@@ -302,6 +307,8 @@
                 class="form-control" id="approver3Status" value="Terminated" disabled>
               <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status"
                 class="form-control" id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
+                <input *ngIf="contractDetails?.approver3Status == 6" type="text" name="approver3Status"
+                class="form-control" id="approver3Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
             </div>
           </div>
           <p class="m-1">Does exists or deleted?</p>
