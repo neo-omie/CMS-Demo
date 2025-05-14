@@ -9,16 +9,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace CMS.Persistence.Repositories
 {
     public class ContractTypeMasterRepository : IContractTypeMasterRepository
     {
         private readonly CMSDbContext _context;
+        private readonly ICacheService _cacheService;
+        private readonly string cacheKey = $"{typeof(ContractTypeMasters)}";
 
-        public ContractTypeMasterRepository(CMSDbContext context)
+        public ContractTypeMasterRepository(CMSDbContext context, ICacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
         }
         //adding contract
         public async Task<ContractTypeMasters> AddContractAsync(ContractTypeMasters ctp)
@@ -82,14 +86,30 @@ namespace CMS.Persistence.Repositories
             .FromSqlRaw(sql, pageNumber, pageSize)
             .AsNoTracking()
             .ToListAsync();
-            var res=rawData.Select(c => new GetAllContractTypesDTO
+            //var res=rawData.Select(c => new GetAllContractTypesDTO
+            //{
+            //    ValueId = c.ValueId,
+            //    ContractTypeName = c.ContractTypeName,
+            //    Status = c.Status,
+            //    IsDeleted = c.IsDeleted,
+            //    TotalRecords = totalRecords
+            //});
+            IEnumerable<GetAllContractTypesDTO> res = null;
+            if (!_cacheService.TryGet(cacheKey, out IReadOnlyList<ContractTypeMasters> cachedList))
             {
-                ValueId = c.ValueId,
-                ContractTypeName = c.ContractTypeName,
-                Status = c.Status,
-                IsDeleted = c.IsDeleted,
-                TotalRecords = totalRecords
-            });
+                cachedList = await _context.Set<ContractTypeMasters>().ToListAsync();
+                res = cachedList.Select(c => new GetAllContractTypesDTO
+                {
+                    ValueId = c.ValueId,
+                    ContractTypeName = c.ContractTypeName,
+                    Status = c.Status,
+                    IsDeleted = c.IsDeleted,
+                    TotalRecords = totalRecords
+                });
+                _cacheService.Set(cacheKey, res);
+                _cacheService.Set(cacheKey, cachedList);
+            }
+
             return res;
         }
         public async Task<ContractTypeMasters> GetContractById(int id)

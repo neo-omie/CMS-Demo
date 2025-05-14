@@ -1,6 +1,7 @@
 using CMS.API.Middlewares;
 using CMS.Application;
 using CMS.Persistence;
+using CMS.Infrastructure;
 using Serilog;
 
 
@@ -15,6 +16,7 @@ namespace CMS.API
             // Add services to the container.
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
+            builder.Services.AddInfrastructureServices(builder.Configuration);
 
             //using serilog for loggin 
             IConfiguration configurationBuilder = new ConfigurationBuilder()

@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CMS.Infrastructure\CMS.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Core\CMS.Application\CMS.Application.csproj" />
     <ProjectReference Include="..\..\Core\CMS.Domain\CMS.Domain.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CMS.Persistence\CMS.Persistence.csproj" />
