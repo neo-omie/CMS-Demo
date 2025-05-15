@@ -24,6 +24,7 @@ import { LoaderComponent } from '../../loader/loader.component';
 import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { AddAddendumContract } from '../../../models/add-addendum-contract';
 import { firstValueFrom } from 'rxjs';
+import { PDFExport } from '../../../utils/pdfExport';
 
 @Component({
   selector: 'app-all-contracts',
@@ -50,9 +51,9 @@ export class AllContractsComponent implements OnInit {
   allContracts: ContractsEntity[] = [];
   contractDetails?: GetContractByIdDto;
   approverCheck: boolean = true;
-  terminationCheck:boolean=true;
-  mode:any;
-  deptID?:number;
+  terminationCheck: boolean = true;
+  mode: any;
+  deptID?: number;
   // Dropdowns
   employeeCustodians: MasterEmployee[] = [];
   departments: GetAllDepartmentsDto[] = [];
@@ -141,65 +142,65 @@ export class AllContractsComponent implements OnInit {
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 1)
-          ) {
-            this.approverCheck = true;
-          } else {
-            this.approverCheck = false;
-          }
-          if((this.contractDetails.approver1Email == localStorage.getItem('email') && 
-            this.contractDetails.approver1Status == 6) || 
-            (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+        ) {
+          this.approverCheck = true;
+        } else {
+          this.approverCheck = false;
+        }
+        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+          this.contractDetails.approver1Status == 6) ||
+          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
             this.contractDetails.approver1Status == 4 &&
             this.contractDetails.approver2Status == 6) ||
-            (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
             this.contractDetails.approver1Status == 4 &&
             this.contractDetails.approver2Status == 4 &&
             this.contractDetails.approver3Status == 6)
-          ) {
-            this.terminationCheck = true;
-          } else {
-            this.terminationCheck = false;
-          }
-        },
-        error: (error) => {
-          console.error('Error :(', error);
-          if (error.message !== undefined) {
-            this.errorMsg = JSON.stringify(error.error.message);
-            console.log(this.errorMsg);
-          }
-          else {
-            this.errorMsg = JSON.stringify(error.message);
-            console.log(this.errorMsg);
-          }
+        ) {
+          this.terminationCheck = true;
+        } else {
+          this.terminationCheck = false;
         }
-      });
-    }
-    DeleteContract(id?: number) {
-      Alert.confirmToast(
-        'Are you sure you want to delete this contract?',
-        "You won't be able to revert this!!",
-        TYPE.WARNING,
-        'Yes ,Delete it',
-        'Deleted Successfully',
-        'Contract has been Deleted',
-        TYPE.SUCCESS,
-        () => {
-          if (id !== undefined) {
-            this.contractsService.deleteContract(id).subscribe({
-              next: () => {
-                // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
-                this.GetAllContracts(1, 10);
-              },
-              error: (error) => {
-                console.error('Deletion Failed', error);
-                this.errorMsg = JSON.stringify(error.error.message);
-                Alert.toast(TYPE.ERROR, true, this.errorMsg);
-              },
-            });
-          }
+      },
+      error: (error) => {
+        console.error('Error :(', error);
+        if (error.message !== undefined) {
+          this.errorMsg = JSON.stringify(error.error.message);
+          console.log(this.errorMsg);
         }
-      );
-    }
+        else {
+          this.errorMsg = JSON.stringify(error.message);
+          console.log(this.errorMsg);
+        }
+      }
+    });
+  }
+  DeleteContract(id?: number) {
+    Alert.confirmToast(
+      'Are you sure you want to delete this contract?',
+      "You won't be able to revert this!!",
+      TYPE.WARNING,
+      'Yes ,Delete it',
+      'Deleted Successfully',
+      'Contract has been Deleted',
+      TYPE.SUCCESS,
+      () => {
+        if (id !== undefined) {
+          this.contractsService.deleteContract(id).subscribe({
+            next: () => {
+              // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
+              this.GetAllContracts(1, 10);
+            },
+            error: (error) => {
+              console.error('Deletion Failed', error);
+              this.errorMsg = JSON.stringify(error.error.message);
+              Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            },
+          });
+        }
+      }
+    );
+  }
 
   editContract(contract: ContractsEntity) {
     console.log('Navigating to editContract with valueId:', contract.contractID);
@@ -332,11 +333,11 @@ export class AllContractsComponent implements OnInit {
             this.GetAllContracts(1, 10);
             this.masterContractAddForm.reset();
           }
-          } catch (error) {
+        } catch (error) {
           console.error('Error :(', error);
           this.errorMsg = JSON.stringify(error);//?.error?.title ?? error.message
           Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          } finally {
+        } finally {
           this.loading = false;
         }
         // this.contractsService.addContract(addFormValues).subscribe({
@@ -463,88 +464,88 @@ export class AllContractsComponent implements OnInit {
     this.masterContractAddForm.reset();
   }
 
-      addaddendumForm=new FormGroup({
-        addendumContractId: new FormControl('',[Validators.required]),
-        contractId:new FormControl('', [Validators.required]),
-        contractName:new FormControl('', [Validators.required]),
-        departmentId : new FormControl('',[Validators.required]),
-        contractWithCompanyId : new FormControl('',[Validators.required]),
-        contractTypeId : new FormControl('',[Validators.required]),
-        apostilleTypeId : new FormControl('',[Validators.required]),
-        actualDocRefNo : new FormControl('',[Validators.required]),
-        retainerContract : new FormControl('',[Validators.required]),
-        termsAndConditions : new FormControl('',[Validators.required]),
-        validFrom : new FormControl('',[Validators.required]),
-        validTill : new FormControl('',[Validators.required]),
-        empCustodianId: new FormControl('',[Validators.required])
-      });
+  addaddendumForm = new FormGroup({
+    addendumContractId: new FormControl('', [Validators.required]),
+    contractId: new FormControl('', [Validators.required]),
+    contractName: new FormControl('', [Validators.required]),
+    departmentId: new FormControl('', [Validators.required]),
+    contractWithCompanyId: new FormControl('', [Validators.required]),
+    contractTypeId: new FormControl('', [Validators.required]),
+    apostilleTypeId: new FormControl('', [Validators.required]),
+    actualDocRefNo: new FormControl('', [Validators.required]),
+    retainerContract: new FormControl('', [Validators.required]),
+    termsAndConditions: new FormControl('', [Validators.required]),
+    validFrom: new FormControl('', [Validators.required]),
+    validTill: new FormControl('', [Validators.required]),
+    empCustodianId: new FormControl('', [Validators.required])
+  });
 
   contID: number = 0;
 
-      fetchContractData(contractID?:string) {
-        if(contractID != null) {
-        this.addAddendumContractsService.fetchContractData(contractID).subscribe({
-          next: (response) => {
-            this.addaddendumForm.patchValue({
-              contractId: String(response.contractId),
-              contractName: String(response.contractName),
-              departmentId: String(response.departmentId),
-              contractWithCompanyId: String(response.contractWithCompanyId),
-              contractTypeId: String(response.contractTypeId),
-              apostilleTypeId: String(response.apostilleTypeId),
-              actualDocRefNo: String(response.actualDocRefNo),
-              retainerContract: String(response.retainerContract),
-              termsAndConditions: response.termsAndConditions,
-              validFrom: this.formatDate(String(response.validFrom)),
-              validTill: this.formatDate(String(response.validTill)),
-              empCustodianId: String(response.empCustodianId)
-            });
-            this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
-            this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
-            // console.log(response);
-            return true;
-          },
-          error:(err)=>{
-            console.error('No Contract with this id exist', err);
-            this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-            return false;
-          }
-        })
+  fetchContractData(contractID?: string) {
+    if (contractID != null) {
+      this.addAddendumContractsService.fetchContractData(contractID).subscribe({
+        next: (response) => {
+          this.addaddendumForm.patchValue({
+            contractId: String(response.contractId),
+            contractName: String(response.contractName),
+            departmentId: String(response.departmentId),
+            contractWithCompanyId: String(response.contractWithCompanyId),
+            contractTypeId: String(response.contractTypeId),
+            apostilleTypeId: String(response.apostilleTypeId),
+            actualDocRefNo: String(response.actualDocRefNo),
+            retainerContract: String(response.retainerContract),
+            termsAndConditions: response.termsAndConditions,
+            validFrom: this.formatDate(String(response.validFrom)),
+            validTill: this.formatDate(String(response.validTill)),
+            empCustodianId: String(response.empCustodianId)
+          });
+          this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
+          this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
+          // console.log(response);
+          return true;
+        },
+        error: (err) => {
+          console.error('No Contract with this id exist', err);
+          this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
           return false;
-        } else { return false; }
-      }
+        }
+      })
+      return false;
+    } else { return false; }
+  }
 
-      fetchContractdata(contractID:any) {
-        this.addAddendumContractsService.fetchContractData(contractID).subscribe({
-          next: (response) => {
-            this.addaddendumForm.patchValue({
-              contractId: String(response.contractId),
-              contractName: String(response.contractName),
-              departmentId: String(response.departmentId),
-              contractWithCompanyId: String(response.contractWithCompanyId),
-              contractTypeId: String(response.contractTypeId),
-              apostilleTypeId: String(response.apostilleTypeId),
-              actualDocRefNo: String(response.actualDocRefNo),
-              retainerContract: String(response.retainerContract),
-              termsAndConditions: response.termsAndConditions,
-              validFrom: this.formatDate(String(response.validFrom)),
-              validTill: this.formatDate(String(response.validTill)),
-              empCustodianId: String(response.empCustodianId)
-            });
-            this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
-            this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
-            return true;
-          },
-          error:(err)=>{
-            console.error('No Contract with this id exist', err);
-            this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-            return false;
-          }
-        })
+  fetchContractdata(contractID: any) {
+    this.addAddendumContractsService.fetchContractData(contractID).subscribe({
+      next: (response) => {
+        this.addaddendumForm.patchValue({
+          contractId: String(response.contractId),
+          contractName: String(response.contractName),
+          departmentId: String(response.departmentId),
+          contractWithCompanyId: String(response.contractWithCompanyId),
+          contractTypeId: String(response.contractTypeId),
+          apostilleTypeId: String(response.apostilleTypeId),
+          actualDocRefNo: String(response.actualDocRefNo),
+          retainerContract: String(response.retainerContract),
+          termsAndConditions: response.termsAndConditions,
+          validFrom: this.formatDate(String(response.validFrom)),
+          validTill: this.formatDate(String(response.validTill)),
+          empCustodianId: String(response.empCustodianId)
+        });
+        this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
+        this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
+        return true;
+      },
+      error: (err) => {
+        console.error('No Contract with this id exist', err);
+        this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
         return false;
       }
+    })
+    return false;
+  }
 
   private formatDate(date: string) {
     const d = new Date(date);
@@ -660,76 +661,76 @@ export class AllContractsComponent implements OnInit {
     contractId: new FormControl('', [Validators.required])
   });
 
-      onSubmitCheck(){
-        const enteredValue= this.checkContractId.value.contractId;
-        this.contractsService.getContracts(1,100).subscribe({
-        next: (res: ContractsEntity[]) => {
-          this.dataSource.data = res;
-          console.log(this.dataSource.data);
-          this.allContracts = res;
-          console.log(this.allContracts);
-          if(this.checkContractId.valid){
-            const foundContract= this.allContracts.find((contract)=>contract.contractID.toString()===enteredValue
-            || contract.contractName===enteredValue);
+  onSubmitCheck() {
+    const enteredValue = this.checkContractId.value.contractId;
+    this.contractsService.getContracts(1, 100).subscribe({
+      next: (res: ContractsEntity[]) => {
+        this.dataSource.data = res;
+        console.log(this.dataSource.data);
+        this.allContracts = res;
+        console.log(this.allContracts);
+        if (this.checkContractId.valid) {
+          const foundContract = this.allContracts.find((contract) => contract.contractID.toString() === enteredValue
+            || contract.contractName === enteredValue);
 
-            if(foundContract){
-              console.log('Contract Found: ',foundContract);
-            }else{
-              console.error("Contract not found");
-            }
-            }
-          else{
-              console.error('Form is invalid');
+          if (foundContract) {
+            console.log('Contract Found: ', foundContract);
+          } else {
+            console.error("Contract not found");
           }
         }
-      });
+        else {
+          console.error('Form is invalid');
+        }
+      }
+    });
+  }
+  uploadFile(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      // TODO check file size and type
+      this.file = input.files[0];
     }
-      uploadFile(event: Event) {
-          const input = event.target as HTMLInputElement;
-          if (input.files?.length) {
-            // TODO check file size and type
-            this.file = input.files[0];
-          }
-          
-          if (!this.file) {
-            Alert.toast(TYPE.WARNING, true, "Please select a file and fill the form correctly.");
-            return;
-          }
-          
-          const allowedExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
-          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
-        
-          if (!allowedExtensions.includes(fileExtension)) {
-            Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg, .jpeg and .png.");
-            return;
-          }
-          
-          if (this.file.size > 25 * 1048576) {
-            Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
-            return;
-          }
-        }
-        
+
+    if (!this.file) {
+      Alert.toast(TYPE.WARNING, true, "Please select a file and fill the form correctly.");
+      return;
+    }
+
+    const allowedExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+    const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg, .jpeg and .png.");
+      return;
+    }
+
+    if (this.file.size > 25 * 1048576) {
+      Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+      return;
+    }
+  }
+
   getContractIdforPostTerm(contractId?: string) {
     this.contIdForPostTerm = Number(contractId);
     console.log(this.contIdForPostTerm, contractId);
   }
-      //uploading the Post Termination Notice 
-      OnSavePostTermination(documentForm:NgForm){
-        console.log(documentForm.value);
-        console.log(this.file);
-        
-          if (!this.file || !documentForm.valid) {
-            this.addFile.nativeElement.value="";
-            this.postTerm.file=null
-            this.postTerm.notice_Duration=1;
-            this.postTerm.end_Date=new Date();
-            this.postTerm.Remark="";
-            Alert.toast(TYPE.WARNING,true,"Please select a file and fill the Form Correctly");
-            return;
-          }
-          const allowedExtensions=['.pdf', '.doc', '.docx'];
-          const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+  //uploading the Post Termination Notice 
+  OnSavePostTermination(documentForm: NgForm) {
+    console.log(documentForm.value);
+    console.log(this.file);
+
+    if (!this.file || !documentForm.valid) {
+      this.addFile.nativeElement.value = "";
+      this.postTerm.file = null
+      this.postTerm.notice_Duration = 1;
+      this.postTerm.end_Date = new Date();
+      this.postTerm.Remark = "";
+      Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
+      return;
+    }
+    const allowedExtensions = ['.pdf', '.doc', '.docx'];
+    const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
 
     if (!allowedExtensions.includes(fileExtension)) {
       this.addFile.nativeElement.value = "";
@@ -795,23 +796,27 @@ export class AllContractsComponent implements OnInit {
     console.log('came here')
     let email = localStorage.getItem('email');
     if (email) {
-      try{
+      try {
         const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
-        if(response !== false){
+        if (response !== false) {
           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
         }
       }
-      catch(error){
+      catch (error) {
         this.errorMsg = JSON.stringify(error);
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
       }
-      finally{
-        this.loading =  false
+      finally {
+        this.loading = false
       }
     }
     else {
       this.router.navigate(['/']);
     }
     this.loading = false;
+  }
+
+  printToPDF(tableID: string, fileName: string) {
+    PDFExport.printToPDF(tableID, fileName);
   }
 }
