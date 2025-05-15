@@ -35,3 +35,15 @@ width: 100%;
     color: whitesmoke;
     background-color: rgba(95, 95, 238, 1);
 }
+.n-btn{
+    position: relative;
+}
+.n-num{
+    position:absolute;
+    top: 2px;
+    right: 8px;
+    background-color: red;
+    border-radius: 50%;
+    width: 9px;
+    aspect-ratio: 1/1;
+}
