@@ -158,13 +158,7 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.Approver2EmployeeCode,
                                           notificationSubject,
                                           $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
-                string emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.Approver2EmployeeCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                string emailBody = GenerateEmailBody(foundContract.Approver2EmployeeCode, foundContract.ContractName,id,approveOrReject, foundContract.Approver1EmployeeCode,1);
                 await SendMail(
                     foundContract.Approver2Email, foundContract.Approver2EmployeeCode, id, foundContract.ContractName,subject,emailBody
                 );
@@ -172,13 +166,7 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.EmpCustodianCode,
                                           notificationSubject.Split('.')[0]+".",
                                           $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
-                emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                emailBody = GenerateEmailBody(foundContract.EmpCustodianCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver1EmployeeCode, 1);
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName,subject,emailBody
                 );
@@ -200,13 +188,7 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.Approver3EmployeeCode,
                                           notificationSubject,
                                           $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
-                string emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.Approver3EmployeeCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                string emailBody = GenerateEmailBody(foundContract.Approver3EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver2EmployeeCode, 2);
                 await SendMail(
                     foundContract.Approver3Email, foundContract.Approver3EmployeeCode, id, foundContract.ContractName, subject, emailBody
                 );
@@ -214,13 +196,7 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.Approver1EmployeeCode,
                                           notificationSubject.Split('.')[0]+" by approver 2.",
                                           $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
-                emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}),  {approveOrReject}  by '{foundContract.Approver2EmployeeCode}'(Approver 2)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                emailBody = GenerateEmailBody(foundContract.Approver1EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver2EmployeeCode, 2);
                 await SendMail(
                     foundContract.Approver1Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
                 );
@@ -228,13 +204,7 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.EmpCustodianCode,
                                           notificationSubject.Split('.')[0]+".",
                                             $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
-                emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), Approved by '{foundContract.Approver2EmployeeCode}'(Approver 2)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                emailBody = GenerateEmailBody(foundContract.EmpCustodianCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver2EmployeeCode, 2);
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
                 );
@@ -255,13 +225,7 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.Approver1EmployeeCode,
                                           notificationSubject.Split('.')[0]+" by approver 3.",
                                           $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
-                string emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                string emailBody = GenerateEmailBody(foundContract.Approver1EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver3EmployeeCode, 3);
                 await SendMail(
                     foundContract.Approver1Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
                 );
@@ -269,27 +233,15 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.Approver2EmployeeCode,
                                           notificationSubject.Split('.')[0] + " by approver 3.",
                                           $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
-                emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                emailBody = GenerateEmailBody(foundContract.Approver2EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver3EmployeeCode, 3);
                 await SendMail(
                     foundContract.Approver2Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
                 );
 
                 await AddNewNotifications(foundContract.EmpCustodianCode,
                                           notificationSubject.Split('.')[0] + ".",
-                                            $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 3)!");
-                emailBody = string.Empty;
-                emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-                emailBody += $"<h1>Hello {foundContract.EmpCustodianCode},</h1>";
-                emailBody += $"<h2>Contract called '{foundContract.ContractName}'({id}), {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!.</h2>";
-                emailBody += "<h3>Please check your CMS portal.</h3>";
-                emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
-                emailBody += "</div>";
+                                            $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
+                emailBody = GenerateEmailBody(foundContract.EmpCustodianCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver3EmployeeCode, 3);
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
                 );
@@ -300,8 +252,6 @@ namespace CMS.Persistence.Repositories
             }
                 return contract;
         }
-
-        
 
         private async Task AddNewNotifications(string name, string subject, string message)
         {
@@ -320,12 +270,12 @@ namespace CMS.Persistence.Repositories
             }
 
         }
-        private string GenerateEmailBody(string name, int contractID, string contractName)
+        private string GenerateEmailBody(string empCode, string contractName , int contractID, string approveOrReject, string approverCode, int approverLevel)
         {
             string emailBody = string.Empty;
             emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
-            emailBody += $"<h1>Hello {name}, new contract has been started under your department.</h1>";
-            emailBody += $"<h2>Contract ID: {contractID}<br>Contract Name: {contractName}</h2>";
+            emailBody += $"<h1>Hello {empCode},</h1>";
+            emailBody += $"<h2>Contract called '{contractName}'({contractID}), {approveOrReject} by '{approverCode}'(Approver {approverLevel})!.</h2>";
             emailBody += "<h3>Please check your CMS portal.</h3>";
             emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
             emailBody += "</div>";

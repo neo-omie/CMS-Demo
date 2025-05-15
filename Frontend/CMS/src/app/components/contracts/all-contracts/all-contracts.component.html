@@ -9,8 +9,11 @@
     <a data-bs-toggle="modal" data-bs-target="#contract-add-addendum"><i class="fa-solid fa-file-circle-plus"></i> Add
       Addendum</a>
   </button>
+  <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
+    <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
   <table mat-table [dataSource]="dataSource" matSort
-    class="table table-striped table-bordered align-middle mat-elevation-z8">
+    class="table table-striped table-bordered align-middle mat-elevation-z8" id="contracts-table">
     <ng-container matColumnDef="contractID">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract ID</th>
       <td mat-cell *matCellDef="let cont">{{ cont.contractID }}</td>
@@ -1082,44 +1085,3 @@
       </div>
     </div>
   </div>
-
-
-  <!-- contract-mail body  -->
-
-  <div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header d-flex justify-content-between">
-          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
-          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-              class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="modal-body">
-          <form #documentForm="ngForm">
-            <div class="mb-3">
-              <p class="m-1">Add Subject<span style="color: red;">*</span></p>
-              <div class="input-group">
-                <input #addSubject class="form-control" id="Subject" placeholder="Enter The Subject For Mail ">
-              </div>
-            </div>
-            <div class="mb-3">
-              <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
-              <div class="input-group">
-                <textarea #addMail class="form-control" id="MailBody" placeholder="Compose Mail"></textarea>
-              </div>
-            </div>
-
-
-          </form>
-
-          <div class="modal-footer">
-            <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
-              style="max-width: 300px;">Send</button>
-            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
-              style="max-width: 300px;" (click)="onClick()">Close</button>
-          </div>
-
-
-        </div>
-      </div>

@@ -81,3 +81,14 @@ h2 {
     color: whitesmoke;
     font-weight: 600;
 }
+sup {
+    cursor: default;
+    font-size: 10px;
+    border-radius: 16px;
+    background-color: #5f5fee;
+    /* color: whitesmoke; */
+    border: none;
+}
+sup:hover {
+    background-color: #5f5fee;
+}

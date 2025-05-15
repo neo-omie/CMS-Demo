@@ -30,6 +30,7 @@ export class NotificationsComponent implements OnInit {
   notifications: Notification[] = [];
   notification?: Notification;
   errorMsg?: string;
+  totalNotifications: number = 0;
   ngOnInit() {
     this.GetAllNotifications();
   }
@@ -40,6 +41,8 @@ export class NotificationsComponent implements OnInit {
       next: (response: Notification[]) => {
         this.loading = false;
         this.notifications = response;
+        this.totalNotifications = response.length;
+        
         this.dataSource.data = response;
           if (this.sort) {
             this.dataSource.sort = this.sort;
