@@ -25,6 +25,7 @@ import { AddAddendumContractsService } from '../../../services/add-addendum-cont
 import { AddAddendumContract } from '../../../models/add-addendum-contract';
 import { firstValueFrom } from 'rxjs';
 import { PDFExport } from '../../../utils/pdfExport';
+import { PostTermination } from '../../../models/post-termination';
 
 @Component({
   selector: 'app-all-contracts',
@@ -631,6 +632,7 @@ export class AllContractsComponent implements OnInit {
   onAddAddendumFormSubmit(contractID: number) {
     const addendum = new AddAddendumContract();
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
+    addendum.contractName=String(this.addaddendumForm.value.contractName);
     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
     addendum.contractWithCompanyId = Number(this.addaddendumForm.value.contractWithCompanyId);
     addendum.contractTypeId = Number(this.addaddendumForm.value.contractTypeId);
@@ -642,7 +644,7 @@ export class AllContractsComponent implements OnInit {
     addendum.validTill = String(this.addaddendumForm.value.validTill);
     addendum.empCustodianId = Number(this.addaddendumForm.value.empCustodianId);
 
-    this.addAddendumContractsService.AddAddendum(contractID, addendum).subscribe({
+    this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum).subscribe({
       next: () => {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
         this.GetAllContracts(1, 10);
@@ -800,6 +802,7 @@ export class AllContractsComponent implements OnInit {
         const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
         if (response !== false) {
           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+          this.GetAllContracts(1, 10);
         }
       }
       catch (error) {
@@ -816,6 +819,62 @@ export class AllContractsComponent implements OnInit {
     this.loading = false;
   }
 
+  // Post Termination Notice
+  postTermination: PostTermination = new PostTermination();
+  statusTermOrReject?: number = 0;
+  termStatus(status: number) {
+    if (status == 4) {
+      this.statusTermOrReject = 4;
+    }
+    if (status == 2) {
+      this.statusTermOrReject = 2;
+    }
+  }
+  postTerminationEmailForm = new FormGroup({
+    emailSubject: new FormControl('', [Validators.required]),
+    emailBody: new FormControl('', [Validators.required])
+  })
+  async approveTerminateContract(contractId?: string) {
+    if (this.postTerminationEmailForm.invalid) {
+      this.postTerminationEmailForm.markAllAsTouched();
+      return;
+    }
+    else {
+      this.loading = true;
+      const emailSubject = this.postTerminationEmailForm.value.emailSubject;
+      const emailBody = this.postTerminationEmailForm.value.emailBody;
+      console.log('came here')
+      let email = localStorage.getItem('email');
+      if (email) {
+        try {
+          this.postTermination.contractId = Number(contractId);
+          this.postTermination.changeToStatus = this.statusTermOrReject;
+          this.postTermination.emailSubject = emailSubject;
+          this.postTermination.emailBody = emailBody;
+          this.postTermination.employeeEmail = email;
+          console.log(this.postTermination);
+
+          const response = await firstValueFrom(this.postTermService.ApproveTerminationContract(this.postTermination))
+          if (response !== false) {
+            Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+            this.GetAllContracts(1, 10);
+          }
+        }
+        catch (error) {
+          this.errorMsg = JSON.stringify(error);
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          console.error(error)
+        }
+        finally {
+          this.loading = false
+        }
+      }
+      else {
+        this.router.navigate(['/']);
+      }
+    }
+    this.loading = false;
+  }
   printToPDF(tableID: string, fileName: string) {
     PDFExport.printToPDF(tableID, fileName);
   }

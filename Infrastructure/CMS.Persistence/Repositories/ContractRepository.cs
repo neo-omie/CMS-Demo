@@ -140,6 +140,7 @@ namespace CMS.Persistence.Repositories
             }
             string approveOrReject = (status == ContractStatus.Active) ? "Approved" : "Rejected";
             string notificationSubject = (status == ContractStatus.Active) ? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been rejected under your department.";
+
             if (foundContract.Approver1Email == empCode)
             {
 
@@ -250,7 +251,17 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Unauthorized Action");
             }
-                return contract;
+            if (status == ContractStatus.Rejected)
+            {
+                contract.Approver1Status = status;
+                contract.Approver2Status = status;
+                contract.Approver3Status = status;
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception($"For some reaons , contract status has not been changed to {status}");
+                }
+            }
+            return contract;
         }
 
         private async Task AddNewNotifications(string name, string subject, string message)
@@ -281,7 +292,7 @@ namespace CMS.Persistence.Repositories
             emailBody += "</div>";
             return emailBody;
         }
-        public async Task SendMail(string email, string name, int contractID, string contractName, string subject, string emailBody)
+        public async Task   SendMail(string email, string name, int contractID, string contractName, string subject, string emailBody)
         {
             var mailRequest = new MailRequest
             {

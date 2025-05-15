@@ -329,8 +329,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="terminationCheck">Approve Termination</button>
-          <button class="btn btn-danger" *ngIf="terminationCheck">Reject Termination</button>
+          <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+            data-bs-toggle="modal" (click)="termStatus(4)">Approve Termination</button>
+          <button class="btn btn-danger" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+            data-bs-toggle="modal" (click)="termStatus(2)">Reject Termination</button>
           <!-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button> -->
           <button class="btn btn-primary" data-bs-dismiss="modal" *ngIf="approverCheck"
             (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
@@ -1083,3 +1085,43 @@
       </div>
     </div>
   </div>
+
+  <!-- contract-mail body  -->
+
+  <div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="postTerminationEmailForm" (ngSubmit)="approveTerminateContract(contractDetails?.contractId)">
+            <div class="mb-3">
+              <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject" placeholder="Enter The Subject For Mail">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody" placeholder="Compose Mail"></textarea>
+              </div>
+            </div>
+
+
+            <div class="modal-footer">
+              <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+                style="max-width: 300px;">Send</button>
+              <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+                style="max-width: 300px;" (click)="onClick()">Close</button>
+            </div>
+          </form>
+
+
+
+        </div>
+      </div>
