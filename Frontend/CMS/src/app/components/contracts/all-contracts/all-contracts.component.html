@@ -329,7 +329,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="terminationCheck">Approve Termination</button>
+          <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+            data-bs-toggle="modal">Approve
+            Termination</button>
           <button class="btn btn-danger" *ngIf="terminationCheck">Reject Termination</button>
           <!-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button> -->
           <button class="btn btn-primary" data-bs-dismiss="modal" *ngIf="approverCheck"

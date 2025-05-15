@@ -35,6 +35,11 @@ namespace CMS.Persistence.Repositories
             {
                 throw new NotFoundException("Notification not found");
             }
+            if(notif.isRead == false)
+            {
+                notif.isRead = true;
+                _context.ContractNotifications.Update(notif);
+            }
             return notif;
         }
         public async Task<bool> NewNotification(Notification notification)
@@ -45,6 +50,11 @@ namespace CMS.Persistence.Repositories
                 return true;
             }
             throw new Exception("For some reasons, notification not added.");
+        }
+        public async Task<int> UnreadNotificationsCount(string employeeCode)
+        {
+            var allNotifs = await _context.ContractNotifications.Where(cn => cn.isRead == false).CountAsync();
+            return allNotifs;
         }
     }
 }

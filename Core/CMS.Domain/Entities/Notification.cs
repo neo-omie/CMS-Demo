@@ -15,5 +15,7 @@ namespace CMS.Domain.Entities
         public string NotficationSubject { get; set; }
         public string NotficationMessage { get; set; }
         public DateTime NotificationDate { get; set; } = DateTime.Now;
+        public bool isRead { get; set; } = false;
+        public bool isDeleted { get; set; } = false;
     }
 }

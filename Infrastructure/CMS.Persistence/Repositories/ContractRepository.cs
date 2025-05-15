@@ -282,7 +282,7 @@ namespace CMS.Persistence.Repositories
             emailBody += "</div>";
             return emailBody;
         }
-        public async Task SendMail(string email, string name, int contractID, string contractName, string subject, string emailBody)
+        public async Task   SendMail(string email, string name, int contractID, string contractName, string subject, string emailBody)
         {
             var mailRequest = new MailRequest
             {

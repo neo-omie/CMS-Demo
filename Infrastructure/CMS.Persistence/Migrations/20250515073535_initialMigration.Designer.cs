@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250514101248_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250515073535_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1379,7 +1379,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEAZLdCu6K2WXSzvhx3BagzvknHwfZPqCMR5i6Rs/UAVHzWFmeAyrhkCioXE49R5ejQ==",
+                            Password = "AQAAAAIAAYagAAAAEPNYMG+n1Vr8G5kO04pazuL+FZ4EfwcxR3j9Au6CMqlQUJFjbPJo+10sGubWpiGtOg==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1394,7 +1394,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEGoo9oRgAS2H54OeF/Bi0qwM+wdasjRF6EvZkCYjKH2FAGUZLowcU7glaNPmyGTexQ==",
+                            Password = "AQAAAAIAAYagAAAAEGs1SMj0iFt8DJyoo/mZcJBp92ocEbD3JQW1kcdyM1npH6Kai6x9J6VlzRzU+AqYDw==",
                             Role = "Contract_Approver",
                             Unit = "Thane"
                         },
@@ -1409,7 +1409,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sakthish Nadar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEAawGFP447lhMC3Qx8iTCmi8lOsa1wlKAh2L4ImaFRkqyMJml/2b9O3D+lN76mG+Zw==",
+                            Password = "AQAAAAIAAYagAAAAEHhPmujVgnCnVJEsfiH1Po/iaFI/wkTQRVNlR8UdMaG5Mtoakkd6usB/BRL/P9QDkA==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1424,7 +1424,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Shreekant Panigrahi",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEKZXvZX4bbS+oU5tw3lKdu2obnQjO2Pe2MXsYDy5Mf9wPFYoMYiVUSBTyn5XHnMwmQ==",
+                            Password = "AQAAAAIAAYagAAAAEB40nv8wmKFK0XTN1+DAQyVmz9lFqWfiirwptrBRYYotiaiVtPrRCOweDyrxc4/lmA==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1439,7 +1439,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Govind Lohar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEBu5OYuTNtyXJHY6d93oC2YDMaDpE5kr8Cc9jaykSKpEgBHgbkZz7UEOOE6bCJhbrg==",
+                            Password = "AQAAAAIAAYagAAAAENJKBNX+/+A8LR4c18cBmLzD+uJhmIbqV14dNApLxSi2mVSKAfj7mDlalibFXwRDxw==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         },
@@ -1454,7 +1454,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Om Auti",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIHZ/Afx5hdWb9z62doPMYFeruP/5M0Ih1EPe2aKzAy1s9B7uoxzPG3EEpreV832Yg==",
+                            Password = "AQAAAAIAAYagAAAAEO9vSL8KTUkcaZ9Lau8rSupizId07aqahdKz0KTs0k9TQS3xndzyU7eEmtZzhfj5GA==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         });
@@ -1572,6 +1572,12 @@ namespace CMS.Persistence.Migrations
 
                     b.Property<DateTime>("NotificationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isRead")
+                        .HasColumnType("bit");
 
                     b.HasKey("ValueId");
 

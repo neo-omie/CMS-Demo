@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,9 @@ namespace CMS.Persistence.Migrations
                     EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotficationSubject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotficationMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NotificationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    NotificationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isRead = table.Column<bool>(type: "bit", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -824,12 +826,12 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEAZLdCu6K2WXSzvhx3BagzvknHwfZPqCMR5i6Rs/UAVHzWFmeAyrhkCioXE49R5ejQ==", "Admin", "Thane" },
-                    { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEGoo9oRgAS2H54OeF/Bi0qwM+wdasjRF6EvZkCYjKH2FAGUZLowcU7glaNPmyGTexQ==", "Contract_Approver", "Thane" },
-                    { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEAawGFP447lhMC3Qx8iTCmi8lOsa1wlKAh2L4ImaFRkqyMJml/2b9O3D+lN76mG+Zw==", "Contract_Approver", "Pune" },
-                    { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEKZXvZX4bbS+oU5tw3lKdu2obnQjO2Pe2MXsYDy5Mf9wPFYoMYiVUSBTyn5XHnMwmQ==", "Contract_Approver", "Pune" },
-                    { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEBu5OYuTNtyXJHY6d93oC2YDMaDpE5kr8Cc9jaykSKpEgBHgbkZz7UEOOE6bCJhbrg==", "Contract_Approver", "Indore" },
-                    { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEIHZ/Afx5hdWb9z62doPMYFeruP/5M0Ih1EPe2aKzAy1s9B7uoxzPG3EEpreV832Yg==", "Contract_Approver", "Indore" }
+                    { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPNYMG+n1Vr8G5kO04pazuL+FZ4EfwcxR3j9Au6CMqlQUJFjbPJo+10sGubWpiGtOg==", "Admin", "Thane" },
+                    { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEGs1SMj0iFt8DJyoo/mZcJBp92ocEbD3JQW1kcdyM1npH6Kai6x9J6VlzRzU+AqYDw==", "Contract_Approver", "Thane" },
+                    { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEHhPmujVgnCnVJEsfiH1Po/iaFI/wkTQRVNlR8UdMaG5Mtoakkd6usB/BRL/P9QDkA==", "Contract_Approver", "Pune" },
+                    { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEB40nv8wmKFK0XTN1+DAQyVmz9lFqWfiirwptrBRYYotiaiVtPrRCOweDyrxc4/lmA==", "Contract_Approver", "Pune" },
+                    { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAENJKBNX+/+A8LR4c18cBmLzD+uJhmIbqV14dNApLxSi2mVSKAfj7mDlalibFXwRDxw==", "Contract_Approver", "Indore" },
+                    { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEO9vSL8KTUkcaZ9Lau8rSupizId07aqahdKz0KTs0k9TQS3xndzyU7eEmtZzhfj5GA==", "Contract_Approver", "Indore" }
                 });
 
             migrationBuilder.InsertData(
