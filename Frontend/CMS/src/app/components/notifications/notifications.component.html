@@ -1,5 +1,5 @@
 <app-loader *ngIf="loading"></app-loader>
-<h2 class="mt-3">All Notifications</h2>
+<h2 class="mt-3">All Notifications<sup class="btn btn-secondary">{{totalNotifications}}</sup></h2>
 
 <div class="table-responsive p-md-5 p-3">
   <table mat-table [dataSource]="dataSource" matSort
