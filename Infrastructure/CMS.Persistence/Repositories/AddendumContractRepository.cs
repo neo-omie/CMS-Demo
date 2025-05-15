@@ -42,16 +42,23 @@ namespace CMS.Persistence.Repositories
             contractIdCheck.EmpCustodianId = addendumContract.EmpCustodianId;
             contractIdCheck.IsDeleted = addendumContract.IsDeleted;
 
+
+            contractIdCheck.Approver1Status = ContractStatus.PendingApproval;
+            contractIdCheck.Approver2Status = ContractStatus.PendingApproval;
+            contractIdCheck.Approver3Status = ContractStatus.PendingApproval;
+
             _dbContext.ContractsEntity.Update(contractIdCheck);
+
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _dbContext.GetContractByIdDtos.FromSqlRaw(sql, contractIdCheck.ContractId).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
+
             if (await _dbContext.SaveChangesAsync() > 0)
             {
                 // To Approver L1
                 await AddNewNotifications(foundContract.Approver1EmployeeCode,
                                           $"New Addendum to Contract called '{foundContract.ContractName}' Added!",
-                                          $"New Addendum has been added under the Contract created by {foundContract.EmpCustodianCode}. You can access and change the approvals for this contract.");
+                                          $"New Addendum has been added under the Contract created by {foundContract.EmpCustodianCode}. You can Approve or Reject this contract by visiting to the Portal.");
                 await SendMail(
                     foundContract.Approver1Email, foundContract.Approver1EmployeeCode, contractIdCheck.ContractId, contractIdCheck.ContractName
                 );
@@ -77,8 +84,12 @@ namespace CMS.Persistence.Repositories
             };
             await _notificationRepository.NewNotification(createNewNotif);
             var existing = _dbContext.ChangeTracker.Entries<Notification>().FirstOrDefault(e => e.Entity.EmployeeCode == name);
+
             if (existing != null)
+            {
                 existing.State = EntityState.Detached;
+            }
+
         }
         private string GenerateEmailBody(string name, int contractID, string contractName)
         {
@@ -101,5 +112,28 @@ namespace CMS.Persistence.Repositories
             };
             await _emailService.SendEmail(mailRequest);
         }
+
+        //private string GenerateEmailBodyAddendum(string empCode, string contractName, int contractID, string approveOrReject, string approverCode, int approverLevel)
+        //{
+        //    string emailBody = string.Empty;
+        //    emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+        //    emailBody += $"<h1>Hello {empCode},</h1>";
+        //    emailBody += $"<h2>Contract called '{contractName}'({contractID}), {approveOrReject} by '{approverCode}'(Approver {approverLevel})!.</h2>";
+        //    emailBody += "<h3>Please check your CMS portal.</h3>";
+        //    emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+        //    emailBody += "</div>";
+        //    return emailBody;
+        //}
+        //public async Task SendMailAddendum(string email, string name, int contractID, string contractName, string subject, string emailBody)
+        //{
+        //    var mailRequest = new MailRequest
+        //    {
+        //        Email = email,
+        //        Subject = subject,
+        //        EmailBody = emailBody
+        //    };
+        //    await _emailService.SendEmail(mailRequest);
+        //}
+
     }
 }

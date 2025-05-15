@@ -140,6 +140,7 @@ namespace CMS.Persistence.Repositories
             }
             string approveOrReject = (status == ContractStatus.Active) ? "Approved" : "Rejected";
             string notificationSubject = (status == ContractStatus.Active) ? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been rejected under your department.";
+
             if (foundContract.Approver1Email == empCode)
             {
 

@@ -20,6 +20,8 @@ namespace CMS.Application.Features.AddendumContract.AddendumContractDto
         public DateTime ValidTill { get; set; }
         public int EmpCustodianId { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         //public bool IsDeleted { get; set; } = false;
 
         //MasterEmployees Details
