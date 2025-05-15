@@ -86,29 +86,29 @@ namespace CMS.Persistence.Repositories
             .FromSqlRaw(sql, pageNumber, pageSize)
             .AsNoTracking()
             .ToListAsync();
-            //var res=rawData.Select(c => new GetAllContractTypesDTO
-            //{
-            //    ValueId = c.ValueId,
-            //    ContractTypeName = c.ContractTypeName,
-            //    Status = c.Status,
-            //    IsDeleted = c.IsDeleted,
-            //    TotalRecords = totalRecords
-            //});
-            IEnumerable<GetAllContractTypesDTO> res = null;
-            if (!_cacheService.TryGet(cacheKey, out IReadOnlyList<ContractTypeMasters> cachedList))
+            var res = rawData.Select(c => new GetAllContractTypesDTO
             {
-                cachedList = await _context.Set<ContractTypeMasters>().ToListAsync();
-                res = cachedList.Select(c => new GetAllContractTypesDTO
-                {
-                    ValueId = c.ValueId,
-                    ContractTypeName = c.ContractTypeName,
-                    Status = c.Status,
-                    IsDeleted = c.IsDeleted,
-                    TotalRecords = totalRecords
-                });
-                _cacheService.Set(cacheKey, res);
-                _cacheService.Set(cacheKey, cachedList);
-            }
+                ValueId = c.ValueId,
+                ContractTypeName = c.ContractTypeName,
+                Status = c.Status,
+                IsDeleted = c.IsDeleted,
+                TotalRecords = totalRecords
+            });
+            //IEnumerable<GetAllContractTypesDTO> res = null;
+            //if (!_cacheService.TryGet(cacheKey, out IReadOnlyList<ContractTypeMasters> cachedList))
+            //{
+            //    cachedList = await _context.Set<ContractTypeMasters>().ToListAsync();
+            //    res = cachedList.Select(c => new GetAllContractTypesDTO
+            //    {
+            //        ValueId = c.ValueId,
+            //        ContractTypeName = c.ContractTypeName,
+            //        Status = c.Status,
+            //        IsDeleted = c.IsDeleted,
+            //        TotalRecords = totalRecords
+            //    });
+            //    _cacheService.Set(cacheKey, res);
+            //    _cacheService.Set(cacheKey, cachedList);
+            //}
 
             return res;
         }

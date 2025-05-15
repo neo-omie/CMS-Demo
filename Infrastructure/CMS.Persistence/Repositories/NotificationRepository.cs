@@ -20,7 +20,7 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<IEnumerable<Notification>> GetAllNotifications(string employeeCode)
         {
-            var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode).ToListAsync();
+            var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode).OrderByDescending(cn => cn.NotificationDate).ToListAsync();
             if(allNotifs == null)
             {
                 throw new NotFoundException("No Notifications found currently");
