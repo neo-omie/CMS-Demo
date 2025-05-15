@@ -1,5 +1,6 @@
 ﻿using CMS.Application.Features.Notifications.Queries.GetAllNotifications;
 using CMS.Application.Features.Notifications.Queries.GetNotificationDetails;
+using CMS.Application.Features.Notifications.Queries.UnreadNotificationsCount;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,13 @@ namespace CMS.API.Controllers
         {
             var notifs = await _mediator.Send(new GetNotificationDetailsQuery(id, employeeCode));
             return Ok(notifs);
+        }
+        //[Route("{employeeCode}")]
+        [HttpGet("UnreadNotifications")]
+        public async Task<IActionResult> UnreadNotificationsCount(string employeeCode)
+        {
+            var unreadNotifsCount = await _mediator.Send(new UnreadNotificationsCountQuery(employeeCode));
+            return Ok(unreadNotifsCount);
         }
 
     }
