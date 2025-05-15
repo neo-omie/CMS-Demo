@@ -631,6 +631,7 @@ export class AllContractsComponent implements OnInit {
   onAddAddendumFormSubmit(contractID: number) {
     const addendum = new AddAddendumContract();
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
+    addendum.contractName=String(this.addaddendumForm.value.contractName);
     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
     addendum.contractWithCompanyId = Number(this.addaddendumForm.value.contractWithCompanyId);
     addendum.contractTypeId = Number(this.addaddendumForm.value.contractTypeId);
@@ -642,7 +643,7 @@ export class AllContractsComponent implements OnInit {
     addendum.validTill = String(this.addaddendumForm.value.validTill);
     addendum.empCustodianId = Number(this.addaddendumForm.value.empCustodianId);
 
-    this.addAddendumContractsService.AddAddendum(contractID, addendum).subscribe({
+    this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum).subscribe({
       next: () => {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
         this.GetAllContracts(1, 10);
