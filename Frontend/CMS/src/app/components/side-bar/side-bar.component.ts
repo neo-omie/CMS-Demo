@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { RouterService } from '../../services/router.service';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
+import { NotificationService } from '../../services/notification.service';
+import { Notification } from '../../models/notification';
 
 @Component({
   selector: 'app-side-bar',
@@ -11,12 +13,16 @@ import { TYPE } from '../auth/login/values.constants';
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.css'
 })
-export class SideBarComponent {
-  username:string | null = '';
-  constructor(private route:RouterService) {}
-  checkLogin():boolean {
-    if(localStorage.getItem('token') != null)
-    {
+export class SideBarComponent implements OnInit {
+  username: string | null = '';
+  totalNotifications: number = 0;
+  constructor(private notificationService: NotificationService, private route: RouterService) { }
+  ngOnInit(): void {
+    this.GetAllNotifications();
+  }
+
+  checkLogin(): boolean {
+    if (localStorage.getItem('token') != null) {
       this.username = localStorage.getItem('name');
       return true;
     }
@@ -24,11 +30,22 @@ export class SideBarComponent {
     // return true;
   }
   logoutUser() {
-    if(localStorage.getItem('token') != null)
-    {
+    if (localStorage.getItem('token') != null) {
       localStorage.clear();
       Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");
       this.route.goToLogin();
     }
+  }
+  GetAllNotifications() {
+    let empCode: string = String(localStorage.getItem('empCode'));
+    this.notificationService.getAllNotifications(empCode).subscribe({
+      next: (response: Notification[]) => {
+        this.totalNotifications = response.length;
+      }, error: (error) => {
+        console.error(error.error);
+        let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
+        Alert.toast(TYPE.ERROR, true, errorMsg);
+      }
+    });
   }
 }

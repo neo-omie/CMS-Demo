@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../../loader/loader.component';
 import { firstValueFrom } from 'rxjs';
+import { PDFExport } from '../../../utils/pdfExport';
 
 @Component({
   selector: 'app-pending-approval-contracts',
@@ -460,5 +461,8 @@ export class PendingApprovalContractsComponent implements OnInit {
     else {
       this.router.navigate(['/']);
     }
+  }
+  printToPDF(tableID: string, fileName: string) {
+    PDFExport.printToPDF(tableID, fileName);
   }
 }

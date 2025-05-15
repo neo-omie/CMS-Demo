@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.Domain", "Core\CMS.Doma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.Persistence", "Infrastructure\CMS.Persistence\CMS.Persistence.csproj", "{153A0395-2127-605F-7B8C-52BC825CF6C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.Infrastructure", "CMS.Infrastructure\CMS.Infrastructure.csproj", "{0A51ED59-A084-40C5-A517-F8B30FBA057D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{153A0395-2127-605F-7B8C-52BC825CF6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{153A0395-2127-605F-7B8C-52BC825CF6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{153A0395-2127-605F-7B8C-52BC825CF6C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A51ED59-A084-40C5-A517-F8B30FBA057D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A51ED59-A084-40C5-A517-F8B30FBA057D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A51ED59-A084-40C5-A517-F8B30FBA057D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A51ED59-A084-40C5-A517-F8B30FBA057D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{C391EC1D-D3F9-4E15-76F6-023FC4CF79F1} = {EE2BE98F-4AA7-4294-ACE3-7523A9A2424D}
 		{A5839571-9D2D-D26A-A1BB-39F4DA255454} = {EE2BE98F-4AA7-4294-ACE3-7523A9A2424D}
 		{153A0395-2127-605F-7B8C-52BC825CF6C2} = {E084E4D8-0E88-4671-ABB0-1D75BED8F87A}
+		{0A51ED59-A084-40C5-A517-F8B30FBA057D} = {E084E4D8-0E88-4671-ABB0-1D75BED8F87A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0640F4A3-6492-4F97-B2A2-1F6A9DAABB85}
