@@ -55,7 +55,6 @@ export const routes: Routes = [
     {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
-    {path: 'classifiedContracts', component: ClassifiedContractsScreenComponent, canActivate:[authGuard]},
     {path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate:[authGuard]},
     
 
