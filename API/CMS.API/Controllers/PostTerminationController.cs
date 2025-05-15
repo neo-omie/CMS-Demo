@@ -34,7 +34,7 @@ namespace CMS.API.Controllers
             return Ok( uploadDoc );
         }
 
-        [Route("{id}/approveRejectContract/{empCode}/{status}/{subject}/{emailBody}")]
+        [Route("approveTerminationContract/{id}/{empCode}/{status}/{subject}/{emailBody}")]
         [HttpPost]
         public async Task<IActionResult> ContractTermination([FromRoute] int id, [FromRoute] string empCode, [FromRoute] int status, [FromRoute] string subject, [FromRoute] string emailBody)
         {
@@ -44,9 +44,9 @@ namespace CMS.API.Controllers
             {
                 contract = await _mediator.Send(new ApproveTerminateContractCommand(id, empCode, ContractStatus.Terminated,subject,emailBody));
             }
-            else if ((ContractStatus)status == ContractStatus.Rejected)
+            else if ((ContractStatus)status == ContractStatus.Active)
             {
-                contract = await _mediator.Send(new ApproveTerminateContractCommand(id, empCode, ContractStatus.Rejected, subject, emailBody));
+                contract = await _mediator.Send(new ApproveTerminateContractCommand(id, empCode, ContractStatus.Active, subject, emailBody));
             }
             else
             {

@@ -250,7 +250,17 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Unauthorized Action");
             }
-                return contract;
+            if (status == ContractStatus.Rejected)
+            {
+                contract.Approver1Status = status;
+                contract.Approver2Status = status;
+                contract.Approver3Status = status;
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception($"For some reaons , contract status has not been changed to {status}");
+                }
+            }
+            return contract;
         }
 
         private async Task AddNewNotifications(string name, string subject, string message)

@@ -169,14 +169,17 @@ namespace CMS.Persistence.Repositories
             {
                 throw new NotFoundException("Contract not found");
             }
+            if(forDoc == null)
+            {
+                throw new NotFoundException($"Post Termination Notice not found for contract id {id}");
+            }
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
 
             if (foundContract==null)
             {
-                throw new NotFoundException("Cotract Not Found");
-
+                throw new NotFoundException("Contract Not Found");
             }
 
             string approveOrTerminate = (status == ContractStatus.Terminated) ? "Approved" : "Terminated";
@@ -243,7 +246,7 @@ namespace CMS.Persistence.Repositories
                     throw new Exception("Invalid approval action");
                 }
 
-                contract.Approver2Status = status;
+                contract.Approver3Status = status;
 
                 if (await _context.SaveChangesAsync()<=0)
                 {
@@ -276,7 +279,16 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Unauthorized Action");
             }
-
+            if (status == ContractStatus.Active)
+            {
+                contract.Approver1Status = status;
+                contract.Approver2Status = status;
+                contract.Approver3Status = status;
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception($"For some reaons , contract status has not been changed to {status}");
+                }
+            }
             return contract;
 
         }
