@@ -15,4 +15,7 @@ export class NotificationService {
   getNotificationDetails(id:number, employeeCode:string) : Observable<Notification> {
     return this.http.get<Notification>(`${this.apiUrl}/${id}/${employeeCode}`);
   }
+  getUnreadNotificationCount(employeeCode:string) : Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/UnreadNotifications/${employeeCode}`);
+  }
 }

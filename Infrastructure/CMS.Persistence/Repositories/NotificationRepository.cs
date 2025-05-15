@@ -20,7 +20,7 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<IEnumerable<Notification>> GetAllNotifications(string employeeCode)
         {
-            var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode).OrderByDescending(cn => cn.NotificationDate).ToListAsync();
+            var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode && cn.isDeleted == false).OrderByDescending(cn => cn.NotificationDate).ToListAsync();
             if(allNotifs == null)
             {
                 throw new NotFoundException("No Notifications found currently");
@@ -30,7 +30,7 @@ namespace CMS.Persistence.Repositories
 
         public async Task<Notification> GetNotificationDetails(int id, string employeeCode)
         {
-            var notif = await _context.ContractNotifications.FirstOrDefaultAsync(cn => (cn.EmployeeCode == employeeCode) && (cn.ValueId == id));
+            var notif = await _context.ContractNotifications.FirstOrDefaultAsync(cn => (cn.EmployeeCode == employeeCode) && (cn.ValueId == id) && (cn.isDeleted == false));
             if(notif == null)
             {
                 throw new NotFoundException("Notification not found");
@@ -39,6 +39,7 @@ namespace CMS.Persistence.Repositories
             {
                 notif.isRead = true;
                 _context.ContractNotifications.Update(notif);
+                await _context.SaveChangesAsync();
             }
             return notif;
         }
@@ -53,7 +54,7 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<int> UnreadNotificationsCount(string employeeCode)
         {
-            var allNotifs = await _context.ContractNotifications.Where(cn => cn.isRead == false).CountAsync();
+            var allNotifs = await _context.ContractNotifications.Where(cn => cn.isRead == false && cn.EmployeeCode == employeeCode && cn.isDeleted == false).CountAsync();
             return allNotifs;
         }
     }

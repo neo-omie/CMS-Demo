@@ -4,12 +4,12 @@ import { RouterService } from '../../services/router.service';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { NotificationService } from '../../services/notification.service';
-import { Notification } from '../../models/notification';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.css'
 })
@@ -38,9 +38,9 @@ export class SideBarComponent implements OnInit {
   }
   GetAllNotifications() {
     let empCode: string = String(localStorage.getItem('empCode'));
-    this.notificationService.getAllNotifications(empCode).subscribe({
-      next: (response: Notification[]) => {
-        this.totalNotifications = response.length;
+    this.notificationService.getUnreadNotificationCount(empCode).subscribe({
+      next: (response: number) => {
+        this.totalNotifications = response;
       }, error: (error) => {
         console.error(error.error);
         let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
