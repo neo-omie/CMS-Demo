@@ -26,6 +26,8 @@ import { AddAddendumContract } from '../../../models/add-addendum-contract';
 import { firstValueFrom } from 'rxjs';
 import { PDFExport } from '../../../utils/pdfExport';
 import { PostTermination } from '../../../models/post-termination';
+import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
+import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 
 @Component({
   selector: 'app-all-contracts',
@@ -53,6 +55,7 @@ export class AllContractsComponent implements OnInit {
   contractDetails?: GetContractByIdDto;
   approverCheck: boolean = true;
   terminationCheck: boolean = true;
+  withdrawCheck:boolean = true;
   mode: any;
   deptID?: number;
   // Dropdowns
@@ -62,6 +65,7 @@ export class AllContractsComponent implements OnInit {
   apostilleTypes: MasterApostille[] = [];
   companies: CompanyMasterDto[] = []
   postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
+  withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
   contIdForPostTerm?: number = 0;
   ngOnInit(): void {
     this.GetAllContracts(1, 10);
@@ -74,6 +78,7 @@ export class AllContractsComponent implements OnInit {
     private renderer: Renderer2, private title: Title,
     private masterApostilleService: MasterApostilleService,
     private postTermService: PostTerminationService,
+    private noticeWithdrawalService: NoticeWithdrawalService,
     private addAddendumContractsService: AddAddendumContractsService,
     @Inject(DOCUMENT) private document: Document) {
     this.title.setTitle("All Contracts - CMS");
@@ -161,6 +166,20 @@ export class AllContractsComponent implements OnInit {
           this.terminationCheck = true;
         } else {
           this.terminationCheck = false;
+        }
+        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+          this.contractDetails.approver1Status == 8) ||
+          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 2 &&
+            this.contractDetails.approver2Status == 8) ||
+          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+            this.contractDetails.approver1Status == 2 &&
+            this.contractDetails.approver2Status == 2 &&
+            this.contractDetails.approver3Status == 8)
+        ) {
+          this.withdrawCheck = true;
+        } else {
+          this.withdrawCheck = false;
         }
       },
       error: (error) => {
@@ -717,6 +736,31 @@ export class AllContractsComponent implements OnInit {
     this.contIdForPostTerm = Number(contractId);
     console.log(this.contIdForPostTerm, contractId);
   }
+  async approveRejectContract(id?: string, status?: number) {
+    this.loading = true;
+    console.log('came here')
+    let email = localStorage.getItem('email');
+    if (email) {
+      try {
+        const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
+        if (response !== false) {
+          Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+          this.GetAllContracts(1, 10);
+        }
+      }
+      catch (error) {
+        this.errorMsg = JSON.stringify(error);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      }
+      finally {
+        this.loading = false
+      }
+    }
+    else {
+      this.router.navigate(['/']);
+    }
+    this.loading = false;
+  }
   //uploading the Post Termination Notice 
   OnSavePostTermination(documentForm: NgForm) {
     console.log(documentForm.value);
@@ -793,32 +837,7 @@ export class AllContractsComponent implements OnInit {
     // this.document.status = 1;
 
   }
-  async approveRejectContract(id?: string, status?: number) {
-    this.loading = true;
-    console.log('came here')
-    let email = localStorage.getItem('email');
-    if (email) {
-      try {
-        const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
-        if (response !== false) {
-          Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-          this.GetAllContracts(1, 10);
-        }
-      }
-      catch (error) {
-        this.errorMsg = JSON.stringify(error);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
-      finally {
-        this.loading = false
-      }
-    }
-    else {
-      this.router.navigate(['/']);
-    }
-    this.loading = false;
-  }
-
+  
   // Post Termination Notice
   postTermination: PostTermination = new PostTermination();
   statusTermOrReject?: number = 0;
@@ -875,6 +894,127 @@ export class AllContractsComponent implements OnInit {
     }
     this.loading = false;
   }
+
+  //uploading the Withdrawal Notice 
+  OnSaveWithdrawalNotice(documentForm: NgForm) {
+    console.log(documentForm.value);
+    console.log(this.file);
+
+    if (!this.file || !documentForm.valid) {
+      this.addFile.nativeElement.value = "";
+      this.withdrawNotice.file = null
+      this.withdrawNotice.Remark = "";
+      Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
+      return;
+    }
+    const allowedExtensions = ['.pdf', '.doc', '.docx'];
+    const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      this.addFile.nativeElement.value = "";
+      this.withdrawNotice.file = null;
+      this.withdrawNotice.Remark = "";
+      Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
+      return;
+    }
+    if (this.file.size > 25 * 1048576) {
+      this.addFile.nativeElement.value = "";
+      this.withdrawNotice.file = null;
+      Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.file)
+    formData.append('contractId', String(this.contIdForPostTerm))
+    formData.append('postTermId', String(1))
+    formData.append('Remark', String(this.withdrawNotice.Remark))
+    this.noticeWithdrawalService.AddWithdrawalNotice(formData).subscribe({
+      next: (res) => {
+        this.file = null;
+        documentForm.reset();
+        // this.addFile.nativeElement.value = "";
+        //      this.postTerm.file=null;
+
+        Alert.bigToast(
+          'Success!',
+          'Withdrawal Notice Added Successfully!',
+          TYPE.SUCCESS,
+          'Ok'
+        );
+        this.GetPage(this.maxPage);
+      },
+      error: (error) => {
+        console.error('Error in adding notice withdrawal:', error);
+        Alert.bigToast(
+          'Error!',
+          'There was an error adding notice withdrawal.',
+          TYPE.ERROR,
+          'Try Again'
+        );
+        // this.file = null;
+        // documentForm.reset();
+        // this.addFile.nativeElement.value = "";
+        // this.postTerm.file = null;
+        // this.document.status = 1;
+      },
+    });
+    // this.file = null;
+    // documentForm.reset();
+    // this.addFile.nativeElement.value = "";
+    // this.document.file = null;
+    // this.document.status = 1;
+
+  }
+
+  withdrawalNoticeEmailForm = new FormGroup({
+    emailSubject: new FormControl('', [Validators.required]),
+    emailBody: new FormControl('', [Validators.required])
+  });
+
+  withdrawNoticeSend:ApproveRejectWithdrawalDTO = new ApproveRejectWithdrawalDTO();
+  async approveWithdrawalNotice(contractId?: string) {
+    if (this.withdrawalNoticeEmailForm.invalid) {
+      this.withdrawalNoticeEmailForm.markAllAsTouched();
+      return;
+    }
+    else {
+      this.loading = true;
+      const emailSubject = this.withdrawalNoticeEmailForm.value.emailSubject;
+      const emailBody = this.withdrawalNoticeEmailForm.value.emailBody;
+      console.log('came here')
+      let email = localStorage.getItem('email');
+      if (email) {
+        try {
+          this.withdrawNoticeSend.contractId = Number(contractId);
+          this.withdrawNoticeSend.changeToStatus = this.statusTermOrReject;
+          this.withdrawNoticeSend.emailSubject = emailSubject;
+          this.withdrawNoticeSend.emailBody = emailBody;
+          this.withdrawNoticeSend.employeeEmail = email;
+          console.log(this.postTermination);
+
+          const response = await firstValueFrom(this.noticeWithdrawalService.ApproveWithdrawalTermination(this.withdrawNoticeSend))
+          if (response !== false) {
+            Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+            this.GetAllContracts(1, 10);
+          }
+        }
+        catch (error) {
+          this.errorMsg = JSON.stringify(error);
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          console.error(error)
+        }
+        finally {
+          this.loading = false
+        }
+      }
+      else {
+        this.router.navigate(['/']);
+      }
+    }
+    this.loading = false;
+  }
+
   printToPDF(tableID: string, fileName: string) {
     PDFExport.printToPDF(tableID, fileName);
   }

@@ -33,7 +33,7 @@ namespace CMS.Persistence.Repositories
             var checkContract = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == contractId);
             if (checkContract == null)
                 throw new NotFoundException($"Contract with id {contractId} not found");
-            var checkNotice = await _context.PostTerminationNotices.FirstOrDefaultAsync(ptn => ptn.ContractId == contractId && ptn.ValueId == postTermId && ptn.End_Date >= DateTime.Now);
+            var checkNotice = await _context.PostTerminationNotices.FirstOrDefaultAsync(ptn => ptn.ContractId == contractId && ptn.End_Date >= DateTime.Now);
             if(checkNotice == null)
                 throw new NotFoundException($"Post Termination Notice with id {postTermId} not found");
             if (checkContract.Approver3Status != ContractStatus.ApprovedForTermination)
@@ -79,7 +79,7 @@ namespace CMS.Persistence.Repositories
             var document = new NoticeWithdrawal
             {
                 ContractId = contractId,
-                TerminationNoticeId = postTermId,
+                TerminationNoticeId = checkNotice.ValueId,
                 DocumentPath = FilePath,
                 DisplayDocumentName = originalFileName,
                 Remark = noticeWithdrawalDocumentUploadDto.Remark
@@ -185,7 +185,7 @@ namespace CMS.Persistence.Repositories
             }
 
             string activeOrTerminate = (status == ContractStatus.Active) ? "Withdrawn" : "Terminated";
-            string notificationSubject=(status==ContractStatus.Active)? $"Withdrawal notice for the contract id {id} has been approved under your department. Contract's status is back to active. You can access and approve/reject the contract termination notice." : "Contract has been Terminated under your department.";
+            string notificationSubject=(status==ContractStatus.Active)? $"Withdrawal notice for the contract id {id} has been approved under your department. Contract's status is back to active" : "Contract has been Terminated under your department.";
 
             if (foundContract.Approver1Email==empCode)
             {
