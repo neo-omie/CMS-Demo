@@ -60,6 +60,8 @@ namespace CMS.Persistence.Context
         public DbSet<Notification> ContractNotifications { get; set; }
 
         public DbSet<PostTerminationNotice> PostTerminationNotices { get; set; }
+        public DbSet<NoticeWithdrawal> NoticeWithdrawals { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -109,6 +111,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Department).WithMany().HasForeignKey(mamc => mamc.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
 
             modelBuilder.Entity<PostTerminationNotice>().HasOne(ptn => ptn.Contract).WithMany().HasForeignKey(ptn => ptn.ContractId).HasPrincipalKey(c => c.ContractId);
+            modelBuilder.Entity<NoticeWithdrawal>().HasOne(nw => nw.Contract).WithMany().HasForeignKey(nw => nw.ContractId).HasPrincipalKey(c => c.ContractId);
+            modelBuilder.Entity<NoticeWithdrawal>().HasOne(nw => nw.PostTermination).WithMany().HasForeignKey(nw => nw.TerminationNoticeId).HasPrincipalKey(c => c.ValueId);
             //mastercompany location
             modelBuilder.Entity<ListOfStates>().HasOne(st => st.listofcountries).WithMany().HasForeignKey(st => st.CountryId);
             modelBuilder.Entity<ListofCity>().HasOne(ct => ct.listofStates).WithMany().HasForeignKey(ct=> ct.StateId);
