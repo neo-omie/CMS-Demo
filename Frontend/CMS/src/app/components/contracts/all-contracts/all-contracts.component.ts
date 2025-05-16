@@ -775,7 +775,7 @@ export class AllContractsComponent implements OnInit {
         console.error('Error in creating Notice:', error);
         Alert.bigToast(
           'Error!',
-          'There was an error posting termination notice.',
+          'There was an error posting termination notice. ' + error.error.message,
           TYPE.ERROR,
           'Try Again'
         );

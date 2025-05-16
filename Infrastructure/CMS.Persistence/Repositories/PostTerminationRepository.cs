@@ -34,6 +34,10 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<bool> AddTerminationDetailsAsync(int contractId, TerminationDocumentUploadDto _terminationDocumentUploadDto)
         {
+            if (_terminationDocumentUploadDto.End_Date<DateTime.Now)
+            {
+                throw new Exception($"End date cant be smaller than current date !");
+            }
             var checkContract = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == contractId);
             if (checkContract == null)
                 throw new NotFoundException($"Contract with id {contractId} not found");
