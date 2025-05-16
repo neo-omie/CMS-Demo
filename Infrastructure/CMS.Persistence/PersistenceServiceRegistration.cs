@@ -34,6 +34,7 @@ namespace CMS.Persistence
             services.AddScoped<ICompanyCascadeRepository, CompanyCascadeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IPostTerminationRepository,PostTerminationRepository>();
+            services.AddScoped<INoticeWithdrawalRepository, NoticeWithdrawalRepository>();
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<INotificationRepository, NotificationRepository>();

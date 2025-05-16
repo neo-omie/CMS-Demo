@@ -8,6 +8,6 @@ namespace CMS.Domain.Constants
 {
     public enum ContractStatus
     {
-        PendingApproval=1, Active, Rejected, Terminated, Expired, PendingTermination
+        PendingApproval=1, Active, Rejected, Terminated, Expired, PendingTermination, ApprovedForTermination, PendingNoticeWithdrawn
     }
 }
