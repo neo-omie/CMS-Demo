@@ -182,8 +182,8 @@ namespace CMS.Persistence.Repositories
                 throw new NotFoundException("Contract Not Found");
             }
 
-            string approveOrTerminate = (status == ContractStatus.ToBeTerminated) ? "Approved" : "Terminated";
-            string notificationSubject=(status==ContractStatus.ToBeTerminated)? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been Terminated under your department.";
+            string approveOrTerminate = (status == ContractStatus.ApprovedForTermination) ? "Approved" : "Terminated";
+            string notificationSubject=(status==ContractStatus.ApprovedForTermination) ? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been Terminated under your department.";
 
             if (foundContract.Approver1Email==empCode)
             {
@@ -213,7 +213,7 @@ namespace CMS.Persistence.Repositories
             }
             else if (foundContract.Approver2Email == empCode)
             {
-                if(contract.Approver1Status!=ContractStatus.ToBeTerminated || contract.Approver2Status != ContractStatus.PendingTermination)
+                if(contract.Approver1Status!=ContractStatus.ApprovedForTermination || contract.Approver2Status != ContractStatus.PendingTermination)
                 {
                     throw new Exception("Invalid approval action");
                 }
@@ -241,7 +241,7 @@ namespace CMS.Persistence.Repositories
             }
             else if(foundContract.Approver3Email==empCode)
             {
-                if (contract.Approver2Status != ContractStatus.ToBeTerminated || contract.Approver1Status!=ContractStatus.ToBeTerminated || contract.Approver3Status != ContractStatus.PendingTermination)
+                if (contract.Approver2Status != ContractStatus.ApprovedForTermination || contract.Approver1Status!=ContractStatus.ApprovedForTermination || contract.Approver3Status != ContractStatus.PendingTermination)
                 {
                     throw new Exception("Invalid approval action");
                 }
