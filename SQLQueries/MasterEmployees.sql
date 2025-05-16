@@ -223,15 +223,15 @@ BEGIN
     SET EscalationId3 = 'NEO1'
     WHERE EscalationId3 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
 
-	UPDATE MasterEscalationMatrixContacts
+	UPDATE MasterEscalationMatrixContracts
     SET EscalationId1 = 'NEO1'
     WHERE EscalationId1 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
 
-	UPDATE MasterEscalationMatrixContacts
+	UPDATE MasterEscalationMatrixContracts
     SET EscalationId2 = 'NEO1'
     WHERE EscalationId2 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
 	
-	UPDATE MasterEscalationMatrixContacts
+	UPDATE MasterEscalationMatrixContracts
     SET EscalationId3 = 'NEO1'
     WHERE EscalationId3 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
 END
