@@ -33,7 +33,7 @@ namespace CMS.Persistence.Repositories
             var checkContract = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == contractId);
             if (checkContract == null)
                 throw new NotFoundException($"Contract with id {contractId} not found");
-            var checkNotice = await _context.PostTerminationNotices.FirstOrDefaultAsync(ptn => ptn.ContractId == contractId && ptn.ValueId == postTermId && ptn.End_Date < DateTime.Now);
+            var checkNotice = await _context.PostTerminationNotices.FirstOrDefaultAsync(ptn => ptn.ContractId == contractId && ptn.ValueId == postTermId && ptn.End_Date >= DateTime.Now);
             if(checkNotice == null)
                 throw new NotFoundException($"Post Termination Notice with id {postTermId} not found");
             if (checkContract.Approver3Status != ContractStatus.ApprovedForTermination)
@@ -189,7 +189,7 @@ namespace CMS.Persistence.Repositories
 
             if (foundContract.Approver1Email==empCode)
             {
-                if (contract.Approver1Status!=ContractStatus.ApprovedForTermination)
+                if (contract.Approver1Status!=ContractStatus.PendingNoticeWithdrawn)
                 {
                     throw new Exception("Invalid approval action");
                 }
@@ -215,7 +215,7 @@ namespace CMS.Persistence.Repositories
             }
             else if (foundContract.Approver2Email == empCode)
             {
-                if(contract.Approver1Status!=ContractStatus.Active || contract.Approver2Status != ContractStatus.ApprovedForTermination)
+                if(contract.Approver1Status!=ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingNoticeWithdrawn)
                 {
                     throw new Exception("Invalid approval action");
                 }
@@ -243,7 +243,7 @@ namespace CMS.Persistence.Repositories
             }
             else if(foundContract.Approver3Email==empCode)
             {
-                if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status!=ContractStatus.Active || contract.Approver3Status != ContractStatus.ApprovedForTermination)
+                if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status!=ContractStatus.Active || contract.Approver3Status != ContractStatus.PendingNoticeWithdrawn)
                 {
                     throw new Exception("Invalid approval action");
                 }
@@ -281,7 +281,7 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Unauthorized Action");
             }
-            if (status == ContractStatus.Terminated)
+            if (status == ContractStatus.ApprovedForTermination)
             {
                 contract.Approver1Status = status;
                 contract.Approver2Status = status;
