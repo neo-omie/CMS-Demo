@@ -151,11 +151,11 @@ export class AllContractsComponent implements OnInit {
         if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
           this.contractDetails.approver1Status == 6) ||
           (this.contractDetails.approver2Email == localStorage.getItem('email') &&
-            this.contractDetails.approver1Status == 4 &&
+            this.contractDetails.approver1Status == 7 &&
             this.contractDetails.approver2Status == 6) ||
           (this.contractDetails.approver3Email == localStorage.getItem('email') &&
-            this.contractDetails.approver1Status == 4 &&
-            this.contractDetails.approver2Status == 4 &&
+            this.contractDetails.approver1Status == 7 &&
+            this.contractDetails.approver2Status == 7 &&
             this.contractDetails.approver3Status == 6)
         ) {
           this.terminationCheck = true;
@@ -823,8 +823,8 @@ export class AllContractsComponent implements OnInit {
   postTermination: PostTermination = new PostTermination();
   statusTermOrReject?: number = 0;
   termStatus(status: number) {
-    if (status == 4) {
-      this.statusTermOrReject = 4;
+    if (status == 7) {
+      this.statusTermOrReject = 7;
     }
     if (status == 2) {
       this.statusTermOrReject = 2;

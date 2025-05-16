@@ -55,6 +55,8 @@
         @if(cont.status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
         @if(cont.status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }
         @if(cont.status == 6){ <button class="btn btn-warning" disabled><b>Pending Termination</b></button> }
+        @if(cont.status == 7){ <button class="btn btn-warning" disabled><b>Approved for Termination</b></button> }
+        @if(cont.status == 8){ <button class="btn btn-warning" disabled><b>Pending Notice Withdrawal</b></button> }
       </td>
     </ng-container>
     <ng-container matColumnDef="approvalPendingFrom">
@@ -273,6 +275,12 @@
               <input *ngIf="contractDetails?.approver1Status == 6" type="text" name="approver1Status"
                 class="form-control" id="approver1Status" value="Pending Termination" style="background-color: #FFC107;"
                 disabled>
+                <input *ngIf="contractDetails?.approver1Status == 7" type="text" name="approver1Status"
+                class="form-control" id="approver1Status" value="Approved for Termination" style="background-color: #f08205;"
+                disabled>
+                <input *ngIf="contractDetails?.approver1Status == 8" type="text" name="approver1Status"
+                class="form-control" id="approver1Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;"
+                disabled>
             </div>
           </div>
           <div class="mb-3">
@@ -294,6 +302,12 @@
                 class="form-control" id="approver2Status" value="Expired" style="background-color: darkgray;" disabled>
               <input *ngIf="contractDetails?.approver2Status == 6" type="text" name="approver2Status"
                 class="form-control" id="approver2Status" value="Pending Termination" style="background-color: #FFC107;"
+                disabled>
+                 <input *ngIf="contractDetails?.approver2Status == 7" type="text" name="approver2Status"
+                class="form-control" id="approver2Status" value="Approved for Termination" style="background-color: #f08205;"
+                disabled>
+                <input *ngIf="contractDetails?.approver2Status == 8" type="text" name="approver2Status"
+                class="form-control" id="approver2Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;"
                 disabled>
             </div>
           </div>
@@ -317,6 +331,12 @@
               <input *ngIf="contractDetails?.approver3Status == 6" type="text" name="approver3Status"
                 class="form-control" id="approver3Status" value="Pending Termination" style="background-color: #FFC107;"
                 disabled>
+                 <input *ngIf="contractDetails?.approver3Status == 7" type="text" name="approver3Status"
+                class="form-control" id="approver3Status" value="Approved for Termination" style="background-color: #f08205;"
+                disabled>
+                <input *ngIf="contractDetails?.approver3Status == 8" type="text" name="approver3Status"
+                class="form-control" id="approver3Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;"
+                disabled>
             </div>
           </div>
           <p class="m-1">Does exists or deleted?</p>
@@ -330,7 +350,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
-            data-bs-toggle="modal" (click)="termStatus(4)">Approve Termination</button>
+            data-bs-toggle="modal" (click)="termStatus(7)">Approve Termination</button>
           <button class="btn btn-danger" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
             data-bs-toggle="modal" (click)="termStatus(2)">Reject Termination</button>
           <!-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button> -->
