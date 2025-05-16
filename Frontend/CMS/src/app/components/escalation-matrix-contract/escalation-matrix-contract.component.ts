@@ -1,3 +1,4 @@
+declare var bootstrap:any
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { EscalationMatrixContract, GetMasterEscalationMatrixContractByIdDto, MasterEscalationMatrixContractDto, UpdateMatrixContractDto } from '../../models/escalation-matrix-contract';
 import { FormsModule } from '@angular/forms';
@@ -192,6 +193,12 @@ export class EscalationMatrixContractComponent implements OnInit {
               next:(response:any)=>{
                 Alert.toast(TYPE.SUCCESS,true,response.message);
                 this.getMatrixContracts(1, 10);
+                const modalElement = document.getElementById('escalation-matrix-contract-edit');
+                if (modalElement) {
+                  const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
+                this.closeEditApproverCollapses();
               },
               error:(error)=>{
                 console.error('Error :(', error);
@@ -203,6 +210,5 @@ export class EscalationMatrixContractComponent implements OnInit {
           else{
             Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
           }
-          this.closeEditApproverCollapses();
         }
 }
