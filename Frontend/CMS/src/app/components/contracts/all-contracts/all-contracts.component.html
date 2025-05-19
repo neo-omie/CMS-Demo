@@ -82,6 +82,7 @@
           ></i> -->
         <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
           (click)="GetContract(cont.contractID)"></i>
+        <i class="fa-solid fa-clock-rotate-left icon" routerLink="/contracts/addendumContract/{{cont.contractID}}"></i>
         <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
           (click)="DeleteContract(cont.contractID)"></i>
       </td>
@@ -374,7 +375,7 @@
             (click)="getContractIdforPostTerm(contractDetails?.contractId)">Withdraw Notice</button>
 
           <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
-            (click)="fetchContractData(contractDetails?.contractId)">+ Add Addendum</button>
+            *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.contractId)">+ Add Addendum</button>
 
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>
@@ -892,8 +893,8 @@
             </div>
 
             <div class="modal-footer">
-              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
               <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
             </div>
           </form>
 
@@ -933,8 +934,8 @@
             </div>
 
             <div class="modal-footer">
-              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
               <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
             </div>
           </form>
         </div>
@@ -975,12 +976,10 @@
                 style="max-width: 300px;" (click)="onClick()">Close</button>
             </div>
           </form>
-
-
-
         </div>
       </div>
-
+</div>
+</div>
 
   <div class="modal fade" id="contract-add-addendum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
