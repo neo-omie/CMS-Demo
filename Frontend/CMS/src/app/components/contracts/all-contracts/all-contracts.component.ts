@@ -353,6 +353,11 @@ export class AllContractsComponent implements OnInit {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
             this.GetAllContracts(1, 10);
             this.masterContractAddForm.reset();
+            const modalElement = document.getElementById('contract-add');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
           }
         } catch (error) {
           console.error('Error :(', error);
@@ -815,6 +820,11 @@ export class AllContractsComponent implements OnInit {
           'Ok'
         );
         this.GetPage(this.maxPage);
+        const modalElement = document.getElementById('Termination-Notice-Detail');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
+        }
       },
       error: (error) => {
         console.error('Error in creating Notice:', error);
@@ -878,6 +888,11 @@ export class AllContractsComponent implements OnInit {
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
             this.GetAllContracts(1, 10);
+            const modalElement = document.getElementById('postTerm-mail');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
           }
         }
         catch (error) {

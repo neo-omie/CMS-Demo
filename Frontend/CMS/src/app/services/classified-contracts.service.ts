@@ -6,13 +6,14 @@ import { GetAllDepartmentsDto } from '../models/master-department';
 import { ContractTypeMasterDTO } from '../models/contract-type-master';
 import { CompanyMasterDto } from '../models/master-company';
 import { MasterEmployee } from '../models/master-employee';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClassifiedContractsService {
 
-  private apiUrl = "https://localhost:7041/api/ClassifiedContract";
+  private apiUrl = `${environment.apiUrl}/ClassifiedContract`;
     constructor(private http:HttpClient) { }
   
     getContracts(pageNumber: number, pageSize: number) : Observable<ClassifiedContracts[]> {
@@ -36,15 +37,15 @@ export class ClassifiedContractsService {
       }
      // For dropdowns and inputs from other tables
       GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
-          return this.http.get<MasterEmployee[]>(`https://localhost:7041/api/Employee/search/${departmentId}/${inputText}`)
+          return this.http.get<MasterEmployee[]>(`${environment.apiUrl}/Employee/search/${departmentId}/${inputText}`)
       }
       GetDepartments():Observable<GetAllDepartmentsDto[]> {
-        return this.http.get<GetAllDepartmentsDto[]>(`https://localhost:7041/api/Department?pageNumber=1&pageSize=100`);
+        return this.http.get<GetAllDepartmentsDto[]>(`${environment.apiUrl}/Department?pageNumber=1&pageSize=100`);
       }
       GetContractTypes():Observable<ContractTypeMasterDTO[]> {
-        return this.http.get<ContractTypeMasterDTO[]>(`https://localhost:7041/api/ContractTypeMaster?pageNumber=1&pageSize=100`);
+        return this.http.get<ContractTypeMasterDTO[]>(`${environment.apiUrl}/ContractTypeMaster?pageNumber=1&pageSize=100`);
       }
       GetCompanies():Observable<CompanyMasterDto[]> {
-        return this.http.get<CompanyMasterDto[]>(`https://localhost:7041/api/MasterCompany/1/100`);
+        return this.http.get<CompanyMasterDto[]>(`${environment.apiUrl}/MasterCompany/1/100`);
       }
 }

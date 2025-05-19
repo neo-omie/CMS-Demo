@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AddContractDTO, ContractTypeMaster, ContractTypeMasterDTO } from '../models/contract-type-master';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ContractTypeMasterService {
-  private apiUrl='https://localhost:7041/api/ContractTypeMaster'
+  private apiUrl = `${environment.apiUrl}/ContractTypeMaster`;
   constructor(private http:HttpClient) { }
 
   getContract(pageNumber:number,pageSize:number):Observable<ContractTypeMasterDTO[]>{

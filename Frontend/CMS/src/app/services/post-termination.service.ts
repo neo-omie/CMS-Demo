@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PostTermination} from '../models/post-termination';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostTerminationService {
-private apiUrl='https://localhost:7041/api/PostTermination';
+private apiUrl = `${environment.apiUrl}/PostTermination`;
   constructor(private http:HttpClient) { }
 
 
