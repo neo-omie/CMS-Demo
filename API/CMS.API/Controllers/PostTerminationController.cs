@@ -40,9 +40,9 @@ namespace CMS.API.Controllers
         {
             _logger.LogInformation("ContractTermination method initiated");
             Contract contract = null;
-            if ((ContractStatus)status == ContractStatus.Terminated)
+            if ((ContractStatus)status == ContractStatus.ApprovedForTermination)
             {
-                contract = await _mediator.Send(new ApproveTerminateContractCommand(id, empCode, ContractStatus.Terminated,subject,emailBody));
+                contract = await _mediator.Send(new ApproveTerminateContractCommand(id, empCode, ContractStatus.ApprovedForTermination,subject,emailBody));
             }
             else if ((ContractStatus)status == ContractStatus.Active)
             {
