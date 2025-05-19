@@ -1,2 +1,9 @@
-<app-side-bar></app-side-bar>
-<router-outlet />
+<app-side-bar #sidebar></app-side-bar>
+<div class="mainContainer" [style.minHeight]="mainContainerMinHeight + 'px'">
+    <router-outlet />
+</div>
+@if(checkLogin()){
+    <footer #footer class="footer bg-body-tertiary">
+        <p class="fs-6">All right are reserved by <span class="team-name">TrailBlazers</span> ©</p>
+    </footer>
+}

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { RouterService } from '../../services/router.service';
 import { Alert } from '../../utils/alert';
@@ -18,6 +18,8 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   username: string | null = '';
   totalNotifications: number = 0;
+  @ViewChild('navbar', { static: false }) navbar!: ElementRef;
+  
   constructor(private notificationService: NotificationService, private route: RouterService) { }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
