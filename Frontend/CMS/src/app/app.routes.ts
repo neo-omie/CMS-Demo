@@ -29,7 +29,8 @@ import { NotificationsComponent } from './components/notifications/notifications
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
     {path: 'auth/renewPassword', component: RenewPasswordComponent},
-    {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
+    // {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
+    { path: 'dashboard', loadChildren: () => import('./dashboard.routes').then(m => m.routes), canActivate: [authGuard] },
     {path: 'masters', component: MastersScreenComponent, canActivate:[authGuard]},
     
 
