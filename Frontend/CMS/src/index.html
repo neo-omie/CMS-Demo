@@ -12,6 +12,34 @@
 </head>
 <body class="mat-typography">
   <app-root></app-root>
+  
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- <script>  
+        var googleLoaded = false;
+        var googleChartsPackagesToLoad = ['geochart'];
+    </script> -->
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Status', 'Hours per Day'],
+          ['Pending Approval',     11],
+          ['Pending Termination',      2],
+          ['Expired',  2],
+          ['Active', 2],
+          ['Terminated',    7]
+        ]);
+
+        var options = {
+          title: 'Contracts Summary',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
 </body>
 </html>
 

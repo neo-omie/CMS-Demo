@@ -1,24 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { RouterService } from '../../services/router.service';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { NotificationService } from '../../services/notification.service';
-import { Notification } from '../../models/notification';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.css'
 })
-export class SideBarComponent implements OnInit {
+export class SideBarComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   username: string | null = '';
   totalNotifications: number = 0;
   constructor(private notificationService: NotificationService, private route: RouterService) { }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
   ngOnInit(): void {
     this.GetAllNotifications();
+    this.subscription = this.notificationService.trigger$.subscribe(() => {
+      this.GetAllNotifications();
+    });
   }
 
   checkLogin(): boolean {
@@ -38,9 +46,10 @@ export class SideBarComponent implements OnInit {
   }
   GetAllNotifications() {
     let empCode: string = String(localStorage.getItem('empCode'));
-    this.notificationService.getAllNotifications(empCode).subscribe({
-      next: (response: Notification[]) => {
-        this.totalNotifications = response.length;
+    this.notificationService.getUnreadNotificationCount(empCode).subscribe({
+      next: (response: number) => {
+        this.totalNotifications = response;
+        console.log(response);
       }, error: (error) => {
         console.error(error.error);
         let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);

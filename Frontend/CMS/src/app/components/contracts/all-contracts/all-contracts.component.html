@@ -55,6 +55,8 @@
         @if(cont.status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
         @if(cont.status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }
         @if(cont.status == 6){ <button class="btn btn-warning" disabled><b>Pending Termination</b></button> }
+        @if(cont.status == 7){ <button class="btn btn-warning" disabled><b>Approved for Termination</b></button> }
+        @if(cont.status == 8){ <button class="btn btn-primary" disabled><b>Pending Notice Withdrawal</b></button> }
       </td>
     </ng-container>
     <ng-container matColumnDef="approvalPendingFrom">
@@ -80,6 +82,7 @@
           ></i> -->
         <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
           (click)="GetContract(cont.contractID)"></i>
+        <i class="fa-solid fa-clock-rotate-left icon" routerLink="/contracts/addendumContract/{{cont.contractID}}"></i>
         <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
           (click)="DeleteContract(cont.contractID)"></i>
       </td>
@@ -273,6 +276,12 @@
               <input *ngIf="contractDetails?.approver1Status == 6" type="text" name="approver1Status"
                 class="form-control" id="approver1Status" value="Pending Termination" style="background-color: #FFC107;"
                 disabled>
+                <input *ngIf="contractDetails?.approver1Status == 7" type="text" name="approver1Status"
+                class="form-control" id="approver1Status" value="Approved for Termination" style="background-color: #f08205;"
+                disabled>
+                <input *ngIf="contractDetails?.approver1Status == 8" type="text" name="approver1Status"
+                class="form-control" id="approver1Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;"
+                disabled>
             </div>
           </div>
           <div class="mb-3">
@@ -294,6 +303,12 @@
                 class="form-control" id="approver2Status" value="Expired" style="background-color: darkgray;" disabled>
               <input *ngIf="contractDetails?.approver2Status == 6" type="text" name="approver2Status"
                 class="form-control" id="approver2Status" value="Pending Termination" style="background-color: #FFC107;"
+                disabled>
+                 <input *ngIf="contractDetails?.approver2Status == 7" type="text" name="approver2Status"
+                class="form-control" id="approver2Status" value="Approved for Termination" style="background-color: #f08205;"
+                disabled>
+                <input *ngIf="contractDetails?.approver2Status == 8" type="text" name="approver2Status"
+                class="form-control" id="approver2Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;"
                 disabled>
             </div>
           </div>
@@ -317,6 +332,12 @@
               <input *ngIf="contractDetails?.approver3Status == 6" type="text" name="approver3Status"
                 class="form-control" id="approver3Status" value="Pending Termination" style="background-color: #FFC107;"
                 disabled>
+                 <input *ngIf="contractDetails?.approver3Status == 7" type="text" name="approver3Status"
+                class="form-control" id="approver3Status" value="Approved for Termination" style="background-color: #f08205;"
+                disabled>
+                <input *ngIf="contractDetails?.approver3Status == 8" type="text" name="approver3Status"
+                class="form-control" id="approver3Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;"
+                disabled>
             </div>
           </div>
           <p class="m-1">Does exists or deleted?</p>
@@ -329,21 +350,33 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="terminationCheck">Approve Termination</button>
-          <button class="btn btn-danger" *ngIf="terminationCheck">Reject Termination</button>
-          <!-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-edit">+ Add Addendum</button> -->
+          <button class="btn btn-primary" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail"
+            data-bs-toggle="modal" (click)="termStatus(2)">Approve Notice Withdrawal</button>
+          <button class="btn btn-danger" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail"
+            data-bs-toggle="modal" (click)="termStatus(7)">Reject Notice Withdrawal</button>
+
+          <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+            data-bs-toggle="modal" (click)="termStatus(7)">Approve Termination</button>
+          <button class="btn btn-danger" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+            data-bs-toggle="modal" (click)="termStatus(2)">Reject Termination</button>
+
           <button class="btn btn-primary" data-bs-dismiss="modal" *ngIf="approverCheck"
             (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
           <button class="btn btn-danger" data-bs-dismiss="modal" *ngIf="approverCheck"
             (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
-          <!-- <button class="btn btn-outline-primary">+ Add Addendum</button> -->
+            
           <button data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;"
             data-bs-target="#Termination-Notice-Detail" data-bs-toggle="modal"
             *ngIf="contractDetails?.approver3Status == 2"
             (click)="getContractIdforPostTerm(contractDetails?.contractId)">Post Termination</button>
-          <!-- <button (click)="getContractIdforPostTerm(contractDetails.contractId)">demo</button> -->
+          <button data-bs-dismiss="modal" class="btn btn-outline-success" id="btncancel" style="max-width: 300px;"
+            data-bs-target="#Notice-Withdrawal-Detail" data-bs-toggle="modal"
+            *ngIf="contractDetails?.approver3Status == 7"
+            (click)="getContractIdforPostTerm(contractDetails?.contractId)">Withdraw Notice</button>
+
           <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
-            (click)="fetchContractData(contractDetails?.contractId)">+ Add Addendum</button>
+            *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.contractId)">+ Add Addendum</button>
+
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>
       </div>
@@ -860,8 +893,8 @@
             </div>
 
             <div class="modal-footer">
-              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
               <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
             </div>
           </form>
 
@@ -869,6 +902,84 @@
       </div>
     </div>
   </div>
+
+  <!-- Post-termination-Notice-Form -->
+  <div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Withdraw Termination Notice</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form #documentForm="ngForm" (ngSubmit)="OnSaveWithdrawalNotice(documentForm)">
+            <div class="mb-3">
+              <p class="m-1">File Upload<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
+                  accept=".pdf">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">
+                Remark <span style="color: red;">*</span>
+                <span *ngIf="!withdrawNotice.Remark || withdrawNotice.Remark.length <= 0" style="color: red;">Required</span>
+              </p>
+              <div class="input-group">
+                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                  [(ngModel)]="withdrawNotice.Remark"></textarea>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Withdrawal-mail body  -->
+  <div class="modal fade" id="withdrawal-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="withdrawalNoticeEmailForm" (ngSubmit)="approveWithdrawalNotice(contractDetails?.contractId)">
+            <div class="mb-3">
+              <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject" placeholder="Enter The Subject For Mail">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody" placeholder="Compose Mail"></textarea>
+              </div>
+            </div>
+
+
+            <div class="modal-footer">
+              <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+                style="max-width: 300px;">Send</button>
+              <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+                style="max-width: 300px;" (click)="onClick()">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+</div>
+</div>
 
   <div class="modal fade" id="contract-add-addendum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -1083,3 +1194,43 @@
       </div>
     </div>
   </div>
+
+  <!-- contract-mail body  -->
+
+  <div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="postTerminationEmailForm" (ngSubmit)="approveTerminateContract(contractDetails?.contractId)">
+            <div class="mb-3">
+              <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject" placeholder="Enter The Subject For Mail">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody" placeholder="Compose Mail"></textarea>
+              </div>
+            </div>
+
+
+            <div class="modal-footer">
+              <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+                style="max-width: 300px;">Send</button>
+              <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+                style="max-width: 300px;" (click)="onClick()">Close</button>
+            </div>
+          </form>
+
+
+
+        </div>
+      </div>

@@ -35,7 +35,9 @@ namespace CMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateApprovalMatrixContract([FromRoute]int id,[FromBody]UpdateApprovalMatrixContractDto contract)
         {
-            if(contract.ApproverId1 == contract.ApproverId2 || contract.ApproverId1 == contract.ApproverId3 || contract.ApproverId2 == contract.ApproverId3)
+            if((contract.ApproverId1 == contract.ApproverId2 && contract.ApproverId1 != "NEO1") || 
+               (contract.ApproverId1 == contract.ApproverId3 && contract.ApproverId1 != "NEO1") || 
+               (contract.ApproverId2 == contract.ApproverId3 && contract.ApproverId2 != "NEO1"))
             {
                 throw new Exception("Approvers cannot be same");
             }
