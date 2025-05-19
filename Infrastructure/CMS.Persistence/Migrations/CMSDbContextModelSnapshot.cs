@@ -768,6 +768,18 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("CountryId");
 
                     b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            CountryId = 1,
+                            Countries = "India"
+                        },
+                        new
+                        {
+                            CountryId = 2,
+                            Countries = "USA"
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
@@ -790,6 +802,20 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("States");
+
+                    b.HasData(
+                        new
+                        {
+                            StateId = 1,
+                            CountryId = 1,
+                            State = "Maharashtra"
+                        },
+                        new
+                        {
+                            StateId = 2,
+                            CountryId = 2,
+                            State = "California"
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListofCity", b =>
@@ -812,6 +838,20 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("StateId");
 
                     b.ToTable("Cities");
+
+                    b.HasData(
+                        new
+                        {
+                            CityId = 1,
+                            City = "Mumbai",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            CityId = 2,
+                            City = "Los Angeles",
+                            StateId = 2
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.MasterCompany", b =>
@@ -1030,6 +1070,43 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("contracts");
+
+                    b.HasData(
+                        new
+                        {
+                            ValueId = 1,
+                            ContractTypeName = "Service",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            ValueId = 2,
+                            ContractTypeName = "AMC",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            ValueId = 3,
+                            ContractTypeName = "NDA",
+                            IsDeleted = false,
+                            Status = false
+                        },
+                        new
+                        {
+                            ValueId = 4,
+                            ContractTypeName = "CSR",
+                            IsDeleted = false,
+                            Status = false
+                        },
+                        new
+                        {
+                            ValueId = 5,
+                            ContractTypeName = "HR",
+                            IsDeleted = true,
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.Department", b =>
@@ -1097,6 +1174,36 @@ namespace CMS.Persistence.Migrations
                     b.HasKey("ValueId");
 
                     b.ToTable("MasterApostilles");
+
+                    b.HasData(
+                        new
+                        {
+                            ValueId = 1,
+                            ApostilleName = "Stamp Paper",
+                            IsDeleted = false,
+                            Status = false
+                        },
+                        new
+                        {
+                            ValueId = 2,
+                            ApostilleName = "Frankin",
+                            IsDeleted = false,
+                            Status = false
+                        },
+                        new
+                        {
+                            ValueId = 3,
+                            ApostilleName = "Notary",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            ValueId = 4,
+                            ApostilleName = "Affidavit",
+                            IsDeleted = false,
+                            Status = false
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixContract", b =>
@@ -1262,14 +1369,14 @@ namespace CMS.Persistence.Migrations
                         {
                             ValueId = 1,
                             DepartmentId = 1,
-                            Email = "admin@cms.com",
+                            Email = "omigaming3123@gmail.com",
                             EmployeeCode = "NEO1",
                             EmployeeExtension = 2467,
                             EmployeeMobile = 7777766666L,
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAELb6hlaHPFANfUqeZra6xcTB3xeLepe9Kcb7FSxgaD2cjv+/5S/bIrapRDPBm6g4og==",
+                            Password = "AQAAAAIAAYagAAAAEAZLdCu6K2WXSzvhx3BagzvknHwfZPqCMR5i6Rs/UAVHzWFmeAyrhkCioXE49R5ejQ==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1277,16 +1384,76 @@ namespace CMS.Persistence.Migrations
                         {
                             ValueId = 2,
                             DepartmentId = 2,
-                            Email = "sarthak@neosoft.com",
+                            Email = "sarthak.lembhe@neosoftmail.com",
                             EmployeeCode = "NEO2",
                             EmployeeExtension = 8976,
                             EmployeeMobile = 9999988888L,
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAENnwLVeOl7bbhBVoIWuJ2qvd4379Iv/ZOvocCe9+BU1/UbrLqF01OoUKcJrbq5Ckww==",
-                            Role = "MOU_Approver",
+                            Password = "AQAAAAIAAYagAAAAEGoo9oRgAS2H54OeF/Bi0qwM+wdasjRF6EvZkCYjKH2FAGUZLowcU7glaNPmyGTexQ==",
+                            Role = "Contract_Approver",
                             Unit = "Thane"
+                        },
+                        new
+                        {
+                            ValueId = 3,
+                            DepartmentId = 3,
+                            Email = "sakthish.nadar@neosoftmail.com",
+                            EmployeeCode = "NEO3",
+                            EmployeeExtension = 6969,
+                            EmployeeMobile = 8888899999L,
+                            EmployeeName = "Sakthish Nadar",
+                            IsDeleted = false,
+                            LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "AQAAAAIAAYagAAAAEAawGFP447lhMC3Qx8iTCmi8lOsa1wlKAh2L4ImaFRkqyMJml/2b9O3D+lN76mG+Zw==",
+                            Role = "Contract_Approver",
+                            Unit = "Pune"
+                        },
+                        new
+                        {
+                            ValueId = 4,
+                            DepartmentId = 4,
+                            Email = "shreekant.panigrahi@neosoftmail.com",
+                            EmployeeCode = "NEO4",
+                            EmployeeExtension = 1111,
+                            EmployeeMobile = 7777788888L,
+                            EmployeeName = "Shreekant Panigrahi",
+                            IsDeleted = false,
+                            LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "AQAAAAIAAYagAAAAEKZXvZX4bbS+oU5tw3lKdu2obnQjO2Pe2MXsYDy5Mf9wPFYoMYiVUSBTyn5XHnMwmQ==",
+                            Role = "Contract_Approver",
+                            Unit = "Pune"
+                        },
+                        new
+                        {
+                            ValueId = 5,
+                            DepartmentId = 5,
+                            Email = "govind.lohar@neosoftmail.com",
+                            EmployeeCode = "NEO5",
+                            EmployeeExtension = 4321,
+                            EmployeeMobile = 7676587876L,
+                            EmployeeName = "Govind Lohar",
+                            IsDeleted = false,
+                            LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "AQAAAAIAAYagAAAAEBu5OYuTNtyXJHY6d93oC2YDMaDpE5kr8Cc9jaykSKpEgBHgbkZz7UEOOE6bCJhbrg==",
+                            Role = "Contract_Approver",
+                            Unit = "Indore"
+                        },
+                        new
+                        {
+                            ValueId = 6,
+                            DepartmentId = 2,
+                            Email = "om.auti@neosoftmail.com",
+                            EmployeeCode = "NEO6",
+                            EmployeeExtension = 1234,
+                            EmployeeMobile = 9876543210L,
+                            EmployeeName = "Om Auti",
+                            IsDeleted = false,
+                            LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "AQAAAAIAAYagAAAAEIHZ/Afx5hdWb9z62doPMYFeruP/5M0Ih1EPe2aKzAy1s9B7uoxzPG3EEpreV832Yg==",
+                            Role = "Contract_Approver",
+                            Unit = "Indore"
                         });
                 });
 

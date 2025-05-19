@@ -46,7 +46,7 @@ export class ContractsEntity {
     }
 }
 export class GetContractByIdDto {
-    contractId?: number;
+    contractId?: string;
     contractName?: string;
     departmentId?: number;
     departmentName?: string;
@@ -79,6 +79,7 @@ export class GetContractByIdDto {
     isDeleted?: boolean;
 }
 export class AddContractDto {
+    contractId?:string|null;
     contractName?: string | null;
     departmentId?: number | null;
     contractWithCompanyId?: number | null;

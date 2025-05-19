@@ -18,7 +18,7 @@ BEGIN
 END
 EXEC SP_GetDocumentByID @id = 1;
 
-CREATE OR ALTER PROCEDURE SP_AddDocument 
+CREATE  PROCEDURE SP_AddDocument 
 @documentName nvarchar(max),
 @status int,
 @documentType nvarchar(max),
@@ -30,7 +30,7 @@ Begin
 End
 Exec SP_AddDocument @documentName='Resume',@status=1 ,@isDeleted =0
 
-CREATE OR ALTER PROCEDURE SP_DeleteDocumentById @id int
+CREATE  OR ALTER PROCEDURE SP_DeleteDocumentById @id int
 As
 Begin
 	Update  MasterDocuments

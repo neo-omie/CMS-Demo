@@ -1,8 +1,11 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="mt-3">Contracts List - Pending Approval</h2>
 <div class="table-responsive p-md-5 p-3">
+  <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#contracts-table','CMS-pending-contracts.pdf')">
+    <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
   <table mat-table [dataSource]="dataSource" matSort
-    class="table table-striped table-bordered align-middle mat-elevation-z8">
+    class="table table-striped table-bordered align-middle mat-elevation-z8" id="contracts-table">
     <ng-container matColumnDef="contractID">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract ID</th>
       <td mat-cell *matCellDef="let cont">{{ cont.contractID }}</td>
@@ -253,8 +256,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
-          <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
+          <button data-bs-dismiss="modal" class="btn btn-primary" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
+          <button data-bs-dismiss="modal" class="btn btn-danger" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
           <button class="btn btn-outline-primary">+ Add Addendum</button>
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>

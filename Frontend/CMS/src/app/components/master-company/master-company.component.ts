@@ -15,6 +15,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../loader/loader.component';
+import { PDFExport } from '../../utils/pdfExport';
 
 @Component({
   selector: 'app-master-company',
@@ -488,6 +489,9 @@ export class MasterCompanyComponent implements OnInit{
           console.log("should not come here ", this.masterCompanyAddForm.value)
         }
       }
+    }
+    printToPDF(tableID:string, fileName:string) {
+      PDFExport.printToPDF(tableID, fileName);
     }
 }
 

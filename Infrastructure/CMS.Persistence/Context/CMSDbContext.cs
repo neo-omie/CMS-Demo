@@ -142,8 +142,13 @@ namespace CMS.Persistence.Context
             //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
             modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
 
-            modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new ApostilleConfiguration());
+            modelBuilder.ApplyConfiguration<ListOfCountries>(new CompanyCascadeConfiguration());
+            modelBuilder.ApplyConfiguration<ListOfStates>(new CompanyCascadeConfiguration());
+            modelBuilder.ApplyConfiguration<ListofCity>(new CompanyCascadeConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
 
         }
     }

@@ -14,6 +14,7 @@ namespace CMS.Domain.Entities
 
         [Required]
         public int ContractId { get; set; }
+        public string ContractName { get; set; }
         public Contract Contract { get; set; }
 
         [Required]

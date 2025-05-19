@@ -10,5 +10,6 @@ namespace CMS.Application.Contracts.Persistence
     public interface IEmailService
     {
         Task SendEmail(MailRequest mailRequest);
+        Task SendEmailWithAttachment(MailRequestWithAttachment mailreq);
     }
 }

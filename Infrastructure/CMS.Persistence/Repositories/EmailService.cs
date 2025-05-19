@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper.Internal;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.DTOs;
 using Microsoft.Extensions.Options;
@@ -48,6 +49,24 @@ namespace CMS.Persistence.Repositories
             //    Subject = mailRequest.Subject,
             //    Body = mailRequest.EmailBody
             //}) { smtp.Send(msg); }
+        }
+
+        public async Task SendEmailWithAttachment(MailRequestWithAttachment mailreq)
+        {
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_settings.Email);
+            email.To.Add(MailboxAddress.Parse(mailreq.Email));
+            email.Subject = mailreq.Subject;
+            
+            var builder = new BodyBuilder();
+            builder.HtmlBody = mailreq.EmailBody;
+            builder.Attachments.Add(mailreq.Attachments);
+            email.Body = builder.ToMessageBody();
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            smtp.Connect(_settings.Host, _settings.Port, MailKit.Security.SecureSocketOptions.StartTls);
+            smtp.Authenticate(_settings.Email, _settings.Password);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
         }
     }
 }

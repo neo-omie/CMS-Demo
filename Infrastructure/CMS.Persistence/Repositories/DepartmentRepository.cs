@@ -20,9 +20,12 @@ namespace CMS.Persistence.Repositories
     public class DepartmentRepository : IDepartmentRepository
     {
         readonly CMSDbContext _context;
-        public DepartmentRepository(CMSDbContext context)
+        private readonly ICacheService _cacheService;
+        private readonly string cacheKey = $"{typeof(Department)}";
+        public DepartmentRepository(CMSDbContext context, ICacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
         }
         public async Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize)
         {
