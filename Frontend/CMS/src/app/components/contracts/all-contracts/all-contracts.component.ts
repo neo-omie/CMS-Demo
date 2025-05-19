@@ -888,11 +888,11 @@ export class AllContractsComponent implements OnInit {
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
             this.GetAllContracts(1, 10);
-            const modalElement = document.getElementById('postTerm-mail');
-            if (modalElement) {
-              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-              modalInstance.hide();
-            }
+            // const modalElement = document.getElementById('postTerm-mail');
+            // if (modalElement) {
+            //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            //   modalInstance.hide();
+            // }
           }
         }
         catch (error) {
@@ -1018,11 +1018,11 @@ export class AllContractsComponent implements OnInit {
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
             this.GetAllContracts(1, 10);
-            const modalElement = document.getElementById('withdrawal-mail');
-            if (modalElement) {
-              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-              modalInstance.hide();
-            }
+            // const modalElement = document.getElementById('withdrawal-mail');
+            // if (modalElement) {
+            //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            //   modalInstance.hide();
+            // }
           }
         }
         catch (error) {
