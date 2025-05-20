@@ -1,37 +1,37 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { MasterEscalationMatrixMouDto } from '../../../models/master-escalation-matrix-mou-dto';
-import { EscalationMatrixMouService } from '../../../services/escalation-matrix-mou.service';
+import { EscalationMatrixContract, GetMasterEscalationMatrixContractByIdDto, MasterEscalationMatrixContractDto } from '../../../models/escalation-matrix-contract';
 import { Title } from '@angular/platform-browser';
+import { EscalationMatrixContractService } from '../../../services/escalation-matrix-contract.service';
 import { Pagination } from '../../../utils/pagination';
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
-import { CommonModule } from '@angular/common';
-import { EscalationMatrixMouModalComponent } from '../escalation-matrix-mou-modal/escalation-matrix-mou-modal.component';
-import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { TableComponent } from '../../UtilComponents/table/table.component';
-import { PaginationComponent } from "../../UtilComponents/pagination/pagination.component";
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
+import { CommonModule } from '@angular/common';
+import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
+import { EscalationMatrixContractModalComponent } from '../escalation-matrix-contract-modal/escalation-matrix-contract-modal.component';
 
 @Component({
-  selector: 'app-escalation-matrix-mou-screen',
+  selector: 'app-escalation-matrix-contract-screen',
   standalone: true,
   imports: [
     TableComponent,
     LoaderComponent,
     CommonModule,
-    EscalationMatrixMouModalComponent,
-    PaginationComponent
+    PaginationComponent,
+    EscalationMatrixContractModalComponent
   ],
-  templateUrl: './escalation-matrix-mou-screen.component.html',
-  styleUrl: './escalation-matrix-mou-screen.component.css'
+  templateUrl: './escalation-matrix-contract-screen.component.html',
+  styleUrl: './escalation-matrix-contract-screen.component.css'
 })
-export class EscalationMatrixMouScreenComponent {
+export class EscalationMatrixContractScreenComponent {
   loading: boolean = true;
   isEdit: boolean = false;
   maxPage: number = 1;
   errorMsg: string = "";
-  escalationMatrixMou?: MasterEscalationMatrixMouDto;
+  matrixContract?: GetMasterEscalationMatrixContractByIdDto;
   pageNumbers: number[] = [];
-  matrixMous: MasterEscalationMatrixMouDto[] = [];
+  matrixContracts: EscalationMatrixContract[] = [];
   displayedColumns: string[] = ['departmentName', 'escalation1', 'escalation2', 'escalation3', 'action'];
   columnsInfo: {
     [key: string]: {
@@ -43,12 +43,12 @@ export class EscalationMatrixMouScreenComponent {
 
   @ViewChild('actionTemplateRef', { static: true }) actionTemplateRef!: TemplateRef<any>;
 
-  constructor(private escalationService: EscalationMatrixMouService, private title: Title) {
-    this.title.setTitle("Escalation Matrix (MOU) - CMS");
+  constructor(private escalationService: EscalationMatrixContractService, private title: Title) {
+    this.title.setTitle("Escalation Matrix (Contract) - CMS");
   }
 
   ngOnInit() {
-    this.getMatrixMous(1, 10);
+    this.getMatrixContracts(1, 10);
     this.columnsInfo = {
       'departmentName': {
         title: 'Department',
@@ -78,14 +78,14 @@ export class EscalationMatrixMouScreenComponent {
     }
   }
 
-  getMatrixMous(pageNumber: number, pageSize: number) {
+  getMatrixContracts(pageNumber: number, pageSize: number) {
     this.escalationService
-      .getAllMatrixMou(pageNumber, pageSize)
+      .getAllMatrixContract(pageNumber, pageSize)
       .subscribe((res) => {
         this.loading = false;
-        this.matrixMous = res;
-        if (this.matrixMous != undefined && this.matrixMous.length > 0) {
-          let result = Pagination.paginator(pageNumber, this.matrixMous[0].totalRecords, pageSize)
+        this.matrixContracts = res.getEscalationMatrixContractDto;
+        if (this.matrixContracts != undefined && this.matrixContracts.length > 0) {
+          let result = Pagination.paginator(pageNumber, res.totalCount, pageSize)
           this.maxPage = result.maxPage;
           this.pageNumbers = result.pageNumbers;
         }
@@ -94,15 +94,15 @@ export class EscalationMatrixMouScreenComponent {
 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
-      this.getMatrixMous(pgNumber, 10);
+      this.getMatrixContracts(pgNumber, 10);
     }
   }
 
   GetMatrixMouById(valueId: number, isEdit: boolean) {
     this.isEdit = isEdit;
-    this.escalationService.getMatrixMouById(valueId).subscribe({
-      next: (response: MasterEscalationMatrixMouDto) => {
-        this.escalationMatrixMou = response;
+    this.escalationService.getMatrixContractById(valueId).subscribe({
+      next: (response: GetMasterEscalationMatrixContractByIdDto) => {
+        this.matrixContract = response;
       },
       error: (error) => {
         console.error('Error :(', error);

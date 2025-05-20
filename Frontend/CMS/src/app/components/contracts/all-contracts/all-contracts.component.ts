@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
 import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
 import { PostTerminationService } from '../../../services/post-termination.service';
-import { LoaderComponent } from '../../loader/loader.component';
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { AddAddendumContract } from '../../../models/add-addendum-contract';
 import { firstValueFrom } from 'rxjs';

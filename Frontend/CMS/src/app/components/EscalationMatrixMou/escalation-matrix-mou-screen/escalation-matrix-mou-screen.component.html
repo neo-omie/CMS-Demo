@@ -1,7 +1,9 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">Escalation Matrix Master - MOUs</h2>
 
-<app-table [data]="matrixMous" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+<div class="table-responsive p-md-5 p-3">
+  <app-table [data]="matrixMous" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+</div>
 
 <app-pagination [maxPage]="maxPage" [records]="this.matrixMous.length" [pageNumbers]="pageNumbers"
   [GetPage]="GetPage"></app-pagination>

@@ -19,7 +19,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   username: string | null = '';
   totalNotifications: number = 0;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
-  
+
   constructor(private notificationService: NotificationService, private route: RouterService) { }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

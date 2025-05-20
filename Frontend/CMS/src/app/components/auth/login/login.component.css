@@ -1,33 +1,39 @@
-.login-form-card{
-    box-shadow: 5px 5px 15px rgb(126, 126, 221);
+.login-form-card {
+  box-shadow: 5px 5px 15px rgb(126, 126, 221);
 }
-.login-title{
-    text-align: center;
-    color: rgb(95, 95, 238);
+
+.login-title {
+  text-align: center;
+  color: rgb(95, 95, 238);
 }
-.fields-error{
-    color: red;
+
+.fields-error {
+  color: red;
 }
-.button{
-    width: 100%;
-    color: #5f5fee;
-    border-color: #5f5fee;
+
+.button {
+  width: 100%;
+  color: #5f5fee;
+  border-color: #5f5fee;
 }
-.button:hover{
-    /* background-color: rgb(136, 136, 243); */
-    background-color: #5f5fee;
-    color: whitesmoke;
+
+.button:hover {
+  background-color: #5f5fee;
+  color: whitesmoke;
 }
-.login-password-field-container{
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.login-password-field-container {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.field-container{
+
+.field-container {
   position: relative;
 }
-.error{
+
+.error {
   position: absolute;
   top: -10px;
   left: 10px;
@@ -37,30 +43,35 @@
   font-size: 12px;
   z-index: 9;
 }
+
 .pswd-error {
   color: red;
   font-size: 12px;
 }
-.input-group-text{
+
+.input-group-text {
   background-color: whitesmoke;
 }
+
 /* Hide the default "show password" icon in Edge */
 input[type="password"]::-ms-reveal {
-    display: none;
-  }
-  
-  /* Hide the default "show password" icon in other browsers */
-  input[type="password"]::-webkit-credentials-auto-fill-button {
-    display: none;
-  }
-  
-  /* Hide the default icon on Firefox */
-  input[type="password"]::-moz-placeholder {
-    display: none;
-  }
-  input[type="checkbox"]:checked{
-    background-color: #5f5fee;
-  }
-  input:focus{
-    box-shadow: 0 0 2px #5f5fee;
-  }
+  display: none;
+}
+
+/* Hide the default "show password" icon in other browsers */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none;
+}
+
+/* Hide the default icon on Firefox */
+input[type="password"]::-moz-placeholder {
+  display: none;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #5f5fee;
+}
+
+input:focus {
+  box-shadow: 0 0 2px #5f5fee;
+}

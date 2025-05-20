@@ -11,7 +11,7 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
 })
 export class AppComponent implements AfterViewInit {
   title = 'CMS';
-  username: string|null = null;
+  username: string | null = null;
   mainContainerMinHeight: number = 0;
   viewportHeight: number = window.innerHeight;
 
@@ -19,7 +19,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('sidebar', { static: false }) sidebar!: any;
 
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     setTimeout(() => this.calculateMinHeight());
