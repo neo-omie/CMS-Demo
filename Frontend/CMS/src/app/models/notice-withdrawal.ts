@@ -16,3 +16,10 @@ export class ApproveRejectWithdrawalDTO {
     emailSubject?: string | null;
     emailBody?: string | null;
 }
+export class ClassifiedApproveRejectWithdrawalDTO {
+    classifiedContractId?: number;
+    employeeEmail?: string;
+    changeToStatus?: number;
+    emailSubject?: string | null;
+    emailBody?: string | null;
+}

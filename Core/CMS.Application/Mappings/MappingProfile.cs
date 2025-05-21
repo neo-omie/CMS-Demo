@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using CMS.Application.Features.AddendumContract.AddendumContractDto;
+using CMS.Application.Features.AddendumContracts.AddendumContractDto;
+using CMS.Application.Features.ClassifiedContracts;
+using CMS.Application.Features.Contracts;
 using CMS.Application.Features.ContractTypeMaster;
+using CMS.Application.Features.MasterApostilles.ApostilleDtos;
 //using CMS.Application.Features.Document;
 using CMS.Application.Features.MasterCompanies;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
 using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
-using CMS.Application.Features.MasterApostilles.ApostilleDtos;
-using CMS.Application.Features.Contracts;
-using CMS.Application.Features.ClassifiedContracts;
-using CMS.Application.Features.AddendumContract.AddendumContractDto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CMS.Application.Mappings
 {
@@ -37,7 +38,7 @@ namespace CMS.Application.Mappings
             CreateMap<ContractDTO, Contract>().ReverseMap();
             CreateMap<ClassifiedContractDTO, ClassifiedContract>().ReverseMap();
             CreateMap<AddAddendumContractDto, AddendumContract>().ReverseMap();
-
+            //CreateMap<GetAddendumContractByIdDto, AddendumContract>().ReverseMap();
         }
     }
 }

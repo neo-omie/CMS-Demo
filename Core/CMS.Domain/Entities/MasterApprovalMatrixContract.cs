@@ -20,5 +20,9 @@ namespace CMS.Domain.Entities
         public MasterEmployee Approver1 { get; set; }
         public MasterEmployee Approver2 { get; set; }
         public MasterEmployee Approver3 { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime UpdateOn { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
