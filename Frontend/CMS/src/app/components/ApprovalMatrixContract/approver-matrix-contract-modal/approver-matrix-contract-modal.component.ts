@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { ApprovalMatrixContract, EditApprovalMatrixContractDto } from '../../../models/approval-matrix-contract';
 import { MasterEmployee } from '../../../models/master-employee';
@@ -46,7 +47,7 @@ export class ApproverMatrixContractModalComponent {
       this.approvers2.length = 0;
       this.approvers3.length = 0;
     }
-    if(this.approvalMatrixContract){
+    if (this.approvalMatrixContract) {
       this.approvalMatrixContract.masterApprovalMatrixContractId = 0;
       this.approvalMatrixContract.approverId1 = '';
       this.approvalMatrixContract.approverId2 = '';
@@ -125,6 +126,12 @@ export class ApproverMatrixContractModalComponent {
             Alert.toast(TYPE.SUCCESS, true, "Updated successfully");
             this.GetApprovalMatrixContract(1, 10);
           }
+          const modalElement = document.getElementById('approval-matrix-contract-modal');
+          if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modalInstance.hide();
+          }
+          this.closeEditApproverCollapses();
         },
         error: (error) => {
           console.error('Error :(', error);
@@ -136,6 +143,5 @@ export class ApproverMatrixContractModalComponent {
     else {
       Alert.toast(TYPE.ERROR, true, "Incorrect number of days");
     }
-    this.closeEditApproverCollapses();
   }
 }

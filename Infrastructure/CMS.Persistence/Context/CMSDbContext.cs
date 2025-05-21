@@ -63,6 +63,11 @@ namespace CMS.Persistence.Context
         public DbSet<Notification> ContractNotifications { get; set; }
 
         public DbSet<PostTerminationNotice> PostTerminationNotices { get; set; }
+        public DbSet<ClassifiedPostTerminationNotice> ClassifiedPostTerminationNotices { get; set; }
+        public DbSet<NoticeWithdrawal> NoticeWithdrawals { get; set; }
+        public DbSet<ClassifiedNoticeWithdrawal> ClassifiedNoticeWithdrawals { get; set; }
+
+        public DbSet<AuditTrail> AuditTrails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -100,6 +105,9 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixMou>().HasAlternateKey(mamc => mamc.DepartmentId);
+            modelBuilder.Entity<AuditTrail>().HasAlternateKey(at => at.ValueId);
+            //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
+            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
 
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
@@ -113,6 +121,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasOne(mamc => mamc.Department).WithMany().HasForeignKey(mamc => mamc.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
 
             modelBuilder.Entity<PostTerminationNotice>().HasOne(ptn => ptn.Contract).WithMany().HasForeignKey(ptn => ptn.ContractId).HasPrincipalKey(c => c.ContractId);
+            modelBuilder.Entity<NoticeWithdrawal>().HasOne(nw => nw.Contract).WithMany().HasForeignKey(nw => nw.ContractId).HasPrincipalKey(c => c.ContractId);
+            modelBuilder.Entity<NoticeWithdrawal>().HasOne(nw => nw.PostTermination).WithMany().HasForeignKey(nw => nw.TerminationNoticeId).HasPrincipalKey(c => c.ValueId);
             //mastercompany location
             modelBuilder.Entity<ListOfStates>().HasOne(st => st.listofcountries).WithMany().HasForeignKey(st => st.CountryId);
             modelBuilder.Entity<ListofCity>().HasOne(ct => ct.listofStates).WithMany().HasForeignKey(ct=> ct.StateId);
@@ -150,9 +160,9 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
             modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
 
-            //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
-            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
+            modelBuilder.Entity<AuditTrail>().HasOne(at => at.Employee).WithMany().HasForeignKey(at => at.LoggedBy).HasPrincipalKey(me => me.EmployeeCode);
 
+            // Configurations and Data seeding
             modelBuilder.ApplyConfiguration(new ApostilleConfiguration());
             modelBuilder.ApplyConfiguration<ListOfCountries>(new CompanyCascadeConfiguration());
             modelBuilder.ApplyConfiguration<ListOfStates>(new CompanyCascadeConfiguration());
@@ -160,6 +170,10 @@ namespace CMS.Persistence.Context
             modelBuilder.ApplyConfiguration(new ContractTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new MasterEmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new EscalationMatrixContractConfiguration());
+            modelBuilder.ApplyConfiguration(new EscalationMatrixMOUConfiguration());
+            modelBuilder.ApplyConfiguration(new ApprovalMatrixContractConfiguration());
+            modelBuilder.ApplyConfiguration(new ApprovalMatrixMOUConfiguration());
 
         }
     }

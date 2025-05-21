@@ -895,6 +895,33 @@ namespace CMS.Persistence.Migrations
                         principalColumn: "ContractId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "NoticeWithdrawals",
+                columns: table => new
+                {
+                    ValueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContractId = table.Column<int>(type: "int", nullable: false),
+                    TerminationNoticeId = table.Column<int>(type: "int", nullable: false),
+                    DisplayDocumentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocumentPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NoticeWithdrawals", x => x.ValueId);
+                    table.ForeignKey(
+                        name: "FK_NoticeWithdrawals_ContractsEntity_ContractId",
+                        column: x => x.ContractId,
+                        principalTable: "ContractsEntity",
+                        principalColumn: "ContractId");
+                    table.ForeignKey(
+                        name: "FK_NoticeWithdrawals_PostTerminationNotices_TerminationNoticeId",
+                        column: x => x.TerminationNoticeId,
+                        principalTable: "PostTerminationNotices",
+                        principalColumn: "ValueId");
+                });
+
             migrationBuilder.InsertData(
                 table: "Countries",
                 columns: new[] { "CountryId", "Countries" },
@@ -932,12 +959,21 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.cs
                     { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJAukfSpvlwzPBsF2WkTmOtqi4MtSADGhbMb2IgtRunLRwAqKe5zXoDUc12VpcG8og==", "Admin", "Thane" },
                     { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEDxirxx6d9zF97srPuQdILuKFerXntF4acx1Fy6608sKTkWH22CVgITabSq/UMXP+Q==", "Contract_Approver", "Thane" },
                     { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEP730PPG13rF3Kfa+pfKKk3Gzr6qwad/TQs+8oAXRUjKvcNma/OA/cSy9RnvR3eKrw==", "Contract_Approver", "Pune" },
                     { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPo3ZsfA9ny6IF0kL556w5VNY7q8oAaeVQxUZBHTVsZmlyph13Lu9yGFWRsP6T8Tnw==", "Contract_Approver", "Pune" },
                     { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPmUGP5RE5odZbuKC4e/Oznu8lFJLI5GDd+Eyq6lV5qorOmvnRg3v1qd91fRXSvTHw==", "Contract_Approver", "Indore" },
                     { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEATZACpMCAJfyqvruXJ4E6RFa8FOb9+vwXZpUXMnE+KOcpxzP0hslEk+QyxpAb6SkQ==", "Contract_Approver", "Indore" }
+========
+                    { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAED2zwc4RCUgXz8HeRK/MsAmU2FTpePP/SwQF2OJZapHHNl5wGFFXk34242PHeSZOLA==", "Admin", "Thane" },
+                    { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEOcJnR1mk26ujdcWNPFnwvw9E34mKMTzZVG0iIr6/1AyFiyLEN1AzlG4Cn92kHNw8Q==", "Contract_Approver", "Thane" },
+                    { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAECRxy2XEWkcPF/8vjGlYjGho43V4+buVletLEiQK0vNRzhFGKAlu/sNCD4ghI6hfKA==", "Contract_Approver", "Pune" },
+                    { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAELFz3rsCSxhLeE3CSbJWMdePgVVq2mkg/RNy1vHMUFYCFCw7p6nB1JxSV3LILiwBaQ==", "Contract_Approver", "Pune" },
+                    { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEH2MNr8LdTMyuTaPRzL5Dj3EYAwmcluCWa80B3atUH/HBQw0qOEbsDv1Cj4o6Z6CHw==", "Contract_Approver", "Indore" },
+                    { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEO3axuyKMx/LyWK6E6aTfdsxfGxTuj9d3QtGSsqDNrDUtfeeZoFQkzzJlAVsfIp/lw==", "Contract_Approver", "Indore" }
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.cs
                 });
 
             migrationBuilder.InsertData(
@@ -1121,6 +1157,16 @@ namespace CMS.Persistence.Migrations
                 column: "EscalationId3");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NoticeWithdrawals_ContractId",
+                table: "NoticeWithdrawals",
+                column: "ContractId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NoticeWithdrawals_TerminationNoticeId",
+                table: "NoticeWithdrawals",
+                column: "TerminationNoticeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PostTerminationNotices_ContractId",
                 table: "PostTerminationNotices",
                 column: "ContractId");
@@ -1196,6 +1242,9 @@ namespace CMS.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "MasterEscalationMatrixMous");
+
+            migrationBuilder.DropTable(
+                name: "NoticeWithdrawals");
 
             migrationBuilder.DropTable(
                 name: "PostTerminationNotices");

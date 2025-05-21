@@ -31,9 +31,8 @@ namespace CMS.API.Controllers
             var notifs = await _mediator.Send(new GetNotificationDetailsQuery(id, employeeCode));
             return Ok(notifs);
         }
-        //[Route("{employeeCode}")]
-        [HttpGet("UnreadNotifications")]
-        public async Task<IActionResult> UnreadNotificationsCount(string employeeCode)
+        [HttpGet("UnreadNotifications/{employeeCode}")]
+        public async Task<IActionResult> UnreadNotificationsCount([FromRoute] string employeeCode)
         {
             var unreadNotifsCount = await _mediator.Send(new UnreadNotificationsCountQuery(employeeCode));
             return Ok(unreadNotifsCount);

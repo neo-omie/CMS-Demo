@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
     [Migration("20250521060912_InitialMigration")]
     partial class InitialMigration
+========
+    [Migration("20250516055601_initialMigration")]
+    partial class initialMigration
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1582,7 +1587,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEJAukfSpvlwzPBsF2WkTmOtqi4MtSADGhbMb2IgtRunLRwAqKe5zXoDUc12VpcG8og==",
+========
+                            Password = "AQAAAAIAAYagAAAAED2zwc4RCUgXz8HeRK/MsAmU2FTpePP/SwQF2OJZapHHNl5wGFFXk34242PHeSZOLA==",
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1597,7 +1606,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEDxirxx6d9zF97srPuQdILuKFerXntF4acx1Fy6608sKTkWH22CVgITabSq/UMXP+Q==",
+========
+                            Password = "AQAAAAIAAYagAAAAEOcJnR1mk26ujdcWNPFnwvw9E34mKMTzZVG0iIr6/1AyFiyLEN1AzlG4Cn92kHNw8Q==",
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
                             Role = "Contract_Approver",
                             Unit = "Thane"
                         },
@@ -1612,7 +1625,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sakthish Nadar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEP730PPG13rF3Kfa+pfKKk3Gzr6qwad/TQs+8oAXRUjKvcNma/OA/cSy9RnvR3eKrw==",
+========
+                            Password = "AQAAAAIAAYagAAAAECRxy2XEWkcPF/8vjGlYjGho43V4+buVletLEiQK0vNRzhFGKAlu/sNCD4ghI6hfKA==",
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1627,7 +1644,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Shreekant Panigrahi",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEPo3ZsfA9ny6IF0kL556w5VNY7q8oAaeVQxUZBHTVsZmlyph13Lu9yGFWRsP6T8Tnw==",
+========
+                            Password = "AQAAAAIAAYagAAAAELFz3rsCSxhLeE3CSbJWMdePgVVq2mkg/RNy1vHMUFYCFCw7p6nB1JxSV3LILiwBaQ==",
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1642,7 +1663,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Govind Lohar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEPmUGP5RE5odZbuKC4e/Oznu8lFJLI5GDd+Eyq6lV5qorOmvnRg3v1qd91fRXSvTHw==",
+========
+                            Password = "AQAAAAIAAYagAAAAEH2MNr8LdTMyuTaPRzL5Dj3EYAwmcluCWa80B3atUH/HBQw0qOEbsDv1Cj4o6Z6CHw==",
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         },
@@ -1657,7 +1682,11 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Om Auti",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+<<<<<<<< HEAD:Infrastructure/CMS.Persistence/Migrations/20250521060912_InitialMigration.Designer.cs
                             Password = "AQAAAAIAAYagAAAAEATZACpMCAJfyqvruXJ4E6RFa8FOb9+vwXZpUXMnE+KOcpxzP0hslEk+QyxpAb6SkQ==",
+========
+                            Password = "AQAAAAIAAYagAAAAEO3axuyKMx/LyWK6E6aTfdsxfGxTuj9d3QtGSsqDNrDUtfeeZoFQkzzJlAVsfIp/lw==",
+>>>>>>>> 7ca5dec26e7d3736a9d61b1f75033159251ef9c9:Infrastructure/CMS.Persistence/Migrations/20250516055601_initialMigration.Designer.cs
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         });
@@ -1765,6 +1794,41 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixMous");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.NoticeWithdrawal", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TerminationNoticeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("TerminationNoticeId");
+
+                    b.ToTable("NoticeWithdrawals");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.Notification", b =>
@@ -2159,6 +2223,25 @@ namespace CMS.Persistence.Migrations
                     b.Navigation("Escalation2");
 
                     b.Navigation("Escalation3");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.NoticeWithdrawal", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.Contract", "Contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.PostTerminationNotice", "PostTermination")
+                        .WithMany()
+                        .HasForeignKey("TerminationNoticeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("PostTermination");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.PostTerminationNotice", b =>

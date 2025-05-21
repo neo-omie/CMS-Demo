@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EscalationMatrixContract, GetMasterEscalationMatrixContractByIdDto, MasterEscalationMatrixContractDto, UpdateMatrixContractDto } from '../models/escalation-matrix-contract';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EscalationMatrixContractService {
-  private apiUrl = 'https://localhost:7041/api/EscalationMatrixContract';
+  private apiUrl = `${environment.apiUrl}/EscalationMatrixContract`;
 
   constructor(private http: HttpClient) {}
 

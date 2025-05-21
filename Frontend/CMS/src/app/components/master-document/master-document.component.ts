@@ -24,7 +24,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { LoaderComponent } from '../loader/loader.component';
+import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 
 @Component({
   selector: 'app-master-document',
@@ -200,6 +200,7 @@ export class MasterDocumentComponent implements OnInit {
                         this.getMasterDocumentById = undefined;
                         this.doc = undefined;
                         this.file = null;
+                        
                         Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
                         this.getDocuments(1, 10);
                       }

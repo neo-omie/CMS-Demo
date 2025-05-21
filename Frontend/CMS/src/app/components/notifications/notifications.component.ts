@@ -5,7 +5,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { NotificationService } from '../../services/notification.service';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
-import { LoaderComponent } from '../loader/loader.component';
+import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';

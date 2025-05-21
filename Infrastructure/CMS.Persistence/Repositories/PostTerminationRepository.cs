@@ -34,6 +34,10 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<bool> AddTerminationDetailsAsync(int contractId, TerminationDocumentUploadDto _terminationDocumentUploadDto)
         {
+            if (_terminationDocumentUploadDto.End_Date<DateTime.Now)
+            {
+                throw new Exception($"End date cant be smaller than current date !");
+            }
             var checkContract = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == contractId);
             if (checkContract == null)
                 throw new NotFoundException($"Contract with id {contractId} not found");
@@ -121,6 +125,7 @@ namespace CMS.Persistence.Repositories
 
 
         }
+
         private async Task AddNewNotifications(string name, string subject, string message)
         {
             Notification createNewNotif = new Notification
@@ -182,8 +187,8 @@ namespace CMS.Persistence.Repositories
                 throw new NotFoundException("Contract Not Found");
             }
 
-            string approveOrTerminate = (status == ContractStatus.Terminated) ? "Approved" : "Terminated";
-            string notificationSubject=(status==ContractStatus.Terminated)? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been Terminated under your department.";
+            string approveOrTerminate = (status == ContractStatus.ApprovedForTermination) ? "Approved" : "Terminated";
+            string notificationSubject=(status==ContractStatus.ApprovedForTermination) ? "Contract has been approved under your department. You can access and change the approvals for this contract." : "Contract has been Terminated under your department.";
 
             if (foundContract.Approver1Email==empCode)
             {
@@ -213,7 +218,7 @@ namespace CMS.Persistence.Repositories
             }
             else if (foundContract.Approver2Email == empCode)
             {
-                if(contract.Approver1Status!=ContractStatus.Terminated || contract.Approver2Status != ContractStatus.PendingTermination)
+                if(contract.Approver1Status!=ContractStatus.ApprovedForTermination || contract.Approver2Status != ContractStatus.PendingTermination)
                 {
                     throw new Exception("Invalid approval action");
                 }
@@ -241,7 +246,7 @@ namespace CMS.Persistence.Repositories
             }
             else if(foundContract.Approver3Email==empCode)
             {
-                if (contract.Approver2Status != ContractStatus.Terminated || contract.Approver1Status!=ContractStatus.Terminated || contract.Approver3Status != ContractStatus.PendingTermination)
+                if (contract.Approver2Status != ContractStatus.ApprovedForTermination || contract.Approver1Status!=ContractStatus.ApprovedForTermination || contract.Approver3Status != ContractStatus.PendingTermination)
                 {
                     throw new Exception("Invalid approval action");
                 }

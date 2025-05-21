@@ -11,7 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { LoaderComponent } from '../loader/loader.component';
+import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 
 @Component({
   selector: 'app-master-apostille',

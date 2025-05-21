@@ -1,29 +1,32 @@
 @if(checkLogin()) {
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand sidebar-toggle-btn btn btn-primary" data-bs-toggle="offcanvas" href="#sideBar" role="button" aria-controls="offcanvasExample">
-                <i class="fa-solid fa-bars-staggered"></i> Menu
-            </a>
-            <a class="btn btn-outline-danger" (click)="logoutUser()"><i class="fa-solid fa-power-off"></i> Logout</a>
+<nav #navbar class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand sidebar-toggle-btn btn btn-primary" data-bs-toggle="offcanvas" href="#sideBar"
+            role="button" aria-controls="offcanvasExample">
+            <i class="fa-solid fa-bars-staggered"></i> Menu
+        </a>
+        <h3 class="headingg fs-4 d-none d-sm-block" routerLink="/dashboard">Contract Management System</h3>
+        <a class="btn btn-outline-danger" (click)="logoutUser()"><i class="fa-solid fa-power-off"></i> Logout</a>
+    </div>
+</nav>
+
+<aside class="offcanvas offcanvas-start offcanvas-width" tabindex="-1" id="sideBar" aria-labelledby="sideBarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="sideBarLabel">Hello, {{username}}!</h5>
+        <div class="d-flex align-items-center">
+            <button type="button" class="btn n-btn" data-bs-dismiss="offcanvas" routerLink="/notifications">
+                <span *ngIf="totalNotifications > 0" class="n-num"></span>
+                <i class="fa-solid fa-bell"></i>
+            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-    </nav>
-    
-    <aside class="offcanvas offcanvas-start offcanvas-width" tabindex="-1" id="sideBar" aria-labelledby="sideBarLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="sideBarLabel">Hello, {{username}}!</h5>
-            <div class="d-flex align-items-center">
-                <button type="button" class="btn n-btn" data-bs-dismiss="offcanvas" routerLink="/notifications">
-                    <span class="n-num"></span>
-                    <i class="fa-solid fa-bell"></i>
-                </button>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-        </div>
-        <div class="offcanvas-body">
-            <a class="btn sideBar-nav-links" data-bs-dismiss="offcanvas" routerLink="/dashboard">Dashboard</a>
-            <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/masters">Masters</a>
-            <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/contracts">Contracts</a>
-            <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/classifiedContracts/allContracts">Contracts-Classified</a>
-        </div>
-    </aside>
+    </div>
+    <div class="offcanvas-body">
+        <a class="btn sideBar-nav-links" data-bs-dismiss="offcanvas" routerLink="/dashboard">Dashboard</a>
+        <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/masters">Masters</a>
+        <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/contracts">Contracts</a>
+        <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas"
+            routerLink="/classifiedContracts/allContracts">Contracts-Classified</a>
+    </div>
+</aside>
 }

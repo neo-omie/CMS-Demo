@@ -96,10 +96,66 @@ select * from MasterEmployees
 go
 
 
-create or alter procedure sp_DeleteEmployee
+alter procedure sp_DeleteEmployee
 @Id int
 as 
 Begin 
+
+	DECLARE @CurrentDepartmentId INT;
+	DECLARE @CurrentEmployeeCode NVARCHAR(100);
+
+	SELECT @CurrentEmployeeCode = EmployeeCode
+	FROM MasterEmployees
+	WHERE ValueId=@Id;
+
+    UPDATE MasterApprovalMatrixContracts
+    SET ApproverId1 = 'NEO1'
+    WHERE ApproverId1 = @CurrentEmployeeCode;
+
+	UPDATE MasterApprovalMatrixContracts
+    SET ApproverId2 = 'NEO1'
+    WHERE ApproverId2 = @CurrentEmployeeCode;
+	
+	UPDATE MasterApprovalMatrixContracts
+    SET ApproverId3 = 'NEO1'
+    WHERE ApproverId3 = @CurrentEmployeeCode;
+
+	UPDATE MasterApprovalMatrixMOUs
+    SET ApproverId1 = 'NEO1'
+    WHERE ApproverId1 = @CurrentEmployeeCode;
+
+	UPDATE MasterApprovalMatrixMOUs
+    SET ApproverId2 = 'NEO1'
+    WHERE ApproverId2 = @CurrentEmployeeCode;
+	
+	UPDATE MasterApprovalMatrixMOUs
+    SET ApproverId3 = 'NEO1'
+    WHERE ApproverId3 = @CurrentEmployeeCode;
+
+    UPDATE MasterEscalationMatrixMous
+    SET EscalationId1 = 'NEO1'
+    WHERE EscalationId1 = @CurrentEmployeeCode;
+
+	UPDATE MasterEscalationMatrixMous
+    SET EscalationId2 = 'NEO1'
+    WHERE EscalationId2 = @CurrentEmployeeCode;
+	
+	UPDATE MasterEscalationMatrixMous
+    SET EscalationId3 = 'NEO1'
+    WHERE EscalationId3 = @CurrentEmployeeCode;
+
+	UPDATE MasterEscalationMatrixContracts
+    SET EscalationId1 = 'NEO1'
+    WHERE EscalationId1 = @CurrentEmployeeCode;
+
+	UPDATE MasterEscalationMatrixContracts
+    SET EscalationId2 = 'NEO1'
+    WHERE EscalationId2 = @CurrentEmployeeCode;
+	
+	UPDATE MasterEscalationMatrixContracts
+    SET EscalationId3 = 'NEO1'
+    WHERE EscalationId3 = @CurrentEmployeeCode;
+
 	Update MasterEmployees
 	Set IsDeleted=1
 	where ValueId=@Id
@@ -110,7 +166,7 @@ Exec sp_DeleteEmployee @Id=24
 go
 
 
-create or alter procedure sp_UpdateEmployee
+alter procedure sp_UpdateEmployee
 	@Id INT,
     @EmployeeName NVARCHAR(255),
     @Password NVARCHAR(255),
@@ -123,6 +179,63 @@ create or alter procedure sp_UpdateEmployee
     @EmployeeExtension NVARCHAR(20)
 as 
 Begin 
+DECLARE @CurrentDepartmentId INT;
+DECLARE @CurrentEmployeeCode NVARCHAR(100);
+SELECT @CurrentDepartmentId = DepartmentId, @CurrentEmployeeCode = EmployeeCode
+FROM MasterEmployees
+WHERE ValueId=@Id;
+
+IF @CurrentDepartmentId != @DepartmentId or @CurrentEmployeeCode != @EmployeeCode
+BEGIN
+    UPDATE MasterApprovalMatrixContracts
+    SET ApproverId1 = 'NEO1'
+    WHERE ApproverId1 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterApprovalMatrixContracts
+    SET ApproverId2 = 'NEO1'
+    WHERE ApproverId2 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+	
+	UPDATE MasterApprovalMatrixContracts
+    SET ApproverId3 = 'NEO1'
+    WHERE ApproverId3 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterApprovalMatrixMOUs
+    SET ApproverId1 = 'NEO1'
+    WHERE ApproverId1 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterApprovalMatrixMOUs
+    SET ApproverId2 = 'NEO1'
+    WHERE ApproverId2 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+	
+	UPDATE MasterApprovalMatrixMOUs
+    SET ApproverId3 = 'NEO1'
+    WHERE ApproverId3 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterEscalationMatrixMous
+    SET EscalationId1 = 'NEO1'
+    WHERE EscalationId1 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterEscalationMatrixMous
+    SET EscalationId2 = 'NEO1'
+    WHERE EscalationId2 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+	
+	UPDATE MasterEscalationMatrixMous
+    SET EscalationId3 = 'NEO1'
+    WHERE EscalationId3 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterEscalationMatrixContracts
+    SET EscalationId1 = 'NEO1'
+    WHERE EscalationId1 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+
+	UPDATE MasterEscalationMatrixContracts
+    SET EscalationId2 = 'NEO1'
+    WHERE EscalationId2 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+	
+	UPDATE MasterEscalationMatrixContracts
+    SET EscalationId3 = 'NEO1'
+    WHERE EscalationId3 = @CurrentEmployeeCode and DepartmentId = @CurrentDepartmentId;
+END
+
 Update MasterEmployees
 set
 	EmployeeName=@EmployeeName,

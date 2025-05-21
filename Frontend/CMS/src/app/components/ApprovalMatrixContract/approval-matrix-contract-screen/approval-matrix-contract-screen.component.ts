@@ -7,7 +7,7 @@ import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
 import { Title } from '@angular/platform-browser';
 import { ApproverMatrixContractModalComponent } from '../approver-matrix-contract-modal/approver-matrix-contract-modal.component';
-import { LoaderComponent } from '../../loader/loader.component';
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { TableComponent } from '../../UtilComponents/table/table.component';
 import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
 import { Pagination } from '../../../utils/pagination';

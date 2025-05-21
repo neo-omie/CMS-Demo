@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import {  ElementRef, Renderer2, ViewChild } from '@angular/core';
@@ -14,7 +15,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { LoaderComponent } from '../loader/loader.component';
+import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { PDFExport } from '../../utils/pdfExport';
 
 @Component({
@@ -193,7 +194,13 @@ export class MasterCompanyComponent implements OnInit{
         Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
         companyForm.resetForm();
         this.GetPage(this.maxPage);
+        const modalElement = document.getElementById('company-add');
+          if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modalInstance.hide();
+          }
       },
+        
       error: (error) => {
         console.error('Error adding Company:', error);
         Alert.bigToast('Error!', 'There was an error adding the Company.', TYPE.ERROR, 'Try Again');
@@ -476,6 +483,11 @@ export class MasterCompanyComponent implements OnInit{
                 Alert.toast(TYPE.SUCCESS,true,'Updated successfully');
                 this.masterCompanyAddForm.reset();
                 this.getCompanies();
+                 const modalElement = document.getElementById('company-edit');
+          if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modalInstance.hide();
+          }
               }
             }, 
             error:(error) => {

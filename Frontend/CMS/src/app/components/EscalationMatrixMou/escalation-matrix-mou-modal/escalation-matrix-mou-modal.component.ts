@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { MasterEmployee } from '../../../models/master-employee';
@@ -138,6 +139,12 @@ export class EscalationMatrixMouModalComponent {
         next:(response:any)=>{
           Alert.toast(TYPE.SUCCESS,true,response.message);
           this.getMatrixMous(1, 10);
+          const modalElement = document.getElementById('escalation-matrix-mou-modal');
+          if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modalInstance.hide();
+          }
+          this.closeEditApproverCollapses();
         },
         error:(error)=>{
           console.error('Error :(', error);
@@ -149,6 +156,5 @@ export class EscalationMatrixMouModalComponent {
     else{
       Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
     }
-    this.closeEditApproverCollapses();
   }
 }

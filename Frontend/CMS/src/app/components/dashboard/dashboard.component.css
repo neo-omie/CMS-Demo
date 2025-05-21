@@ -7,3 +7,7 @@ hr {
     width: 10%;
     justify-self: center;
 }
+#piechart_3d, .card, .card-body {
+    margin: 0 !important;
+    padding: 0 !important;
+}

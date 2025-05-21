@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GetAllDepartmentsDto, MasterDepartment } from '../models/master-department';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MasterDepartmentService {
-  private apiUrl = 'https://localhost:7041/api/Department'
+  private apiUrl = `${environment.apiUrl}/Department`;
   constructor(private http:HttpClient) { }
 
   getAllDepartments(pageNumber:number, pageSize:number):Observable<GetAllDepartmentsDto[]>{
