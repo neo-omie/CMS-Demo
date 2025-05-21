@@ -849,6 +849,41 @@ namespace CMS.Persistence.Migrations
                     b.ToTable("AddendumContracts");
                 });
 
+            modelBuilder.Entity("CMS.Domain.Entities.AuditTrail", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<string>("ActionDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ForTable")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LogTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoggedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("LoggedBy");
+
+                    b.ToTable("AuditTrails");
+                });
+
             modelBuilder.Entity("CMS.Domain.Entities.ClassifiedContract", b =>
                 {
                     b.Property<int>("ClassifiedContractId")
@@ -942,6 +977,80 @@ namespace CMS.Persistence.Migrations
                     b.ToTable("ClassifiedContracts");
                 });
 
+            modelBuilder.Entity("CMS.Domain.Entities.ClassifiedNoticeWithdrawal", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("ClassifiedContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassifiedPostTerminationValueId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TerminationNoticeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("ClassifiedContractId");
+
+                    b.HasIndex("ClassifiedPostTerminationValueId");
+
+                    b.ToTable("ClassifiedNoticeWithdrawals");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.ClassifiedPostTerminationNotice", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("ClassifiedContractId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("End_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Notice_Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("ClassifiedContractId");
+
+                    b.ToTable("ClassifiedPostTerminationNotices");
+                });
+
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfCountries", b =>
                 {
                     b.Property<int>("CountryId")
@@ -968,6 +1077,46 @@ namespace CMS.Persistence.Migrations
                         {
                             CountryId = 2,
                             Countries = "USA"
+                        },
+                        new
+                        {
+                            CountryId = 3,
+                            Countries = "UK"
+                        },
+                        new
+                        {
+                            CountryId = 4,
+                            Countries = "Russia"
+                        },
+                        new
+                        {
+                            CountryId = 5,
+                            Countries = "China"
+                        },
+                        new
+                        {
+                            CountryId = 6,
+                            Countries = "Japan"
+                        },
+                        new
+                        {
+                            CountryId = 7,
+                            Countries = "Australia"
+                        },
+                        new
+                        {
+                            CountryId = 8,
+                            Countries = "New Zealand"
+                        },
+                        new
+                        {
+                            CountryId = 9,
+                            Countries = "Pakistan"
+                        },
+                        new
+                        {
+                            CountryId = 10,
+                            Countries = "Germany"
                         });
                 });
 
@@ -1004,6 +1153,174 @@ namespace CMS.Persistence.Migrations
                             StateId = 2,
                             CountryId = 2,
                             State = "California"
+                        },
+                        new
+                        {
+                            StateId = 3,
+                            CountryId = 3,
+                            State = "Scotland"
+                        },
+                        new
+                        {
+                            StateId = 4,
+                            CountryId = 4,
+                            State = "Republic of Crimea"
+                        },
+                        new
+                        {
+                            StateId = 5,
+                            CountryId = 5,
+                            State = "Guangdong Province"
+                        },
+                        new
+                        {
+                            StateId = 6,
+                            CountryId = 6,
+                            State = "Hokkaido"
+                        },
+                        new
+                        {
+                            StateId = 7,
+                            CountryId = 7,
+                            State = "Queensland"
+                        },
+                        new
+                        {
+                            StateId = 8,
+                            CountryId = 8,
+                            State = "Auckland"
+                        },
+                        new
+                        {
+                            StateId = 9,
+                            CountryId = 9,
+                            State = "Sindh"
+                        },
+                        new
+                        {
+                            StateId = 10,
+                            CountryId = 10,
+                            State = "Berlin"
+                        },
+                        new
+                        {
+                            StateId = 11,
+                            CountryId = 1,
+                            State = "Delhi"
+                        },
+                        new
+                        {
+                            StateId = 12,
+                            CountryId = 2,
+                            State = "Texas"
+                        },
+                        new
+                        {
+                            StateId = 13,
+                            CountryId = 3,
+                            State = "Wales"
+                        },
+                        new
+                        {
+                            StateId = 14,
+                            CountryId = 4,
+                            State = "Republic of Tatarsan"
+                        },
+                        new
+                        {
+                            StateId = 15,
+                            CountryId = 5,
+                            State = "Qinghai"
+                        },
+                        new
+                        {
+                            StateId = 16,
+                            CountryId = 6,
+                            State = "Kanto"
+                        },
+                        new
+                        {
+                            StateId = 17,
+                            CountryId = 7,
+                            State = "New South Wales"
+                        },
+                        new
+                        {
+                            StateId = 18,
+                            CountryId = 8,
+                            State = "Wellington"
+                        },
+                        new
+                        {
+                            StateId = 19,
+                            CountryId = 9,
+                            State = "Balochistan"
+                        },
+                        new
+                        {
+                            StateId = 20,
+                            CountryId = 10,
+                            State = "Bavaria"
+                        },
+                        new
+                        {
+                            StateId = 21,
+                            CountryId = 1,
+                            State = "Tamil Nadu"
+                        },
+                        new
+                        {
+                            StateId = 22,
+                            CountryId = 2,
+                            State = "Florida"
+                        },
+                        new
+                        {
+                            StateId = 23,
+                            CountryId = 3,
+                            State = "Northern Ireland"
+                        },
+                        new
+                        {
+                            StateId = 24,
+                            CountryId = 4,
+                            State = "Altai Republic"
+                        },
+                        new
+                        {
+                            StateId = 25,
+                            CountryId = 5,
+                            State = "Tibet"
+                        },
+                        new
+                        {
+                            StateId = 26,
+                            CountryId = 6,
+                            State = "Kyushu-Okinawa"
+                        },
+                        new
+                        {
+                            StateId = 27,
+                            CountryId = 7,
+                            State = "Victoria"
+                        },
+                        new
+                        {
+                            StateId = 28,
+                            CountryId = 8,
+                            State = "Canterbury"
+                        },
+                        new
+                        {
+                            StateId = 29,
+                            CountryId = 9,
+                            State = "Gilgit Baltistan"
+                        },
+                        new
+                        {
+                            StateId = 30,
+                            CountryId = 10,
+                            State = "Saxony"
                         });
                 });
 
@@ -1040,6 +1357,174 @@ namespace CMS.Persistence.Migrations
                             CityId = 2,
                             City = "Los Angeles",
                             StateId = 2
+                        },
+                        new
+                        {
+                            CityId = 3,
+                            City = "Edinburgh",
+                            StateId = 3
+                        },
+                        new
+                        {
+                            CityId = 4,
+                            City = "Kerch",
+                            StateId = 4
+                        },
+                        new
+                        {
+                            CityId = 5,
+                            City = "Guangzhou",
+                            StateId = 5
+                        },
+                        new
+                        {
+                            CityId = 6,
+                            City = "Sapporo",
+                            StateId = 6
+                        },
+                        new
+                        {
+                            CityId = 7,
+                            City = "Brisbane",
+                            StateId = 7
+                        },
+                        new
+                        {
+                            CityId = 8,
+                            City = "Auckland City",
+                            StateId = 8
+                        },
+                        new
+                        {
+                            CityId = 9,
+                            City = "Karachi",
+                            StateId = 9
+                        },
+                        new
+                        {
+                            CityId = 10,
+                            City = "Bernau",
+                            StateId = 10
+                        },
+                        new
+                        {
+                            CityId = 11,
+                            City = "New Delhi",
+                            StateId = 11
+                        },
+                        new
+                        {
+                            CityId = 12,
+                            City = "Houston",
+                            StateId = 12
+                        },
+                        new
+                        {
+                            CityId = 13,
+                            City = "Cardiff",
+                            StateId = 13
+                        },
+                        new
+                        {
+                            CityId = 14,
+                            City = "Kazan",
+                            StateId = 14
+                        },
+                        new
+                        {
+                            CityId = 15,
+                            City = "Xining",
+                            StateId = 15
+                        },
+                        new
+                        {
+                            CityId = 16,
+                            City = "Tokyo",
+                            StateId = 16
+                        },
+                        new
+                        {
+                            CityId = 17,
+                            City = "Sydney",
+                            StateId = 17
+                        },
+                        new
+                        {
+                            CityId = 18,
+                            City = "Porirua",
+                            StateId = 18
+                        },
+                        new
+                        {
+                            CityId = 19,
+                            City = "Quetta",
+                            StateId = 19
+                        },
+                        new
+                        {
+                            CityId = 20,
+                            City = "Munich",
+                            StateId = 20
+                        },
+                        new
+                        {
+                            CityId = 21,
+                            City = "Chennai",
+                            StateId = 21
+                        },
+                        new
+                        {
+                            CityId = 22,
+                            City = "Miami",
+                            StateId = 22
+                        },
+                        new
+                        {
+                            CityId = 23,
+                            City = "Belfast",
+                            StateId = 23
+                        },
+                        new
+                        {
+                            CityId = 24,
+                            City = "Gorno-Altaysk",
+                            StateId = 24
+                        },
+                        new
+                        {
+                            CityId = 25,
+                            City = "Lhasa",
+                            StateId = 25
+                        },
+                        new
+                        {
+                            CityId = 26,
+                            City = "Miyazaki",
+                            StateId = 26
+                        },
+                        new
+                        {
+                            CityId = 27,
+                            City = "Melbourne",
+                            StateId = 27
+                        },
+                        new
+                        {
+                            CityId = 28,
+                            City = "Christchurch",
+                            StateId = 28
+                        },
+                        new
+                        {
+                            CityId = 29,
+                            City = "Gilgit",
+                            StateId = 29
+                        },
+                        new
+                        {
+                            CityId = 30,
+                            City = "Leipzig",
+                            StateId = 30
                         });
                 });
 
@@ -1444,6 +1929,47 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("ApproverId3");
 
                     b.ToTable("MasterApprovalMatrixContracts");
+
+                    b.HasData(
+                        new
+                        {
+                            MasterApprovalMatrixContractId = 1,
+                            ApproverId1 = "NEO1",
+                            ApproverId2 = "NEO1",
+                            ApproverId3 = "NEO1",
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8891),
+                            DepartmentId = 1,
+                            NumberOfDays = 5,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8905),
+                            UpdatedBy = "NEO1"
+                        },
+                        new
+                        {
+                            MasterApprovalMatrixContractId = 2,
+                            ApproverId1 = "NEO2",
+                            ApproverId2 = "NEO6",
+                            ApproverId3 = "NEO2",
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8909),
+                            DepartmentId = 2,
+                            NumberOfDays = 10,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8910),
+                            UpdatedBy = "NEO1"
+                        },
+                        new
+                        {
+                            MasterApprovalMatrixContractId = 3,
+                            ApproverId1 = "NEO3",
+                            ApproverId2 = "NEO3",
+                            ApproverId3 = "NEO3",
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8913),
+                            DepartmentId = 3,
+                            NumberOfDays = 7,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8915),
+                            UpdatedBy = "NEO1"
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterApprovalMatrixMOU", b =>
@@ -1483,6 +2009,53 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("ApproverId3");
 
                     b.ToTable("MasterApprovalMatrixMOUs");
+
+                    b.HasData(
+                        new
+                        {
+                            MasterApprovalMatrixMOUId = 1,
+                            ApproverId1 = "NEO1",
+                            ApproverId2 = "NEO1",
+                            ApproverId3 = "NEO1",
+                            DepartmentId = 1,
+                            NumberOfDays = 10
+                        },
+                        new
+                        {
+                            MasterApprovalMatrixMOUId = 2,
+                            ApproverId1 = "NEO6",
+                            ApproverId2 = "NEO2",
+                            ApproverId3 = "NEO2",
+                            DepartmentId = 2,
+                            NumberOfDays = 10
+                        },
+                        new
+                        {
+                            MasterApprovalMatrixMOUId = 3,
+                            ApproverId1 = "NEO3",
+                            ApproverId2 = "NEO3",
+                            ApproverId3 = "NEO3",
+                            DepartmentId = 3,
+                            NumberOfDays = 7
+                        },
+                        new
+                        {
+                            MasterApprovalMatrixMOUId = 4,
+                            ApproverId1 = "NEO4",
+                            ApproverId2 = "NEO4",
+                            ApproverId3 = "NEO4",
+                            DepartmentId = 4,
+                            NumberOfDays = 10
+                        },
+                        new
+                        {
+                            MasterApprovalMatrixMOUId = 5,
+                            ApproverId1 = "NEO5",
+                            ApproverId2 = "NEO5",
+                            ApproverId3 = "NEO5",
+                            DepartmentId = 5,
+                            NumberOfDays = 8
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterDocument", b =>
@@ -1579,7 +2152,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEJAukfSpvlwzPBsF2WkTmOtqi4MtSADGhbMb2IgtRunLRwAqKe5zXoDUc12VpcG8og==",
+                            Password = "AQAAAAIAAYagAAAAEN9sYCKrikX/W5j0xY1E6C593FSZQRU/1KE5T1L0jUfk6MVCjGMMLK792iIUDsbjFg==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -1594,7 +2167,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEDxirxx6d9zF97srPuQdILuKFerXntF4acx1Fy6608sKTkWH22CVgITabSq/UMXP+Q==",
+                            Password = "AQAAAAIAAYagAAAAEHlnkvW2xruNR6Eel/7s06JaFiwrMFYupmBPG5gKG0RiMtvz9cDjcL2QHXFcVZsG+w==",
                             Role = "Contract_Approver",
                             Unit = "Thane"
                         },
@@ -1609,7 +2182,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sakthish Nadar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEP730PPG13rF3Kfa+pfKKk3Gzr6qwad/TQs+8oAXRUjKvcNma/OA/cSy9RnvR3eKrw==",
+                            Password = "AQAAAAIAAYagAAAAEPpYEZxAtYp5WGb0fDeul+PreWW9Jm/uH7/JOQ+8YthnYh2JWeFqJ6ElC0E//937Vw==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1624,7 +2197,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Shreekant Panigrahi",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEPo3ZsfA9ny6IF0kL556w5VNY7q8oAaeVQxUZBHTVsZmlyph13Lu9yGFWRsP6T8Tnw==",
+                            Password = "AQAAAAIAAYagAAAAELVY5Sfo2NcUg1ML1QyL5BiQOmHl1Sm1xbKg2E7/i11hexUbxq56h568rWwtd1uwhA==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -1639,7 +2212,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Govind Lohar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEPmUGP5RE5odZbuKC4e/Oznu8lFJLI5GDd+Eyq6lV5qorOmvnRg3v1qd91fRXSvTHw==",
+                            Password = "AQAAAAIAAYagAAAAEE+YDudHfoz+A42QNk/pWhGqRY+qDbUMjofDLWoomxsxRolUCZboK4ZzTIWDnIvSgA==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         },
@@ -1654,7 +2227,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Om Auti",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEATZACpMCAJfyqvruXJ4E6RFa8FOb9+vwXZpUXMnE+KOcpxzP0hslEk+QyxpAb6SkQ==",
+                            Password = "AQAAAAIAAYagAAAAEHWuyTKF2ehG2ZprlNMUUyNHnb+xZ6UBvhPrSpeVbdlp9RCnnOIoGNIWMLcy2EWhAg==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         });
@@ -1703,6 +2276,52 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixContracts");
+
+                    b.HasData(
+                        new
+                        {
+                            MatrixContractId = 1,
+                            DepartmentId = 1,
+                            EscalationId1 = "NEO1",
+                            EscalationId2 = "NEO1",
+                            EscalationId3 = "NEO1",
+                            TriggerDaysEscalation1 = 3,
+                            TriggerDaysEscalation2 = 6,
+                            TriggerDaysEscalation3 = 9
+                        },
+                        new
+                        {
+                            MatrixContractId = 2,
+                            DepartmentId = 2,
+                            EscalationId1 = "NEO2",
+                            EscalationId2 = "NEO2",
+                            EscalationId3 = "NEO2",
+                            TriggerDaysEscalation1 = 4,
+                            TriggerDaysEscalation2 = 6,
+                            TriggerDaysEscalation3 = 8
+                        },
+                        new
+                        {
+                            MatrixContractId = 3,
+                            DepartmentId = 3,
+                            EscalationId1 = "NEO3",
+                            EscalationId2 = "NEO3",
+                            EscalationId3 = "NEO3",
+                            TriggerDaysEscalation1 = 2,
+                            TriggerDaysEscalation2 = 3,
+                            TriggerDaysEscalation3 = 5
+                        },
+                        new
+                        {
+                            MatrixContractId = 4,
+                            DepartmentId = 4,
+                            EscalationId1 = "NEO4",
+                            EscalationId2 = "NEO4",
+                            EscalationId3 = "NEO4",
+                            TriggerDaysEscalation1 = 1,
+                            TriggerDaysEscalation2 = 2,
+                            TriggerDaysEscalation3 = 3
+                        });
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.MasterEscalationMatrixMou", b =>
@@ -1762,6 +2381,103 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("EscalationId3");
 
                     b.ToTable("MasterEscalationMatrixMous");
+
+                    b.HasData(
+                        new
+                        {
+                            MatrixMouId = 1,
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8353),
+                            DepartmentId = 1,
+                            EscalationId1 = "NEO1",
+                            EscalationId2 = "NEO1",
+                            EscalationId3 = "NEO1",
+                            TriggerDaysEscalation1 = 2,
+                            TriggerDaysEscalation2 = 3,
+                            TriggerDaysEscalation3 = 5,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8372),
+                            UpdatedBy = "NEO1"
+                        },
+                        new
+                        {
+                            MatrixMouId = 2,
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8377),
+                            DepartmentId = 2,
+                            EscalationId1 = "NEO2",
+                            EscalationId2 = "NEO2",
+                            EscalationId3 = "NEO2",
+                            TriggerDaysEscalation1 = 2,
+                            TriggerDaysEscalation2 = 4,
+                            TriggerDaysEscalation3 = 8,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8379),
+                            UpdatedBy = "NEO1"
+                        },
+                        new
+                        {
+                            MatrixMouId = 3,
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8382),
+                            DepartmentId = 3,
+                            EscalationId1 = "NEO3",
+                            EscalationId2 = "NEO3",
+                            EscalationId3 = "NEO3",
+                            TriggerDaysEscalation1 = 3,
+                            TriggerDaysEscalation2 = 5,
+                            TriggerDaysEscalation3 = 8,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8383),
+                            UpdatedBy = "NEO1"
+                        },
+                        new
+                        {
+                            MatrixMouId = 4,
+                            CreatedBy = "NEO1",
+                            CreatedOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8473),
+                            DepartmentId = 4,
+                            EscalationId1 = "NEO4",
+                            EscalationId2 = "NEO4",
+                            EscalationId3 = "NEO4",
+                            TriggerDaysEscalation1 = 2,
+                            TriggerDaysEscalation2 = 3,
+                            TriggerDaysEscalation3 = 6,
+                            UpdateOn = new DateTime(2025, 5, 21, 12, 37, 29, 979, DateTimeKind.Local).AddTicks(8475),
+                            UpdatedBy = "NEO1"
+                        });
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.NoticeWithdrawal", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayDocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TerminationNoticeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("TerminationNoticeId");
+
+                    b.ToTable("NoticeWithdrawals");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.Notification", b =>
@@ -1885,6 +2601,18 @@ namespace CMS.Persistence.Migrations
                     b.Navigation("EmpCustodian");
                 });
 
+            modelBuilder.Entity("CMS.Domain.Entities.AuditTrail", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("LoggedBy")
+                        .HasPrincipalKey("EmployeeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("CMS.Domain.Entities.ClassifiedContract", b =>
                 {
                     b.HasOne("CMS.Domain.Entities.MasterApostille", "ApostilleType")
@@ -1927,6 +2655,36 @@ namespace CMS.Persistence.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("EmpCustodian");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.ClassifiedNoticeWithdrawal", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.ClassifiedContract", "ClassifiedContract")
+                        .WithMany()
+                        .HasForeignKey("ClassifiedContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.ClassifiedPostTerminationNotice", "ClassifiedPostTermination")
+                        .WithMany()
+                        .HasForeignKey("ClassifiedPostTerminationValueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassifiedContract");
+
+                    b.Navigation("ClassifiedPostTermination");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.ClassifiedPostTerminationNotice", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.ClassifiedContract", "ClassifiedContract")
+                        .WithMany()
+                        .HasForeignKey("ClassifiedContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassifiedContract");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.CompanyMaster.ListOfStates", b =>
@@ -2156,6 +2914,25 @@ namespace CMS.Persistence.Migrations
                     b.Navigation("Escalation2");
 
                     b.Navigation("Escalation3");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.NoticeWithdrawal", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.Contract", "Contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.PostTerminationNotice", "PostTermination")
+                        .WithMany()
+                        .HasForeignKey("TerminationNoticeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("PostTermination");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.PostTerminationNotice", b =>
