@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CMS.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,6 +70,44 @@ namespace CMS.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.DepartmentId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GetAddendumContractByIdDtos",
+                columns: table => new
+                {
+                    AddendumContractId = table.Column<int>(type: "int", nullable: false),
+                    ContractId = table.Column<int>(type: "int", nullable: false),
+                    ContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContractWithCompanyId = table.Column<int>(type: "int", nullable: false),
+                    ContractWithCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContractTypeId = table.Column<int>(type: "int", nullable: false),
+                    ContractTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApostilleTypeId = table.Column<int>(type: "int", nullable: false),
+                    ApostilleTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ActualDocRefNo = table.Column<int>(type: "int", nullable: false),
+                    RetainerContract = table.Column<int>(type: "int", nullable: false),
+                    TermsAndConditions = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmpCustodianId = table.Column<int>(type: "int", nullable: false),
+                    EmpCustodianName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver1Status = table.Column<int>(type: "int", nullable: false),
+                    Approver1Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver1EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver2Status = table.Column<int>(type: "int", nullable: false),
+                    Approver2Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver2EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver3Status = table.Column<int>(type: "int", nullable: false),
+                    Approver3Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver3EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -437,7 +475,11 @@ namespace CMS.Persistence.Migrations
                     ApproverId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ApproverId2 = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ApproverId3 = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    NumberOfDays = table.Column<int>(type: "int", nullable: false)
+                    NumberOfDays = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdateOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -555,7 +597,11 @@ namespace CMS.Persistence.Migrations
                     TriggerDaysEscalation1 = table.Column<int>(type: "int", nullable: false),
                     TriggerDaysEscalation2 = table.Column<int>(type: "int", nullable: false),
                     TriggerDaysEscalation3 = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdateOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -767,6 +813,66 @@ namespace CMS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AddendumContracts",
+                columns: table => new
+                {
+                    AddendumContractId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContractId = table.Column<int>(type: "int", nullable: false),
+                    ContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    ContractWithCompanyId = table.Column<int>(type: "int", nullable: false),
+                    ContractTypeId = table.Column<int>(type: "int", nullable: false),
+                    ApostilleTypeId = table.Column<int>(type: "int", nullable: false),
+                    ActualDocRefNo = table.Column<int>(type: "int", nullable: false),
+                    RetainerContract = table.Column<int>(type: "int", nullable: false),
+                    TermsAndConditions = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmpCustodianId = table.Column<int>(type: "int", nullable: false),
+                    AddendumDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approver1Status = table.Column<int>(type: "int", nullable: false),
+                    Approver2Status = table.Column<int>(type: "int", nullable: false),
+                    Approver3Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddendumContracts", x => x.AddendumContractId);
+                    table.ForeignKey(
+                        name: "FK_AddendumContracts_ContractsEntity_ContractId",
+                        column: x => x.ContractId,
+                        principalTable: "ContractsEntity",
+                        principalColumn: "ContractId");
+                    table.ForeignKey(
+                        name: "FK_AddendumContracts_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId");
+                    table.ForeignKey(
+                        name: "FK_AddendumContracts_MasterApostilles_ApostilleTypeId",
+                        column: x => x.ApostilleTypeId,
+                        principalTable: "MasterApostilles",
+                        principalColumn: "ValueId");
+                    table.ForeignKey(
+                        name: "FK_AddendumContracts_MasterCompanies_ContractWithCompanyId",
+                        column: x => x.ContractWithCompanyId,
+                        principalTable: "MasterCompanies",
+                        principalColumn: "ValueId");
+                    table.ForeignKey(
+                        name: "FK_AddendumContracts_MasterEmployees_EmpCustodianId",
+                        column: x => x.EmpCustodianId,
+                        principalTable: "MasterEmployees",
+                        principalColumn: "ValueId");
+                    table.ForeignKey(
+                        name: "FK_AddendumContracts_contracts_ContractTypeId",
+                        column: x => x.ContractTypeId,
+                        principalTable: "contracts",
+                        principalColumn: "ValueId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PostTerminationNotices",
                 columns: table => new
                 {
@@ -826,12 +932,12 @@ namespace CMS.Persistence.Migrations
                 columns: new[] { "ValueId", "DepartmentId", "Email", "EmployeeCode", "EmployeeExtension", "EmployeeMobile", "EmployeeName", "IsDeleted", "LastPasswordChanged", "Password", "Role", "Unit" },
                 values: new object[,]
                 {
-                    { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPNYMG+n1Vr8G5kO04pazuL+FZ4EfwcxR3j9Au6CMqlQUJFjbPJo+10sGubWpiGtOg==", "Admin", "Thane" },
-                    { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEGs1SMj0iFt8DJyoo/mZcJBp92ocEbD3JQW1kcdyM1npH6Kai6x9J6VlzRzU+AqYDw==", "Contract_Approver", "Thane" },
-                    { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEHhPmujVgnCnVJEsfiH1Po/iaFI/wkTQRVNlR8UdMaG5Mtoakkd6usB/BRL/P9QDkA==", "Contract_Approver", "Pune" },
-                    { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEB40nv8wmKFK0XTN1+DAQyVmz9lFqWfiirwptrBRYYotiaiVtPrRCOweDyrxc4/lmA==", "Contract_Approver", "Pune" },
-                    { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAENJKBNX+/+A8LR4c18cBmLzD+uJhmIbqV14dNApLxSi2mVSKAfj7mDlalibFXwRDxw==", "Contract_Approver", "Indore" },
-                    { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEO9vSL8KTUkcaZ9Lau8rSupizId07aqahdKz0KTs0k9TQS3xndzyU7eEmtZzhfj5GA==", "Contract_Approver", "Indore" }
+                    { 1, 1, "omigaming3123@gmail.com", "NEO1", 2467, 7777766666L, "Admin", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEJAukfSpvlwzPBsF2WkTmOtqi4MtSADGhbMb2IgtRunLRwAqKe5zXoDUc12VpcG8og==", "Admin", "Thane" },
+                    { 2, 2, "sarthak.lembhe@neosoftmail.com", "NEO2", 8976, 9999988888L, "Sarthak Lembhe", false, new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEDxirxx6d9zF97srPuQdILuKFerXntF4acx1Fy6608sKTkWH22CVgITabSq/UMXP+Q==", "Contract_Approver", "Thane" },
+                    { 3, 3, "sakthish.nadar@neosoftmail.com", "NEO3", 6969, 8888899999L, "Sakthish Nadar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEP730PPG13rF3Kfa+pfKKk3Gzr6qwad/TQs+8oAXRUjKvcNma/OA/cSy9RnvR3eKrw==", "Contract_Approver", "Pune" },
+                    { 4, 4, "shreekant.panigrahi@neosoftmail.com", "NEO4", 1111, 7777788888L, "Shreekant Panigrahi", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPo3ZsfA9ny6IF0kL556w5VNY7q8oAaeVQxUZBHTVsZmlyph13Lu9yGFWRsP6T8Tnw==", "Contract_Approver", "Pune" },
+                    { 5, 5, "govind.lohar@neosoftmail.com", "NEO5", 4321, 7676587876L, "Govind Lohar", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEPmUGP5RE5odZbuKC4e/Oznu8lFJLI5GDd+Eyq6lV5qorOmvnRg3v1qd91fRXSvTHw==", "Contract_Approver", "Indore" },
+                    { 6, 2, "om.auti@neosoftmail.com", "NEO6", 1234, 9876543210L, "Om Auti", false, new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAIAAYagAAAAEATZACpMCAJfyqvruXJ4E6RFa8FOb9+vwXZpUXMnE+KOcpxzP0hslEk+QyxpAb6SkQ==", "Contract_Approver", "Indore" }
                 });
 
             migrationBuilder.InsertData(
@@ -863,6 +969,36 @@ namespace CMS.Persistence.Migrations
                     { 1, "Mumbai", 1 },
                     { 2, "Los Angeles", 2 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddendumContracts_ApostilleTypeId",
+                table: "AddendumContracts",
+                column: "ApostilleTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddendumContracts_ContractId",
+                table: "AddendumContracts",
+                column: "ContractId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddendumContracts_ContractTypeId",
+                table: "AddendumContracts",
+                column: "ContractTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddendumContracts_ContractWithCompanyId",
+                table: "AddendumContracts",
+                column: "ContractWithCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddendumContracts_DepartmentId",
+                table: "AddendumContracts",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddendumContracts_EmpCustodianId",
+                table: "AddendumContracts",
+                column: "EmpCustodianId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId",
@@ -999,10 +1135,16 @@ namespace CMS.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AddendumContracts");
+
+            migrationBuilder.DropTable(
                 name: "ClassifiedContracts");
 
             migrationBuilder.DropTable(
                 name: "ContractNotifications");
+
+            migrationBuilder.DropTable(
+                name: "GetAddendumContractByIdDtos");
 
             migrationBuilder.DropTable(
                 name: "GetAllApprovalMatrixContractDTOs");

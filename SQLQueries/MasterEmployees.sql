@@ -151,7 +151,7 @@ exec sp_UpdateEmployee @Id=24,
 go
 
 
-create  or alter procedure sp_GetEmployeesByDepartmentAndQuery
+create or alter procedure sp_GetEmployeesByDepartmentAndQuery
 @DepartmentId int,
 @inpQuery nvarchar(100)
 as 

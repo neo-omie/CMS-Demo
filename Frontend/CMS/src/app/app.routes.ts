@@ -25,6 +25,7 @@ import { TerminatedContractsComponent } from './components/contracts/terminated-
 import { PostTerminationNoticeComponent } from './components/contracts/post-termination-notice/post-termination-notice.component';
 import { EscalationMatrixMouScreenComponent } from './components/EscalationMatrixMou/escalation-matrix-mou-screen/escalation-matrix-mou-screen.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { AddendumContractsComponent } from './components/addendum-contracts/addendum-contracts.component';
 
 export const routes: Routes = [
     {path: '', component: LoginScreenComponent}, 
@@ -50,6 +51,8 @@ export const routes: Routes = [
 
     {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
     {path: 'contracts/allContracts', component: AllContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/addendumContract', component: AddendumContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},

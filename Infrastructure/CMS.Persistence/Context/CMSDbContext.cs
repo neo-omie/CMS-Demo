@@ -17,6 +17,7 @@ using CMS.Application.Features.Contracts.Queries.GetContractById;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById;
 using CMS.Application.Features.PostTermination.Command.AddCommand;
+using CMS.Application.Features.AddendumContracts.AddendumContractDto;
 
 namespace CMS.Persistence.Context
 {
@@ -31,7 +32,9 @@ namespace CMS.Persistence.Context
         public DbSet<GetAllApprovalMatrixMOUByIdDto> GetAllApprovalMatrixMOUByIdDtos { get; set; }
         public DbSet<MasterApprovalMatrixContract> MasterApprovalMatrixContracts { get; set; }
         public DbSet<MasterApprovalMatrixMOU> MasterApprovalMatrixMOUs { get; set; }
-
+        //Addition of AddendumContract.
+        public DbSet<AddendumContract> AddendumContracts { get; set; }
+        public DbSet<GetAddendumContractByIdDto> GetAddendumContractByIdDtos { get; set; }
         public DbSet<MasterEscalationMatrixContract> MasterEscalationMatrixContracts { get; set; }
         public DbSet<GetEscalationMatrixContractDto> GetEscalationMatrixContractDtos { get; set; }
         public DbSet<MasterEscalationMatrixMou> MasterEscalationMatrixMous { get; set; }
@@ -72,6 +75,7 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<GetContractByIdDto>().Entity<GetContractByIdDto>().HasNoKey();
             modelBuilder.Ignore<GetClassifiedContractByIdDto>().Entity<GetClassifiedContractByIdDto>().HasNoKey();
             modelBuilder.Ignore<GetAllClassifiedContractsDto>().Entity<GetAllClassifiedContractsDto>().HasNoKey();
+            modelBuilder.Ignore<GetAddendumContractByIdDto>().Entity<GetAddendumContractByIdDto>().HasNoKey();
 
             modelBuilder.Entity<GetMastersDTO>().HasNoKey();
             modelBuilder.Ignore<GetAllApprovalMatrixContractDTO>().Entity<GetAllApprovalMatrixContractDTO>().HasNoKey();
@@ -132,6 +136,13 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<Contract>().HasOne(c => c.ContractType).WithMany().HasForeignKey(c => c.ContractTypeId).HasPrincipalKey(ct => ct.ValueId);
             modelBuilder.Entity<Contract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
             modelBuilder.Entity<Contract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
+
+            //Addendum Contract Relationship with other table. 
+            modelBuilder.Entity<AddendumContract>().HasOne(c => c.Department).WithMany().HasForeignKey(c => c.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
+            modelBuilder.Entity<AddendumContract>().HasOne(c => c.ContractWithCompany).WithMany().HasForeignKey(c => c.ContractWithCompanyId).HasPrincipalKey(cc => cc.ValueId);
+            modelBuilder.Entity<AddendumContract>().HasOne(c => c.ContractType).WithMany().HasForeignKey(c => c.ContractTypeId).HasPrincipalKey(ct => ct.ValueId);
+            modelBuilder.Entity<AddendumContract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
+            modelBuilder.Entity<AddendumContract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
 
             modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.Department).WithMany().HasForeignKey(c => c.DepartmentId).HasPrincipalKey(d => d.DepartmentId);
             modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.ContractWithCompany).WithMany().HasForeignKey(c => c.ContractWithCompanyId).HasPrincipalKey(cc => cc.ValueId);

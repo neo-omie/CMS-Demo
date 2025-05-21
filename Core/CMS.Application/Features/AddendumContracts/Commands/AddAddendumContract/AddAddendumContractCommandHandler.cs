@@ -7,10 +7,11 @@ using CMS.Domain.Entities;
 using AutoMapper;
 using CMS.Application.Contracts.Persistence;
 using MediatR;
+using CMS.Application.Features.AddendumContract.AddendumContractDto;
 
 namespace CMS.Application.Features.AddendumContracts.Commands.AddAddendumContract
 {
-    public class AddAddendumContractCommandHandler:IRequestHandler<AddAddendumContractCommand, Domain.Entities.AddendumContract>
+    public class AddAddendumContractCommandHandler:IRequestHandler<AddAddendumContractCommand, AddAddendumContractDto>
     {
         readonly IAddendumContractRepository _addendumContractRepository;
         readonly IMapper _mapper;
@@ -19,9 +20,9 @@ namespace CMS.Application.Features.AddendumContracts.Commands.AddAddendumContrac
             _addendumContractRepository = addendumContractRepository;
             _mapper = mapper;
         }
-        public async Task<Domain.Entities.AddendumContract> Handle(AddAddendumContractCommand request, CancellationToken cancellationToken)
+        public async Task<AddAddendumContractDto> Handle(AddAddendumContractCommand request, CancellationToken cancellationToken)
         {
-            var mappedContract = _mapper.Map<Domain.Entities.AddendumContract>(request.addendumDto);
+            var mappedContract = _mapper.Map<AddAddendumContractDto>(request.addendumDto);
             return await _addendumContractRepository.AddAddendumContractAsync(request.id, mappedContract);
         }
     }

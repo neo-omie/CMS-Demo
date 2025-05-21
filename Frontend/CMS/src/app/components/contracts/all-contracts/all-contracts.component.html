@@ -5,8 +5,8 @@
     <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New
       Contract</a>
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2">
-    <a data-bs-toggle="modal" data-bs-target="#contract-add-addendum"><i class="fa-solid fa-file-circle-plus"></i> Add
+  <button class="add-btn btn btn-outline-primary mb-2" routerLink="/contracts/addendumContract">
+    <a><i class="fa-solid fa-file-circle-plus"></i> Add
       Addendum</a>
   </button>
   <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
@@ -76,10 +76,9 @@
     <ng-container matColumnDef="action">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
       <td mat-cell *matCellDef="let cont">
-        <!-- <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#contract-edit"
-          ></i> -->
         <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
           (click)="GetContract(cont.contractID)"></i>
+        <i class="fa-solid fa-clock-rotate-left icon" routerLink="/contracts/addendumContract/{{cont.contractID}}"></i>
         <i class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
           (click)="DeleteContract(cont.contractID)"></i>
       </td>
@@ -90,6 +89,7 @@
   </table>
 </div>
 
+  <!-- Pagination Logic and Implementation -->
 <div *ngIf="!loading" class="table-responsive p-3">
   <nav class="d-flex justify-content-center" *ngIf="allContracts!=undefined && allContracts.length > 0"
     aria-label="Page navigation example">
@@ -114,7 +114,9 @@
           aria-label="LastPage">&raquo;</span></li>
     </ul>
   </nav>
+</div>
 
+  <!-- View of Contract -->
   <div class="modal fade" id="contract-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -352,6 +354,7 @@
     </div>
   </div>
 
+  <!-- Edit of Contract -->
   <div class="modal fade" id="contract-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -578,6 +581,7 @@
     </div>
   </div>
 
+  <!-- Addition of Contract -->
   <div #addContractModal class="modal fade" id="contract-add" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-content">
@@ -808,7 +812,6 @@
     </div>
   </div>
 
-
   <!-- Post-termination-Notice-Form -->
   <div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -872,6 +875,7 @@
     </div>
   </div>
 
+  <!-- Specific contract addendum -->
   <div class="modal fade" id="contract-add-addendum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -904,6 +908,7 @@
     </div>
   </div>
 
+  <!-- global addendum -->
   <div class="modal fade" id="contract-addendum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -1087,7 +1092,6 @@
   </div>
 
   <!-- contract-mail body  -->
-
   <div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -1120,8 +1124,7 @@
                 style="max-width: 300px;" (click)="onClick()">Close</button>
             </div>
           </form>
-
-
-
         </div>
       </div>
+    </div>
+  </div>

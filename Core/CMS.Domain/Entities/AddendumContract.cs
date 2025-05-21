@@ -49,6 +49,13 @@ namespace CMS.Domain.Entities
         //Employee Custodian Details
         public int EmpCustodianId { get; set; } //This will be autofilled 
         public MasterEmployee EmpCustodian { get; set; }
+        //public DateOnly AddendumDate { get; set; }
+
+        public DateTime AddendumDate { get; set; } = DateTime.Now;//Date in which addendum added 
+        public string Location { get; set; }
+        public ContractStatus Approver1Status { get; set; } = ContractStatus.PendingApproval;
+        public ContractStatus Approver2Status { get; set; } = ContractStatus.PendingApproval;
+        public ContractStatus Approver3Status { get; set; } = ContractStatus.PendingApproval;
         public bool IsDeleted { get; set; } = false; //for soft delete
     }
 }
