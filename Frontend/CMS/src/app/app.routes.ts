@@ -55,13 +55,9 @@ export const routes: Routes = [
     { path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate: [authGuard] },
     { path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate: [authGuard] },
     { path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate: [authGuard] },
-    {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
-    {path: 'contracts/allContracts', component: AllContractsComponent, canActivate:[authGuard]},
+
     {path: 'contracts/addendumContract', component: AddendumContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
     { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard] },
 

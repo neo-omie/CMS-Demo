@@ -8,10 +8,11 @@ import { AddAddendumContractsService } from '../../services/add-addendum-contrac
 import { AddendumContract } from '../../models/addendum-contract';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from '../UtilComponents/table/table.component';
-import { LoaderComponent } from '../loader/loader.component';
+
 import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 
 @Component({
   selector: 'app-addendum-contracts',

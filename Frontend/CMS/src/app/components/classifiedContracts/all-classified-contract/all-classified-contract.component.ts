@@ -28,17 +28,18 @@ import {  ClassifiedApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { PostTerminationService } from '../../../services/post-termination.service';
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 
 
 @Component({
   selector: 'app-all-classified-contract',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './all-classified-contract.component.html',
   styleUrl: './all-classified-contract.component.css'
 })
 export class AllClassifiedContractComponent implements OnInit{
-
+  
    displayedColumns: string[] = ['classifiedContractID', 'classifiedContractName', 'contractType', 'departmentName', 'effectiveDate',
                                   'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
                                   'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
