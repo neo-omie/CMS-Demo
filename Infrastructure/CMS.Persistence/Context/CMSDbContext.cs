@@ -60,7 +60,9 @@ namespace CMS.Persistence.Context
         public DbSet<Notification> ContractNotifications { get; set; }
 
         public DbSet<PostTerminationNotice> PostTerminationNotices { get; set; }
+        public DbSet<ClassifiedPostTerminationNotice> ClassifiedPostTerminationNotices { get; set; }
         public DbSet<NoticeWithdrawal> NoticeWithdrawals { get; set; }
+        public DbSet<ClassifiedNoticeWithdrawal> ClassifiedNoticeWithdrawals { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

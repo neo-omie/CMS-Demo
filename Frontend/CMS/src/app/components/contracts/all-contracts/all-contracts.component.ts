@@ -738,7 +738,9 @@ export class AllContractsComponent implements OnInit {
   }
   async approveRejectContract(id?: string, status?: number) {
     this.loading = true;
-    console.log('came here')
+    console.log('came here 1')
+    console.log("id",id,status);
+    
     let email = localStorage.getItem('email');
     if (email) {
       try {
@@ -862,7 +864,7 @@ export class AllContractsComponent implements OnInit {
       this.loading = true;
       const emailSubject = this.postTerminationEmailForm.value.emailSubject;
       const emailBody = this.postTerminationEmailForm.value.emailBody;
-      console.log('came here')
+      console.log('came here 2')
       let email = localStorage.getItem('email');
       if (email) {
         try {
@@ -982,7 +984,7 @@ export class AllContractsComponent implements OnInit {
       this.loading = true;
       const emailSubject = this.withdrawalNoticeEmailForm.value.emailSubject;
       const emailBody = this.withdrawalNoticeEmailForm.value.emailBody;
-      console.log('came here')
+      console.log('came here 3')
       let email = localStorage.getItem('email');
       if (email) {
         try {

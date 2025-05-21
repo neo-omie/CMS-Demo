@@ -125,6 +125,7 @@ namespace CMS.Persistence.Repositories
 
 
         }
+
         private async Task AddNewNotifications(string name, string subject, string message)
         {
             Notification createNewNotif = new Notification

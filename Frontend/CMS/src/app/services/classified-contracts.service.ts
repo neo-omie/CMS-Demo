@@ -6,6 +6,7 @@ import { GetAllDepartmentsDto } from '../models/master-department';
 import { ContractTypeMasterDTO } from '../models/contract-type-master';
 import { CompanyMasterDto } from '../models/master-company';
 import { MasterEmployee } from '../models/master-employee';
+import { MasterApostilleDto } from '../models/master-apostille';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,10 @@ export class ClassifiedContractsService {
     fetchContractData(contractID:number):Observable<AddClassifiedContractDto> {
         return this.http.get<AddClassifiedContractDto>(`${this.apiUrl}/${contractID}`);
       }
+
+    approveRejectContract(id?:number, empCode?:string, status?:number) : Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/${id}/approveRejectContract/${empCode}/${status}`,{});
+  }
      // For dropdowns and inputs from other tables
       GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
           return this.http.get<MasterEmployee[]>(`https://localhost:7041/api/Employee/search/${departmentId}/${inputText}`)
@@ -47,4 +52,8 @@ export class ClassifiedContractsService {
       GetCompanies():Observable<CompanyMasterDto[]> {
         return this.http.get<CompanyMasterDto[]>(`https://localhost:7041/api/MasterCompany/1/100`);
       }
+       GetApostilleTypes() : Observable<MasterApostilleDto> {
+          return this.http.get<MasterApostilleDto>(`https://localhost:7041/api/Apostille/1/100`);
+        }
+
 }

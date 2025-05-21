@@ -1,6 +1,5 @@
 
 export class ClassifiedContracts {
-   
         classifiedContractID: number;
         classifiedContractName: string;
         contractType: string;
@@ -49,33 +48,40 @@ export class ClassifiedContracts {
         
     }
 export class GetClassifiedContractByIdDto {
-        classifiedContractID?: number;
+        classifiedContractId?: string;
         classifiedContractName?: string;
-        departmentId?: number;
-        departmentName?: string;
-        contractWithCompanyId?: number;
-        contractWithCompanyName?: string;
-        contractTypeId?: number;
-        contractTypeName?: string;
-        apostilleTypeId?: number;
-        apostilleTypeName?: string;
-        actualDocRefNo?: number;
-        retainerContract?: number;
-        termsAndConditions?: string;
-        validFrom?: string;
-        validTill?: string;  
-        renewalFrom?: string;
-        renewalTill?: string;
-        addendumDate?: string;
-        empCustodianId?: number;
-        empCustodianName?: string;
-        location?: string;
-        approver1Status?: number;
-        approver2Status?: number;
-        approver3Status?: number;
-        isDeleted?: boolean;
+       departmentId?: number;
+    departmentName?: string;
+    contractWithCompanyId?: number;
+    contractWithCompanyName?: string;
+    contractTypeId?: number;
+    contractTypeName?: string;
+    apostilleTypeId?: number;
+    apostilleTypeName?: string;
+    actualDocRefNo?: number;
+    retainerContract?: number;
+    termsAndConditions?: string;
+    validFrom?: string;
+    validTill?: string;
+    renewalFrom?: string;
+    renewalTill?: string;
+    addendumDate?: string;
+    empCustodianId?: number;
+    empCustodianName?: string;
+    location?: string;
+    approver1Status?: number;
+    approver1Email?:string;
+    approver1EmployeeCode?:string;
+    approver2Status?: number;
+    approver2Email?:string;
+    approver2EmployeeCode?:string;
+    approver3Status?: number;
+    approver3Email?:string;
+    approver3EmployeeCode?:string;
+    isDeleted?: boolean;
     }
 export class AddClassifiedContractDto {
+    classifiedContractId?:string|null;
         classifiedContractName?: string | null;
       departmentId?: number | null;
       contractWithCompanyId?: number | null;
