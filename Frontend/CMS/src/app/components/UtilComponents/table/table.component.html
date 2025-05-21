@@ -1,5 +1,8 @@
+<button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#table','CMS-records.pdf')">
+    <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
 <table mat-table [dataSource]="dataSource" matSort
-    class="table table-striped table-bordered align-middle mat-elevation-z8">
+    class="table table-striped table-bordered align-middle mat-elevation-z8" id="table">
     <ng-container *ngFor="let column of displayedColumns; let first = first; let last = last" [matColumnDef]="column">
         <ng-container *ngIf="columnsInfo[column].isSort; else plainHeader">
             <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header

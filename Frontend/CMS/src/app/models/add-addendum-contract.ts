@@ -15,7 +15,7 @@ export class AddAddendumContract {
     termsAndConditions:string;
     validFrom:string;
     validTill:string;
-    addendumDate:string;
+    addendumDate:Date;
     approver1Status:number;
     approver1Email:string;
     approver2Status:number;
@@ -44,7 +44,7 @@ constructor(
     termsAndConditions:string='',
     validFrom:string='',
     validTill:string='',
-    addendumDate:string='',
+    addendumDate:Date=new Date(),
     approver1status:number=1,
     approver1Email:string = '',
     approver2status:number=1,

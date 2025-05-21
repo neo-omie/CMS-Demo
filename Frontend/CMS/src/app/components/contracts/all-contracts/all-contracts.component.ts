@@ -660,6 +660,7 @@ export class AllContractsComponent implements OnInit {
   }
 
   onAddAddendumFormSubmit(contractID: number) {
+    this.loading = true;
     const addendum = new AddAddendumContract();
     // var todaysDate = new Date().toISOString().split('T')[0];
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
@@ -673,10 +674,10 @@ export class AllContractsComponent implements OnInit {
     addendum.termsAndConditions = String(this.addaddendumForm.value.termsAndConditions);
     addendum.validFrom = String(this.addaddendumForm.value.validFrom);
     addendum.validTill = String(this.addaddendumForm.value.validTill);
-    addendum.addendumDate=String(this.addaddendumForm.value.addendumDate);
+    addendum.addendumDate=new Date();
     addendum.empCustodianId = Number(this.addaddendumForm.value.empCustodianId);
     addendum.location=String(this.addaddendumForm.value.location);
-    // console.log('Date', addendum.addendumDate);
+    console.log('Date', addendum.addendumDate);
     // console.log('Date', todaysDate);
     
 
@@ -685,11 +686,13 @@ export class AllContractsComponent implements OnInit {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
         this.GetAllContracts(1, 10);
         this.masterContractAddForm.reset();
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error adding addendum:', err);
         this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.title : err.message);
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        this.loading = false;
       }
     })
 
