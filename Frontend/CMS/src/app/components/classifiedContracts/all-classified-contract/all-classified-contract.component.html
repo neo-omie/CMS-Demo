@@ -305,7 +305,7 @@
             data-bs-target="#Termination-Notice-Detail" data-bs-toggle="modal"
             *ngIf="contractDetails?.approver3Status == 2"
             (click)="getContractIdforPostTerm(contractDetails?.classifiedContractId)">Post Termination</button>
-          <button data-bs-dismiss="modal" class="btn btn-outline-success" id="btncancel" style="max-width: 300px;"
+           <button data-bs-dismiss="modal" class="btn btn-outline-success" id="btncancel" style="max-width: 300px;"
             data-bs-target="#Notice-Withdrawal-Detail" data-bs-toggle="modal"
             *ngIf="contractDetails?.approver3Status == 7"
             (click)="getContractIdforPostTerm(contractDetails?.classifiedContractId)">Withdraw Notice</button>
@@ -318,6 +318,48 @@
       </div>
     </div>
   </div>
+
+<!-- notice withdraw -->
+ <div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Withdraw Termination Notice</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form #documentForm="ngForm" (ngSubmit)="OnSaveWithdrawalNotice(documentForm)">
+            <div class="mb-3">
+              <p class="m-1">File Upload<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
+                  accept=".pdf">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">
+                Remark <span style="color: red;">*</span>
+                <span *ngIf="!withdrawNotice.Remark || withdrawNotice.Remark.length <= 0" style="color: red;">Required</span>
+              </p>
+              <div class="input-group">
+                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                  [(ngModel)]="withdrawNotice.Remark"></textarea>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-outline-primary" type="submit">Save</button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
   <!-- Post termination -->
 <div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -728,3 +770,79 @@
       </div>
   </div>
 </div>
+
+
+  <div class="modal fade" id="withdrawal-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="withdrawalNoticeEmailForm" (ngSubmit)="approveWithdrawalNotice(contractDetails?.classifiedContractId)">
+            <div class="mb-3">
+              <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject" placeholder="Enter The Subject For Mail">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody" placeholder="Compose Mail"></textarea>
+              </div>
+            </div>
+
+
+            <div class="modal-footer">
+              <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+                style="max-width: 300px;">Send</button>
+              <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+                style="max-width: 300px;" (click)="onClick()">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+</div>
+</div>
+
+
+ <div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="postTerminationEmailForm" (ngSubmit)="approveTerminateContract(contractDetails?.classifiedContractId)">
+            <div class="mb-3">
+              <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject" placeholder="Enter The Subject For Mail">
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+              <div class="input-group">
+                <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody" placeholder="Compose Mail"></textarea>
+              </div>
+            </div>
+
+
+            <div class="modal-footer">
+              <button  data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+                style="max-width: 300px;">Send</button>
+              <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+                style="max-width: 300px;" (click)="onClick()">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

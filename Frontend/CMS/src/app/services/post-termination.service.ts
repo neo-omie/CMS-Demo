@@ -11,7 +11,7 @@ import { ClassifiedPostTermination} from '../models/post-termination';
 export class PostTerminationService {
 private apiUrl = `${environment.apiUrl}/PostTermination`;
 // private apiUrl='https://localhost:7041/api/PostTermination';
-private apiUrl2='https://localhost:7041/api/ClassifiedPostTermination';
+private apiUrl2=`${environment.apiUrl}/ClassifiedPostTermination`;
 
   constructor(private http:HttpClient) { }
 

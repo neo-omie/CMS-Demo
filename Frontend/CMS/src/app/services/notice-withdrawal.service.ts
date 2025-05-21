@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class NoticeWithdrawalService {
   // private apiUrl='https://localhost:7041/api/NoticeWithdrawal';
-  private apiUrl2='https://localhost:7041/api/ClassifiedNoticeWithdrawal';
+  private apiUrl2=`${environment.apiUrl}/ClassifiedNoticeWithdrawal`;
   private apiUrl = `${environment.apiUrl}/NoticeWithdrawal`;
     constructor(private http:HttpClient) { }
   
@@ -21,6 +21,7 @@ export class NoticeWithdrawalService {
     ApproveWithdrawalTermination(postTermination:ApproveRejectWithdrawalDTO) : Observable<boolean> {
       return this.http.post<boolean>(`${this.apiUrl}/approveWithdrawalNotice/${postTermination.contractId}/${postTermination.employeeEmail}/${postTermination.changeToStatus}/${postTermination.emailSubject}/${postTermination.emailBody}`, null)
     }
+
     AddClassifiedWithdrawalNotice(PostUpload:FormData):Observable<any>{
       console.log(PostUpload);
       return this.http.post<any>(`${this.apiUrl2}/WithdrawalUpload`,PostUpload)

@@ -123,6 +123,11 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<PostTerminationNotice>().HasOne(ptn => ptn.Contract).WithMany().HasForeignKey(ptn => ptn.ContractId).HasPrincipalKey(c => c.ContractId);
             modelBuilder.Entity<NoticeWithdrawal>().HasOne(nw => nw.Contract).WithMany().HasForeignKey(nw => nw.ContractId).HasPrincipalKey(c => c.ContractId);
             modelBuilder.Entity<NoticeWithdrawal>().HasOne(nw => nw.PostTermination).WithMany().HasForeignKey(nw => nw.TerminationNoticeId).HasPrincipalKey(c => c.ValueId);
+            
+            modelBuilder.Entity<ClassifiedPostTerminationNotice>().HasOne(ptn => ptn.ClassifiedContract).WithMany().HasForeignKey(ptn => ptn.ClassifiedContractId).HasPrincipalKey(c => c.ClassifiedContractId);
+            modelBuilder.Entity<ClassifiedNoticeWithdrawal>().HasOne(nw => nw.ClassifiedContract).WithMany().HasForeignKey(nw => nw.ClassifiedContractId).HasPrincipalKey(c => c.ClassifiedContractId);
+            modelBuilder.Entity<ClassifiedNoticeWithdrawal>().HasOne(nw => nw.ClassifiedPostTermination).WithMany().HasForeignKey(nw => nw.TerminationNoticeId).HasPrincipalKey(c => c.ValueId);
+
             //mastercompany location
             modelBuilder.Entity<ListOfStates>().HasOne(st => st.listofcountries).WithMany().HasForeignKey(st => st.CountryId);
             modelBuilder.Entity<ListofCity>().HasOne(ct => ct.listofStates).WithMany().HasForeignKey(ct=> ct.StateId);
