@@ -6,6 +6,7 @@ import { ApproverMatrixContractService } from '../../../services/approver-matrix
 import { TYPE } from '../../auth/login/values.constants';
 import { Alert } from '../../../utils/alert';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-approver-matrix-contract-modal',
@@ -36,7 +37,11 @@ export class ApproverMatrixContractModalComponent {
   @ViewChild('editApproverId3') editApproverId3!: ElementRef;
   @ViewChild('editNumberOfDays') editNumberOfDays!: ElementRef;
 
-  constructor(private approverMatrixContractService: ApproverMatrixContractService, private renderer: Renderer2) { }
+  constructor(
+    private approverMatrixContractService: ApproverMatrixContractService, 
+    private renderer: Renderer2,
+    private route: Router
+  ) { }
 
   closeEditApproverCollapses() {
     if (this.editApproverCollapse1 && this.editApproverCollapse2 && this.editApproverCollapse3) {
@@ -114,34 +119,41 @@ export class ApproverMatrixContractModalComponent {
   }
 
   editApproverMatrixContractSubmit(id: number) {
-    let nod = this.editNumberOfDays?.nativeElement.value;
-    if (nod !== "" && Number(nod) > 0) {
-      this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1?.nativeElement.value;
-      this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2?.nativeElement.value;
-      this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3?.nativeElement.value;
-      this.editApprovalMatrixContractDto.numberOfDays = nod;
-      this.approverMatrixContractService.EditApproverMatrixContract(id, this.editApprovalMatrixContractDto).subscribe({
-        next: (response: boolean) => {
-          if (response) {
-            Alert.toast(TYPE.SUCCESS, true, "Updated successfully");
-            this.GetApprovalMatrixContract(1, 10);
+    let empCode = localStorage.getItem("empCode");
+    if(empCode){
+      let nod = this.editNumberOfDays?.nativeElement.value;
+      if (nod !== "" && Number(nod) > 0) {
+        this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1?.nativeElement.value;
+        this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2?.nativeElement.value;
+        this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3?.nativeElement.value;
+        this.editApprovalMatrixContractDto.numberOfDays = nod;
+        this.approverMatrixContractService.EditApproverMatrixContract(id, this.editApprovalMatrixContractDto, empCode).subscribe({
+          next: (response: boolean) => {
+            if (response) {
+              Alert.toast(TYPE.SUCCESS, true, "Updated successfully");
+              this.GetApprovalMatrixContract(1, 10);
+            }
+            const modalElement = document.getElementById('approval-matrix-contract-modal');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
+            this.closeEditApproverCollapses();
+          },
+          error: (error) => {
+            console.error('Error :(', error);
+            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.error.title);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
           }
-          const modalElement = document.getElementById('approval-matrix-contract-modal');
-          if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            modalInstance.hide();
-          }
-          this.closeEditApproverCollapses();
-        },
-        error: (error) => {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.error.title);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
-      })
+        })
+      }
+      else {
+        Alert.toast(TYPE.ERROR, true, "Incorrect number of days");
+      }
     }
-    else {
-      Alert.toast(TYPE.ERROR, true, "Incorrect number of days");
+    else{
+      localStorage.clear();
+      this.route.navigate(["/"]);
     }
   }
 }

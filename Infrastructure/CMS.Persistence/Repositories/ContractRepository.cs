@@ -27,6 +27,13 @@ namespace CMS.Persistence.Repositories
             _context = context;
             _notificationRepository = notificationRepository;
         }
+        //public async Task<ContractsCount> GetContractsCountAsync()
+        //{
+        //    string sql = "EXEC SP_ContractsCounts";
+        //    var counter = _context.ContractsCounts.FromSqlRaw(sql).AsNoTracking().ToList();
+        //    var allCounters = counter.FirstOrDefault();
+        //    return allCounters;
+        //}
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();

@@ -3,11 +3,18 @@ h2 {
     font-weight: 600;
     text-align: center;
 }
+
 hr {
     width: 10%;
     justify-self: center;
 }
-#piechart_3d, .card, .card-body {
-    margin: 0 !important;
-    padding: 0 !important;
+
+.pie-chart {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    box-shadow:
+        inset 0 10px 15px rgba(0, 0, 0, 0.2),
+        0 10px 15px rgba(0, 0, 0, 0.3);
+    transform: rotateX(10deg);
 }

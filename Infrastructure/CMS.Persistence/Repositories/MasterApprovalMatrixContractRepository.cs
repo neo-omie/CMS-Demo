@@ -2,6 +2,7 @@
 using CMS.Application.Features.ApprovalMatrixContract.Commands;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatrixContract;
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
+using CMS.Domain.Constants;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,10 +27,10 @@ namespace CMS.Persistence.Repositories
             IEnumerable<GetApprovalMatrixContractByIdDto> result = _context.GetApprovalMatrixContractByIdDtos.FromSqlRaw(query, id);
             return result.FirstOrDefault();
         }
-        public async Task<bool> UpdateApprovalMatrixContract(int id, UpdateApprovalMatrixContractDto contract)
+        public async Task<bool> UpdateApprovalMatrixContract(int id, UpdateApprovalMatrixContractDto contract, string empCode)
         {
-            string query = "EXEC SP_UpdateApprovalMatrixContract @id = {0}, @ApproverId1 = {1}, @ApproverId2 = {2}, @ApproverId3 = {3}, @NumberOfDays = {4}";
-            return await _context.Database.ExecuteSqlRawAsync(query, id, contract.ApproverId1, contract.ApproverId2, contract.ApproverId3, contract.NumberOfDays ) > 0;
+            string query = "EXEC SP_UpdateApprovalMatrixContract @id = {0}, @ApproverId1 = {1}, @ApproverId2 = {2}, @ApproverId3 = {3}, @NumberOfDays = {4}, @UpdatedBy = {5}, @ForTable = {6}, @Status = {7}";
+            return await _context.Database.ExecuteSqlRawAsync(query, id, contract.ApproverId1, contract.ApproverId2, contract.ApproverId3, contract.NumberOfDays, empCode, TableList.MasterApprovalMatrixContract, LogStatus.Updated) > 0;
         }
     }
 }
