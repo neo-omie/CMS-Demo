@@ -200,6 +200,7 @@ export class MasterDocumentComponent implements OnInit {
                         this.getMasterDocumentById = undefined;
                         this.doc = undefined;
                         this.file = null;
+                        
                         Alert.toast(TYPE.SUCCESS, true, 'Document Updated Successfully');
                         this.getDocuments(1, 10);
                       }

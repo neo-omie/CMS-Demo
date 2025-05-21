@@ -21,7 +21,11 @@ namespace CMS.Persistence.Configurations
                     ApproverId1 = "NEO1",
                     ApproverId2 = "NEO1",
                     ApproverId3 = "NEO1",
-                    NumberOfDays = 5
+                    NumberOfDays = 5,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 },
                 new MasterApprovalMatrixContract
                 {
@@ -30,7 +34,11 @@ namespace CMS.Persistence.Configurations
                     ApproverId1 = "NEO2",
                     ApproverId2 = "NEO6",
                     ApproverId3 = "NEO2",
-                    NumberOfDays = 10
+                    NumberOfDays = 10,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 },
                 new MasterApprovalMatrixContract
                 {
@@ -39,7 +47,11 @@ namespace CMS.Persistence.Configurations
                     ApproverId1 = "NEO3",
                     ApproverId2 = "NEO3",
                     ApproverId3 = "NEO3",
-                    NumberOfDays = 7
+                    NumberOfDays = 7,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 }
             );
         }

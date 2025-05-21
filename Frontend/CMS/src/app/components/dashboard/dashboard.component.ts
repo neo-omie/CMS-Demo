@@ -1,4 +1,3 @@
-declare var google: any;
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
@@ -17,31 +16,34 @@ export class DashboardComponent implements OnInit {
     this.title.setTitle("Dashboard - CMS");
   }
 
-  ngOnInit(): void {
-    this.loadGoogleChart();
+  pieSegments = [
+    { color: '#4caf50', percentage: 40 },
+    { color: '#2196f3', percentage: 40 },
+    { color: '#ff9800', percentage: 10 },
+    { color: '#f44336', percentage: 10 }
+  ];
+
+  pieChartBackground = '';
+
+  ngOnInit() {
+    this.pieChartBackground = this.generateConicGradient(this.pieSegments);
   }
 
-  loadGoogleChart() {
-    google.charts.load('current', { packages: ['corechart'] });
-    google.charts.setOnLoadCallback(this.drawChart);
-  }
+  generateConicGradient(segments: { color: string; percentage: number }[]): string {
+    let gradient = 'conic-gradient(';
+    let currentPercent = 0;
 
-  drawChart() {
-    const data = google.visualization.arrayToDataTable([
-      ['Status', 'Hours per Day'],
-      ['Pending Approval', 11],
-      ['Pending Termination', 2],
-      ['Expired', 2],
-      ['Active', 2],
-      ['Terminated', 7]
-    ]);
+    for (let i = 0; i < segments.length; i++) {
+      const start = currentPercent;
+      const end = start + segments[i].percentage;
+      gradient += `${segments[i].color} ${start}% ${end}%`;
+      if (i < segments.length - 1) {
+        gradient += ', ';
+      }
+      currentPercent = end;
+    }
 
-    const options = {
-      title: 'Company Performance',
-      is3D: true
-    };
-
-    const chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-    chart.draw(data, options);
+    gradient += ')';
+    return gradient;
   }
 }

@@ -12,7 +12,7 @@ namespace CMS.Application.Features.ApprovalMatrixContract.Commands
         }
         public async Task<bool> Handle(UpdateApprovalMatrixContractCommand request, CancellationToken cancellationToken)
         {
-            return await _masterApprovalMatrixContractRepository.UpdateApprovalMatrixContract(request.id, request.contract);
+            return await _masterApprovalMatrixContractRepository.UpdateApprovalMatrixContract(request.id, request.contract, request.empCode);
         }
     }
 }

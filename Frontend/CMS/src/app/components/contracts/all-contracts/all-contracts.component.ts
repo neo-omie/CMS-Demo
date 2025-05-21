@@ -503,7 +503,9 @@ export class AllContractsComponent implements OnInit {
     termsAndConditions: new FormControl('', [Validators.required]),
     validFrom: new FormControl('', [Validators.required]),
     validTill: new FormControl('', [Validators.required]),
-    empCustodianId: new FormControl('', [Validators.required])
+    addendumDate: new FormControl('', [Validators.required]),
+    empCustodianId: new FormControl('', [Validators.required]),
+    location: new FormControl('', [Validators.required])
   });
 
   contID: number = 0;
@@ -524,7 +526,8 @@ export class AllContractsComponent implements OnInit {
             termsAndConditions: response.termsAndConditions,
             validFrom: this.formatDate(String(response.validFrom)),
             validTill: this.formatDate(String(response.validTill)),
-            empCustodianId: String(response.empCustodianId)
+            empCustodianId: String(response.empCustodianId),
+            location: String(response.location)
           });
           this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
           this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
@@ -557,7 +560,9 @@ export class AllContractsComponent implements OnInit {
           termsAndConditions: response.termsAndConditions,
           validFrom: this.formatDate(String(response.validFrom)),
           validTill: this.formatDate(String(response.validTill)),
-          empCustodianId: String(response.empCustodianId)
+          addendumDate: this.formatDate(String(response.addendumDate)),
+          empCustodianId: String(response.empCustodianId),
+          location: String(response.location)
         });
         this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
         this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
@@ -655,7 +660,9 @@ export class AllContractsComponent implements OnInit {
   }
 
   onAddAddendumFormSubmit(contractID: number) {
+    this.loading = true;
     const addendum = new AddAddendumContract();
+    // var todaysDate = new Date().toISOString().split('T')[0];
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
     addendum.contractName = String(this.addaddendumForm.value.contractName);
     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
@@ -667,18 +674,25 @@ export class AllContractsComponent implements OnInit {
     addendum.termsAndConditions = String(this.addaddendumForm.value.termsAndConditions);
     addendum.validFrom = String(this.addaddendumForm.value.validFrom);
     addendum.validTill = String(this.addaddendumForm.value.validTill);
+    addendum.addendumDate=new Date();
     addendum.empCustodianId = Number(this.addaddendumForm.value.empCustodianId);
+    addendum.location=String(this.addaddendumForm.value.location);
+    console.log('Date', addendum.addendumDate);
+    // console.log('Date', todaysDate);
+    
 
     this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum).subscribe({
       next: () => {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
         this.GetAllContracts(1, 10);
         this.masterContractAddForm.reset();
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error adding addendum:', err);
         this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.title : err.message);
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        this.loading = false;
       }
     })
 
@@ -712,6 +726,7 @@ export class AllContractsComponent implements OnInit {
       }
     });
   }
+  
   uploadFile(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -744,7 +759,9 @@ export class AllContractsComponent implements OnInit {
   }
   async approveRejectContract(id?: string, status?: number) {
     this.loading = true;
-    console.log('came here')
+    console.log('came here 1')
+    console.log("id",id,status);
+    
     let email = localStorage.getItem('email');
     if (email) {
       try {
@@ -873,7 +890,7 @@ export class AllContractsComponent implements OnInit {
       this.loading = true;
       const emailSubject = this.postTerminationEmailForm.value.emailSubject;
       const emailBody = this.postTerminationEmailForm.value.emailBody;
-      console.log('came here')
+      console.log('came here 2')
       let email = localStorage.getItem('email');
       if (email) {
         try {
@@ -1003,7 +1020,7 @@ export class AllContractsComponent implements OnInit {
       this.loading = true;
       const emailSubject = this.withdrawalNoticeEmailForm.value.emailSubject;
       const emailBody = this.withdrawalNoticeEmailForm.value.emailBody;
-      console.log('came here')
+      console.log('came here 3')
       let email = localStorage.getItem('email');
       if (email) {
         try {

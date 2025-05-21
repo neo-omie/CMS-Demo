@@ -1,4 +1,4 @@
-CREATE  OR ALTER PROCEDURE SP_GetAllApostilles @PageNumber int, @PageSize int, @SearchTerm nvarchar(255)=null
+CREATE OR ALTER PROCEDURE SP_GetAllApostilles @PageNumber int, @PageSize int, @SearchTerm nvarchar(255)=null
 AS
 DECLARE @TotalRecords int
 BEGIN
@@ -30,7 +30,7 @@ go
 EXEC SP_GetApostilleByID @id = 1;
 go
 
-Create  or alter procedure sp_AddApostille 
+Create or alter procedure sp_AddApostille 
 	@ApostilleName nvarchar(100),
 	@Status BIT,
 	@IsDeleted BIT,

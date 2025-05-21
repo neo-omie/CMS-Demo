@@ -89,3 +89,6 @@ div::-webkit-scrollbar {
     width: 3vw;
     aspect-ratio: 1/1;
 }
+.printPdf{
+    margin-left: 5px;
+}
