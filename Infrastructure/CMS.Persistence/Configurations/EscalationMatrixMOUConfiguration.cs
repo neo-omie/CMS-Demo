@@ -23,7 +23,11 @@ namespace CMS.Persistence.Configurations
                     TriggerDaysEscalation1 = 2,
                     TriggerDaysEscalation2 = 3,
                     TriggerDaysEscalation3 = 5,
-                    DepartmentId = 1
+                    DepartmentId = 1,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 },
                 new MasterEscalationMatrixMou
                 {
@@ -34,7 +38,11 @@ namespace CMS.Persistence.Configurations
                     TriggerDaysEscalation1 = 2,
                     TriggerDaysEscalation2 = 4,
                     TriggerDaysEscalation3 = 8,
-                    DepartmentId = 2
+                    DepartmentId = 2,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 },
                 new MasterEscalationMatrixMou
                 {
@@ -45,7 +53,11 @@ namespace CMS.Persistence.Configurations
                     TriggerDaysEscalation1 = 3,
                     TriggerDaysEscalation2 = 5,
                     TriggerDaysEscalation3 = 8,
-                    DepartmentId = 3
+                    DepartmentId = 3,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 },
                 new MasterEscalationMatrixMou
                 {
@@ -56,7 +68,11 @@ namespace CMS.Persistence.Configurations
                     TriggerDaysEscalation1 = 2,
                     TriggerDaysEscalation2 = 3,
                     TriggerDaysEscalation3 = 6,
-                    DepartmentId = 4
+                    DepartmentId = 4,
+                    CreatedBy = "NEO1",
+                    CreatedOn = DateTime.Now,
+                    UpdatedBy = "NEO1",
+                    UpdateOn = DateTime.Now
                 }
             );
         }

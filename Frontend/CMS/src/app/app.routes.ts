@@ -25,6 +25,7 @@ import { EscalationMatrixMouScreenComponent } from './components/EscalationMatri
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ApprovalMatrixMouScreenComponent } from './components/ApprovalMatrixMou/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
 import { EscalationMatrixContractScreenComponent } from './components/EscalationMarixContract/escalation-matrix-contract-screen/escalation-matrix-contract-screen.component';
+import { AddendumContractsComponent } from './components/addendum-contracts/addendum-contracts.component';
 
 export const routes: Routes = [
     { path: '', component: LoginScreenComponent },
@@ -54,6 +55,9 @@ export const routes: Routes = [
     { path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate: [authGuard] },
     { path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate: [authGuard] },
     { path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate: [authGuard] },
+
+    {path: 'contracts/addendumContract', component: AddendumContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
     { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard] },
 

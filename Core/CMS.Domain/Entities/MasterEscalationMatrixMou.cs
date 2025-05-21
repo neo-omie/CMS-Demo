@@ -22,5 +22,10 @@ namespace CMS.Domain.Entities
 
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
+
+        public string UpdatedBy { get; set; }
+        public DateTime UpdateOn { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
