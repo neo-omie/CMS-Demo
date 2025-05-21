@@ -62,6 +62,7 @@ namespace CMS.Persistence.Context
         public DbSet<PostTerminationNotice> PostTerminationNotices { get; set; }
         public DbSet<NoticeWithdrawal> NoticeWithdrawals { get; set; }
 
+        public DbSet<AuditTrail> AuditTrails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +99,9 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<MasterApprovalMatrixMOU>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixContract>().HasAlternateKey(mamc => mamc.DepartmentId);
             modelBuilder.Entity<MasterEscalationMatrixMou>().HasAlternateKey(mamc => mamc.DepartmentId);
+            modelBuilder.Entity<AuditTrail>().HasAlternateKey(at => at.ValueId);
+            //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
+            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
 
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
@@ -143,8 +147,7 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.ApostilleType).WithMany().HasForeignKey(c => c.ApostilleTypeId).HasPrincipalKey(at => at.ValueId);
             modelBuilder.Entity<ClassifiedContract>().HasOne(c => c.EmpCustodian).WithMany().HasForeignKey(c => c.EmpCustodianId).HasPrincipalKey(ec => ec.ValueId);
 
-            //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
-            modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
+            modelBuilder.Entity<AuditTrail>().HasOne(at => at.Employee).WithMany().HasForeignKey(at => at.LoggedBy).HasPrincipalKey(me => me.EmployeeCode);
 
             // Configurations and Data seeding
             modelBuilder.ApplyConfiguration(new ApostilleConfiguration());
