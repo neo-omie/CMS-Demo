@@ -31,9 +31,9 @@ namespace CMS.API.Controllers
             GetApprovalMatrixContractByIdDto approvalMatrixContract = await _mediator.Send(new GetApprovalMatrixContractByIdQuery(id));
             return Ok(approvalMatrixContract);
         }
-        [Route("{id}")]
+        [Route("empCode/{empCode}/{id}")]
         [HttpPost]
-        public async Task<IActionResult> UpdateApprovalMatrixContract([FromRoute]int id,[FromBody]UpdateApprovalMatrixContractDto contract)
+        public async Task<IActionResult> UpdateApprovalMatrixContract([FromRoute]string empCode,[FromRoute]int id,[FromBody]UpdateApprovalMatrixContractDto contract)
         {
             if((contract.ApproverId1 == contract.ApproverId2 && contract.ApproverId1 != "NEO1") || 
                (contract.ApproverId1 == contract.ApproverId3 && contract.ApproverId1 != "NEO1") || 
@@ -41,7 +41,7 @@ namespace CMS.API.Controllers
             {
                 throw new Exception("Approvers cannot be same");
             }
-            var updatedApprovalMatrixContract = await _mediator.Send(new UpdateApprovalMatrixContractCommand(id, contract));
+            var updatedApprovalMatrixContract = await _mediator.Send(new UpdateApprovalMatrixContractCommand(id, contract, empCode));
             return Ok(updatedApprovalMatrixContract);
         }
     }
