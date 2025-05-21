@@ -20,7 +20,7 @@ export class ApproverMatrixContractService {
     GetApproversForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
       return this.http.get<MasterEmployee[]>(`${environment.apiUrl}/Employee/search/${departmentId}/${inputText}`)
     }
-    EditApproverMatrixContract(id:number,editApprovalMatrixContractDto:EditApprovalMatrixContractDto):Observable<boolean>{
-      return this.http.post<boolean>(`${this.apiUrl}/${id}`,editApprovalMatrixContractDto);
+    EditApproverMatrixContract(id:number,editApprovalMatrixContractDto:EditApprovalMatrixContractDto,empCode:string):Observable<boolean>{
+      return this.http.post<boolean>(`${this.apiUrl}/empCode/${empCode}/${id}`,editApprovalMatrixContractDto);
     }
 }
