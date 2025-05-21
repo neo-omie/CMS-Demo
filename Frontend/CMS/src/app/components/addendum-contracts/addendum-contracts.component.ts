@@ -176,6 +176,4 @@ export class AddendumContractsComponent {
   //     }
   //   });
   // }
-
-
 }

@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ColumnTemplates } from '../../../models/column-templates';
+import { PDFExport } from '../../../utils/pdfExport';
 
 @Component({
   selector: 'app-table',
@@ -40,5 +41,8 @@ export class TableComponent {
     if (changes['data']) {
       this.dataSource.data = this.data;
     }
+  }
+  printToPDF(tableID: string, fileName: string) {
+    PDFExport.printToPDF(tableID, fileName);
   }
 }
