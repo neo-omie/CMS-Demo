@@ -8,6 +8,4 @@ import { LoginComponent } from '../login/login.component';
   templateUrl: './login-screen.component.html',
   styleUrl: './login-screen.component.css'
 })
-export class LoginScreenComponent {
-
-}
+export class LoginScreenComponent { }

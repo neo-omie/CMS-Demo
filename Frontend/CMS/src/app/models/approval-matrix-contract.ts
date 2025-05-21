@@ -1,26 +1,26 @@
 export class ApprovalMatrixContract {
-    masterApprovalMatrixContractId : number;
-    departmentName : string;
-    departmentId : number;
-    approverName1 : string;
-    approverId1 : string;
-    approverName2 : string;
-    approverId2 : string;
-    approverName3 : string;
-    approverId3 : string;
-    numberOfDays : number;
-    totalRecords : number;
-    constructor(masterApprovalMatrixContractId : number, 
-        departmentName : string, 
-        departmentId : number, 
-        approverName1 : string, 
-        approverId1 : string, 
-        approverName2 : string, 
-        approverId2 : string, 
-        approverName3 : string, 
-        approverId3 : string, 
-        numberOfDays : number,
-        totalRecords : number){
+    masterApprovalMatrixContractId: number;
+    departmentName: string;
+    departmentId: number;
+    approverName1: string;
+    approverId1: string;
+    approverName2: string;
+    approverId2: string;
+    approverName3: string;
+    approverId3: string;
+    numberOfDays: number;
+    totalRecords: number;
+    constructor(masterApprovalMatrixContractId: number,
+        departmentName: string,
+        departmentId: number,
+        approverName1: string,
+        approverId1: string,
+        approverName2: string,
+        approverId2: string,
+        approverName3: string,
+        approverId3: string,
+        numberOfDays: number,
+        totalRecords: number) {
         this.masterApprovalMatrixContractId = masterApprovalMatrixContractId;
         this.departmentName = departmentName;
         this.departmentId = departmentId;
@@ -35,19 +35,18 @@ export class ApprovalMatrixContract {
     }
 }
 export class EditApprovalMatrixContractDto {
-    approverId1 : string;
-    approverId2 : string;
-    approverId3 : string;
-    numberOfDays : number;
+    approverId1: string;
+    approverId2: string;
+    approverId3: string;
+    numberOfDays: number;
     constructor(
-        approverId1 : string,
-        approverId2 : string,
-        approverId3 : string, 
-        numberOfDays : number){
+        approverId1: string,
+        approverId2: string,
+        approverId3: string,
+        numberOfDays: number) {
         this.approverId1 = approverId1;
         this.approverId2 = approverId2;
         this.approverId3 = approverId3;
         this.numberOfDays = numberOfDays;
     }
 }
-

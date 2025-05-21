@@ -5,9 +5,7 @@ import { MastersScreenComponent } from './components/Masters/masters-screen/mast
 import { ApprovalMatrixContractScreenComponent } from './components/ApprovalMatrixContract/approval-matrix-contract-screen/approval-matrix-contract-screen.component';
 import { MasterDocumentComponent } from './components/master-document/master-document.component';
 import { RenewPasswordComponent } from './components/auth/renew-password/renew-password.component';
-import { NotFoundComponent } from './components/misc/not-found/not-found.component';
-import { ApprovalMatrixMouScreenComponent } from './components/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
-import { EscalationMatrixContractComponent } from './components/escalation-matrix-contract/escalation-matrix-contract.component';
+import { NotFoundComponent } from './components/UtilComponents/not-found/not-found.component';
 
 import { MasterDepartmentComponent } from './components/master-department/master-department.component';
 import { authGuard } from './auth.guard';
@@ -22,42 +20,45 @@ import { MasterApostilleComponent } from './components/master-apostille/master-a
 import { ActiveContractsComponent } from './components/contracts/active-contracts/active-contracts.component';
 import { PendingApprovalContractsComponent } from './components/contracts/pending-approval-contracts/pending-approval-contracts.component';
 import { TerminatedContractsComponent } from './components/contracts/terminated-contracts/terminated-contracts.component';
-import { PostTerminationNoticeComponent } from './components/contracts/post-termination-notice/post-termination-notice.component';
+
 import { EscalationMatrixMouScreenComponent } from './components/EscalationMatrixMou/escalation-matrix-mou-screen/escalation-matrix-mou-screen.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { ApprovalMatrixMouScreenComponent } from './components/ApprovalMatrixMou/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
+import { EscalationMatrixContractScreenComponent } from './components/EscalationMarixContract/escalation-matrix-contract-screen/escalation-matrix-contract-screen.component';
 
 export const routes: Routes = [
-    {path: '', component: LoginScreenComponent}, 
-    {path: 'auth/renewPassword', component: RenewPasswordComponent},
-    {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
-    {path: 'masters', component: MastersScreenComponent, canActivate:[authGuard]},
-    
+    { path: '', component: LoginScreenComponent },
+    { path: 'auth/renewPassword', component: RenewPasswordComponent },
+    // {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
+    { path: 'dashboard', loadChildren: () => import('./dashboard.routes').then(m => m.routes), canActivate: [authGuard] },
+    { path: 'masters', component: MastersScreenComponent, canActivate: [authGuard] },
 
-    {path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate:[authGuard]},
-    {path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate:[authGuard]},
 
-    {path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate:[authGuard]},
-    {path:'masters/employeeMasters', component:MasterEmployeeComponent, canActivate:[authGuard]},
-    {path:'masters/apostilleMasters', component:MasterApostilleComponent,canActivate:[authGuard]},
-    {path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate:[authGuard]},
-    
-    {path: 'masters/escalationContracts', component: EscalationMatrixContractComponent, canActivate:[authGuard]},
-    {path:'masters/escalationMOUs', component: EscalationMatrixMouScreenComponent, canActivate:[authGuard]},
-    
-    
-    {path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate:[authGuard]},
-    {path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate:[authGuard]},
+    { path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate: [authGuard] },
+    { path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate: [authGuard] },
 
-    {path: 'contracts', component: ContractsScreenComponent, canActivate:[authGuard]},
-    {path: 'contracts/allContracts', component: AllContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate:[authGuard]},
+    { path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate: [authGuard] },
+    { path: 'masters/employeeMasters', component: MasterEmployeeComponent, canActivate: [authGuard] },
+    { path: 'masters/apostilleMasters', component: MasterApostilleComponent, canActivate: [authGuard] },
+    { path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate: [authGuard] },
+
+    { path: 'masters/escalationContracts', component: EscalationMatrixContractScreenComponent, canActivate: [authGuard] },
+    { path: 'masters/escalationMOUs', component: EscalationMatrixMouScreenComponent, canActivate: [authGuard] },
+
+
+    { path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate: [authGuard] },
+    { path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate: [authGuard] },
+
+    { path: 'contracts', component: ContractsScreenComponent, canActivate: [authGuard] },
+    { path: 'contracts/allContracts', component: AllContractsComponent, canActivate: [authGuard] },
+    { path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate: [authGuard] },
+    { path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate: [authGuard] },
+    { path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate: [authGuard] },
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
-    {path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate:[authGuard]},
-    
+    { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard] },
 
-    {path: 'notifications', component: NotificationsComponent, canActivate:[authGuard]},
-    {path: '**', component: NotFoundComponent}
+
+    { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard] },
+    { path: '**', component: NotFoundComponent }
 
 ];

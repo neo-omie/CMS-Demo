@@ -2,12 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AddDocumentDto, GetDocumentById, MasterDocument, MasterDocumentDto } from '../models/master-document';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MasterDocumentService {
-  private apiUrl = 'https://localhost:7041/api/Document'
+  private apiUrl = `${environment.apiUrl}/Document`;
 
   constructor(private http:HttpClient) { }
 

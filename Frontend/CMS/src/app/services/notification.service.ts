@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
 import { Notification } from '../models/notification';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class NotificationService {
   // Observable to subscribe to
   trigger$ = this.triggerSubject.asObservable();
 
-  private apiUrl = 'https://localhost:7041/api/Notification';
+  private apiUrl = `${environment.apiUrl}/Notification`;
   constructor(private http:HttpClient) { }
   getAllNotifications(employeeCode:string) : Observable<Notification[]> {
     return this.http.get<Notification[]>(`${this.apiUrl}/${employeeCode}`);

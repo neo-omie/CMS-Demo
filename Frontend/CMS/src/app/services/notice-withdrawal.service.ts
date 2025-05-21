@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApproveRejectWithdrawalDTO, ClassifiedApproveRejectWithdrawalDTO } from '../models/notice-withdrawal';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NoticeWithdrawalService {
-  private apiUrl='https://localhost:7041/api/NoticeWithdrawal';
+  // private apiUrl='https://localhost:7041/api/NoticeWithdrawal';
   private apiUrl2='https://localhost:7041/api/ClassifiedNoticeWithdrawal';
+  private apiUrl = `${environment.apiUrl}/NoticeWithdrawal`;
     constructor(private http:HttpClient) { }
   
   

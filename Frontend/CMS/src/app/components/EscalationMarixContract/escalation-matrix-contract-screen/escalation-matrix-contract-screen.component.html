@@ -1,0 +1,19 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="pt-3 fs-1">Escalation Matrix Master - Contracts</h2>
+
+<div class="table-responsive p-md-5 p-3">
+  <app-table [data]="matrixContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+</div>
+
+<app-pagination [maxPage]="maxPage" [records]="this.matrixContracts.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage"></app-pagination>
+
+<ng-template #actionTemplateRef let-row>
+  <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#escalation-matrix-contract-modal"
+    (click)="GetMatrixMouById(row.matrixContractId,true)"></i>
+  <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#escalation-matrix-contract-modal"
+    (click)="GetMatrixMouById(row.matrixContractId,false)"></i>
+</ng-template>
+
+<app-escalation-matrix-contract-modal [getMatrixMous]="getMatrixContracts.bind(this)" [matrixContract]="matrixContract"
+  [isEdit]="isEdit"></app-escalation-matrix-contract-modal>

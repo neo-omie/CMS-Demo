@@ -18,7 +18,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { LoaderComponent } from '../../loader/loader.component';
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { firstValueFrom } from 'rxjs';
 import { PDFExport } from '../../../utils/pdfExport';
 

@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AddCompanyDto, CompanyListResponse, CompanyMasterDto, MasterCompany } from '../models/master-company';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyMasterService {
-private apiUrl='https://localhost:7041/api/MasterCompany'
+private apiUrl = `${environment.apiUrl}/MasterCompany`;
   constructor(private http:HttpClient) { }
 
   getCompany(searchTerm:string, pageNumber:number,pageSize:number):Observable<CompanyMasterDto[]>{

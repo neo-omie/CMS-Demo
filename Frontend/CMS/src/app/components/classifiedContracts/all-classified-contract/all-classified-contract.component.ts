@@ -5,7 +5,7 @@ import { AddClassifiedContractDto, ClassifiedContracts, GetClassifiedContractByI
 import { Pagination } from '../../../utils/pagination';
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
-import { LoaderComponent } from "../../loader/loader.component";
+// import { LoaderComponent } from "../../loader/loader.component";
 import { CommonModule, DatePipe, DOCUMENT } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,11 +20,11 @@ import { MasterEmployee } from '../../../models/master-employee';
 import { Title } from '@angular/platform-browser';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
 import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
-import { AddAddendumContract } from '../../../models/add-addendum-contract';
+// import { AddAddendumContract } from '../../../models/add-addendum-contract';
 import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { PDFExport } from '../../../utils/pdfExport';
 import { ClassifiedPostTermination } from '../../../models/post-termination';
-import { ApproveRejectWithdrawalDTO, ClassifiedApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
+import {  ClassifiedApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { PostTerminationService } from '../../../services/post-termination.service';
@@ -33,7 +33,7 @@ import { PostTerminationService } from '../../../services/post-termination.servi
 @Component({
   selector: 'app-all-classified-contract',
   standalone: true,
-  imports: [LoaderComponent,FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './all-classified-contract.component.html',
   styleUrl: './all-classified-contract.component.css'
 })

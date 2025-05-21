@@ -1,13 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ClassifiedPostTermination, PostTermination} from '../models/post-termination';
+import { PostTermination} from '../models/post-termination';
+import { environment } from '../../environments/environment';
+import { ClassifiedPostTermination} from '../models/post-termination';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostTerminationService {
-private apiUrl='https://localhost:7041/api/PostTermination';
+private apiUrl = `${environment.apiUrl}/PostTermination`;
+// private apiUrl='https://localhost:7041/api/PostTermination';
 private apiUrl2='https://localhost:7041/api/ClassifiedPostTermination';
 
   constructor(private http:HttpClient) { }

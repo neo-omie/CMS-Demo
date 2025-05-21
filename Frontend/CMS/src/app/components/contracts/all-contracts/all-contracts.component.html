@@ -1,5 +1,5 @@
 <app-loader *ngIf="loading"></app-loader>
-<h2 class="mt-3">Contracts List - All</h2>
+<h2 class="pt-3">Contracts List - All</h2>
 <div class="table-responsive p-md-5 p-3">
   <button class="add-btn btn btn-outline-primary mb-2">
     <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New
@@ -824,7 +824,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+            <button class="btn add-btn add-modal-btn" id="btnadd" type="submit"
               style="max-width: 300px;">Add</button>
             <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
               style="max-width: 300px;" (click)="onClick()">Cancel</button>
@@ -893,11 +893,10 @@
             </div>
 
             <div class="modal-footer">
-              <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
+              <button class="btn btn-outline-primary" type="submit">Save</button>
               <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
             </div>
           </form>
-
         </div>
       </div>
     </div>
@@ -934,7 +933,7 @@
             </div>
 
             <div class="modal-footer">
-              <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Save</button>
+              <button class="btn btn-outline-primary" type="submit">Save</button>
               <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
             </div>
           </form>
@@ -1223,7 +1222,7 @@
 
 
             <div class="modal-footer">
-              <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+              <button  data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
                 style="max-width: 300px;">Send</button>
               <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
                 style="max-width: 300px;" (click)="onClick()">Close</button>

@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -20,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
 import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
 import { PostTerminationService } from '../../../services/post-termination.service';
-import { LoaderComponent } from '../../loader/loader.component';
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { AddAddendumContract } from '../../../models/add-addendum-contract';
 import { firstValueFrom } from 'rxjs';
@@ -55,7 +56,7 @@ export class AllContractsComponent implements OnInit {
   contractDetails?: GetContractByIdDto;
   approverCheck: boolean = true;
   terminationCheck: boolean = true;
-  withdrawCheck:boolean = true;
+  withdrawCheck: boolean = true;
   mode: any;
   deptID?: number;
   // Dropdowns
@@ -352,6 +353,11 @@ export class AllContractsComponent implements OnInit {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
             this.GetAllContracts(1, 10);
             this.masterContractAddForm.reset();
+            const modalElement = document.getElementById('contract-add');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
           }
         } catch (error) {
           console.error('Error :(', error);
@@ -651,7 +657,7 @@ export class AllContractsComponent implements OnInit {
   onAddAddendumFormSubmit(contractID: number) {
     const addendum = new AddAddendumContract();
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
-    addendum.contractName=String(this.addaddendumForm.value.contractName);
+    addendum.contractName = String(this.addaddendumForm.value.contractName);
     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
     addendum.contractWithCompanyId = Number(this.addaddendumForm.value.contractWithCompanyId);
     addendum.contractTypeId = Number(this.addaddendumForm.value.contractTypeId);
@@ -816,6 +822,11 @@ export class AllContractsComponent implements OnInit {
           'Ok'
         );
         this.GetPage(this.maxPage);
+        const modalElement = document.getElementById('Termination-Notice-Detail');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
+        }
       },
       error: (error) => {
         console.error('Error in creating Notice:', error);
@@ -839,7 +850,7 @@ export class AllContractsComponent implements OnInit {
     // this.document.status = 1;
 
   }
-  
+
   // Post Termination Notice
   postTermination: PostTermination = new PostTermination();
   statusTermOrReject?: number = 0;
@@ -879,6 +890,11 @@ export class AllContractsComponent implements OnInit {
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
             this.GetAllContracts(1, 10);
+            // const modalElement = document.getElementById('postTerm-mail');
+            // if (modalElement) {
+            //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            //   modalInstance.hide();
+            // }
           }
         }
         catch (error) {
@@ -945,6 +961,11 @@ export class AllContractsComponent implements OnInit {
           'Ok'
         );
         this.GetPage(this.maxPage);
+        const modalElement = document.getElementById('Notice-Withdrawal-Detail');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
+        }
       },
       error: (error) => {
         console.error('Error in adding notice withdrawal:', error);
@@ -974,7 +995,7 @@ export class AllContractsComponent implements OnInit {
     emailBody: new FormControl('', [Validators.required])
   });
 
-  withdrawNoticeSend:ApproveRejectWithdrawalDTO = new ApproveRejectWithdrawalDTO();
+  withdrawNoticeSend: ApproveRejectWithdrawalDTO = new ApproveRejectWithdrawalDTO();
   async approveWithdrawalNotice(contractId?: string) {
     if (this.withdrawalNoticeEmailForm.invalid) {
       this.withdrawalNoticeEmailForm.markAllAsTouched();
@@ -999,6 +1020,11 @@ export class AllContractsComponent implements OnInit {
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
             this.GetAllContracts(1, 10);
+            // const modalElement = document.getElementById('withdrawal-mail');
+            // if (modalElement) {
+            //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            //   modalInstance.hide();
+            // }
           }
         }
         catch (error) {

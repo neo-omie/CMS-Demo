@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cities, Countriess, States } from '../models/company-cascade';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyCascadeService {
-  private apiUrl="https://localhost:7041/api/MasterCompanyCascade"
+  private apiUrl = `${environment.apiUrl}/MasterCompanyCascade`;
   constructor(private http:HttpClient) {
   
    }

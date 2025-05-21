@@ -7,7 +7,7 @@ import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
 import { EscalationMatrixMouModalComponent } from '../escalation-matrix-mou-modal/escalation-matrix-mou-modal.component';
-import { LoaderComponent } from '../../loader/loader.component';
+import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { TableComponent } from '../../UtilComponents/table/table.component';
 import { PaginationComponent } from "../../UtilComponents/pagination/pagination.component";
 
