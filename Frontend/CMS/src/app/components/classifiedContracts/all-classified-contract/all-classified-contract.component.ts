@@ -1,3 +1,5 @@
+declare var bootstrap: any;
+
 import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ClassifiedContractsService } from '../../../services/classified-contracts.service';
@@ -304,7 +306,7 @@ export class AllClassifiedContractComponent implements OnInit{
             skipApproval : new FormControl(true,[Validators.required])
           })
           async onAddFormSubmit(){
-            
+            this.loading=true;
             this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
             if(this.masterContractAddForm.invalid){
               this.masterContractAddForm.markAllAsTouched();
@@ -356,10 +358,6 @@ export class AllClassifiedContractComponent implements OnInit{
                 addFormValues.approver1Status = Number(approver1Status);
                 addFormValues.approver2Status = Number(approver2Status);
                 addFormValues.approver3Status = Number(approver3Status);
-                //console.log("bula bula bule",addFormValues);                 
-                
-                // this.contractsService.addContract(addFormValues).subscribe({
-                //   next:(response:boolean) => {
                 
                     try {
                               const response = await firstValueFrom(this.contractsService.addContract(addFormValues));
@@ -378,7 +376,11 @@ export class AllClassifiedContractComponent implements OnInit{
                     });
                     console.log("After rest : ",this.masterContractAddForm.value);
                       this.GetAllContracts(1, 10);
-                      //this.renderer.removeClass(this.addContractModal.nativeElement, 'show');
+                      const modalElement = document.getElementById('contract-add');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
                     }
                   }
                   // error:(error) => {
@@ -533,41 +535,6 @@ export class AllClassifiedContractComponent implements OnInit{
           
 
           contID:number = 0;
-
-          //  fetchContractData(classifiedContractID?: string) {
-          //     if (classifiedContractID != null) {
-          //       this.addAddendumContractsService.fetchContractData(classifiedContractID).subscribe({
-          //         next: (response) => {
-          //           this.addaddendumForm.patchValue({
-          //             classifiedContractID: String(response.classifiedContractID),
-          //             contractName: String(response.contractName),
-          //             departmentId: String(response.departmentId),
-          //             contractWithCompanyId: String(response.contractWithCompanyId),
-          //             contractTypeId: String(response.contractTypeId),
-          //             apostilleTypeId: String(response.apostilleTypeId),
-          //             actualDocRefNo: String(response.actualDocRefNo),
-          //             retainerContract: String(response.retainerContract),
-          //             termsAndConditions: response.termsAndConditions,
-          //             validFrom: this.formatDate(String(response.validFrom)),
-          //             validTill: this.formatDate(String(response.validTill)),
-          //             empCustodianId: String(response.empCustodianId)
-          //           });
-          //           this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
-          //           this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
-          //           // console.log(response);
-          //           return true;
-          //         },
-          //         error: (err) => {
-          //           console.error('No Contract with this id exist', err);
-          //           this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.message : err.message);
-          //           Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          //           return false;
-          //         }
-          //       })
-          //       return false;
-          //     } else { return false; }
-          //   }
-          
 
           fetchContractData(classifiedContractID:any) {
             this.contID = classifiedContractID;
