@@ -8,6 +8,7 @@ import { CompanyMasterDto } from '../models/master-company';
 import { MasterEmployee } from '../models/master-employee';
 import { MasterApostilleDto } from '../models/master-apostille';
 import { environment } from '../../environments/environment';
+import { ContractsCount } from '../models/contracts-count';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,9 @@ export class ClassifiedContractsService {
     getContractByID(classifiedContractID: number) : Observable<GetClassifiedContractByIdDto> {
       return this.http.get<GetClassifiedContractByIdDto>(`${this.apiUrl}/${classifiedContractID}`);
     }
+  getClassifiedContractCounts(): Observable<ContractsCount> {
+    return this.http.get<ContractsCount>(`${this.apiUrl}/GetClassifiedContractsCount`);
+  }
     deleteContract(classifiedContractID: number) : Observable<boolean> {
       return this.http.delete<boolean>(`${this.apiUrl}/${classifiedContractID}`);
     }

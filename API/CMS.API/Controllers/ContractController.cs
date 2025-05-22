@@ -63,7 +63,6 @@ namespace CMS.API.Controllers
             _logger.LogInformation("GetPendingApprovalContracts method performed");
             return Ok(pendingApprovalContracts);
         }
-
         [HttpGet("GetContractsCount")]
         public async Task<IActionResult> GetContractsCount()
         {

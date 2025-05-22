@@ -33,6 +33,17 @@ namespace CMS.Persistence.Repositories
             _emailService = emailService;
             _notificationRepository = notificationRepository;
         }
+
+        public async Task<ContractsCount> GetClassifiedContractsCountAsync()
+        {
+            string sql = "EXEC SP_ClassifiedContractsCounts";
+            var counter = _context.ContractsCounter.FromSqlRaw(sql).AsNoTracking().ToList();
+            var allCounters = counter.FirstOrDefault();
+            if (allCounters == null)
+                throw new NotFoundException("Classified Contracts count not found for some reason");
+            return allCounters;
+        }
+
         public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.ClassifiedContracts.Where(x => x.IsDeleted == false).CountAsync();
