@@ -1,4 +1,5 @@
-SELECT * FROM ContractsEntity
+USE CMS_Trailblazers
+-- Get All and types of Contracts counts
 CREATE OR ALTER PROCEDURE SP_ContractsCounts
 AS
 BEGIN
@@ -27,3 +28,4 @@ BEGIN
 		   @TerminatedContractsCount AS TerminatedContractsCount
 END
 EXEC SP_ContractsCounts
+SELECT * FROM ContractsEntity

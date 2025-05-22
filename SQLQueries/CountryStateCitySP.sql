@@ -1,3 +1,4 @@
+USE CMS_Trailblazers
 -- Get Countries
 CREATE OR ALTER PROCEDURE SP_GetCountries
 AS
