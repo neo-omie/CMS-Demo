@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { CommonModule } from '@angular/common';
+import { ContractsService } from '../../services/contracts.service';
+import { ContractsCount } from '../../models/contracts-count';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +16,8 @@ import { CommonModule } from '@angular/common';
 })
 export class DashboardComponent implements OnInit {
   loading: boolean = false;
-  constructor(private title: Title) {
+  errorMsg: string = '';
+  constructor(private title: Title, private contractsService:ContractsService) {
     this.title.setTitle("Dashboard - CMS");
   }
 
@@ -27,6 +32,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.pieChartBackground = this.generateConicGradient(this.pieSegments);
+    this.GetContractsCount();
+  }
+  GetContractsCount() {
+    this.contractsService.getContractCounts().subscribe({
+      next: (response: ContractsCount) => {
+        console.log(response);
+        
+      }, error: (error) => {
+        this.errorMsg = error.error.message;
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      }
+    });
   }
 
   generateConicGradient(segments: { color: string; percentage: number }[]): string {

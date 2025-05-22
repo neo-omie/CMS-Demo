@@ -8,6 +8,7 @@ import { ContractTypeMasterDTO } from '../models/contract-type-master';
 import { CompanyMasterDto } from '../models/master-company';
 import { MasterApostille, MasterApostilleDto } from '../models/master-apostille';
 import { environment } from '../../environments/environment';
+import { ContractsCount } from '../models/contracts-count';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +29,13 @@ export class ContractsService {
   getPendingApprovalContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
     return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetPendingApprovalContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
   }
-
   getContractByID(contractID: number) : Observable<GetContractByIdDto> {
     return this.http.get<GetContractByIdDto>(`${this.apiUrl}/${contractID}`);
   }
+  getContractCounts() : Observable<ContractsCount> {
+    return this.http.get<ContractsCount>(`${this.apiUrl}/GetContractsCount`);
+  }
+
   deleteContract(contractID: number) : Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/${contractID}`);
   }
