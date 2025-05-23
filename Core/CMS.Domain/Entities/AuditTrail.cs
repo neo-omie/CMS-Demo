@@ -16,7 +16,7 @@ namespace CMS.Domain.Entities
         public TableList ForTable { get; set; }
         public string ActionDescription { get; set; }
         public DateTime LogTime { get; set; }
-        public string LoggedBy { get; set; } // FK of Employee Code from MasterEmployee Table
+        public string LoggedBy { get; set; } // FK of Employee Code from MasterEmployee Table.
         public MasterEmployee Employee { get; set; }
         public LogStatus Status { get; set; }
     }

@@ -201,10 +201,12 @@ namespace CMS.Persistence.Repositories
             //{
             //    throw new Exception("Employee not updated. Failed :(");
             //}
+
             var hasher = new PasswordHasher<MasterEmployee>();
             var hashedPswd = hasher.HashPassword(null, employee.Password);
             employee.Password = hashedPswd;
             employee.LastPasswordChanged = DateTime.Now;
+
             var affectedRows = await _context.Database.ExecuteSqlRawAsync("EXEC sp_UpdateEmployee @Id={0}, @EmployeeName={1}, @Password={2}, @Role={3}, @EmployeeCode={4}, @Unit={5}, @DepartmentId={6}, @EmployeeMobile={7}, @Email={8}, @EmployeeExtension={9}",
                 id, employee.EmployeeName, employee.Password, employee.Role, employee.EmployeeCode, employee.Unit, employee.DepartmentId, employee.EmployeeMobile, employee.Email, employee.EmployeeExtension);
 
