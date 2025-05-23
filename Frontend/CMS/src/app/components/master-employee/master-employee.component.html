@@ -230,7 +230,6 @@
       <div class="modal-header d-flex justify-content-between">
         <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Employee' : mode==='edit' ? 'Edit Employee' :'View Employee'}}</h1>
         <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
-
       </div>
       <div class="modal-body">
         <div class="row justify-content-center">
@@ -314,36 +313,6 @@
                     <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
                   </div>
                 </form>
-    
-                <!-- <div class="view-mode" *ngIf="mode==='view'"> -->
-                  <!-- <div class="m-3">
-                    <strong>Employee Name: </strong>{{addEmployeeForm.get('employeeName')?.value}}
-                  </div>
-                  <div class="m-3">
-                    <strong>Role: </strong>{{addEmployeeForm.get('role')?.value}}
-                  </div>
-                  <div class="m-3">
-                    <strong>Employee Code: </strong>{{addEmployeeForm.get('employeeCode')?.value}}
-                  </div>
-                  <div class="m-3">
-                    <strong>Unit: </strong>{{addEmployeeForm.get('unit')?.value}}
-                  </div>
-                  <div class="m-3">
-                    <strong>Department: </strong>{{addEmployeeForm.get('departmentName')?.value}}
-                  </div>
-                  <div class="m-3">
-                    <strong>Employee Mobile:</strong> {{ addEmployeeForm.get('employeeMobile')?.value }}
-                  </div>
-                  <div class="m-3">
-                    <strong>Email:</strong> {{ addEmployeeForm.get('email')?.value }}
-                  </div>
-                  <div class="m-3">
-                    <strong>Employee Extension:</strong> {{ addEmployeeForm.get('employeeExtension')?.value }}
-                  </div>
-                  <div class="d-flex justify-content-center gap-2">
-                    <button type="reset" data-bs-dismiss="modal" class="btn btn-secondary" (click)="resetForm()">Back</button>
-                  </div> -->
-                <!-- </div> -->
         </div>
       </div>
     </div>
