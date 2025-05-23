@@ -20,6 +20,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 export class SideBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   username: string | null = '';
+  userRole: string | null = '';
   totalNotifications: number = 0;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
 
@@ -37,6 +38,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   checkLogin(): boolean {
     if (localStorage.getItem('token')) {
       this.username = DecodeToken.sub;
+      this.userRole = DecodeToken.ERole;
       return true;
     }
     return false;

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthResponse, Login, PasswordRenewal } from '../../models/auth/login';
 import { Observable } from 'rxjs';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,10 @@ export class UserService {
   refreshPassword(refPswd:PasswordRenewal):Observable<string> {
     return this.http.post<string>(`${this.apiUrl}/refreshPassword`, refPswd);
   }
-  isLoggedIn():boolean{
+  isLoggedIn():boolean {
     return !!localStorage.getItem('token');
+  }
+  checkUserRole():string | null {
+    return DecodeToken.ERole;
   }
 }
