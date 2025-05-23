@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,6 +14,7 @@ import { AppComponent } from '../../../app.component';
   styleUrl: './progress-bar.component.css'
 })
 export class ProgressBarComponent {
+  @Input() progress!: number;
   step = 0;
 
   ngOnInit() {}
