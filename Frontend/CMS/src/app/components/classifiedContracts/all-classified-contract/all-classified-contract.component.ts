@@ -1,6 +1,6 @@
 declare var bootstrap: any;
 
-import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ClassifiedContractsService } from '../../../services/classified-contracts.service';
 import { AddClassifiedContractDto, ClassifiedContracts, GetClassifiedContractByIdDto } from '../../../models/classified-contracts';
@@ -31,25 +31,49 @@ import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.ser
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { PostTerminationService } from '../../../services/post-termination.service';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
+import { TableComponent } from '../../UtilComponents/table/table.component';
+import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
+import { AllClassifiedContractViewAddModalComponent } from '../all-classified-contract-view-add-modal/all-classified-contract-view-add-modal.component';
 
 
 @Component({
   selector: 'app-all-classified-contract',
   standalone: true,
-  imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    AllClassifiedContractViewAddModalComponent,
+    PaginationComponent,
+    TableComponent,
+    LoaderComponent, 
+    FormsModule, 
+    CommonModule, 
+    RouterModule, 
+    ReactiveFormsModule, 
+    MatTableModule, 
+    MatSortModule, 
+    MatFormFieldModule, 
+    MatInputModule],
   templateUrl: './all-classified-contract.component.html',
   styleUrl: './all-classified-contract.component.css'
 })
 export class AllClassifiedContractComponent implements OnInit{
-  
-   displayedColumns: string[] = ['classifiedContractID', 'classifiedContractName', 'contractType', 'departmentName', 'effectiveDate',
+  isCreate:boolean = false
+  columnsInfo:{[key:string]:{
+      'title' ?: string,
+      'isSort' ?: boolean,
+      'templateRef' : TemplateRef<any> | null,
+    }} = {};
+   displayedColumns: string[] = ['classifiedContractName', 'contractType', 'departmentName', 'effectiveDate',
                                   'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
                                   'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
-        dataSource = new MatTableDataSource<ClassifiedContracts>();
-        @ViewChild(MatSort) sort!: MatSort;
-        ngAfterViewInit() {
-          this.dataSource.sort = this.sort;
-        }
+
+    @ViewChild('effectiveDateRef', { static: true }) effectiveDateRef!: TemplateRef<any>;
+    @ViewChild('expiryDateRef', { static: true }) expiryDateRef!: TemplateRef<any>;
+    @ViewChild('toBeRenewedOnRef', { static: true }) toBeRenewedOnRef!: TemplateRef<any>;
+    @ViewChild('addendumDateRef', { static: true }) addendumDateRef!: TemplateRef<any>;
+    @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
+    @ViewChild('approvalPendingFromRef', { static: true }) approvalPendingFromRef!: TemplateRef<any>;
+    @ViewChild('renewalDueInRef', { static: true }) renewalDueInRef!: TemplateRef<any>;
+    @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
         addBtn:string = '';
          file: File | null = null;
           loading: boolean = true;
@@ -79,12 +103,84 @@ export class AllClassifiedContractComponent implements OnInit{
       this.getAllContractTypes();
       this.getAllApostilleTypes();
       this.getAllCompanies();
+      this.columnsInfo = {
+        'classifiedContractName': {
+          title : 'Contract Name',
+          isSort : true,
+          templateRef : null
+        },
+        'contractType': {
+          title : 'Contract Type',
+          isSort : true,
+          templateRef : null
+        },
+        'departmentName': {
+          title : 'Department Name',
+          isSort : true,
+          templateRef : null
+        },
+        'effectiveDate': {
+          title : 'Effective Date',
+          isSort : true,
+          templateRef : this.effectiveDateRef
+        },
+        'expiryDate': {
+          title : 'Expiry Date',
+          isSort : true,
+          templateRef : this.expiryDateRef
+        },
+        'toBeRenewedOn': {
+          title : 'To Be Renewed On',
+          isSort : true,
+          templateRef : this.toBeRenewedOnRef
+        },
+        'addendumDate': {
+          title : 'Addendum Date',
+          isSort : true,
+          templateRef : this.addendumDateRef
+        },
+        'status': {
+          title : 'Status',
+          isSort : true,
+          templateRef : this.statusRef
+        },
+        'approvalPendingFrom': {
+          title : 'Approval Pending From',
+          isSort : true,
+          templateRef : this.approvalPendingFromRef
+        },
+        'renewalContractPerson': {
+          title : 'Renewal Contract Person',
+          isSort : true,
+          templateRef : null
+        },
+        'renewalDueIn': {
+          title : 'Renewal Due In',
+          isSort : true,
+          templateRef : this.renewalDueInRef
+        },
+        'location': {
+          title : 'Location',
+          isSort : true,
+          templateRef : null
+        },
+        'action': {
+          title : 'Action',
+          isSort : false,
+          templateRef : this.actionRef
+        },
+
+      }
     }
-  constructor(private addAddendumContractsService: AddAddendumContractsService
-  ,private contractsService: ClassifiedContractsService, private router: Router,private renderer : Renderer2, private title:Title,private masterApostilleService: MasterApostilleService,
-      private postTermService: PostTerminationService,
-      private noticeWithdrawalService: NoticeWithdrawalService,
-    @Inject(DOCUMENT) private document: Document ) {
+  constructor(
+    private contractsService: ClassifiedContractsService, 
+    private router: Router,
+    private renderer : Renderer2, 
+    private title:Title,
+    private masterApostilleService: MasterApostilleService,
+    private postTermService: PostTerminationService,
+    private noticeWithdrawalService: NoticeWithdrawalService,
+    @Inject(DOCUMENT) private document: Document) {
     this.title.setTitle("All Classified Contracts - CMS");
   }
   @ViewChild('editEmpCustodianCollapse') editEmpCustodianCollapse!: ElementRef;
@@ -94,7 +190,7 @@ export class AllClassifiedContractComponent implements OnInit{
   @ViewChild('addEmpCustodianName') addEmpCustodianName!: ElementRef;
   @ViewChild('addEmpCustodianId') addEmpCustodianId!: ElementRef;
   @ViewChild('addEmpCustodianCollapse') addEmpCustodianCollapse!: ElementRef;
-    @ViewChild('addAddendumEmpCustodianName') addAddendumEmpCustodianName!: ElementRef;
+  @ViewChild('addAddendumEmpCustodianName') addAddendumEmpCustodianName!: ElementRef;
   @ViewChild('addAddendumEmpCustodianCollapse') addAddendumEmpCustodianCollapse!: ElementRef;
   @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
   @ViewChild('addFile') addFile!: ElementRef;
@@ -103,15 +199,7 @@ export class AllClassifiedContractComponent implements OnInit{
        this.contractsService.getContracts(pageNumber, pageSize).subscribe({
          next: (res: ClassifiedContracts[]) => {
            this.loading = false;
-           this.dataSource.data = res;
-           console.log(res);
-           
-           console.log(this.dataSource.data)
-           if (this.sort) {
-             this.dataSource.sort = this.sort;
-           }
            this.allContracts = res;
-           
            if (this.allContracts != undefined && this.allContracts.length > 0) {
              let result = Pagination.paginator(
                pageNumber,
@@ -165,7 +253,6 @@ export class AllClassifiedContractComponent implements OnInit{
           this.masterApostilleService.getApostilles(1,100).subscribe({
             next: (response:MasterApostilleDto) => {
               this.apostilleTypes = response.data;
-              // console.log(this.apostilleTypes)
             }, error: (error) => {
               console.error('Error :(', error);
               this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
@@ -239,6 +326,7 @@ export class AllClassifiedContractComponent implements OnInit{
         } else {
           this.withdrawCheck = false;
         }
+        this.isCreate = false
         },
         error: (error: { message: undefined; error: { message: any; }; }) => {
           console.error('Error :(', error);
@@ -280,38 +368,33 @@ export class AllClassifiedContractComponent implements OnInit{
       );
     }
 
-    //  editContract(contract: ClassifiedContracts) {
-    //     console.log('Navigating to editContract with valueId:', contract.classifiedContractID);
-    //     this.router.navigate(['contracts/editContract', contract.classifiedContractID]);
-    //   }
     masterContractAddForm = new FormGroup({
       classifiedContractName : new FormControl('',[Validators.required]),
-            departmentId : new FormControl('',[Validators.required]),
-            contractWithCompanyId : new FormControl('',[Validators.required]),
-            contractTypeId : new FormControl('',[Validators.required]),
-            apostilleTypeId : new FormControl('',[Validators.required]),
-            actualDocRefNo : new FormControl('',[Validators.required]),
-            retainerContract : new FormControl('',[Validators.required]),
-            termsAndConditions : new FormControl('',[Validators.required]),
-            validFrom : new FormControl('',[Validators.required]),
-            validTill : new FormControl('',[Validators.required]),
-            renewalFrom : new FormControl(''),
-            renewalTill : new FormControl(''),
-            addendumDate : new FormControl(''),
-            empCustodianId : new FormControl('',[Validators.required]),
-            location : new FormControl('',[Validators.required]),
-            approver1Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
-            approver2Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
-            approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
-            skipApproval : new FormControl(true,[Validators.required])
-          })
+      departmentId : new FormControl('',[Validators.required]),
+      contractWithCompanyId : new FormControl('',[Validators.required]),
+      contractTypeId : new FormControl('',[Validators.required]),
+      apostilleTypeId : new FormControl('',[Validators.required]),
+      actualDocRefNo : new FormControl('',[Validators.required]),
+      retainerContract : new FormControl('',[Validators.required]),
+      termsAndConditions : new FormControl('',[Validators.required]),
+      validFrom : new FormControl('',[Validators.required]),
+      validTill : new FormControl('',[Validators.required]),
+      renewalFrom : new FormControl(''),
+      renewalTill : new FormControl(''),
+      addendumDate : new FormControl(''),
+      empCustodianId : new FormControl('',[Validators.required]),
+      location : new FormControl('',[Validators.required]),
+      approver1Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
+      approver2Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
+      approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
+      skipApproval : new FormControl(true,[Validators.required])
+    })
           async onAddFormSubmit(){
             this.loading=true;
             this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
             if(this.masterContractAddForm.invalid){
               this.masterContractAddForm.markAllAsTouched();
-              console.log("bla bla bla",this.masterContractAddForm.value)
-              // Alert.toast(TYPE.WARNING, true, 'There is still few fields to fill out. Please fill all the required fields.');
+              console.log("MasterContractAddForm is invalid : ",this.masterContractAddForm.value)
               return;
             }
             else{
@@ -336,8 +419,6 @@ export class AllClassifiedContractComponent implements OnInit{
               approver2Status && Number(approver2Status) &&
               approver3Status && Number(approver3Status) 
               ){
-                // console.log(this.masterContractAddForm.value.addendumDate);
-                
                 const addFormValues:AddClassifiedContractDto = new AddClassifiedContractDto();
                 addFormValues.classifiedContractName = this.masterContractAddForm.value.classifiedContractName;
                 addFormValues.departmentId = Number(departmentId);
@@ -363,7 +444,6 @@ export class AllClassifiedContractComponent implements OnInit{
                               const response = await firstValueFrom(this.contractsService.addContract(addFormValues));
                               
                     if( response !== false){
-                      // console.log(this.skipApproval);
                       Alert.toast(TYPE.SUCCESS,true,'Added successfully');
                       this.masterContractAddForm.reset({
                       skipApproval : true,
@@ -583,106 +663,6 @@ export class AllClassifiedContractComponent implements OnInit{
             if (day.length < 2) day = '0' + day;
              return [year, month, day].join('-');
             }
-          onUpdateFormSubmit(contractID:number) {
-            // this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
-            // if (this.masterContractAddForm.invalid) {
-            //   this.masterContractAddForm.markAllAsTouched();
-            //   return;
-            // }
-            // else {
-            //   const departmentId = this.masterContractAddForm.value.departmentId;
-            //   const contractWithCompanyId = this.masterContractAddForm.value.contractWithCompanyId;
-            //   const contractTypeId = this.masterContractAddForm.value.contractTypeId;
-            //   const apostilleTypeId = this.masterContractAddForm.value.apostilleTypeId;
-            //   const actualDocRefNo = this.masterContractAddForm.value.actualDocRefNo;
-            //   const retainerContract = this.masterContractAddForm.value.retainerContract;
-            //   const empCustodianId = this.masterContractAddForm.value.empCustodianId;
-            //   const approver1Status = this.masterContractAddForm.value.approver1Status;
-            //   const approver2Status = this.masterContractAddForm.value.approver2Status;
-            //   const approver3Status = this.masterContractAddForm.value.approver3Status;
-            //   if (departmentId && Number(departmentId) &&
-            //     contractWithCompanyId && Number(contractWithCompanyId) &&
-            //     contractTypeId && Number(contractTypeId) &&
-            //     apostilleTypeId && Number(apostilleTypeId) &&
-            //     actualDocRefNo && Number(actualDocRefNo) &&
-            //     retainerContract && Number(retainerContract) &&
-            //     empCustodianId && Number(empCustodianId) &&
-            //     approver1Status && Number(approver1Status) &&
-            //     approver2Status && Number(approver2Status) &&
-            //     approver3Status && Number(approver3Status)
-            //   ) {
-            //     const addFormValues: AddClassifiedContractDto = new AddClassifiedContractDto();
-            //     addFormValues.classifiedContractName = this.masterContractAddForm.value.classifiedContractName;
-            //     addFormValues.departmentId = Number(departmentId);
-            //     addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
-            //     addFormValues.contractTypeId = Number(contractTypeId);
-            //     addFormValues.apostilleTypeId = Number(apostilleTypeId);
-            //     addFormValues.actualDocRefNo = Number(actualDocRefNo);
-            //     addFormValues.retainerContract = Number(retainerContract);
-            //     addFormValues.termsAndConditions = this.masterContractAddForm.value.termsAndConditions;
-            //     addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
-            //     addFormValues.validTill = this.masterContractAddForm.value.validTill;
-            //     addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom;
-            //     addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill;
-            //     addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
-            //     addFormValues.empCustodianId = Number(empCustodianId);
-            //     addFormValues.location = this.masterContractAddForm.value.location;
-            //     addFormValues.approver1Status = Number(approver1Status);
-            //     addFormValues.approver2Status = Number(approver2Status);
-            //     addFormValues.approver3Status = Number(approver3Status);
-            //     console.log(addFormValues);
-            //     this.contractsService.editContract(contractID, addFormValues).subscribe({
-            //       next: (response: boolean) => {
-            //         if (response !== false) {
-            //           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-            //           // this.router.navigate(['contracts/allContracts'])
-            //           this.GetAllContracts(1, 10);
-            //           //this.renderer.removeClass(this.addContractModal.nativeElement, 'show');
-            //           this.masterContractAddForm.reset();
-            //         }
-            //       },
-            //       error: (error) => {
-            //         console.error('Error :(', error);
-            //         this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-            //       }
-            //     });
-            //   }
-            //   else {
-            //     console.log("should not come here ", this.masterContractAddForm.value)
-            //   }
-            // }
-          }
-
-          // onAddAddendumFormSubmit(contractID: number) {
-          //     const addendum = new AddAddendumContract();
-          //     addendum.contractId = Number(this.addaddendumForm.value.contractId);
-          //     addendum.contractName=String(this.addaddendumForm.value.contractName);
-          //     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
-          //     addendum.contractWithCompanyId = Number(this.addaddendumForm.value.contractWithCompanyId);
-          //     addendum.contractTypeId = Number(this.addaddendumForm.value.contractTypeId);
-          //     addendum.apostilleTypeId = Number(this.addaddendumForm.value.apostilleTypeId);
-          //     addendum.actualDocRefNo = Number(this.addaddendumForm.value.actualDocRefNo);
-          //     addendum.retainerContract = Number(this.addaddendumForm.value.retainerContract);
-          //     addendum.termsAndConditions = String(this.addaddendumForm.value.termsAndConditions);
-          //     addendum.validFrom = String(this.addaddendumForm.value.validFrom);
-          //     addendum.validTill = String(this.addaddendumForm.value.validTill);
-          //     addendum.empCustodianId = Number(this.addaddendumForm.value.empCustodianId);
-          
-          //     this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum).subscribe({
-          //       next: () => {
-          //         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
-          //         this.GetAllContracts(1, 10);
-          //         this.masterContractAddForm.reset();
-          //       },
-          //       error: (err) => {
-          //         console.error('Error adding addendum:', err);
-          //         this.errorMsg = JSON.stringify((err.message !== undefined) ? err.error.title : err.message);
-          //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          //       }
-          //     })
-          
-          //   }
 
              checkContractId = new FormGroup({
                 contractId: new FormControl('', [Validators.required])
@@ -692,10 +672,7 @@ export class AllClassifiedContractComponent implements OnInit{
                   const enteredValue = this.checkContractId.value.contractId;
                   this.contractsService.getContracts(1, 100).subscribe({
                     next: (res: ClassifiedContracts[]) => {
-                      this.dataSource.data = res;
-                      console.log(this.dataSource.data);
                       this.allContracts = res;
-                      console.log(this.allContracts);
                       if (this.checkContractId.valid) {
                         const foundContract = this.allContracts.find((contract) => contract.classifiedContractID.toString() === enteredValue
                           || contract.classifiedContractName === enteredValue);
@@ -1025,5 +1002,9 @@ export class AllClassifiedContractComponent implements OnInit{
               
                 printToPDF(tableID: string, fileName: string) {
                   PDFExport.printToPDF(tableID, fileName);
+                }
+
+                setLoader(data:boolean){
+                  this.loading = data;
                 }
 }
