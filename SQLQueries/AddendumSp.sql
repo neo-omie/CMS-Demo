@@ -1,4 +1,6 @@
-CREATE PROCEDURE SP_GetAddendumContractByID @ID int
+USE CMS_Trailblazers
+-- Get Addendum Contract By ID
+CREATE OR ALTER PROCEDURE SP_GetAddendumContractByID @ID int
 AS
 BEGIN
 	SELECT c.AddendumContractId as AddendumContractId, c.ContractId as ContractId, c.ContractName as ContractName,

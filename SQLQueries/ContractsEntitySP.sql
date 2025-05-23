@@ -1,3 +1,4 @@
+USE CMS_Trailblazers
 -- Get All
 CREATE PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
 AS
@@ -144,6 +145,7 @@ BEGIN
 END
 EXEC SP_GetPendingApprovalContractsEntity @PageNumber = 1, @PageSize = 10;
 
+-- Get Contract By Name
 CREATE PROCEDURE SP_GetContractEntityByName @Name nvarchar(100)
 AS
 BEGIN

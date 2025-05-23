@@ -7,6 +7,7 @@ using CMS.Application.Features.ClassifiedContracts.Commands.EditClassifiedContra
 using CMS.Application.Features.ClassifiedContracts.Commands.RemoveClassifiedContract;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById;
+using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractsCount;
 using CMS.Application.Features.Contracts;
 using CMS.Application.Features.Contracts.Commands.ApproveRejectContract;
 using CMS.Application.Features.Contracts.Commands.CreateNewContract;
@@ -14,6 +15,7 @@ using CMS.Application.Features.Contracts.Commands.EditContract;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractByContractName;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Application.Features.Contracts.Queries.GetContractsCount;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities;
@@ -50,6 +52,14 @@ namespace CMS.API.Controllers
             var foundContract = await _mediator.Send(new GetClassifiedContractByIdQuery(id));
             _logger.LogInformation("GetClassifiedContractById method performed");
             return Ok(foundContract);
+        }
+        [HttpGet("GetClassifiedContractsCount")]
+        public async Task<IActionResult> GetClassifiedContractsCount()
+        {
+            _logger.LogInformation("GetClassifiedContractsCount method initiated");
+            var classifiedContractCounts = await _mediator.Send(new GetClassifiedContractsCountQuery());
+            _logger.LogInformation("GetClassifiedContractsCount method performed");
+            return Ok(classifiedContractCounts);
         }
         //[Route("{id}")]
         //[HttpGet]

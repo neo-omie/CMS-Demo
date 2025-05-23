@@ -6,6 +6,9 @@ import { TYPE } from '../auth/login/values.constants';
 import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { JwtClaims } from '../../models/jwt-claims';
+import { jwtDecode } from 'jwt-decode';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-side-bar',
@@ -17,6 +20,7 @@ import { Subscription } from 'rxjs';
 export class SideBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   username: string | null = '';
+  userRole: string | null = '';
   totalNotifications: number = 0;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
 
@@ -32,8 +36,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
   }
 
   checkLogin(): boolean {
-    if (localStorage.getItem('token') != null) {
-      this.username = localStorage.getItem('name');
+    if (localStorage.getItem('token')) {
+      this.username = DecodeToken.sub;
+      this.userRole = DecodeToken.ERole;
       return true;
     }
     return false;
@@ -42,12 +47,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
   logoutUser() {
     if (localStorage.getItem('token') != null) {
       localStorage.clear();
+      DecodeToken.clearUserCredentials();
       Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");
       this.route.goToLogin();
     }
   }
   GetAllNotifications() {
-    let empCode: string = String(localStorage.getItem('empCode'));
+    let empCode: string | null = DecodeToken.ECode;
     this.notificationService.getUnreadNotificationCount(empCode).subscribe({
       next: (response: number) => {
         this.totalNotifications = response;

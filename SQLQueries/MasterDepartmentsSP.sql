@@ -1,4 +1,6 @@
-CREATE or alter PROCEDURE SP_GetAllDepartments @PageNumber int, @PageSize int
+USE CMS_Trailblazers
+-- Get All Departments
+CREATE OR ALTER PROCEDURE SP_GetAllDepartments @PageNumber int, @PageSize int
 AS
 DECLARE @TotalRecords int
 BEGIN
@@ -10,7 +12,8 @@ BEGIN
 END
 EXEC SP_GetAllDepartments @PageNumber = 1, @PageSize = 10;
 
-CREATE or alter PROCEDURE SP_GetDepartmentByID @id int
+-- Get Department By ID
+CREATE OR ALTER PROCEDURE SP_GetDepartmentByID @id int
 AS
 BEGIN
 	SELECT * FROM Departments

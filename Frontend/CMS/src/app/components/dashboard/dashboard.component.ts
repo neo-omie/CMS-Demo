@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { CommonModule } from '@angular/common';
+import { ContractsService } from '../../services/contracts.service';
+import { ContractsCount } from '../../models/contracts-count';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
+import { ClassifiedContractsService } from '../../services/classified-contracts.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +17,10 @@ import { CommonModule } from '@angular/common';
 })
 export class DashboardComponent implements OnInit {
   loading: boolean = false;
-  constructor(private title: Title) {
+  errorMsg: string = '';
+  constructor(private title: Title,
+              private contractsService:ContractsService, 
+              private classifiedContractsService:ClassifiedContractsService) {
     this.title.setTitle("Dashboard - CMS");
   }
 
@@ -27,6 +35,30 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.pieChartBackground = this.generateConicGradient(this.pieSegments);
+    this.GetContractsCount();
+    this.GetClassifiedContractsCount();
+  }
+  GetContractsCount() {
+    this.contractsService.getContractCounts().subscribe({
+      next: (response: ContractsCount) => {
+        console.log('Contracts', response);
+        
+      }, error: (error) => {
+        this.errorMsg = error.error.message;
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      }
+    });
+  }
+  GetClassifiedContractsCount() {
+    this.classifiedContractsService.getClassifiedContractCounts().subscribe({
+      next: (response: ContractsCount) => {
+        console.log('Classified Contracts', response);
+        
+      }, error: (error) => {
+        this.errorMsg = error.error.message;
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      }
+    });
   }
 
   generateConicGradient(segments: { color: string; percentage: number }[]): string {

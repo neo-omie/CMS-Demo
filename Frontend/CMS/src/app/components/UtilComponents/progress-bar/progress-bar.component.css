@@ -1,0 +1,26 @@
+p {
+  font-family: Lato;
+}
+
+.stepper {
+  display: flex;
+  width: 100%;
+  flex-direction: column
+}
+.stepper-bar-content {
+  min-height: 4px;
+  background: #2f5ff4;
+}
+
+.stepper-bar {
+  min-height: 4px;
+  width: 100%;
+  background: #f2f2f2;
+  display: flex
+}
+
+.stepper-steps {
+  display: flex;
+  justify-content: space-between;
+  width: 100%
+}

@@ -1,3 +1,5 @@
+USE CMS_Trailblazers
+-- Get All Apostilles
 CREATE OR ALTER PROCEDURE SP_GetAllApostilles @PageNumber int, @PageSize int, @SearchTerm nvarchar(255)=null
 AS
 DECLARE @TotalRecords int
@@ -14,23 +16,19 @@ BEGIN
 	OFFSET(@PageNumber-1)*@PageSize ROWS
 	FETCH NEXT @PageSize ROWS ONLY
 END
-go
-
 EXEC SP_GetAllApostilles @PageNumber = 1, @PageSize = 10;
-go
 
+-- Get Apostille By ID
 CREATE OR ALTER PROCEDURE SP_GetApostilleByID @id int
 AS
 BEGIN
 	SELECT * FROM MasterApostilles
 	WHERE ValueId = @id;
 END
-go
-
 EXEC SP_GetApostilleByID @id = 1;
-go
 
-Create or alter procedure sp_AddApostille 
+-- Add Apostille
+CREATE OR ALTER PROCEDURE sp_AddApostille 
 	@ApostilleName nvarchar(100),
 	@Status BIT,
 	@IsDeleted BIT,
@@ -48,12 +46,10 @@ Insert into MasterApostilles(
 )
 set @ValueId=SCOPE_IDENTITY();
 END
-GO
+EXEC sp_AddApostille @ApostilleName='Shinchan', @Status=1, @IsDeleted=1
 
-Exec sp_AddApostille @ApostilleName='Shinchan', @Status=1, @IsDeleted=1
-go	
-
-create or alter procedure sp_DeleteApostille
+-- Delete Apostille
+CREATE OR ALTER PROCEDURE sp_DeleteApostille
 @Id int 
 as 
 Begin
@@ -61,12 +57,10 @@ Begin
 	set IsDeleted=1
 	where ValueId=@Id
 End
-go
-
 EXEC sp_DeleteApostille @Id=2
-go
 
-create or alter procedure sp_UpdateApostille
+-- Update Apostille
+CREATE OR ALTER PROCEDURE sp_UpdateApostille
 @Id int, 
 @ApostilleName nvarchar(100),
 @Status Bit
@@ -78,7 +72,4 @@ Begin
 		Status=@Status
 	Where ValueId=@Id
 End
-go
-
 EXEC sp_UpdateApostille @Id=3, @ApostilleName='Shinchan', @Status=1
-go
