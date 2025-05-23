@@ -7,6 +7,6 @@ namespace CMS.Application.Contracts.Persistence
     {
         public Task<IEnumerable<EscalationMatrixMoutDto>> GetAllEscalationMatrixMou(int pageNumber, int pageSize);
         public Task<EscalationMatrixMoutDto> GetEscalationMatrixMou(int valueId);
-        public Task<int> UpdateMatrixMou(int valueId, UpdateEscalationMatrixMouDto updateDto);
+        public Task<bool> UpdateMatrixMou(int valueId, UpdateEscalationMatrixMouDto updateDto, string empCode);
     }
 }

@@ -8,7 +8,7 @@ using CMS.Application.Contracts.Persistence;
 using CMS.Domain.Entities;
 using MediatR;
 
-namespace CMS.Application.Features.ClassifiedContracts.Commands.CreateNewContract
+namespace CMS.Application.Features.ClassifiedContracts.Commands.CreateNewClassifiedContract
 {
     public class CreateNewClassifiedContractCommandHandler : IRequestHandler<CreateNewClassifiedContractCommand, ClassifiedContract>
     {
@@ -22,7 +22,7 @@ namespace CMS.Application.Features.ClassifiedContracts.Commands.CreateNewContrac
         public async Task<ClassifiedContract> Handle(CreateNewClassifiedContractCommand request, CancellationToken cancellationToken)
         {
             var mappedContract = _mapper.Map<ClassifiedContract>(request.cont);
-            return await _contractRepository.AddClassifiedContractAsync(mappedContract);
+            return await _contractRepository.AddClassifiedContractAsync(mappedContract,request.empName);
         }
     }
 }
