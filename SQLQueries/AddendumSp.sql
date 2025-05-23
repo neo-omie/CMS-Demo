@@ -1,4 +1,4 @@
-CREATE PROCEDURE SP_GetAddendumContractByID @ID int
+CREATE OR Alter PROCEDURE SP_GetAddendumContractByID @ID int
 AS
 BEGIN
 	SELECT c.AddendumContractId as AddendumContractId, c.ContractId as ContractId, c.ContractName as ContractName,

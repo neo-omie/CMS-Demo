@@ -273,7 +273,17 @@ onSubmit(){
 
       addFormValues.email =this.addEmployeeForm.value.email;
       addFormValues.employeeExtension =this.addEmployeeForm.value.employeeExtension;
+      // addFormValues.loggedBy =this.addEmployeeForm.value.loggedBy;
+
+      const loggedInEmpCode=localStorage.getItem('empCode');
+      if(!loggedInEmpCode){
+        console.log("LoggedInUser EmpCode is not found in localstorage");
+        Alert.toast(TYPE.ERROR, true, 'Unable to retrieve logged-in user information.');
+        return;
+      }
+      addFormValues.loggedBy=loggedInEmpCode;
       console.log(addFormValues);
+
       if (!this.empId) {
         console.error('valueId is undefined. Cannot update employee.');
         Alert.toast(TYPE.ERROR, true, 'Invalid employee ID.');
