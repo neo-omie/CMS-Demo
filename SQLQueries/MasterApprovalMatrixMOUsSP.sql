@@ -1,7 +1,9 @@
-CREATE procedure SP_GetAllApprovalMatrixMOUDto @pageNumber int, @pageSize int
-as
-begin
-declare @totalRecords int
+USE CMS_Trailblazers
+-- Get All Approval Matrix MOU
+CREATE OR ALTER PROCEDURE SP_GetAllApprovalMatrixMOUDto @pageNumber int, @pageSize int
+AS
+BEGIN
+	declare @totalRecords int
 	select 
 		@totalRecords = count(MasterApprovalMatrixMOUId) 
 	from 
@@ -29,10 +31,10 @@ declare @totalRecords int
 	fetch next @pageSize rows only
 end
 
--- Get By Id
-CREATE procedure SP_GetApprovalMatrixMOUById @id int
-as
-begin
+-- Get Approval Matrix MOU By Id
+CREATE OR ALTER PROCEDURE SP_GetApprovalMatrixMOUById @id int
+AS
+BEGIN
 	declare @count int
 	select 
 		@count = count(MasterApprovalMatrixMOUId)
@@ -75,10 +77,10 @@ begin
 	end
 end
 
---Update
-CREATE procedure SP_UpdateApprovalMatrixMOU @id int, @approverId1 varchar(20), @approverId2 varchar(20), @approverId3 varchar(20), @numberOfDays int
-as
-begin
+--Update Approval Matrix MOU
+CREATE OR ALTER PROCEDURE SP_UpdateApprovalMatrixMOU @id int, @approverId1 varchar(20), @approverId2 varchar(20), @approverId3 varchar(20), @numberOfDays int
+AS
+BEGIN
 	declare @count int
 	select 
 		@count = count(MasterApprovalMatrixMOUId)

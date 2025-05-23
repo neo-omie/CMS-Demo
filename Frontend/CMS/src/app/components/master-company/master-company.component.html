@@ -348,8 +348,10 @@
           <p class="m-1">Company Status </p>
           <div class="input-group">
             <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
-            <input type="text" name="companyStatus" class="form-control" id="companyStatus"
-              [value]="comp?.companyStatus" disabled>
+            <input *ngIf="comp?.companyStatus==true" type="text" name="companyStatus" class="form-control" id="companyStatus"
+              value="Active" disabled>
+              <input *ngIf="comp?.companyStatus==false" type="text" name="companyStatus" class="form-control" id="companyStatus"
+              value="InActive" disabled>
           </div>
         </div>
         <div class="mb-3">

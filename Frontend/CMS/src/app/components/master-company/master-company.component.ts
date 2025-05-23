@@ -195,10 +195,10 @@ export class MasterCompanyComponent implements OnInit{
         companyForm.resetForm();
         this.GetPage(this.maxPage);
         const modalElement = document.getElementById('company-add');
-          if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            modalInstance.hide();
-          }
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
+        }
       },
         
       error: (error) => {
@@ -318,6 +318,11 @@ export class MasterCompanyComponent implements OnInit{
                 Alert.toast(TYPE.SUCCESS,true,'Added successfully');
                 this.masterCompanyAddForm.reset();
                 this.getCompanies();
+                const modalElement = document.getElementById('company-add');
+                if (modalElement) {
+                  const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
               }
             }, 
             error:(error) => {

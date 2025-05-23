@@ -7,6 +7,7 @@ using CMS.Application.Features.Contracts.Queries.GetActiveContracts;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractByContractName;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Application.Features.Contracts.Queries.GetContractsCount;
 using CMS.Application.Features.Contracts.Queries.GetPendingApprovalContracts;
 using CMS.Application.Features.Contracts.Queries.GetTerminatedContracts;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
@@ -62,8 +63,14 @@ namespace CMS.API.Controllers
             _logger.LogInformation("GetPendingApprovalContracts method performed");
             return Ok(pendingApprovalContracts);
         }
-
-
+        [HttpGet("GetContractsCount")]
+        public async Task<IActionResult> GetContractsCount()
+        {
+            _logger.LogInformation("GetContractsCount method initiated");
+            var contractCounts = await _mediator.Send(new GetContractsCountQuery());
+            _logger.LogInformation("GetContractsCount method performed");
+            return Ok(contractCounts);
+        }
 
         [Route("{id}")]
         [HttpGet]

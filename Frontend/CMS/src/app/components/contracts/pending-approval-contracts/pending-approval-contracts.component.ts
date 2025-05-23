@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { firstValueFrom } from 'rxjs';
 import { PDFExport } from '../../../utils/pdfExport';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 @Component({
   selector: 'app-pending-approval-contracts',
@@ -116,12 +117,12 @@ export class PendingApprovalContractsComponent implements OnInit {
         this.contractDetails = response;
         console.log(response);
         // Checking if the approver is the one who's logged in or not
-        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+        if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 1) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 1) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 1)
@@ -442,7 +443,7 @@ export class PendingApprovalContractsComponent implements OnInit {
   }
   async approveRejectContract(id?: string, status?: number) {
     this.loading = true;
-    let email = localStorage.getItem('email');
+    let email = DecodeToken.email;
     if (email) {
       try {
         const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))

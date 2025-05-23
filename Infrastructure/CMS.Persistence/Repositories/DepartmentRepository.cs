@@ -78,7 +78,7 @@ namespace CMS.Persistence.Repositories
             {
                 MasterApprovalMatrixContract cApprovers = new MasterApprovalMatrixContract
                 {
-                    DepartmentId = newDepartment.DepartmentId, ApproverId1 = "NEO1", ApproverId2 = "NEO1", ApproverId3 = "NEO1"
+                    DepartmentId = newDepartment.DepartmentId, ApproverId1 = "NEO1", ApproverId2 = "NEO1", ApproverId3 = "NEO1", UpdatedBy = "NEO1", UpdateOn = DateTime.Now
                 };
                 _context.MasterApprovalMatrixContracts.Add(cApprovers);
                 MasterApprovalMatrixMOU mApprovers = new MasterApprovalMatrixMOU
@@ -93,7 +93,7 @@ namespace CMS.Persistence.Repositories
                 _context.MasterEscalationMatrixContracts.Add(cEscalators);
                 MasterEscalationMatrixMou mEscalators = new MasterEscalationMatrixMou
                 {
-                    DepartmentId = newDepartment.DepartmentId, EscalationId1 = "NEO1", EscalationId2 = "NEO1", EscalationId3 = "NEO1"
+                    DepartmentId = newDepartment.DepartmentId, EscalationId1 = "NEO1", EscalationId2 = "NEO1", EscalationId3 = "NEO1", UpdatedBy = "NEO1", UpdateOn = DateTime.Now
                 };
                 _context.MasterEscalationMatrixMous.Add(mEscalators);
                 await _context.SaveChangesAsync();

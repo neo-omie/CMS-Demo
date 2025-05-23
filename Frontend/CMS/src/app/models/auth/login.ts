@@ -8,18 +8,18 @@ export class Login {
     }
 }
 export class AuthResponse {
-    userId:string;
-    email:string;
-    name:string;
     token:string;
-    role:string;
-    constructor(userId:string, email:string, name:string, token:string, role:string)
+    // userId:string;
+    // email:string;
+    // name:string;
+    // role:string;
+    constructor(token:string/*, userId:string, email:string, name:string, role:string*/)
     {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
         this.token = token;
-        this.role = role;
+        // this.userId = userId;
+        // this.email = email;
+        // this.name = name;
+        // this.role = role;
     }
 }
 

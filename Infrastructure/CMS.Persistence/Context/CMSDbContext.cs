@@ -68,6 +68,7 @@ namespace CMS.Persistence.Context
         public DbSet<ClassifiedNoticeWithdrawal> ClassifiedNoticeWithdrawals { get; set; }
 
         public DbSet<AuditTrail> AuditTrails { get; set; }
+        public DbSet<ContractsCount> ContractsCounter { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,6 +88,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<GetApprovalMatrixContractByIdDto>().Entity<GetApprovalMatrixContractByIdDto>().HasNoKey();
             modelBuilder.Ignore<GetAllApprovalMatrixMOUByIdDto>().Entity<GetAllApprovalMatrixMOUByIdDto>().HasNoKey();
             modelBuilder.Ignore<GetAllApprovalMatrixMOUDto>().Entity<GetAllApprovalMatrixMOUDto>().HasNoKey();
+            modelBuilder.Ignore<ContractsCount>().Entity<ContractsCount>().HasNoKey();
+
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.EmployeeCode);
             modelBuilder.Entity<MasterEmployee>().HasAlternateKey(u => u.ValueId);
             //for companymaster unique constraint

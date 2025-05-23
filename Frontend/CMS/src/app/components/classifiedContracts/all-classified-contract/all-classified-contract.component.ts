@@ -31,6 +31,7 @@ import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.ser
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { PostTerminationService } from '../../../services/post-termination.service';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 
 @Component({
@@ -197,12 +198,12 @@ export class AllClassifiedContractComponent implements OnInit{
           this.contractDetails.renewalTill = response.renewalTill != null ? response.renewalTill?.toString().split('T')[0] : ""
           this.contractDetails.addendumDate = response.addendumDate != null ? response.addendumDate?.toString().split('T')[0] : ""
           console.log(response);
-          if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+          if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 1) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 1) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 1)
@@ -211,12 +212,12 @@ export class AllClassifiedContractComponent implements OnInit{
         } else {
           this.approverCheck = false;
         }
-        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+        if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 6) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 7 &&
             this.contractDetails.approver2Status == 6) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 7 &&
             this.contractDetails.approver2Status == 7 &&
             this.contractDetails.approver3Status == 6)
@@ -225,12 +226,12 @@ export class AllClassifiedContractComponent implements OnInit{
         } else {
           this.terminationCheck = false;
         }
-        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+        if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 8) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 8) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 8)
@@ -747,7 +748,7 @@ export class AllClassifiedContractComponent implements OnInit{
                   console.log('came here 1')
                   console.log("id and status",id,status);
                   
-                  let email = localStorage.getItem('email');
+                  let email = DecodeToken.email;
                   if (email) {
                     try {
                       const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
@@ -871,7 +872,7 @@ export class AllClassifiedContractComponent implements OnInit{
                     const emailSubject = this.postTerminationEmailForm.value.emailSubject;
                     const emailBody = this.postTerminationEmailForm.value.emailBody;
                     console.log('ApproveTerminationClassifiedContract came here ')
-                    let email = localStorage.getItem('email');
+                    let email = DecodeToken.email;
                     if (email) {
                       try {
                         this.postTermination.classifiedContractId = Number(contractId);
@@ -991,7 +992,7 @@ export class AllClassifiedContractComponent implements OnInit{
                     const emailSubject = this.withdrawalNoticeEmailForm.value.emailSubject;
                     const emailBody = this.withdrawalNoticeEmailForm.value.emailBody;
                     console.log('approveWithdrawalNotice came here')
-                    let email = localStorage.getItem('email');
+                    let email = DecodeToken.email;
                     if (email) {
                       try {
                         this.withdrawNoticeSend.classifiedContractId = Number(contractId);
