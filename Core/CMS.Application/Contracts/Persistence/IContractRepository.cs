@@ -12,7 +12,7 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface IContractRepository
     {
-        //Task<ContractsCount> GetContractsCountAsync();
+        Task<ContractsCount> GetContractsCountAsync();
         Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetTerminatedContractsAsync(int pageNumber, int pageSize);

@@ -10,6 +10,7 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface IClassifiedContractRepository
     {
+        Task<ContractsCount> GetClassifiedContractsCountAsync();
         Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize);
         Task<GetClassifiedContractByIdDto> GetClassifiedContractByIdAsync(int id);
 

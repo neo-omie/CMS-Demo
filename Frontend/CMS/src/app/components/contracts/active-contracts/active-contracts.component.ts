@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { PDFExport } from '../../../utils/pdfExport';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 @Component({
   selector: 'app-active-contracts',
@@ -115,7 +116,7 @@ export class ActiveContractsComponent implements OnInit {
         this.contractDetails = response;
         console.log(response);
         // Checking if the approver is the one who's logged in or not
-        if (this.contractDetails.approver1Email == localStorage.getItem('email')) {
+        if (this.contractDetails.approver1Email == DecodeToken.email) {
           this.approverCheck = false;
           console.log(this.approverCheck);
         } else {

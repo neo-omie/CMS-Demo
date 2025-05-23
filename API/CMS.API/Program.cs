@@ -1,8 +1,8 @@
 using CMS.API.Middlewares;
 using CMS.Application;
-using CMS.Persistence;
-using CMS.Infrastructure;
 using CMS.Domain.Converters;
+using CMS.Infrastructure;
+using CMS.Persistence;
 using Serilog;
 
 
@@ -42,6 +42,7 @@ namespace CMS.API
                 {
                     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
                 });
+            //builder.Services.AddScoped<IAuditLogService, AuditLogService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

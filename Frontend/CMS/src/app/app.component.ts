@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import { jwtDecode } from 'jwt-decode';
+import { DecodeToken } from './utils/decodeToken';
 
 @Component({
   selector: 'app-root',
@@ -46,7 +48,8 @@ export class AppComponent implements AfterViewInit {
 
   checkLogin(): boolean {
     if (localStorage.getItem('token') != null) {
-      this.username = localStorage.getItem('name');
+      DecodeToken.decodeJWTToken(String(localStorage.getItem('token')));
+      this.username = DecodeToken.sub;
       return true;
     }
     return false;

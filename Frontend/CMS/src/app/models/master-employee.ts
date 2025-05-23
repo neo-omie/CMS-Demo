@@ -73,4 +73,5 @@ export class EditEmployeeDto{
       employeeMobile?:number;
       email?:string;
       employeeExtension?:number;
+      loggedBy?:string;
 }

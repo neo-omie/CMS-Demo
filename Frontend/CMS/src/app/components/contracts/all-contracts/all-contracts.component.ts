@@ -29,11 +29,13 @@ import { PDFExport } from '../../../utils/pdfExport';
 import { PostTermination } from '../../../models/post-termination';
 import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
+import { DecodeToken } from '../../../utils/decodeToken';
+import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
@@ -129,6 +131,7 @@ export class AllContractsComponent implements OnInit {
       },
     });
   }
+
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.GetAllContracts(pgNumber, 10);
@@ -140,12 +143,12 @@ export class AllContractsComponent implements OnInit {
         this.contractDetails = response;
         console.log(response);
         // Checking if the approver is the one who's logged in or not
-        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+        if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 1) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 1) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 1)
@@ -154,12 +157,12 @@ export class AllContractsComponent implements OnInit {
         } else {
           this.approverCheck = false;
         }
-        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+        if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 6) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 7 &&
             this.contractDetails.approver2Status == 6) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 7 &&
             this.contractDetails.approver2Status == 7 &&
             this.contractDetails.approver3Status == 6)
@@ -168,12 +171,12 @@ export class AllContractsComponent implements OnInit {
         } else {
           this.terminationCheck = false;
         }
-        if ((this.contractDetails.approver1Email == localStorage.getItem('email') &&
+        if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 8) ||
-          (this.contractDetails.approver2Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver2Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 8) ||
-          (this.contractDetails.approver3Email == localStorage.getItem('email') &&
+          (this.contractDetails.approver3Email == DecodeToken.email &&
             this.contractDetails.approver1Status == 2 &&
             this.contractDetails.approver2Status == 2 &&
             this.contractDetails.approver3Status == 8)
@@ -762,7 +765,7 @@ export class AllContractsComponent implements OnInit {
     console.log('came here 1')
     console.log("id",id,status);
     
-    let email = localStorage.getItem('email');
+    let email = DecodeToken.email;
     if (email) {
       try {
         const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
@@ -891,7 +894,7 @@ export class AllContractsComponent implements OnInit {
       const emailSubject = this.postTerminationEmailForm.value.emailSubject;
       const emailBody = this.postTerminationEmailForm.value.emailBody;
       console.log('came here 2')
-      let email = localStorage.getItem('email');
+      let email = DecodeToken.email;
       if (email) {
         try {
           this.postTermination.contractId = Number(contractId);
@@ -1021,7 +1024,7 @@ export class AllContractsComponent implements OnInit {
       const emailSubject = this.withdrawalNoticeEmailForm.value.emailSubject;
       const emailBody = this.withdrawalNoticeEmailForm.value.emailBody;
       console.log('came here 3')
-      let email = localStorage.getItem('email');
+      let email = DecodeToken.email;
       if (email) {
         try {
           this.withdrawNoticeSend.contractId = Number(contractId);

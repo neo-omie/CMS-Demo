@@ -14,6 +14,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-master-employee',
@@ -273,7 +274,17 @@ onSubmit(){
 
       addFormValues.email =this.addEmployeeForm.value.email;
       addFormValues.employeeExtension =this.addEmployeeForm.value.employeeExtension;
+      //addFormValues.loggedBy =this.addEmployeeForm.value.loggedBy;
+
+      const loggedInEmpCode=DecodeToken.ECode;
+      if(!loggedInEmpCode){
+        console.log("LoggedInUser EmpCode is not found in localstorage");
+        Alert.toast(TYPE.ERROR, true, 'Unable to retrieve logged-in user information.');
+        return;
+      }
+      addFormValues.loggedBy=loggedInEmpCode;
       console.log(addFormValues);
+
       if (!this.empId) {
         console.error('valueId is undefined. Cannot update employee.');
         Alert.toast(TYPE.ERROR, true, 'Invalid employee ID.');

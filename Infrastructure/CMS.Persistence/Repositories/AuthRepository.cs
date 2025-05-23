@@ -48,10 +48,10 @@ namespace CMS.Persistence.Repositories
             return new AuthResponseDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                UserId = user.EmployeeCode,
-                Role = user.Role,
-                Name = user.EmployeeName,
-                Email = user.Email,
+                //UserId = user.EmployeeCode,
+                //Role = user.Role,
+                //Name = user.EmployeeName,
+                //Email = user.Email
 
             };
         }
@@ -63,7 +63,8 @@ namespace CMS.Persistence.Repositories
                 new Claim(JwtRegisteredClaimNames.Sub, user.EmployeeName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("EID", user.ValueId.ToString())
+                new Claim("ECode", user.EmployeeCode),
+                new Claim("ERole", user.Role)
             };
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256); // Generally used this type

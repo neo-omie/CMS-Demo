@@ -1,7 +1,9 @@
-CREATE PROCEDURE SP_GetAllEscalationMatrixContracts @PageNumber INT, @PageSize INT
+USE CMS_Trailblazers
+-- Get All Escalation Matrix Contracts
+CREATE OR ALTER PROCEDURE SP_GetAllEscalationMatrixContracts @PageNumber INT, @PageSize INT
 AS
 BEGIN
-DECLARE @TotalRecords INT
+	DECLARE @TotalRecords INT
 	SELECT @TotalRecords = Count(m.MatrixContractId) FROM MasterEscalationMatrixContracts m; 
     SELECT 
         m.MatrixContractId,
