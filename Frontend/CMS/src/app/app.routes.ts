@@ -26,29 +26,30 @@ import { NotificationsComponent } from './components/notifications/notifications
 import { ApprovalMatrixMouScreenComponent } from './components/ApprovalMatrixMou/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
 import { EscalationMatrixContractScreenComponent } from './components/EscalationMarixContract/escalation-matrix-contract-screen/escalation-matrix-contract-screen.component';
 import { AddendumContractsComponent } from './components/addendum-contracts/addendum-contracts.component';
+import { roleGuard } from './role.guard';
 
 export const routes: Routes = [
     { path: '', component: LoginScreenComponent },
     { path: 'auth/renewPassword', component: RenewPasswordComponent },
     // {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
     { path: 'dashboard', loadChildren: () => import('./dashboard.routes').then(m => m.routes), canActivate: [authGuard] },
-    { path: 'masters', component: MastersScreenComponent, canActivate: [authGuard] },
+    { path: 'masters', component: MastersScreenComponent, canActivate: [authGuard, roleGuard] },
 
 
-    { path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate: [authGuard] },
-    { path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate: [authGuard] },
+    { path: 'masters/approval-matrix-contract', component: ApprovalMatrixContractScreenComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'masters/approval-matrix-mou', component: ApprovalMatrixMouScreenComponent, canActivate: [authGuard, roleGuard] },
 
-    { path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate: [authGuard] },
-    { path: 'masters/employeeMasters', component: MasterEmployeeComponent, canActivate: [authGuard] },
-    { path: 'masters/apostilleMasters', component: MasterApostilleComponent, canActivate: [authGuard] },
-    { path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate: [authGuard] },
+    { path: 'masters/documentMasters', component: MasterDocumentComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'masters/employeeMasters', component: MasterEmployeeComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'masters/apostilleMasters', component: MasterApostilleComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'masters/departmentMasters', component: MasterDepartmentComponent, canActivate: [authGuard, roleGuard] },
 
-    { path: 'masters/escalationContracts', component: EscalationMatrixContractScreenComponent, canActivate: [authGuard] },
-    { path: 'masters/escalationMOUs', component: EscalationMatrixMouScreenComponent, canActivate: [authGuard] },
+    { path: 'masters/escalationContracts', component: EscalationMatrixContractScreenComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'masters/escalationMOUs', component: EscalationMatrixMouScreenComponent, canActivate: [authGuard, roleGuard] },
 
 
-    { path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate: [authGuard] },
-    { path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate: [authGuard] },
+    { path: 'masters/companyMasters', component: MasterCompanyComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate: [authGuard, roleGuard] },
 
     { path: 'contracts', component: ContractsScreenComponent, canActivate: [authGuard] },
     { path: 'contracts/allContracts', component: AllContractsComponent, canActivate: [authGuard] },
@@ -59,7 +60,7 @@ export const routes: Routes = [
     {path: 'contracts/addendumContract', component: AddendumContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
-    { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard] },
+    { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard, roleGuard] },
 
 
     { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard] },
