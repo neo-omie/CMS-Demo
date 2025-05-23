@@ -8,7 +8,9 @@ namespace CMS.Domain.Constants
 {
     public enum TableList
     {
-        Contract = 1, ClassifiedContract, AddendumContract,
+        Contract = 1, 
+        ClassifiedContract, 
+        AddendumContract,
         MasterContractType, MasterDepartment, MasterApostille, MasterDocument, MasterEmployee,
         MasterApprovalMatrixContract, MasterApprovalMatrixMOU, MasterEscalationMatrixContract, MasterEscalationMatrixMOU,
         PostTerminationNotice, NoticeWithdrawal

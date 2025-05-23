@@ -64,7 +64,7 @@ namespace CMS.Persistence.Repositories
             return foundContract;
 
         }
-        public async Task<ClassifiedContract> AddClassifiedContractAsync(ClassifiedContract cp)
+        public async Task<ClassifiedContract> AddClassifiedContractAsync(ClassifiedContract cp, string empName)
         {
             if (cp.SkipApproval)
             {
@@ -123,6 +123,8 @@ namespace CMS.Persistence.Repositories
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName, subject, emailBody
                 );
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                 await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract ," New Classified Contract created by "+empCode, "NEO1" , LogStatus.Created);
             }
             return cp;
         }

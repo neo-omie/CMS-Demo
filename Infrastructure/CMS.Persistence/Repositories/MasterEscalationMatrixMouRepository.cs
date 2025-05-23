@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using CMS.Application.Features.EscalationMatrixMouMaster;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
+using CMS.Domain.Constants;
+using System.Diagnostics.Contracts;
+using System.Reflection.Emit;
 
 namespace CMS.Persistence.Repositories
 {
@@ -66,24 +69,10 @@ namespace CMS.Persistence.Repositories
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<int> UpdateMatrixMou(int valueId, UpdateEscalationMatrixMouDto updateDto)
+        public async Task<bool> UpdateMatrixMou(int valueId, UpdateEscalationMatrixMouDto updateDto, string empCode)
         {
-            var mou = await _context.MasterEscalationMatrixMous.FirstOrDefaultAsync(x => x.MatrixMouId == valueId);
-            if (mou == null)
-            {
-                throw new NotFoundException("Escalation Mou not Found");
-            }
-            mou.EscalationId1 = updateDto.EscalationId1;
-            mou.EscalationId2 = updateDto.EscalationId2;
-            mou.EscalationId3 = updateDto.EscalationId3;
-            mou.TriggerDaysEscalation1 = updateDto.TriggerDaysEscalation1;
-            mou.TriggerDaysEscalation2 = updateDto.TriggerDaysEscalation2;
-            mou.TriggerDaysEscalation3 = updateDto.TriggerDaysEscalation3;
-
-            _context.MasterEscalationMatrixMous.Update(mou);
-            return _context.SaveChanges();
-
-
+            string query = "EXEC SP_UpdateMasterEscalationMatrixMou @id = {0}, @EscalationId1 = {1}, @EscalationId2 = {2}, @EscalationId3 = {3}, @TriggerDaysEscalation1 = {4}, @TriggerDaysEscalation2 = {5}, @TriggerDaysEscalation3 = {6}, @UpdatedBy = {7}, @ForTable = {8}, @Status = {9}";
+            return await _context.Database.ExecuteSqlRawAsync(query, valueId, updateDto.EscalationId1, updateDto.EscalationId2, updateDto.EscalationId3, updateDto.TriggerDaysEscalation1, updateDto.TriggerDaysEscalation2, updateDto.TriggerDaysEscalation3, empCode, TableList.MasterApprovalMatrixContract, LogStatus.Updated) > 0;
         }
     }
 }
