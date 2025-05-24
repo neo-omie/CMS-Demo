@@ -343,6 +343,7 @@ export class AllClassifiedContractComponent implements OnInit{
       });
     }
     DeleteContract(id?: number) {
+      let empName = DecodeToken.ECode;
       Alert.confirmToast(
         'Are you sure you want to delete this contract?',
         "You won't be able to revert this!!",
@@ -353,7 +354,7 @@ export class AllClassifiedContractComponent implements OnInit{
         TYPE.SUCCESS,
         () => {
           if (id !== undefined) {
-            this.contractsService.deleteContract(id).subscribe({
+            this.contractsService.deleteContract(id,empName).subscribe({
               next: () => {
                 Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
                 this.GetAllContracts(1, 10);
@@ -390,208 +391,6 @@ export class AllClassifiedContractComponent implements OnInit{
       approver3Status : new FormControl('1',[Validators.required,Validators.pattern('^[0-9]$')]),
       skipApproval : new FormControl(true,[Validators.required])
     })
-          async onAddFormSubmit(){
-            this.loading=true;
-            this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
-            if(this.masterContractAddForm.invalid){
-              this.masterContractAddForm.markAllAsTouched();
-              console.log("MasterContractAddForm is invalid : ",this.masterContractAddForm.value)
-              return;
-            }
-            else{
-              const departmentId = this.masterContractAddForm.value.departmentId;
-              const contractWithCompanyId = this.masterContractAddForm.value.contractWithCompanyId;
-              const contractTypeId = this.masterContractAddForm.value.contractTypeId;
-              const apostilleTypeId = this.masterContractAddForm.value.apostilleTypeId;
-              const actualDocRefNo = this.masterContractAddForm.value.actualDocRefNo;
-              const retainerContract = this.masterContractAddForm.value.retainerContract;
-              const empCustodianId = this.masterContractAddForm.value.empCustodianId;
-              const approver1Status = this.masterContractAddForm.value.approver1Status;
-              const approver2Status = this.masterContractAddForm.value.approver2Status;
-              const approver3Status = this.masterContractAddForm.value.approver3Status;
-              if(departmentId && Number(departmentId) &&
-              contractWithCompanyId && Number(contractWithCompanyId) &&
-              contractTypeId && Number(contractTypeId) &&
-              apostilleTypeId && Number(apostilleTypeId) &&
-              actualDocRefNo && Number(actualDocRefNo) &&
-              retainerContract && Number(retainerContract) &&
-              empCustodianId && Number(empCustodianId) &&
-              approver1Status && Number(approver1Status) &&
-              approver2Status && Number(approver2Status) &&
-              approver3Status && Number(approver3Status) 
-              ){
-                const addFormValues:AddClassifiedContractDto = new AddClassifiedContractDto();
-                addFormValues.classifiedContractName = this.masterContractAddForm.value.classifiedContractName;
-                addFormValues.departmentId = Number(departmentId);
-                addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
-                addFormValues.contractTypeId = Number(contractTypeId);
-                addFormValues.apostilleTypeId = Number(apostilleTypeId);
-                addFormValues.actualDocRefNo = Number(actualDocRefNo);
-                addFormValues.retainerContract = Number(retainerContract);
-                addFormValues.termsAndConditions = this.masterContractAddForm.value.termsAndConditions;
-                addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
-                addFormValues.validTill = this.masterContractAddForm.value.validTill;
-                addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom != "" ? String(this.masterContractAddForm.value.renewalFrom) : null;
-                addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill != "" ? String(this.masterContractAddForm.value.renewalTill) : null;
-                addFormValues.addendumDate = this.masterContractAddForm.value.addendumDate != "" ? String(this.masterContractAddForm.value.addendumDate) : null;
-                addFormValues.skipApproval =this.masterContractAddForm.value.skipApproval;
-                addFormValues.empCustodianId = Number(empCustodianId);
-                addFormValues.location = this.masterContractAddForm.value.location;
-                addFormValues.approver1Status = Number(approver1Status);
-                addFormValues.approver2Status = Number(approver2Status);
-                addFormValues.approver3Status = Number(approver3Status);
-                
-                    try {
-                              const response = await firstValueFrom(this.contractsService.addContract(addFormValues));
-                              
-                    if( response !== false){
-                      Alert.toast(TYPE.SUCCESS,true,'Added successfully');
-                      this.masterContractAddForm.reset({
-                      skipApproval : true,
-                      approver1Status : "1",
-                      approver2Status : "1",
-                      approver3Status : "1",
-                      renewalFrom : "",
-                      renewalTill : "",
-                      addendumDate : ""
-                    });
-                    console.log("After rest : ",this.masterContractAddForm.value);
-                      this.GetAllContracts(1, 10);
-                      const modalElement = document.getElementById('contract-add');
-            if (modalElement) {
-              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-              modalInstance.hide();
-            }
-                    }
-                  }
-                  // error:(error) => {
-                    catch (error) {
-                    console.error('Error :(', error);
-                    // this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-                    // console.log(this.skipApproval);
-                    this.errorMsg = JSON.stringify(error);
-                    Alert.toast(TYPE.ERROR,true,this.errorMsg);
-                    this.masterContractAddForm.reset();
-                    this.masterContractAddForm.patchValue({
-                      skipApproval : true,
-                      approver1Status : "1",
-                      approver2Status : "1",
-                      approver3Status : "1",
-                      renewalFrom : "",
-                      renewalTill : "",
-                      addendumDate : ""
-                    })
-                  }
-                  finally {
-          this.loading = false;
-        }
-                // });
-
-              }
-              else{
-                console.log("should not come here 1", this.masterContractAddForm.value)
-              }
-            }
-            // console.log("should not come here 2 ", this.masterContractAddForm.value)
-            // console.log(this.skipApproval);
-            // this.masterContractAddForm.reset();
-            // this.masterContractAddForm.patchValue({
-            //           skipApproval : true,
-            //           approver1Status : "1",
-            //           approver2Status : "1",
-            //           approver3Status : "1",
-            //})
-          }
-          textChangeEmployeeCustodian(departmentId:number, event:Event, approverNumber:number){
-            let input = event.target as HTMLInputElement;
-            this.contractsService.GetEmployeeForInputText(departmentId,input.value).subscribe(
-              {
-                next:(response:MasterEmployee[]) => {
-                  if(approverNumber == 1){
-                    this.employeeCustodians = response;
-                  }
-                },
-                error:(error) => {
-                  console.error('Error :(', error);
-                  this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-                  Alert.toast(TYPE.ERROR,true,this.errorMsg);
-                }
-              }
-            )
-          }
-          fillEmployeeCustodian(employeeId:number, employeeName:string, inputNumber:number){
-            if(inputNumber == 1){
-              const input = this.editEmpCustodianCollapse.nativeElement.querySelector('input');
-              input.value = "";
-              // console.log(input.value);
-              this.employeeCustodians.length = 0;
-              this.renderer.removeClass(this.editEmpCustodianCollapse.nativeElement,'show');
-              this.renderer.removeClass(this.addEmpCustodianCollapse.nativeElement,'show');
-              this.editEmpCustodianName.nativeElement.value = employeeName;
-              this.editEmpCustodianId.nativeElement.value = employeeId;
-              this.addEmpCustodianName.nativeElement.value = employeeName;
-              this.addEmpCustodianId.nativeElement.value = employeeId;
-              console.log(employeeId);
-            }
-          }
-          get classifiedContractName(){
-            return this.masterContractAddForm.get('classifiedContractName');
-          }
-          get departmentId(){
-            return this.masterContractAddForm.get('departmentId');
-          }
-          get contractWithCompanyId(){
-            return this.masterContractAddForm.get('contractWithCompanyId');
-          }
-          get contractTypeId(){
-            return this.masterContractAddForm.get('contractTypeId');
-          }
-          get apostilleTypeId(){
-            return this.masterContractAddForm.get('apostilleTypeId');
-          }
-          get actualDocRefNo(){
-            return this.masterContractAddForm.get('actualDocRefNo');
-          }
-          get retainerContract(){
-            return this.masterContractAddForm.get('retainerContract');
-          }
-          get termsAndConditions(){
-            return this.masterContractAddForm.get('termsAndConditions');
-          }
-          get validFrom(){
-            return this.masterContractAddForm.get('validFrom');
-          }
-          get validTill(){
-            return this.masterContractAddForm.get('validTill');
-          }
-          get renewalFrom(){
-            return this.masterContractAddForm.get('renewalFrom');
-          }
-          get renewalTill(){
-            return this.masterContractAddForm.get('renewalTill');
-          }
-          get addendumDate(){
-            return this.masterContractAddForm.get('addendumDate');
-          }
-          get empCustodianId(){
-            return this.masterContractAddForm.get('empCustodianId');
-          }
-          get location(){
-            return this.masterContractAddForm.get('location');
-          }
-          get approver1Status(){
-            return this.masterContractAddForm.get('approver1Status');
-          }
-          get approver2Status(){
-            return this.masterContractAddForm.get('approver2Status');
-          }
-          get approver3Status(){
-            return this.masterContractAddForm.get('approver3Status');
-          }
-          get skipApproval(){
-            return this.masterContractAddForm.get('skipApproval');
-          }
-        
           onClick(){
             this.router.navigate(['classifiedContracts/allContracts']);
             this.masterContractAddForm.reset();

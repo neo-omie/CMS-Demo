@@ -27,11 +27,11 @@ export class ClassifiedContractsService {
   getClassifiedContractCounts(): Observable<ContractsCount> {
     return this.http.get<ContractsCount>(`${this.apiUrl}/GetClassifiedContractsCount`);
   }
-    deleteContract(classifiedContractID: number) : Observable<boolean> {
-      return this.http.delete<boolean>(`${this.apiUrl}/${classifiedContractID}`);
+    deleteContract(classifiedContractID: number,empName:string|null) : Observable<boolean> {
+      return this.http.delete<boolean>(`${this.apiUrl}/${classifiedContractID}/${empName}`);
     }
-    addContract(addContractDto: AddClassifiedContractDto) : Observable<boolean> {
-      return this.http.post<boolean>(`${this.apiUrl}`,addContractDto);
+    addContract(addContractDto: AddClassifiedContractDto,empName :string | null) : Observable<boolean> {
+      return this.http.post<boolean>(`${this.apiUrl}/${empName}`,addContractDto);
     }
 
     editContract(contractID:number, contract:AddClassifiedContractDto) : Observable<boolean> {

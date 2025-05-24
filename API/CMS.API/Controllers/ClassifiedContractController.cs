@@ -80,7 +80,7 @@ namespace CMS.API.Controllers
         //    return Ok(foundContract);
         //}
         //[HttpPost]
-        [HttpPost("${empName}")]
+        [HttpPost("{empName}")]
         public async Task<IActionResult> AddContract(ClassifiedContractDTO cont,[FromRoute]string empName)
         {
             _logger.LogInformation("AddClassifiedContract method initiated");
@@ -99,12 +99,12 @@ namespace CMS.API.Controllers
             _logger.LogInformation("UpdateContract method performed");
             return Ok(editedContract); // bool
         }
-        [Route("{id}")]
+        [Route("{id}/{empCode}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteClassifiedContract([FromRoute] int id)
+        public async Task<IActionResult> DeleteClassifiedContract([FromRoute] int id, [FromRoute]string empCode)
         {
             _logger.LogInformation("DeleteClassifiedContract method initiated");
-            var deletedContract = await _mediator.Send(new RemoveClassifiedContractCommand(id));
+            var deletedContract = await _mediator.Send(new RemoveClassifiedContractCommand(id,empCode));
             _logger.LogInformation("DeleteClassifiedContract method performed");
             return Ok(deletedContract); // bool
         }

@@ -18,9 +18,6 @@ import {
 import { GetAllDepartmentsDto } from '../../../models/master-department';
 import { ClassifiedContractsService } from '../../../services/classified-contracts.service';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
-import { PostTerminationService } from '../../../services/post-termination.service';
-import { Router } from '@angular/router';
-import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { TYPE } from '../../auth/login/values.constants';
 import { Alert } from '../../../utils/alert';
 import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
@@ -35,6 +32,7 @@ import {
   GetClassifiedContractByIdDto,
 } from '../../../models/classified-contracts';
 import { firstValueFrom } from 'rxjs';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 @Component({
   selector: 'app-all-classified-contract-view-add-modal',
@@ -50,9 +48,9 @@ export class AllClassifiedContractViewAddModalComponent {
   @Input() withdrawCheck: boolean = false;
   @Input() contractDetails?: GetClassifiedContractByIdDto;
   @Input() isCreate = false;
-  @Input() termStatus!:(status: number) => void;
-  @Input() getContractIdforPostTerm!:(classifiedContractID?: string) => void;
-  @Input() approveRejectContract!:(id?: string, status?: number) => void;
+  @Input() termStatus!: (status: number) => void;
+  @Input() getContractIdforPostTerm!: (classifiedContractID?: string) => void;
+  @Input() approveRejectContract!: (id?: string, status?: number) => void;
   @Input() GetAllContracts!: (pageSize: number, pageNumber: number) => void;
 
   approverStatusColor: string[] = [
@@ -147,11 +145,11 @@ export class AllClassifiedContractViewAddModalComponent {
     }
   }
 
-  returnValue(value?:number):number{
-    if(value){
-      return value
+  returnValue(value?: number): number {
+    if (value) {
+      return value;
     }
-    return 0
+    return 0;
   }
 
   error(error: any) {
@@ -218,6 +216,7 @@ export class AllClassifiedContractViewAddModalComponent {
   }
 
   async onAddFormSubmit() {
+    let empName = DecodeToken.ECode;
     this.formfield('approver1Status')?.setValue(1);
     this.formfield('approver2Status')?.setValue(1);
     this.formfield('approver3Status')?.setValue(1);
@@ -290,7 +289,7 @@ export class AllClassifiedContractViewAddModalComponent {
 
         try {
           const response = await firstValueFrom(
-            this.contractsService.addContract(addFormValues)
+            this.contractsService.addContract(addFormValues, empName)
           );
 
           if (response !== false) {

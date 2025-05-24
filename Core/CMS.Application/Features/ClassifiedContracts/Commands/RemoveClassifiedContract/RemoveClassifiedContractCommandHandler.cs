@@ -18,7 +18,7 @@ namespace CMS.Application.Features.ClassifiedContracts.Commands.RemoveClassified
         }
         public async Task<bool> Handle(RemoveClassifiedContractCommand request, CancellationToken cancellationToken)
         {
-            return await _contractRepository.DeleteClassifiedContractAsync(request.id);
+            return await _contractRepository.DeleteClassifiedContractAsync(request.id,request.empCode);
         }
     }
 }

@@ -16,6 +16,7 @@ using CMS.Persistence.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Reflection.Emit;
 
 namespace CMS.Persistence.Repositories
 {
@@ -124,7 +125,7 @@ namespace CMS.Persistence.Repositories
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName, subject, emailBody
                 );
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                 await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract ," New Classified Contract created by "+empCode, "NEO1" , LogStatus.Created);
+                 await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract ," New Classified Contract created by "+empCode, empName , LogStatus.Created);
             }
             return cp;
         }
@@ -261,11 +262,15 @@ namespace CMS.Persistence.Repositories
                 contract.Approver1Status = status;
                 contract.Approver2Status = status;
                 contract.Approver3Status = status;
+
                 if (await _context.SaveChangesAsync() <= 0)
                 {
                     throw new Exception($"For some reasons , contract status has not been changed to {status}");
                 }
             }
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, " Classified Contract Approved by " + empCode, empCode, LogStatus.Approved);
             return contract;
         }
 
@@ -330,7 +335,7 @@ namespace CMS.Persistence.Repositories
             await _emailService.SendEmailWithAttachment(mailRequest);
         }
 
-        public async Task<bool> DeleteClassifiedContractAsync(int id)
+        public async Task<bool> DeleteClassifiedContractAsync(int id,string empCode)
         {
             var foundContract = await _context.ClassifiedContracts.FirstOrDefaultAsync(ce => ce.ClassifiedContractId == id);
             if (foundContract == null)
@@ -339,7 +344,11 @@ namespace CMS.Persistence.Repositories
             }
             foundContract.IsDeleted = true;
             _context.ClassifiedContracts.Update(foundContract);
-            if(await _context.SaveChangesAsync() > 0)
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, "Classified Contract Deleted by " + empCode, empCode, LogStatus.Deleted);
+
+            if (await _context.SaveChangesAsync() > 0)
                 return true;
             return false;
         }
