@@ -379,6 +379,12 @@
             *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.contractId)">+ Add Addendum</button>
 
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+          <!-- Progress bar horizontal -->
+          <div>
+            <app-progress-bar [progress]="75">
+
+            </app-progress-bar>
+          </div>
         </div>
       </div>
     </div>

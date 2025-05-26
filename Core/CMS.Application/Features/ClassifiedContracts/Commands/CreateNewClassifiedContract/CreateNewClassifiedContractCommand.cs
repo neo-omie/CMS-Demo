@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CMS.Domain.Entities;
 using MediatR;
 
-namespace CMS.Application.Features.ClassifiedContracts.Commands.CreateNewContract
+namespace CMS.Application.Features.ClassifiedContracts.Commands.CreateNewClassifiedContract
 {
-    public record CreateNewClassifiedContractCommand(ClassifiedContractDTO cont) : IRequest<ClassifiedContract>;
+    public record CreateNewClassifiedContractCommand(ClassifiedContractDTO cont,string empName) : IRequest<ClassifiedContract>;
 }

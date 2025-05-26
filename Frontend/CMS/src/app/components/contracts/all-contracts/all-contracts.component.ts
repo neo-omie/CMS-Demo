@@ -30,11 +30,12 @@ import { PostTermination } from '../../../models/post-termination';
 import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { DecodeToken } from '../../../utils/decodeToken';
+import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
@@ -130,6 +131,7 @@ export class AllContractsComponent implements OnInit {
       },
     });
   }
+
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.GetAllContracts(pgNumber, 10);

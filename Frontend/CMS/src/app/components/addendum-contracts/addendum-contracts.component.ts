@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { PDFExport } from '../../utils/pdfExport';
 
 @Component({
   selector: 'app-addendum-contracts',
@@ -163,18 +164,7 @@ export class AddendumContractsComponent {
         }
       })
     }
-
-  // GetContract(id: number, isEdit: boolean) {
-  //   this.isEdit = isEdit;
-  //   this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
-  //     next: (response: ApprovalMatrixContract) => {
-  //       this.approvalMatrixContract = response;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error :(', error);
-  //       this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-  //       Alert.toast(TYPE.ERROR, true, this.errorMsg);
-  //     }
-  //   });
-  // }
+    printToPDF(tableID: string, fileName: string) {
+    PDFExport.printToPDF(tableID, fileName);
+  }
 }

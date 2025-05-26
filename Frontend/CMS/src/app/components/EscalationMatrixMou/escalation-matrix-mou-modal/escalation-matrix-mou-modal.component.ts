@@ -7,6 +7,7 @@ import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
 import { MasterEscalationMatrixMouDto, UpdateMatrixMouDto } from '../../../models/master-escalation-matrix-mou-dto';
 import { EscalationMatrixMouService } from '../../../services/escalation-matrix-mou.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-escalation-matrix-mou-modal',
@@ -38,7 +39,12 @@ export class EscalationMatrixMouModalComponent {
   @ViewChild('editNumberOfDays2') editNumberOfDays2!: ElementRef;
   @ViewChild('editNumberOfDays3') editNumberOfDays3!: ElementRef;
 
-  constructor(private escalationService: EscalationMatrixMouService,private renderer: Renderer2, private approverMatrixContractService: ApproverMatrixContractService) { }
+  constructor(
+    private escalationService: EscalationMatrixMouService,
+    private renderer: Renderer2, 
+    private approverMatrixContractService: ApproverMatrixContractService,
+    private route : Router
+  ) { }
 
   closeEditApproverCollapses() {
     if(this.editApproverCollapse1 && this.editApproverCollapse2 && this.editApproverCollapse3){
@@ -119,42 +125,49 @@ export class EscalationMatrixMouModalComponent {
   }
 
   editApproverMatrixContractSubmit(id:number){
-    let updateMatrixMouDto = new UpdateMatrixMouDto(0,'','','','',0,0,0);
-    let nod1 = this.editNumberOfDays1.nativeElement.value;
-    let nod2 = this.editNumberOfDays2.nativeElement.value;
-    let nod3 = this.editNumberOfDays3.nativeElement.value;
-    let ap1 = this.editApproverId1.nativeElement.value;
-    let ap2 = this.editApproverId2.nativeElement.value;
-    let ap3 = this.editApproverId3.nativeElement.value;
-    if(nod1 !== "" && Number(nod1) > 0 &&
-    nod2 !== "" && Number(nod2) > 0 &&
-    nod3 !== "" && Number(nod3) > 0){
-      updateMatrixMouDto.escalationId1 = ap1;
-      updateMatrixMouDto.escalationId2 = ap2;
-      updateMatrixMouDto.escalationId3 = ap3;
-      updateMatrixMouDto.triggerDaysEscalation1 = nod1;
-      updateMatrixMouDto.triggerDaysEscalation2 = nod2;
-      updateMatrixMouDto.triggerDaysEscalation3 = nod3;
-      this.escalationService.postMatrixMouById(id,updateMatrixMouDto).subscribe({
-        next:(response:any)=>{
-          Alert.toast(TYPE.SUCCESS,true,response.message);
-          this.getMatrixMous(1, 10);
-          const modalElement = document.getElementById('escalation-matrix-mou-modal');
-          if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            modalInstance.hide();
+    let empCode = localStorage.getItem("empCode");
+    if(empCode){
+      let updateMatrixMouDto = new UpdateMatrixMouDto(0,'','','','',0,0,0);
+      let nod1 = this.editNumberOfDays1.nativeElement.value;
+      let nod2 = this.editNumberOfDays2.nativeElement.value;
+      let nod3 = this.editNumberOfDays3.nativeElement.value;
+      let ap1 = this.editApproverId1.nativeElement.value;
+      let ap2 = this.editApproverId2.nativeElement.value;
+      let ap3 = this.editApproverId3.nativeElement.value;
+      if(nod1 !== "" && Number(nod1) > 0 &&
+      nod2 !== "" && Number(nod2) > 0 &&
+      nod3 !== "" && Number(nod3) > 0){
+        updateMatrixMouDto.escalationId1 = ap1;
+        updateMatrixMouDto.escalationId2 = ap2;
+        updateMatrixMouDto.escalationId3 = ap3;
+        updateMatrixMouDto.triggerDaysEscalation1 = nod1;
+        updateMatrixMouDto.triggerDaysEscalation2 = nod2;
+        updateMatrixMouDto.triggerDaysEscalation3 = nod3;
+        this.escalationService.postMatrixMouById(id,updateMatrixMouDto,empCode).subscribe({
+          next:(response:any)=>{
+            Alert.toast(TYPE.SUCCESS,true,response.message);
+            this.getMatrixMous(1, 10);
+            const modalElement = document.getElementById('escalation-matrix-mou-modal');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
+            this.closeEditApproverCollapses();
+          },
+          error:(error)=>{
+            console.error('Error :(', error);
+            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
+            Alert.toast(TYPE.ERROR,true,this.errorMsg);
           }
-          this.closeEditApproverCollapses();
-        },
-        error:(error)=>{
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
-          Alert.toast(TYPE.ERROR,true,this.errorMsg);
-        }
-      })
+        })
+      }
+      else{
+        Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
+      }
     }
     else{
-      Alert.toast(TYPE.ERROR,true,"Incorrect number of days");
+      localStorage.clear();
+      this.route.navigate(["/"]);
     }
   }
 }
