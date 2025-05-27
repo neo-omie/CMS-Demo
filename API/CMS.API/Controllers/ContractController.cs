@@ -8,6 +8,7 @@ using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractByContractName;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
 using CMS.Application.Features.Contracts.Queries.GetContractsCount;
+using CMS.Application.Features.Contracts.Queries.GetExpiredContracts;
 using CMS.Application.Features.Contracts.Queries.GetPendingApprovalContracts;
 using CMS.Application.Features.Contracts.Queries.GetTerminatedContracts;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
@@ -63,6 +64,15 @@ namespace CMS.API.Controllers
             _logger.LogInformation("GetPendingApprovalContracts method performed");
             return Ok(pendingApprovalContracts);
         }
+        [HttpGet("GetExpiredContracts")]
+        public async Task<IActionResult> GetExpiredContracts(int pageNumber, int pageSize)
+        {
+            _logger.LogInformation("GetExpiredContracts method initiated");
+            var expiredContracts = await _mediator.Send(new GetExpiredContractsQuery(pageNumber, pageSize));
+            _logger.LogInformation("GetExpiredContracts method performed");
+            return Ok(expiredContracts);
+        }
+
         [HttpGet("GetContractsCount")]
         public async Task<IActionResult> GetContractsCount()
         {

@@ -63,6 +63,7 @@ namespace CMS.Persistence.Repositories
                 new Claim(JwtRegisteredClaimNames.Sub, user.EmployeeName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role),
                 new Claim("ECode", user.EmployeeCode),
                 new Claim("ERole", user.Role)
             };

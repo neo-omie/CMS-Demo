@@ -1,7 +1,7 @@
 <app-loader *ngIf="loading"></app-loader>
-<h2 class="pt-3">Contracts List - Terminated</h2>
+<h2 class="pt-3">Contracts List - Expired</h2>
 <div class="table-responsive p-md-5 p-3">
-  <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#contracts-table','CMS-terminated-contracts.pdf')">
+  <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#contracts-table','CMS-pending-contracts.pdf')">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
   <table mat-table [dataSource]="dataSource" matSort
@@ -80,7 +80,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
     
 </table>
-<p class="fs-5" *ngIf="allContracts.length == 0" style="text-align: center;">No terminated records.</p>
+<p class="fs-5" *ngIf="allContracts.length == 0" style="text-align: center;">No expired contracts records.</p>
 </div>
 <div *ngIf="!loading" class="table-responsive p-3">
   <nav class="d-flex justify-content-center" *ngIf="allContracts!=undefined && allContracts.length > 0" aria-label="Page navigation example">
@@ -256,8 +256,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" *ngIf="!approverCheck">Approve</button>
-          <button class="btn btn-danger" *ngIf="!approverCheck">Reject</button>
+          <button data-bs-dismiss="modal" class="btn btn-primary" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
+          <button data-bs-dismiss="modal" class="btn btn-danger" *ngIf="approverCheck" (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
           <button class="btn btn-outline-primary">+ Add Addendum</button>
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>

@@ -8,6 +8,7 @@ import { Alert } from '../../../utils/alert';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DecodeToken } from '../../../utils/decodeToken';
+import { UserService } from '../../../services/auth/user.service';
 
 @Component({
   selector: 'app-approver-matrix-contract-modal',
@@ -41,7 +42,8 @@ export class ApproverMatrixContractModalComponent {
   constructor(
     private approverMatrixContractService: ApproverMatrixContractService, 
     private renderer: Renderer2,
-    private route: Router
+    private route: Router,
+    private authService: UserService
   ) { }
 
   closeEditApproverCollapses() {
