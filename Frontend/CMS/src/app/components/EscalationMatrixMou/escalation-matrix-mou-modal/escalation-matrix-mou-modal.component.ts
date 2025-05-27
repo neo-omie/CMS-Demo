@@ -8,6 +8,8 @@ import { TYPE } from '../../auth/login/values.constants';
 import { MasterEscalationMatrixMouDto, UpdateMatrixMouDto } from '../../../models/master-escalation-matrix-mou-dto';
 import { EscalationMatrixMouService } from '../../../services/escalation-matrix-mou.service';
 import { Router } from '@angular/router';
+import { DecodeToken } from '../../../utils/decodeToken';
+import { UserService } from '../../../services/auth/user.service';
 
 @Component({
   selector: 'app-escalation-matrix-mou-modal',
@@ -43,7 +45,8 @@ export class EscalationMatrixMouModalComponent {
     private escalationService: EscalationMatrixMouService,
     private renderer: Renderer2, 
     private approverMatrixContractService: ApproverMatrixContractService,
-    private route : Router
+    private route : Router,
+    private authService: UserService,
   ) { }
 
   closeEditApproverCollapses() {
@@ -125,7 +128,7 @@ export class EscalationMatrixMouModalComponent {
   }
 
   editApproverMatrixContractSubmit(id:number){
-    let empCode = localStorage.getItem("empCode");
+    let empCode = DecodeToken.ECode;
     if(empCode){
       let updateMatrixMouDto = new UpdateMatrixMouDto(0,'','','','',0,0,0);
       let nod1 = this.editNumberOfDays1.nativeElement.value;
@@ -167,6 +170,7 @@ export class EscalationMatrixMouModalComponent {
     }
     else{
       localStorage.clear();
+      DecodeToken.clearUserCredentials();
       this.route.navigate(["/"]);
     }
   }

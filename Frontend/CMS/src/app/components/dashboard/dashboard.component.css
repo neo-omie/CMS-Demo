@@ -8,13 +8,3 @@ hr {
     width: 10%;
     justify-self: center;
 }
-
-.pie-chart {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    box-shadow:
-        inset 0 10px 15px rgba(0, 0, 0, 0.2),
-        0 10px 15px rgba(0, 0, 0, 0.3);
-    transform: rotateX(10deg);
-}
