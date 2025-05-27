@@ -64,6 +64,13 @@ namespace CMS.Persistence.Repositories
             var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return allContracts;
         }
+        public async Task<IEnumerable<GetAllContractsDto>> GetExpiredContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetExpiredContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
         {
