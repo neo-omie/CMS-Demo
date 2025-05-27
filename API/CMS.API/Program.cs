@@ -1,8 +1,10 @@
+using CMS.API.Helpers;
 using CMS.API.Middlewares;
 using CMS.Application;
 using CMS.Domain.Converters;
 using CMS.Infrastructure;
 using CMS.Persistence;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 
@@ -50,7 +52,34 @@ namespace CMS.API
             builder.Services.AddAuthentication(); // For Auth
             builder.Services.AddCors(); // For Angular Frontend joining
 
+            // Authorize Button in Swagger
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Please enter your token with this format: ''Bearer YOUR_TOKEN''",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
 
+                });
+                options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+            });
 
             var app = builder.Build();
 
