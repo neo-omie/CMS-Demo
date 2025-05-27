@@ -9,5 +9,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Commands.AddEmployee
 {
-    public record AddEmployeeCommand(AddEmployeeDto EmpDTO):IRequest<MasterEmployee>;
+    public record AddEmployeeCommand(AddEmployeeDto EmpDTO,string empCode):IRequest<MasterEmployee>;
 }

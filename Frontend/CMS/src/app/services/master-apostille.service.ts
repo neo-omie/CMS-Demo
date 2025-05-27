@@ -37,15 +37,15 @@ export class MasterApostilleService {
     return this.http.get<MasterApostille>(`${this.apiUrl}/${id}`);
   }
 
-  addApostille(apostille:AddApostilleDto):Observable<AddApostilleDto>{
-    return this.http.post<AddApostilleDto>(`${this.apiUrl}`,apostille);
+  addApostille(apostille:AddApostilleDto,empCode:string|null):Observable<AddApostilleDto>{
+    return this.http.post<AddApostilleDto>(`${this.apiUrl}/${empCode}`,apostille);
   }
 
-  updateApostille(id:number,apostille:EditApostilleDto):Observable<EditApostilleDto>{
-    return this.http.put<EditApostilleDto>(`${this.apiUrl}/${id}`,apostille);
+  updateApostille(id:number,apostille:EditApostilleDto,empCode:string|null):Observable<EditApostilleDto>{
+    return this.http.put<EditApostilleDto>(`${this.apiUrl}/${id}/${empCode}`,apostille);
   }
 
-  deleteApostille(id:number){
-    return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
+  deleteApostille(id:number,empCode:string|null){
+    return this.http.delete<boolean>(`${this.apiUrl}/${id}/${empCode}`);
   }
 }

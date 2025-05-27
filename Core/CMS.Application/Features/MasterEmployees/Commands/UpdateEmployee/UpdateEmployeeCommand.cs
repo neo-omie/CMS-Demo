@@ -4,5 +4,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Commands.UpdateEmployee
 {
-    public record UpdateEmployeeCommand(int id,UpdateEmployeeDto EmpDTO):IRequest<MasterEmployee>;
+    public record UpdateEmployeeCommand(int id,UpdateEmployeeDto EmpDTO,string empCode):IRequest<MasterEmployee>;
 }

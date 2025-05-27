@@ -7,8 +7,8 @@ namespace CMS.Application.Contracts.Persistence
     {
         Task<(IEnumerable<MasterApostille> Data, int TotalCount)> GetAllMasterApostilleAsync(int pageNumber, int pageSize, string? searchTerm);
         Task<MasterApostille> GetMasterApostilleByIdAsync(int id);
-        Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille);
-        Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille);
-        Task<bool> DeleteMasterApostilleAsync(int id);
+        Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille, string empCode);
+        Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille, string empCode);
+        Task<bool> DeleteMasterApostilleAsync(int id,string empCode);
     }
 }

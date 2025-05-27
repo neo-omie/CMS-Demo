@@ -8,7 +8,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Command.UpdateDocument
 {
-    public record UpdateDocumentCommand(int id, DocumentFormDTO model) : IRequest<object>;
+    public record UpdateDocumentCommand(int id, DocumentFormDTO model,string empCode) : IRequest<object>;
 
 
 }

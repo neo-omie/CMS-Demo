@@ -14,10 +14,10 @@ namespace CMS.Application.Contracts.Persistence
 
         Task<MasterCompany> GetCompanyByIdAsync(int id);
 
-        Task<MasterCompany> AddCompanyAsync(MasterCompany masterCompany);
+        Task<MasterCompany> AddCompanyAsync(MasterCompany masterCompany, string empCode);
 
-        Task<MasterCompany> UpdateCompanyAsync(int id, MasterCompany masterCompany);
+        Task<MasterCompany> UpdateCompanyAsync(int id, MasterCompany masterCompany, string empCode);
 
-        Task<bool> DeleteCompanyAsync(int id);
+        Task<bool> DeleteCompanyAsync(int id, string empCode);
     }
 }

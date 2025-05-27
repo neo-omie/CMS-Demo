@@ -36,11 +36,11 @@ export class ContractsService {
     return this.http.get<ContractsCount>(`${this.apiUrl}/GetContractsCount`);
   }
 
-  deleteContract(contractID: number) : Observable<boolean> {
-    return this.http.delete<boolean>(`${this.apiUrl}/${contractID}`);
+  deleteContract(contractID: number,empName:string |null ) : Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiUrl}/${contractID}/${empName}`);
   }
-  addContract(addContractDto: AddContractDto) : Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}`,addContractDto);
+  addContract(addContractDto: AddContractDto,empName:string|null) : Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/${empName}`,addContractDto);
   }
   editContract(contractID:number, contract:AddContractDto) : Observable<boolean> {
     return this.http.put<boolean>(`${this.apiUrl}/${contractID}`, contract);

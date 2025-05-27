@@ -59,33 +59,33 @@ namespace CMS.API.Controllers
         }
 
             //Add
-            [HttpPost]
-        public async Task<ActionResult<MasterCompany>> AddCompany([FromBody] MasterCompany company)
+        [HttpPost("{empCode}")]
+        public async Task<ActionResult<MasterCompany>> AddCompany([FromBody] MasterCompany company, [FromRoute] string empCode)
         {
             _logger.LogInformation("AddCompany method initiated");
-            var command = new AddCompanyCommand(company);
+            var command = new AddCompanyCommand(company,empCode);
             _logger.LogInformation("AddCompany method Performed");
             return Ok(await _mediator.Send(command));
 
         }
 
         //update
-        [HttpPut("{id}")]
-        public async Task<ActionResult<MasterCompany>>UpdateCompany(int id, [FromBody] MasterCompany company)
+        [HttpPut("{id}/{empCode}")]
+        public async Task<ActionResult<MasterCompany>>UpdateCompany(int id, [FromBody] MasterCompany company, [FromRoute] string empCode)
         {
             _logger.LogInformation("UpdateCompany method initiated");
-            var command = new UpdateCompanyCommand(id, company);
+            var command = new UpdateCompanyCommand(id, company,empCode);
             _logger.LogInformation("UpdateCompany method Performed");
             return Ok(await _mediator.Send(command));
         }
 
         //Delete 
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompany(int id)
+        [HttpDelete("{id}/{empCode}")]
+        public async Task<IActionResult> DeleteCompany(int id, [FromRoute] string empCode)
         {
             _logger.LogInformation("DeleteCompany method initiated");
-            var command = new DeleteCompanyCommand(id);
+            var command = new DeleteCompanyCommand(id,empCode);
             var checkifDel = await _mediator.Send(command);
             if (checkifDel)
                 return Ok(checkifDel);

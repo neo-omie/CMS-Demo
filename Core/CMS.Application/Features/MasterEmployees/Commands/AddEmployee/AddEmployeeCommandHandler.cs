@@ -26,7 +26,7 @@ namespace CMS.Application.Features.MasterEmployees.Commands.AddEmployee
         public async Task<MasterEmployee> Handle(AddEmployeeCommand request, CancellationToken cancellationToken)
         {
             var employee = _mapper.Map<MasterEmployee>(request.EmpDTO);
-            return await _masterEmployeeRepository.AddEmployeeAsync(employee);
+            return await _masterEmployeeRepository.AddEmployeeAsync(employee,request.empCode);
         }
     }
 }

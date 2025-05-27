@@ -25,6 +25,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-master-document',
@@ -108,6 +109,7 @@ export class MasterDocumentComponent implements OnInit {
   }
 
   addDocument(documentForm: NgForm) {
+    let empCode = DecodeToken.ECode;
     if (!this.file || !documentForm.valid) {
       this.addFile.nativeElement.value = "";
       this.document.file = null;
@@ -138,7 +140,7 @@ export class MasterDocumentComponent implements OnInit {
     const formData = new FormData();
     formData.append('File',this.file)
     formData.append('Status',String(this.document.status))
-    this.documentService.addDocument(formData).subscribe({
+    this.documentService.addDocument(formData,empCode).subscribe({
       next: (res) => {
         this.file = null;
         // documentForm.reset();
@@ -280,6 +282,7 @@ export class MasterDocumentComponent implements OnInit {
     }
 
   deleteDocument(id?: number) {
+    let empCode = DecodeToken.ECode;
     Alert.confirmToast(
       'Are you sure you want to delete this document?',
       "You won't be able to revert this!!",
@@ -290,7 +293,7 @@ export class MasterDocumentComponent implements OnInit {
       TYPE.SUCCESS,
       () => {
         if (id !== undefined) {
-          this.documentService.deleteDocument(id).subscribe({
+          this.documentService.deleteDocument(id,empCode).subscribe({
             next: () => {
               //Alert.toast(TYPE.SUCCESS, true, 'Document Deleted successfully');
               this.getDocuments(1, 10);

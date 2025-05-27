@@ -24,7 +24,7 @@ namespace CMS.Application.Features.MasterCompanies.Command.UpdateCompany
             {
                 throw new Exception($"Company Not Found");
             }
-            return await _comprepo.UpdateCompanyAsync(request.id, request.comp);
+            return await _comprepo.UpdateCompanyAsync(request.id, request.comp,request.empCode);
         }
     }
 }

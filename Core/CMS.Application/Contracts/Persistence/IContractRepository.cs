@@ -20,8 +20,9 @@ namespace CMS.Application.Contracts.Persistence
         public Task<Contract> ApproveRejectContract(int id, string empCode, ContractStatus status);
         Task<GetContractByIdDto> GetContractByIdAsync(int id);
         Task<GetContractByIdDto> GetContractByNameAsync(string name);
-        Task<Contract> AddContractAsync(Contract cp);
+        //Task<Contract> AddContractAsync(Contract cp);
+        Task<Contract> AddContractAsync(Contract cp, string empName);
         Task<bool> UpdateContractAsync(int id, Contract cp);
-        Task<bool> DeleteContractAsync(int id);
+        Task<bool> DeleteContractAsync(int id, string empCode);
     }
 }

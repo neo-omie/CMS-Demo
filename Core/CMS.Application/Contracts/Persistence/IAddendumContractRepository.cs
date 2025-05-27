@@ -18,7 +18,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<(IEnumerable<AddendumContract> Data, int TotalCount)> GetAllAddendumByContractIdAsync(int pageNumber, int pageSize, int id);
         Task<GetAddendumContractByIdDto> GetAddendumByAddendumContractIdAsync(int id);
         Task<AddendumContract> ApproveRejectAddendum(int contractId, ContractStatus addendumStatus, int addendumId, string empCode);
-        Task<AddAddendumContractDto> AddAddendumContractAsync(int id, AddAddendumContractDto addendumContract);
-        Task<bool> DeleteAddendumContractAsync(int id);
+        Task<AddAddendumContractDto> AddAddendumContractAsync(int id, AddAddendumContractDto addendumContract,string empCode);
+        Task<bool> DeleteAddendumContractAsync(int id, string empCode);
     }
 }

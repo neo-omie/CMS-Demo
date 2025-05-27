@@ -21,7 +21,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.UploadDocument
 
         public async Task<string> Handle(UploadDocumentCommand request, CancellationToken cancellationToken)
         {
-            return await _documentRepository.UploadDocument(request.model);
+            return await _documentRepository.UploadDocument(request.model,request.empCode);
         }
     }
 

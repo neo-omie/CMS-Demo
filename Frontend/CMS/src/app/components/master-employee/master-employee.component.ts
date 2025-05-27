@@ -130,12 +130,13 @@ getPageNumbers():number[]{
 }
 
 deleteEmployee(employee:MasterEmployee){
+        const loggedInEmpCode=DecodeToken.ECode;
   Alert.confirmToast("Are you sure you want to delete this Employee?",
     "You won't be able to revert this!", TYPE.WARNING,
     "Yes, delete it!",
     "Deleted successfully!",
     "Company has been deleted.", TYPE.SUCCESS,() => {
-     this.employeeService.deleteEmployee(employee.valueId).subscribe({
+     this.employeeService.deleteEmployee(employee.valueId,loggedInEmpCode).subscribe({
        next:(response:boolean)=>{
          if(response){
            Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
@@ -212,6 +213,8 @@ onSubmit(){
 
   const formValues=this.addEmployeeForm.value;
   if(this.mode==='add'){
+          const loggedInEmpCode=DecodeToken.ECode;
+
     const employeeName = this.addEmployeeForm.value.employeeName;
     const password = this.addEmployeeForm.value.password;
     const role = this.addEmployeeForm.value.role;
@@ -235,7 +238,7 @@ onSubmit(){
       addFormValues.email =this.addEmployeeForm.value.email;
       addFormValues.employeeExtension =this.addEmployeeForm.value.employeeExtension;
       console.log(addFormValues);
-      this.employeeService.addEmployee(addFormValues).subscribe({
+      this.employeeService.addEmployee(addFormValues,loggedInEmpCode).subscribe({
         next:(response:AddEmployeeDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Added successfully');
             this.router.navigate(['masters/employeeMasters']);
@@ -290,7 +293,7 @@ onSubmit(){
         Alert.toast(TYPE.ERROR, true, 'Invalid employee ID.');
         return;
       }
-      this.employeeService.updateEmployee(this.empId, addFormValues).subscribe({
+      this.employeeService.updateEmployee(this.empId, addFormValues,loggedInEmpCode).subscribe({
         next:(response:EditEmployeeDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Updated successfully');
             this.router.navigate(['masters/employeeMasters']);

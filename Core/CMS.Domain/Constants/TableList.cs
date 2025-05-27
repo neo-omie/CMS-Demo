@@ -11,7 +11,7 @@ namespace CMS.Domain.Constants
         Contract = 1, 
         ClassifiedContract, 
         AddendumContract,
-        MasterContractType, MasterDepartment, MasterApostille, MasterDocument, MasterEmployee,
+        MasterContractType, MasterDepartment, MasterApostille,MasterCompany, MasterDocument, MasterEmployee,
         MasterApprovalMatrixContract, MasterApprovalMatrixMOU, MasterEscalationMatrixContract, MasterEscalationMatrixMOU,
         PostTerminationNotice, NoticeWithdrawal
     }

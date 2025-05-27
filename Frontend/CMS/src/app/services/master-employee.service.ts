@@ -39,15 +39,15 @@ export class MasterEmployeeService {
     return this.http.get<MasterEmployee>(`${this.apiUrl}/${id}`);
   }
 
-  addEmployee(employee:AddEmployeeDto):Observable<AddEmployeeDto>{
-    return this.http.post<AddEmployeeDto>(`${this.apiUrl}`,employee);
+  addEmployee(employee:AddEmployeeDto,empCode :string|null):Observable<AddEmployeeDto>{
+    return this.http.post<AddEmployeeDto>(`${this.apiUrl}/${empCode}`,employee);
   }
 
-  updateEmployee(id:number, employee:EditEmployeeDto):Observable<EditEmployeeDto>{
-    return this.http.put<EditEmployeeDto>(`${this.apiUrl}/${id}`, employee);
+  updateEmployee(id:number, employee:EditEmployeeDto,empCode :string|null):Observable<EditEmployeeDto>{
+    return this.http.put<EditEmployeeDto>(`${this.apiUrl}/${id}/${empCode}`, employee);
   }
 
-  deleteEmployee(id:number):Observable<any>{
-    return this.http.delete<MasterEmployee>(`${this.apiUrl}/${id}`);
+  deleteEmployee(id:number,empCode :string|null):Observable<any>{
+    return this.http.delete<MasterEmployee>(`${this.apiUrl}/${id}/${empCode}`);
   }
 }

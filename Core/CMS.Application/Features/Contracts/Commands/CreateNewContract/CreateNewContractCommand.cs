@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Contracts.Commands.CreateNewContract
 {
-    public record CreateNewContractCommand(ContractDTO cont) : IRequest<Contract>;
+    public record CreateNewContractCommand(ContractDTO cont,string empName) : IRequest<Contract>;
 }

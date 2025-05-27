@@ -18,7 +18,7 @@ namespace CMS.Application.Features.Contracts.Commands.RemoveContract
         }
         public async Task<bool> Handle(RemoveContractCommand request, CancellationToken cancellationToken)
         {
-            return await _contractRepository.DeleteContractAsync(request.id);
+            return await _contractRepository.DeleteContractAsync(request.id, request.empCode);
         }
     }
 }

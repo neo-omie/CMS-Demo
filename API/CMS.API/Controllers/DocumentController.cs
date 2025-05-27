@@ -58,27 +58,27 @@ namespace CMS.API.Controllers
         }
 
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model)
+        [HttpPost("upload/{empCode}")]
+        public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadDto model, [FromRoute]string empCode)
         {
-            var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model));
+            var uploadDoc = await _mediator.Send(new UploadDocumentCommand(model,empCode));
             return Ok( new {  Message = uploadDoc});
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<int>> DeleteDocument(int id)
+        [HttpDelete("{id}/{empCode}")]
+        public async Task<ActionResult<int>> DeleteDocument(int id, [FromRoute] string empCode)
         {
-            await _mediator.Send(new DeleteDocumentByIdQuery(id));
+            await _mediator.Send(new DeleteDocumentByIdQuery(id,empCode));
 
             return Ok(new { Message = "Deleted Document Successfully" });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDocument(int id, DocumentFormDTO documentForm)
+        [HttpPut("{id}/{empCode}")]
+        public async Task<IActionResult> UpdateDocument(int id, DocumentFormDTO documentForm, [FromRoute] string empCode)
         {
            
-            var result = await _mediator.Send(new UpdateDocumentCommand(id, documentForm));
+            var result = await _mediator.Send(new UpdateDocumentCommand(id, documentForm,empCode));
 
             return Ok(result);
         }

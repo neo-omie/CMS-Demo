@@ -90,11 +90,11 @@ namespace CMS.API.Controllers
                 _logger.LogInformation("GetContractById method performed");
             return Ok(foundContract);
         }
-        [HttpPost]
-        public async Task<IActionResult> AddContract(ContractDTO cont)
+        [HttpPost("{empCode}")]
+        public async Task<IActionResult> AddContract(ContractDTO cont, [FromRoute]string empCode)
         {
             _logger.LogInformation("AddContract method initiated");
-            var addedContract = await _mediator.Send(new CreateNewContractCommand(cont));
+            var addedContract = await _mediator.Send(new CreateNewContractCommand(cont,empCode));
             _logger.LogInformation("AddContract method performed");
             if(addedContract != null)
                 return Ok(true);
@@ -109,12 +109,12 @@ namespace CMS.API.Controllers
             _logger.LogInformation("UpdateContract method performed");
             return Ok(editedContract); // bool
         }
-        [Route("{id}")]
+        [Route("{id}/{empCode}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteContract([FromRoute] int id)
+        public async Task<IActionResult> DeleteContract([FromRoute] int id, [FromRoute]string empCode)
         {
             _logger.LogInformation("DeleteContract method initiated");
-            var deletedContract = await _mediator.Send(new RemoveContractCommand(id));
+            var deletedContract = await _mediator.Send(new RemoveContractCommand(id,empCode));
             _logger.LogInformation("DeleteContract method performed");
             return Ok(deletedContract); // bool
         }

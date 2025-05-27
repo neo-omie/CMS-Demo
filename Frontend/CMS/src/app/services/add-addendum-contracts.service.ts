@@ -18,8 +18,8 @@ export class AddAddendumContractsService {
       return this.http.get<AddContractDto>(`${this.apiUrl}/Contract/${contractID}`);
   }
 
-  AddAddendum(id:number, addendum:AddAddendumContract):Observable<AddAddendumContract>{
-    return this.http.post<AddAddendumContract>(`${this.apiUrl}/AddendumContract/${id}`,addendum);
+  AddAddendum(id:number, addendum:AddAddendumContract,empCode :string | null):Observable<AddAddendumContract>{
+    return this.http.post<AddAddendumContract>(`${this.apiUrl}/AddendumContract/${id}/${empCode}`,addendum);
   }
 
   GetAddenduByAddendumId(id:number){
@@ -41,7 +41,7 @@ export class AddAddendumContractsService {
     return this.http.get<AddendumContract>(`${this.apiUrl}/AddendumContract/${pageNumber}/${pageSize}/${id}`);
   }
 
-  DeleteAddendum(id:number){
-    return this.http.delete<AddAddendumContract>(`${this.apiUrl}/AddendumContract/${id}`);
+  DeleteAddendum(id:number,empCode :string | null){
+    return this.http.delete<AddAddendumContract>(`${this.apiUrl}/AddendumContract/${id}/${empCode}`);
   }
 }
