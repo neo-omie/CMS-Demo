@@ -13,6 +13,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-contract-type-master',
@@ -126,13 +127,14 @@ export class ContractTypeMasterComponent implements OnInit {
 
   //delete contract 
   deleteContract(id: number) {
+    let empCode =DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this Contract?");
     Alert.confirmToast("Are you sure you want to delete this Contract?",
       "You won't be able to revert this!", TYPE.WARNING,
       "Yes, delete it!",
       "Deleted successfully!",
       "Contract has been deleted.", TYPE.SUCCESS, () => {
-        this.contractService.deleteContract(id).subscribe({
+        this.contractService.deleteContract(id,empCode).subscribe({
           next: (response: boolean) => {
             if (response) {
               // Alert.toast(TYPE.SUCCESS, true, "Deleted successfully");
@@ -152,8 +154,8 @@ export class ContractTypeMasterComponent implements OnInit {
   //add contract
   addCompany(contractForm: NgForm) {
     this.cont = contractForm.value;
-
-    this.contractService.addContract(this.cont).subscribe({
+let empCode =DecodeToken.ECode;
+    this.contractService.addContract(this.cont,empCode).subscribe({
       next: (response) => {
         Alert.bigToast('Success!', 'Contract added successfully.', TYPE.SUCCESS, 'Ok');
         contractForm.resetForm();
@@ -171,6 +173,7 @@ export class ContractTypeMasterComponent implements OnInit {
     status: new FormControl('', [Validators.required])
   })
   onAddFormSubmitContract() {
+    let empCode =DecodeToken.ECode;
     console.log(this.contractTypeMasterAddForm.value);
     
     if (this.contractTypeMasterAddForm.invalid) {
@@ -184,7 +187,7 @@ export class ContractTypeMasterComponent implements OnInit {
         addFormValues.contractTypeName = this.contractTypeMasterAddForm.value.contractTypeName;
         addFormValues.status = Number(status) == 1 ? true : false;
         console.log(this.contractTypeMasterAddForm);
-        this.contractService.addContract(addFormValues).subscribe({
+        this.contractService.addContract(addFormValues,empCode).subscribe({
           next: (response: ContractTypeMaster) => {
             if (response != undefined || response != null) {
               Alert.toast(TYPE.SUCCESS, true, 'Added Successfully');
@@ -220,6 +223,7 @@ export class ContractTypeMasterComponent implements OnInit {
       })
     }
     onUpdateFormSubmit(){
+      let empCode =DecodeToken.ECode;
       if(this.contractTypeMasterAddForm.invalid){
         this.contractTypeMasterAddForm.markAllAsTouched();
         return;
@@ -231,7 +235,7 @@ export class ContractTypeMasterComponent implements OnInit {
         updatFormValues.contractTypeName=contractTypeName;
         updatFormValues.status= Number(Status) == 1 ? true : false;
         console.log(updatFormValues);
-        this.contractService.updateContract(this.contID, updatFormValues).subscribe({
+        this.contractService.updateContract(this.contID, updatFormValues,empCode).subscribe({
           next: (response: ContractTypeMaster) => {
             if(response != undefined && response != null)
             {

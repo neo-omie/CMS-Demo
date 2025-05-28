@@ -9,7 +9,18 @@ DECLARE @TotalRecords int
 BEGIN
 	IF(@HasAddendum = 1)
 	BEGIN
-		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity c
+		WHERE c.IsDeleted = 0 AND
+		((@SearchTerm IS NOT NULL AND c.ContractName LIKE '%' + @SearchTerm + '%') OR (@SearchTerm IS NULL)) AND
+		((@FromDate IS NOT NULL AND c.ValidFrom >= @FromDate) OR (@FromDate IS NULL)) AND
+		((@ToDate IS NOT NULL AND c.ValidTill <= @ToDate) OR (@ToDate IS NULL)) AND
+		((@ContractType IS NOT NULL AND c.ContractTypeId = @ContractType) OR (@ContractType IS NULL)) AND
+		((@RenewalDueIn IS NOT NULL AND c.RenewalFrom < DATEADD(day, @RenewalDueIn, CONVERT(DATE,GETDATE()))) OR (@RenewalDueIn IS NULL)) AND
+		((@ContractStatus IS NOT NULL AND c.Approver3Status = @ContractStatus) OR (@ContractStatus IS NULL)) AND
+		((@Department IS NOT NULL AND c.DepartmentId = @Department) OR (@Department IS NULL)) AND
+		((@Location IS NOT NULL AND c.Location = @Location) OR (@Location IS NULL)) AND
+		EXISTS (SELECT 1 FROM AddendumContracts ac WHERE ac.ContractId = c.ContractId)
+
 		SELECT c.ContractId as ContractID, c.ContractName as ContractName,
 		cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
 		c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
@@ -38,7 +49,18 @@ BEGIN
 	END
 	ELSE IF(@HasAddendum = 0)
 	BEGIN
-		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity c
+		WHERE c.IsDeleted = 0 AND
+		((@SearchTerm IS NOT NULL AND c.ContractName LIKE '%' + @SearchTerm + '%') OR (@SearchTerm IS NULL)) AND
+		((@FromDate IS NOT NULL AND c.ValidFrom >= @FromDate) OR (@FromDate IS NULL)) AND
+		((@ToDate IS NOT NULL AND c.ValidTill <= @ToDate) OR (@ToDate IS NULL)) AND
+		((@ContractType IS NOT NULL AND c.ContractTypeId = @ContractType) OR (@ContractType IS NULL)) AND
+		((@RenewalDueIn IS NOT NULL AND c.RenewalFrom < DATEADD(day, @RenewalDueIn, CONVERT(DATE,GETDATE()))) OR (@RenewalDueIn IS NULL)) AND
+		((@ContractStatus IS NOT NULL AND c.Approver3Status = @ContractStatus) OR (@ContractStatus IS NULL)) AND
+		((@Department IS NOT NULL AND c.DepartmentId = @Department) OR (@Department IS NULL)) AND
+		((@Location IS NOT NULL AND c.Location = @Location) OR (@Location IS NULL)) AND
+		NOT EXISTS (SELECT 1 FROM AddendumContracts ac WHERE ac.ContractId = c.ContractId)
+
 		SELECT c.ContractId as ContractID, c.ContractName as ContractName,
 		cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
 		c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
@@ -66,7 +88,17 @@ BEGIN
 		FETCH NEXT @PageSize ROWS ONLY
 	END
 	ELSE BEGIN
-		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity c
+		WHERE c.IsDeleted = 0 AND
+		((@SearchTerm IS NOT NULL AND c.ContractName LIKE '%' + @SearchTerm + '%') OR (@SearchTerm IS NULL)) AND
+		((@FromDate IS NOT NULL AND c.ValidFrom >= @FromDate) OR (@FromDate IS NULL)) AND
+		((@ToDate IS NOT NULL AND c.ValidTill <= @ToDate) OR (@ToDate IS NULL)) AND
+		((@ContractType IS NOT NULL AND c.ContractTypeId = @ContractType) OR (@ContractType IS NULL)) AND
+		((@RenewalDueIn IS NOT NULL AND c.RenewalFrom < DATEADD(day, @RenewalDueIn, CONVERT(DATE,GETDATE()))) OR (@RenewalDueIn IS NULL)) AND
+		((@ContractStatus IS NOT NULL AND c.Approver3Status = @ContractStatus) OR (@ContractStatus IS NULL)) AND
+		((@Department IS NOT NULL AND c.DepartmentId = @Department) OR (@Department IS NULL)) AND
+		((@Location IS NOT NULL AND c.Location = @Location) OR (@Location IS NULL))
+
 		SELECT c.ContractId as ContractID, c.ContractName as ContractName,
 		cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
 		c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,

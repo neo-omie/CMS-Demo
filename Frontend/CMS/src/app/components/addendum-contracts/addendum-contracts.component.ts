@@ -15,11 +15,12 @@ import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
 import { PDFExport } from '../../utils/pdfExport';
+import { ProgressBarComponent } from '../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-addendum-contracts',
   standalone: true,
-  imports: [CommonModule,TableComponent,LoaderComponent,PaginationComponent],
+  imports: [CommonModule,TableComponent,LoaderComponent,PaginationComponent, ProgressBarComponent],
   templateUrl: './addendum-contracts.component.html',
   styleUrl: './addendum-contracts.component.css'
 })
@@ -164,6 +165,46 @@ export class AddendumContractsComponent {
         }
       })
     }
+
+    getProgressType(status:number|undefined):string{
+    if(status===undefined || status===null){
+      return '';
+    }
+
+    switch(status){
+      case 1: return 'Approval for'; 
+      case 2: return 'Active'; 
+      case 3: return 'Rejection for';
+      case 4: return 'Termination of';
+      case 5: return 'Expiration of';
+      case 6: return 'Termination in progress for';
+      case 7: return 'Termination approved for';
+      case 8: return 'Notice withdrawal pending for';
+      default: return 'Progress for ';
+    }
+  }
+
+  phases=[
+    'Addendum Created',
+    'L1 Approver Approval',
+    'L2 Approver Approval',
+    'L3 Approver Approval',
+    'Addendum Active',
+  ]
+
+  // GetContract(id: number, isEdit: boolean) {
+  //   this.isEdit = isEdit;
+  //   this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
+  //     next: (response: ApprovalMatrixContract) => {
+  //       this.approvalMatrixContract = response;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error :(', error);
+  //       this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+  //       Alert.toast(TYPE.ERROR, true, this.errorMsg);
+  //     }
+  //   });
+  // }
     printToPDF(tableID: string, fileName: string) {
     PDFExport.printToPDF(tableID, fileName);
   }

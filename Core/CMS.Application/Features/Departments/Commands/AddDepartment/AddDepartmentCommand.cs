@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Departments.Commands.AddDepartment
 {
-    public record AddDepartmentCommand(string departmentName) : IRequest<Department>;
+    public record AddDepartmentCommand(string departmentName,string empCode) : IRequest<Department>;
 }

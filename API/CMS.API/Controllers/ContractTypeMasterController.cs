@@ -62,31 +62,31 @@ namespace CMS.API.Controllers
             return Ok(contract);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<ContractTypeMasters>>> AddContract([FromBody] AddContractDTO cont)
+        [HttpPost("{empCode}")]
+        public async Task<ActionResult<IEnumerable<ContractTypeMasters>>> AddContract([FromBody] AddContractDTO cont, [FromRoute] string empCode)
         {
             _logger.LogInformation("AddContracts method initiated");
-            var command = new AddContractCommand(cont);
+            var command = new AddContractCommand(cont,empCode);
             _logger.LogInformation("AddContracts method Performed");
             return Ok(await _mediator.Send(command));
 
         }
 
-         [HttpPut("{id}")]
-        public async Task<ActionResult<IEnumerable<ContractTypeMasters>>> UpdateContract(int id, [FromBody] UpdateContractDTO conty)
+         [HttpPut("{id}/{empCode}")]
+        public async Task<ActionResult<IEnumerable<ContractTypeMasters>>> UpdateContract(int id, [FromBody] UpdateContractDTO conty, [FromRoute] string empCode)
         {
             _logger.LogInformation("UpdateContracts method initiated");
-            var command = new UpdateContractCommand(id, conty);
+            var command = new UpdateContractCommand(id, conty,empCode);
             _logger.LogInformation("UpdateContracts method Performed");
             return Ok(await _mediator.Send(command));
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContract(int id)
+        [HttpDelete("{id}/{empCode}")]
+        public async Task<IActionResult> DeleteContract(int id, [FromRoute] string empCode)
         {
             _logger.LogInformation("DeleteContracts method initiated");
-            var command = new DeleteContractCommand(id);
+            var command = new DeleteContractCommand(id,empCode);
             var checkifDel = await _mediator.Send(command);
             if (checkifDel)
                 return Ok(checkifDel);

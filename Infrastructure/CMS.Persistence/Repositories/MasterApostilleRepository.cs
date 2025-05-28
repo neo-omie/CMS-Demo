@@ -86,7 +86,7 @@ namespace CMS.Persistence.Repositories
                 masterApostille.ValueId = (int)parameters[3].Value;
 
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, getApostille.ValueId, TableList.MasterApostille, $"New Apostille {getApostille.ApostilleName} has been Added by " + empCode, empCode, LogStatus.Created);
+                await _context.Database.ExecuteSqlRawAsync(query, getApostille.ValueId, TableList.MasterApostille, $"New Apostille '{getApostille.ApostilleName}' has been Added by '{ empCode}'", empCode, LogStatus.Created);
                 return masterApostille;
             }
             throw new Exception("Failed to add apostille");
@@ -114,7 +114,7 @@ namespace CMS.Persistence.Repositories
             if (deleteApostille > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterApostille, $"Apostille {getApostille.ApostilleName} has been Deleted by " + empCode, empCode, LogStatus.Deleted);
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterApostille, $"Apostille '{getApostille.ApostilleName}' has been Deleted by '{ empCode}'", empCode, LogStatus.Deleted);
                
                 return true;
             }
@@ -158,7 +158,7 @@ namespace CMS.Persistence.Repositories
                 if (checkApostille != null)
                 {
                     string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                    await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterApostille, $"Apostille {getApostille.ApostilleName} has been updated by " + empCode, empCode, LogStatus.Updated);
+                    await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterApostille, $"Apostille '{getApostille.ApostilleName}' has been Updated by '{empCode}'", empCode, LogStatus.Updated);
 
                     return checkApostille;
                 }

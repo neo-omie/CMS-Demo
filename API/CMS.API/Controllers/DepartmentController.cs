@@ -53,26 +53,26 @@ namespace CMS.API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> AddDepartment(string departmentName)
+        [HttpPost("{empCode}")]
+        public async Task<IActionResult> AddDepartment(string departmentName,[FromRoute]string empCode)
         {
-            var newDepartment = await _mediator.Send(new AddDepartmentCommand(departmentName));
+            var newDepartment = await _mediator.Send(new AddDepartmentCommand(departmentName,empCode));
             return Ok(newDepartment);
         }
 
-        [Route("{id}")]
+        [Route("{id}/{empCode}")]
         [HttpPut]
-        public async Task<IActionResult> UpdateDepartment([FromRoute] int id, string departmentName)
+        public async Task<IActionResult> UpdateDepartment([FromRoute] int id, string departmentName, [FromRoute] string empCode)
         {
-            var checkUpdate = await _mediator.Send(new UpdateDepartmentCommand(id, departmentName));
+            var checkUpdate = await _mediator.Send(new UpdateDepartmentCommand(id, departmentName,empCode));
             return Ok(checkUpdate);
         }
 
-        [Route("{id}")]
+        [Route("{id}/{empCode}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteDepartment([FromRoute] int id)
+        public async Task<IActionResult> DeleteDepartment([FromRoute] int id, [FromRoute] string empCode)
         {
-            var checkDelete = await _mediator.Send(new DeleteDepartmentCommand(id));
+            var checkDelete = await _mediator.Send(new DeleteDepartmentCommand(id,empCode));
             return Ok(checkDelete);
         }
 

@@ -293,7 +293,7 @@ namespace CMS.Persistence.Repositories
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, " Contract Approved by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Approved);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, $"Contract Approved by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
 
 
             return contract;
@@ -350,8 +350,8 @@ namespace CMS.Persistence.Repositories
             if (await _context.SaveChangesAsync() > 0)
             {
 
-            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, "Contract "+foundContract.ContractName+" Deleted by " + empCode, empCode, LogStatus.Deleted);
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, $"Contract  '{foundContract.ContractName}' Deleted by '{empCode}'", empCode, LogStatus.Deleted);
 
 
                 return true;

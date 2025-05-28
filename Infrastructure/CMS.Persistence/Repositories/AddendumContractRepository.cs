@@ -90,7 +90,7 @@ namespace CMS.Persistence.Repositories
             if(await _dbContext.SaveChangesAsync() > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _dbContext.Database.ExecuteSqlRawAsync(query, id, TableList.AddendumContract, $" Addendum  {addendum.ContractName}  has been Deleted by {empCode}", empCode, LogStatus.Deleted);
+                await _dbContext.Database.ExecuteSqlRawAsync(query, id, TableList.AddendumContract, $" Addendum  '{addendum.ContractName}' has been Deleted by '{empCode}'", empCode, LogStatus.Deleted);
 
                 return true;
             }
@@ -155,7 +155,7 @@ namespace CMS.Persistence.Repositories
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, contractIdCheck.ContractId, contractIdCheck.ContractName
                 );
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _dbContext.Database.ExecuteSqlRawAsync(query, newAddendumContract.AddendumContractId, TableList.AddendumContract, $" Addendum  {foundContract.ContractName}  has been Added by {empCode}", empCode, LogStatus.Created);
+                await _dbContext.Database.ExecuteSqlRawAsync(query, newAddendumContract.AddendumContractId, TableList.AddendumContract, $" Addendum  '{foundContract.ContractName}'  has been Added by '{empCode}'", empCode, LogStatus.Created);
 
                 return addendumContract;
             }
@@ -367,7 +367,7 @@ namespace CMS.Persistence.Repositories
                 contract.Approver3Status = addendumStatus;
 
                 string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _dbContext.Database.ExecuteSqlRawAsync(rejectedQuery, addendumId, TableList.AddendumContract, $"Addendum  {foundContract.ContractName} has been Rejected by {empCode}", empCode, LogStatus.Rejected);
+                await _dbContext.Database.ExecuteSqlRawAsync(rejectedQuery, addendumId, TableList.AddendumContract, $"Addendum  '{foundContract.ContractName}' has been Rejected by '{empCode}'", empCode, LogStatus.Rejected);
                 if (await _dbContext.SaveChangesAsync() <= 0)
                 {
                     throw new Exception($"For some reasons , contract status has not been changed to {addendumStatus}");
@@ -375,7 +375,7 @@ namespace CMS.Persistence.Repositories
 
             }
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _dbContext.Database.ExecuteSqlRawAsync(query, addendumId, TableList.AddendumContract, $"Addendum  {foundContract.ContractName} has been Approved by {employee.EmployeeCode}", employee.EmployeeCode, LogStatus.Approved);
+            await _dbContext.Database.ExecuteSqlRawAsync(query, addendumId, TableList.AddendumContract, $"Addendum  '{foundContract.ContractName}' has been Approved by '{employee.EmployeeCode}'", employee.EmployeeCode, LogStatus.Approved);
 
             return addedum;
         }

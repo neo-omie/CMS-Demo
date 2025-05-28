@@ -17,7 +17,7 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.DeleteContract
         }
         public Task<bool> Handle(DeleteContractCommand request, CancellationToken cancellationToken)
         {
-            return _contractTypeMasterRepository.DeletContract(request.id);
+            return _contractTypeMasterRepository.DeletContract(request.id,request.empCode);
         }
     }
 }

@@ -216,6 +216,7 @@ export class AllContractsComponent implements OnInit {
       })
     }
   }
+  
   GetContract(contractID: number) {
     this.contractsService.getContractByID(contractID).subscribe({
       next: (response: GetContractByIdDto) => {
@@ -1271,4 +1272,33 @@ export class AllContractsComponent implements OnInit {
   printToPDF(tableID: string, fileName: string) {
     PDFExport.printToPDF(tableID, fileName);
   }
+  exportToExcel(tableID:string, fileName: string): void {
+    ExcelExport.printToExcel(tableID,fileName);
+  }
+
+  getProgressType(status:number|undefined):string{
+    if(status===undefined || status===null){
+      return '';
+    }
+
+    switch(status){
+      case 1: return 'Approval for'; 
+      case 2: return 'Active'; // optional � maybe don't show this
+      case 3: return 'Rejection for';
+      case 4: return 'Termination of';
+      case 5: return 'Expiration of';
+      case 6: return 'Termination in progress for';
+      case 7: return 'Termination approved for';
+      case 8: return 'Notice withdrawal pending for';
+      default: return 'Progress for ';
+    }
+  }
+  phases=[
+    'Contract Created',
+    'L1 Approver Approval',
+    'L2 Approver Approval',
+    'L3 Approver Approval',
+    'Contract Active',
+  ];
 }
+
