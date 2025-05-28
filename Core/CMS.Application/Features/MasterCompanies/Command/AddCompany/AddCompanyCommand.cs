@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.MasterCompanies.Command.AddCompany
 {
-    public record AddCompanyCommand(MasterCompany mastercomp):IRequest<MasterCompany>;
+    public record AddCompanyCommand(MasterCompany mastercomp, string empCode) :IRequest<MasterCompany>;
     
 }

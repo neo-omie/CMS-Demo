@@ -28,7 +28,7 @@ namespace CMS.Persistence.Repositories
             _environment = environment;
         }
 
-        public async Task<(IEnumerable<MasterDocument> , int )> GetAllDocuments(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<MasterDocument> docs, int totalCount)> GetAllDocuments(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
             {
@@ -41,9 +41,9 @@ namespace CMS.Persistence.Repositories
             }
 
             
-            var totalCount = await _context.MasterDocuments.Where(x => x.IsDeleted == false).CountAsync();
+            var totalCount = await _context.MasterDocuments.CountAsync();
             string sql = "EXEC SP_GetAllDocuments @PageNumber = {0}, @PageSize = {1}";
-            var docs = _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize);
+            var docs =await  _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
 
             //var docs = _context.MasterDocuments.ToListAsync();
             return (docs, totalCount);
@@ -61,12 +61,13 @@ namespace CMS.Persistence.Repositories
 
 
 
-        public async Task<string> UploadDocument(DocumentUploadDto model)
+        public async Task<string> UploadDocument(DocumentUploadDto model,string empCode)
         {
 
             var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
             var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
-
+            int id;
+            MasterDocument gotDocument  =null;
             if (!allowedExtensions.Contains(fileExtension))
             {
                 throw new Exception("Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg and .png."); 
@@ -120,6 +121,8 @@ namespace CMS.Persistence.Repositories
                 existingDocument.UniqueDocumentName = uniqueFileName;
                 //existingDocument.UniqueDocumentName = Path.GetFileName(filePath);
                 _context.MasterDocuments.Update(existingDocument);
+
+                id = existingDocument.ValueId;
             }
             else
             {
@@ -132,10 +135,16 @@ namespace CMS.Persistence.Repositories
                     status = model.Status
                 };
                 await _context.MasterDocuments.AddAsync(document);
+
+                 gotDocument =await _context.MasterDocuments.OrderBy(x => x.ValueId).LastAsync();
+                id = gotDocument.ValueId;
             }
 
             if (await _context.SaveChangesAsync() > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id , TableList.MasterDocument, $"New Document {originalFileName} has been Added by " + empCode, empCode, LogStatus.Created);
+
                 return "Document uploaded successfully";
             }
 
@@ -143,7 +152,7 @@ namespace CMS.Persistence.Repositories
         }
 
 
-        public async Task<bool> DeleteDocument(int id)
+        public async Task<bool> DeleteDocument(int id,string empCode)
         {
             var document = await GetDocumentById(id);
             if (document == null)
@@ -175,11 +184,15 @@ namespace CMS.Persistence.Repositories
                 throw new Exception("Failed to update document status in the database.");
             }
 
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDocument, $"Document {document.DisplayDocumentName} has been deleted by " + empCode, empCode, LogStatus.Deleted);
+
+
             return true;
         }
         
         
-        public async Task<object> UpdateDocument(int id, DocumentFormDTO model)
+        public async Task<object> UpdateDocument(int id, DocumentFormDTO model,string empCode)
         {
             var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
             var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
@@ -253,6 +266,11 @@ namespace CMS.Persistence.Repositories
             _context.MasterDocuments.Update(existingDocument);
             if (await _context.SaveChangesAsync() > 0)
             {
+
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDocument, $"Document {originalFileName} has been updated by " + empCode, empCode, LogStatus.Updated);
+
+
                 return new { Message = "Document updated" };
             }
 

@@ -20,7 +20,7 @@ namespace CMS.Application.Features.MasterEmployees.Commands.DeleteEmployee
 
         public async Task<bool> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
         {
-            await _masterEmployeeRepository.DeleteEmployeeAsync(request.ValueId);
+            await _masterEmployeeRepository.DeleteEmployeeAsync(request.ValueId,request.empCode);
             return true;
         }
     }

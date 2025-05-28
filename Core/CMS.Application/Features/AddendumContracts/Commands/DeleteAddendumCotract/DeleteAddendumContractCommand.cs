@@ -7,5 +7,5 @@ using MediatR;
 
 namespace CMS.Application.Features.AddendumContracts.Commands.DeleteAddendumCotract
 {
-    public record DeleteAddendumContractCommand(int AddendumId):IRequest<bool>;
+    public record DeleteAddendumContractCommand(int AddendumId,string empCode):IRequest<bool>;
 }

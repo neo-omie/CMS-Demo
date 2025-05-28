@@ -1,4 +1,5 @@
-﻿using CMS.Application.Features.AddendumContract.AddendumContractDto;
+﻿using System.Reflection.Emit;
+using CMS.Application.Features.AddendumContract.AddendumContractDto;
 using CMS.Application.Features.AddendumContracts.Commands.AddAddendumContract;
 using CMS.Application.Features.AddendumContracts.Commands.ApproveRejectAddendum;
 using CMS.Application.Features.AddendumContracts.Commands.DeleteAddendumCotract;
@@ -56,10 +57,10 @@ namespace CMS.API.Controllers
             return Ok(await _mediator.Send(query));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddedum(int id)
+        [HttpDelete("{id}/{empCode}")]
+        public async Task<IActionResult> DeleteAddedum(int id,[FromRoute]string empCode)
         {
-            var command = new DeleteAddendumContractCommand(id);
+            var command = new DeleteAddendumContractCommand(id,empCode);
             var checkDelete = await _mediator.Send(command);
             if (checkDelete)
                 return Ok(checkDelete);
@@ -67,10 +68,10 @@ namespace CMS.API.Controllers
         }
 
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<AddendumContract>> AddAddendum(int id, [FromBody] AddAddendumContractDto addendum)
+        [HttpPost("{id}/{empCode}")]
+        public async Task<ActionResult<AddendumContract>> AddAddendum(int id, [FromBody] AddAddendumContractDto addendum, [FromRoute] string empCode)
         {
-            var command= new AddAddendumContractCommand(id, addendum);
+            var command= new AddAddendumContractCommand(id, addendum, empCode );
             return Ok(await _mediator.Send(command));
         }
 

@@ -23,9 +23,9 @@ namespace CMS.Application.Contracts.Persistence
 
         Task<ClassifiedContract> ApproveNoticeWithdrawalAsync(int id, string empCode, ContractStatus status, string subject, string emailBody);
 
-        //Task<ClassifiedContract> AddClassifiedContractAsync(ClassifiedContract cp);
+        
         Task<ClassifiedContract> AddClassifiedContractAsync(ClassifiedContract cp,string empName);
         Task<bool> UpdateClassifiedContractAsync(int id, ClassifiedContract cp);
-        Task<bool> DeleteClassifiedContractAsync(int id);
+        Task<bool> DeleteClassifiedContractAsync(int id, string empCode);
     }
 }

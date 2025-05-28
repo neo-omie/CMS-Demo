@@ -207,6 +207,7 @@ export class AllContractsComponent implements OnInit {
     });
   }
   DeleteContract(id?: number) {
+    let empName = DecodeToken.ECode;
     Alert.confirmToast(
       'Are you sure you want to delete this contract?',
       "You won't be able to revert this!!",
@@ -217,7 +218,7 @@ export class AllContractsComponent implements OnInit {
       TYPE.SUCCESS,
       () => {
         if (id !== undefined) {
-          this.contractsService.deleteContract(id).subscribe({
+          this.contractsService.deleteContract(id,empName).subscribe({
             next: () => {
               // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
               this.GetAllContracts(1, 10);
@@ -307,6 +308,7 @@ export class AllContractsComponent implements OnInit {
   });
 
   async onAddFormSubmit() {
+    let empName = DecodeToken.ECode;
     this.loading = true
     this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
     if (this.masterContractAddForm.invalid) {
@@ -358,7 +360,7 @@ export class AllContractsComponent implements OnInit {
         addFormValues.approver3Status = Number(approver3Status);
         console.log(addFormValues);
         try {
-          const response = await firstValueFrom(this.contractsService.addContract(addFormValues));
+          const response = await firstValueFrom(this.contractsService.addContract(addFormValues,empName));
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
             this.GetAllContracts(1, 10);
@@ -672,6 +674,7 @@ export class AllContractsComponent implements OnInit {
   onAddAddendumFormSubmit(contractID: number) {
     this.loading = true;
     const addendum = new AddAddendumContract();
+    let empCode = DecodeToken.ECode;
     // var todaysDate = new Date().toISOString().split('T')[0];
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
     addendum.contractName = String(this.addaddendumForm.value.contractName);
@@ -691,7 +694,7 @@ export class AllContractsComponent implements OnInit {
     // console.log('Date', todaysDate);
     
 
-    this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum).subscribe({
+    this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum,empCode).subscribe({
       next: () => {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
         this.GetAllContracts(1, 10);

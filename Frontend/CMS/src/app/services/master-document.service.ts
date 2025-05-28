@@ -22,9 +22,9 @@ export class MasterDocumentService {
     );
   }
 
-  addDocument(masterDocument:FormData):Observable<any>{
+  addDocument(masterDocument:FormData,empCode:string|null):Observable<any>{
     console.log(masterDocument);
-    return this.http.post<any>(`${this.apiUrl}/upload`,masterDocument);
+    return this.http.post<any>(`${this.apiUrl}/upload/${empCode}`,masterDocument);
   }
 
   // uploadDocument()
@@ -46,8 +46,8 @@ export class MasterDocumentService {
     return this.http.put<boolean>(`${this.apiUrl}/checkFileExists`,data);
   }
   
-  deleteDocument(documentId:number):Observable<boolean>{
-    return this.http.delete<boolean>(`${this.apiUrl}/${documentId}`);
+  deleteDocument(documentId:number,empCode :string|null):Observable<boolean>{
+    return this.http.delete<boolean>(`${this.apiUrl}/${documentId}/${empCode}`);
   }
 
   getById(id:number):Observable<GetDocumentById>{

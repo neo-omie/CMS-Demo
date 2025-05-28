@@ -13,7 +13,7 @@ namespace CMS.Application.Features.AddendumContracts.Commands.DeleteAddendumCotr
         }
         public async Task<bool> Handle(DeleteAddendumContractCommand request, CancellationToken cancellationToken)
         {
-            await _addendumContractRepository.DeleteAddendumContractAsync(request.AddendumId);
+            await _addendumContractRepository.DeleteAddendumContractAsync(request.AddendumId,request.empCode);
             return true;
         }
     }

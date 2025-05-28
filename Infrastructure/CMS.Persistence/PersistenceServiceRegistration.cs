@@ -41,6 +41,8 @@ namespace CMS.Persistence
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<JwtSettings>>().Value);
             services.AddTransient<IAuthRepository, AuthRepository>();
+            services.AddScoped<ICacheService, MemoryCacheService>(); //registering cache
+            services.AddScoped<CacheWarmupHostedService>(); //adding the hosted service
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

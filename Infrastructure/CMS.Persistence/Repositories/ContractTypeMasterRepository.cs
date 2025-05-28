@@ -86,14 +86,14 @@ namespace CMS.Persistence.Repositories
             .FromSqlRaw(sql, pageNumber, pageSize)
             .AsNoTracking()
             .ToListAsync();
-            var res = rawData.Select(c => new GetAllContractTypesDTO
+            var res =  rawData.Select(c => new GetAllContractTypesDTO
             {
                 ValueId = c.ValueId,
                 ContractTypeName = c.ContractTypeName,
                 Status = c.Status,
                 IsDeleted = c.IsDeleted,
                 TotalRecords = totalRecords
-            });
+            }).ToList();
             //IEnumerable<GetAllContractTypesDTO> res = null;
             //if (!_cacheService.TryGet(cacheKey, out IReadOnlyList<ContractTypeMasters> cachedList))
             //{

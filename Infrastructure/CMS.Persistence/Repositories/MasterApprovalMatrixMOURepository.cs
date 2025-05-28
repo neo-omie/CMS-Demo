@@ -26,7 +26,7 @@ namespace CMS.Persistence.Repositories
         public async Task<IEnumerable<GetAllApprovalMatrixMOUDto>> GetAllApprovalMatrixMOU(int pageNumber, int pageSize)
         {
             string query = "EXEC SP_GetAllApprovalMatrixMOUDto @pageNumber = {0}, @pageSize = {1}";
-            return _context.GetAllApprovalMatrixMOUDtos.FromSqlRaw(query, pageNumber, pageSize);
+            return await  _context.GetAllApprovalMatrixMOUDtos.FromSqlRaw(query, pageNumber, pageSize).ToListAsync();
         }
 
         public async Task<GetAllApprovalMatrixMOUByIdDto> GetApprovalMatrixMOUById(int id)

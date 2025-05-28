@@ -60,3 +60,13 @@ BEGIN
 END
 EXEC SP_ClassifiedContractsCounts
 SELECT * FROM ClassifiedContracts
+
+-- Expiring Contracts in n number of days
+CREATE OR ALTER PROCEDURE SP_ExpiringContractsIn @days int, @ExpiringContractsCount int OUTPUT
+AS
+BEGIN
+	SELECT @ExpiringContractsCount = COUNT(*) FROM ContractsEntity WHERE ValidTill < DATEADD(day, @days, CONVERT(DATE,GETDATE()))
+END
+DECLARE @Count INT
+EXEC SP_ExpiringContractsIn @days = 90, @ExpiringContractsCount = @Count OUTPUT
+SELECT @Count

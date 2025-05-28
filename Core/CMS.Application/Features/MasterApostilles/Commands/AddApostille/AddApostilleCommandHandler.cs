@@ -20,7 +20,7 @@ namespace CMS.Application.Features.MasterApostilles.Commands.AddApostille
         public async Task<MasterApostille> Handle(AddApostilleCommand request, CancellationToken cancellationToken)
         {
             var apostille= _mapper.Map<MasterApostille>(request.ApostilleDTO);
-            return await _masterApostilleRepository.AddMasterApostilleAsync(apostille);
+            return await _masterApostilleRepository.AddMasterApostilleAsync(apostille,request.empCode);
         }
     }
 }

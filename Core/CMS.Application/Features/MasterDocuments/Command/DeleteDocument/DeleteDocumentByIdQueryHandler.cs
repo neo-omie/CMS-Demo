@@ -18,7 +18,7 @@ namespace CMS.Application.Features.MasterDocuments.Command.DeleteDocument
         }
         public Task<bool> Handle(DeleteDocumentByIdQuery request, CancellationToken cancellationToken)
         {
-            return _repository.DeleteDocument(request.id);
+            return _repository.DeleteDocument(request.id,request.empCode);
 
         }
     }
