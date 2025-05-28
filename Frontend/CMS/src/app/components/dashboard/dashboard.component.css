@@ -8,3 +8,15 @@ hr {
     width: 10%;
     justify-self: center;
 }
+
+.contract-summary-continer{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.card-hover:hover{
+    box-shadow: 0 0 5px #5f5fee;
+    scale: 1.03;
+    transition-duration: 0.2s;
+}

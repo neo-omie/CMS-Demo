@@ -18,7 +18,7 @@ namespace CMS.Persistence.Repositories
         public async Task<IEnumerable<GetAllApprovalMatrixContractDTO>> GetAllApprovalMatrixContract(int pageNumber, int pageSize)
         {
             string query = "EXEC SP_GetAllApprovalMatrixContract @pageNumber = {0}, @pageSize = {1}";
-            var allApprovals = _context.GetAllApprovalMatrixContractDTOs.FromSqlRaw(query, pageNumber, pageSize);
+            var allApprovals =await  _context.GetAllApprovalMatrixContractDTOs.FromSqlRaw(query, pageNumber, pageSize).ToListAsync();
             return allApprovals;
         }
         public async Task<GetApprovalMatrixContractByIdDto> GetApprovalMatrixContractById(int id)

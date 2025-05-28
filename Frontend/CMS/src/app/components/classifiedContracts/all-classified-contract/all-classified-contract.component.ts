@@ -35,6 +35,7 @@ import { TableComponent } from '../../UtilComponents/table/table.component';
 import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
 import { AllClassifiedContractViewAddModalComponent } from '../all-classified-contract-view-add-modal/all-classified-contract-view-add-modal.component';
 import { DecodeToken } from '../../../utils/decodeToken';
+import { ContractStatus, Location } from '../../../utils/constants';
 
 
 @Component({
@@ -58,11 +59,19 @@ import { DecodeToken } from '../../../utils/decodeToken';
 })
 export class AllClassifiedContractComponent implements OnInit{
   isCreate:boolean = false
+  contractStatus = ContractStatus
+  locationSelect = Location
+  statusKeys = Object.keys(this.contractStatus);
+  locationSelectKeys = Object.keys(this.locationSelect);
   columnsInfo:{[key:string]:{
       'title' ?: string,
       'isSort' ?: boolean,
       'templateRef' : TemplateRef<any> | null,
     }} = {};
+    checkNotNaN(number:string){
+      if(isNaN(Number(number))) return false
+      return true
+    }
    displayedColumns: string[] = ['classifiedContractName', 'contractType', 'departmentName', 'effectiveDate',
                                   'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
                                   'renewalContractPerson', 'renewalDueIn', 'location', 'action'];

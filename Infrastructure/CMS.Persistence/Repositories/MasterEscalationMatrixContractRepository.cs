@@ -40,7 +40,7 @@ namespace CMS.Persistence.Repositories
             }
             var totalCount = await _context.MasterEscalationMatrixContracts.CountAsync();
             string sql = "EXEC SP_GetAllEscalationMatrixContracts @PageNumber = {0}, @PageSize = {1}";
-            var allEscalations = _context.GetEscalationMatrixContractDtos.FromSqlRaw(sql,pageNumber, pageSize);
+            var allEscalations = await  _context.GetEscalationMatrixContractDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return (allEscalations, totalCount);
         }
 

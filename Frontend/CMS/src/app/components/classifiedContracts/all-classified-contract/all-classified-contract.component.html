@@ -1,100 +1,126 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">
-  All Classified Contracts<img
-    class="classifiedImg"
-    src="ClassifiedContract.png"
-    alt="CMS-logo"
-  />
+  All Classified Contracts<img class="classifiedImg" src="ClassifiedContract.png" alt="CMS-logo" />
 </h2>
 <div *ngIf="!loading" class="table-responsive p-md-5 p-3">
-  <button data-bs-toggle="modal" data-bs-target="#contract-add" class="add-btn btn btn-outline-primary mb-2" (click)="isCreate = true">
+  <button data-bs-toggle="modal" data-bs-target="#contract-add" class="add-btn btn btn-outline-primary mb-2"
+    (click)="isCreate = true">
     <i class="fa-solid fa-file-circle-plus"></i> Add New Contract
   </button>
-  <button
-    class="add-btn btn btn-outline-primary mb-2 printPdf"
-    (click)="
-      printToPDF('#classifiedContracts-table', 'CMS-classifiedContracts.pdf')
-    "
-  >
+  <button class="add-btn btn btn-outline-primary mb-2 printPdf" (click)="
+        printToPDF('#classifiedContracts-table', 'CMS-classifiedContracts.pdf')
+        ">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
-  <app-table
-    [data]="allContracts"
-    [displayedColumns]="displayedColumns"
-    [columnsInfo]="columnsInfo"
-  ></app-table>
+  <button class="add-btn btn btn-outline-primary mb-2 margin-left" data-bs-toggle="collapse"
+    data-bs-target="#filter-container">
+    Filters<i class="fa-solid fa-angle-down"></i>
+  </button>
+  <div class="card mb-2">
+    <div class="card-body collapse" id="filter-container">
+      <form class="filters">
+        <div class="mb-3">
+          <p class="mb-1">From date</p>
+          <input class="form-control" type="date" />
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">To date</p>
+          <input class="form-control" type="date" />
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract type</p>
+          <select class="form-select" name="contract-type" id="filter-contract-type">
+            <option value="0">--Select--</option>
+            <option *ngFor="let cont of contractTypes" value="{{cont.valueId}}">{{cont.contractTypeName}}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Renewal due in</p>
+          <select class="form-select" name="contract-renewal-in" id="filter-renewal-in">
+            <option value="-1">--Select--</option>
+            <option value="0">Today</option>
+            <option value="30">30</option>
+            <option value="60">60</option>
+            <option value="90">90</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract status</p>
+          <select class="form-select" name="contract-status" id="filter-contract-status">
+            <option value="0">--Select--</option>
+            @for (key of statusKeys; track $index) {
+              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract department</p>
+          <select class="form-select" name="department" id="filter-department">
+            <option value="0">--Select--</option>
+            <option *ngFor="let dept of departments" value="{{dept.departmentId}}">{{dept.departmentName}}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract location</p>
+          <select class="form-select" name="loaction" id="filter-loction">
+            <option value="0">--Select--</option>
+            @for (key of locationSelectKeys; track $index) {
+              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{locationSelect[+key]}}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Has addendum</p>
+          <select class="form-select" name="contract-type" id="filter-contract-type">
+            <option value="-1">--Select--</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="add-btn btn btn-outline-primary mb-3">Filter</button>
+          <button type="reset" class="add-btn btn btn-outline-primary mb-3 margin-left">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <app-table [data]="allContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
 </div>
-<app-pagination
-  [maxPage]="maxPage"
-  [records]="this.allContracts.length"
-  [pageNumbers]="pageNumbers"
-  [GetPage]="GetPage.bind(this)"
-></app-pagination>
-<div *ngIf="!loading" class="table-responsive p-3">
+<app-pagination [maxPage]="maxPage" [records]="this.allContracts.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage.bind(this)"></app-pagination>
+<!-- <div *ngIf="!loading" class="table-responsive p-3"> -->
   <!-- notice withdraw -->
-  <div
-    class="modal fade"
-    id="Notice-Withdrawal-Detail"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header d-flex justify-content-between">
           <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
             Withdraw Termination Notice
           </h1>
-          <button
-            type="button"
-            class="btn close-btn"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          >
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
         <div class="modal-body">
-          <form
-            #documentForm="ngForm"
-            (ngSubmit)="OnSaveWithdrawalNotice(documentForm)"
-          >
+          <form #documentForm="ngForm" (ngSubmit)="OnSaveWithdrawalNotice(documentForm)">
             <div class="mb-3">
               <p class="m-1">File Upload<span style="color: red">*</span></p>
               <div class="input-group">
-                <input
-                  #addFile
-                  type="file"
-                  name="file"
-                  class="form-control"
-                  id="file"
-                  (change)="uploadFile($event)"
-                  accept=".pdf"
-                />
+                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
+                  accept=".pdf" />
               </div>
             </div>
             <div class="mb-3">
               <p class="m-1">
                 Remark <span style="color: red">*</span>
-                <span
-                  *ngIf="
+                <span *ngIf="
                     !withdrawNotice.Remark || withdrawNotice.Remark.length <= 0
-                  "
-                  style="color: red"
-                  >Required</span
-                >
+                  " style="color: red">Required</span>
               </p>
               <div class="input-group">
-                <textarea
-                  name="Remark"
-                  class="form-control"
-                  id="Remark"
-                  rows="4"
-                  placeholder="Enter remarks"
-                  [(ngModel)]="withdrawNotice.Remark"
-                ></textarea>
+                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                  [(ngModel)]="withdrawNotice.Remark"></textarea>
               </div>
             </div>
 
@@ -102,11 +128,7 @@
               <button class="btn btn-outline-primary" type="submit">
                 Save
               </button>
-              <button
-                class="btn btn-outline-danger"
-                type="reset"
-                data-bs-dismiss="modal"
-              >
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">
                 Cancel
               </button>
             </div>
@@ -117,49 +139,27 @@
   </div>
 
   <!-- Post termination -->
-  <div
-    class="modal fade"
-    id="Termination-Notice-Detail"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header d-flex justify-content-between">
           <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
             Post Termination Notice
           </h1>
-          <button
-            type="button"
-            class="btn close-btn"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          >
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
         <div class="modal-body">
-          <form
-            #documentForm="ngForm"
-            (ngSubmit)="OnSavePostTermination(documentForm)"
-          >
+          <form #documentForm="ngForm" (ngSubmit)="OnSavePostTermination(documentForm)">
             <div class="mb-3">
               <p class="m-1">
                 Upload Termination Notice<span style="color: red">*</span>
               </p>
               <div class="input-group">
-                <input
-                  #addFile
-                  type="file"
-                  name="file"
-                  class="form-control"
-                  id="file"
-                  (change)="uploadFile($event)"
-                  accept=".pdf"
-                />
+                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
+                  accept=".pdf" />
               </div>
             </div>
             <!-- (change)="onFileSelected($event)"
@@ -170,16 +170,8 @@
                 <!-- <span style="color: red;">*</span> -->
               </p>
               <div class="input-group">
-                <input
-                  type="date"
-                  name="end_Date"
-                  class="form-control"
-                  id="end_Date"
-                  min="0"
-                  max="30"
-                  placeholder="Enter number of days"
-                  [(ngModel)]="postTerm.end_Date"
-                />
+                <input type="date" name="end_Date" class="form-control" id="end_Date" min="0" max="30"
+                  placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date" />
               </div>
             </div>
             <div class="mb-3">
@@ -188,52 +180,27 @@
                 <!-- <span style="color: red;">*</span> -->
               </p>
               <div class="input-group">
-                <input
-                  type="number"
-                  name="notice_Duration"
-                  class="form-control"
-                  id="notice_Duration"
-                  min="0"
-                  placeholder="Enter the end date"
-                  [(ngModel)]="postTerm.notice_Duration"
-                />
+                <input type="number" name="notice_Duration" class="form-control" id="notice_Duration" min="0"
+                  placeholder="Enter the end date" [(ngModel)]="postTerm.notice_Duration" />
               </div>
             </div>
             <div class="mb-3">
               <p class="m-1">
                 Remark <span style="color: red">*</span>
-                <span
-                  *ngIf="!postTerm.Remark || postTerm.Remark.length <= 0"
-                  style="color: red"
-                  >Required</span
-                >
+                <span *ngIf="!postTerm.Remark || postTerm.Remark.length <= 0" style="color: red">Required</span>
                 <!-- <span *ngIf="(postTerm.Remark.touched && !postTerm.Remark) || (postTerm.Remark.touched && postTerm.Remark.length <= 0)"style="color: red;">Required</span> -->
               </p>
               <div class="input-group">
-                <textarea
-                  name="Remark"
-                  class="form-control"
-                  id="Remark"
-                  rows="4"
-                  placeholder="Enter remarks"
-                  [(ngModel)]="postTerm.Remark"
-                ></textarea>
+                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                  [(ngModel)]="postTerm.Remark"></textarea>
               </div>
             </div>
 
             <div class="modal-footer">
-              <button
-                class="btn btn-outline-primary"
-                type="submit"
-                data-bs-dismiss="modal"
-              >
+              <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">
                 Save
               </button>
-              <button
-                class="btn btn-outline-danger"
-                type="reset"
-                data-bs-dismiss="modal"
-              >
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">
                 Cancel
               </button>
             </div>
@@ -242,7 +209,7 @@
       </div>
     </div>
   </div>
-</div>
+<!-- </div> -->
 <ng-template #effectiveDateRef let-row>
   {{ row.effectiveDate.toString().split("T")[0] }}
 </ng-template>
@@ -251,12 +218,12 @@
 </ng-template>
 <ng-template #toBeRenewedOnRef let-row>
   {{
-    row.toBeRenewedOn != null ? row.toBeRenewedOn.toString().split("T")[0] : "-"
+  row.toBeRenewedOn != null ? row.toBeRenewedOn.toString().split("T")[0] : "-"
   }}
 </ng-template>
 <ng-template #addendumDateRef let-row>
   {{
-    row.addendumDate != null ? row.addendumDate.toString().split("T")[0] : "-"
+  row.addendumDate != null ? row.addendumDate.toString().split("T")[0] : "-"
   }}
 </ng-template>
 <ng-template #statusRef let-row>
@@ -289,72 +256,38 @@
   {{ row.renewalDueIn > 0 ? row.renewalDueIn : "-" }}
 </ng-template>
 <ng-template #actionRef let-row>
-  <i
-    class="fa-regular fa-eye icon"
-    data-bs-toggle="modal"
-    data-bs-target="#contract-add"
-    (click)="GetContract(row.classifiedContractID)"
-  ></i>
-  <i
-    class="fa-solid fa-trash icon"
-    data-bs-toggle="modal"
-    *ngIf="row.status == 1"
-    data-bs-target="#contract-delete"
-    (click)="DeleteContract(row.classifiedContractID)"
-  ></i>
+  <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-add"
+    (click)="GetContract(row.classifiedContractID)"></i>
+  <i class="fa-solid fa-trash icon" data-bs-toggle="modal" *ngIf="row.status == 1" data-bs-target="#contract-delete"
+    (click)="DeleteContract(row.classifiedContractID)"></i>
 </ng-template>
-<app-all-classified-contract-view-add-modal 
-  [isCreate]="isCreate"
-  [contractDetails]="isCreate?undefined:contractDetails"
-  [approverCheck]="isCreate?false:approverCheck"
-  [terminationCheck]="isCreate?false:terminationCheck"
-  [withdrawCheck]="isCreate?false:withdrawCheck"
-  (loaderEmit)="setLoader($event)" 
-  [termStatus]="termStatus.bind(this)"
+<app-all-classified-contract-view-add-modal [isCreate]="isCreate" [contractDetails]="isCreate?undefined:contractDetails"
+  [approverCheck]="isCreate?false:approverCheck" [terminationCheck]="isCreate?false:terminationCheck"
+  [withdrawCheck]="isCreate?false:withdrawCheck" (loaderEmit)="setLoader($event)" [termStatus]="termStatus.bind(this)"
   [approveRejectContract]="approveRejectContract.bind(this)"
   [getContractIdforPostTerm]="getContractIdforPostTerm.bind(this)"
   [GetAllContracts]="GetAllContracts.bind(this)"></app-all-classified-contract-view-add-modal>
-<div
-  class="modal fade"
-  id="withdrawal-mail"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="withdrawal-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
           Mail Box
         </h1>
-        <button
-          type="button"
-          class="btn close-btn"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
-        <form
-          [formGroup]="withdrawalNoticeEmailForm"
-          (ngSubmit)="
+        <form [formGroup]="withdrawalNoticeEmailForm" (ngSubmit)="
             approveWithdrawalNotice(contractDetails?.classifiedContractId)
-          "
-        >
+          ">
           <div class="mb-3">
             <p class="m-1">Add Subject<span style="color: red">*</span></p>
             <div class="input-group">
-              <input
-                formControlName="emailSubject"
-                class="form-control"
-                id="emailSubject"
-                name="emailSubject"
-                placeholder="Enter The Subject For Mail"
-              />
+              <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject"
+                placeholder="Enter The Subject For Mail" />
             </div>
           </div>
           <div class="mb-3">
@@ -362,34 +295,18 @@
               Email Body(Compose Mail)<span style="color: red">*</span>
             </p>
             <div class="input-group">
-              <textarea
-                formControlName="emailBody"
-                class="form-control"
-                id="emailBody"
-                name="emailBody"
-                placeholder="Compose Mail"
-              ></textarea>
+              <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody"
+                placeholder="Compose Mail"></textarea>
             </div>
           </div>
 
           <div class="modal-footer">
-            <button
-              data-bs-dismiss="modal"
-              class="btn add-btn add-modal-btn"
-              id="btnadd"
-              type="submit"
-              style="max-width: 300px"
-            >
+            <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+              style="max-width: 300px">
               Send
             </button>
-            <button
-              type="reset"
-              data-bs-dismiss="modal"
-              class="btn btn-outline-danger"
-              id="btncancel"
-              style="max-width: 300px"
-              (click)="onClick()"
-            >
+            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+              style="max-width: 300px" (click)="onClick()">
               Close
             </button>
           </div>
@@ -399,47 +316,27 @@
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="postTerm-mail"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
           Mail Box
         </h1>
-        <button
-          type="button"
-          class="btn close-btn"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
-        <form
-          [formGroup]="postTerminationEmailForm"
-          (ngSubmit)="
+        <form [formGroup]="postTerminationEmailForm" (ngSubmit)="
             approveTerminateContract(contractDetails?.classifiedContractId)
-          "
-        >
+          ">
           <div class="mb-3">
             <p class="m-1">Add Subject<span style="color: red">*</span></p>
             <div class="input-group">
-              <input
-                formControlName="emailSubject"
-                class="form-control"
-                id="emailSubject"
-                name="emailSubject"
-                placeholder="Enter The Subject For Mail"
-              />
+              <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject"
+                placeholder="Enter The Subject For Mail" />
             </div>
           </div>
           <div class="mb-3">
@@ -447,34 +344,18 @@
               Email Body(Compose Mail)<span style="color: red">*</span>
             </p>
             <div class="input-group">
-              <textarea
-                formControlName="emailBody"
-                class="form-control"
-                id="emailBody"
-                name="emailBody"
-                placeholder="Compose Mail"
-              ></textarea>
+              <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody"
+                placeholder="Compose Mail"></textarea>
             </div>
           </div>
 
           <div class="modal-footer">
-            <button
-              data-bs-dismiss="modal"
-              class="btn add-btn add-modal-btn"
-              id="btnadd"
-              type="submit"
-              style="max-width: 300px"
-            >
+            <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
+              style="max-width: 300px">
               Send
             </button>
-            <button
-              type="reset"
-              data-bs-dismiss="modal"
-              class="btn btn-outline-danger"
-              id="btncancel"
-              style="max-width: 300px"
-              (click)="onClick()"
-            >
+            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
+              style="max-width: 300px" (click)="onClick()">
               Close
             </button>
           </div>

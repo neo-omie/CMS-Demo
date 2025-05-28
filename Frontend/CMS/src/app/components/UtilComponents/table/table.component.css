@@ -6,11 +6,3 @@
 .mat-header-cell {
     color: white;
 }
-.icon{
-    cursor: pointer;
-    display: inline-block;
-    margin-left: 1rem;
-}
-.icon:hover{
-    color: #5f5fee;
-}
