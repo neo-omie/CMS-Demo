@@ -7,6 +7,6 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEscalationMatrixContracts.Queries.GetAllEscalationMatrixContracts
 {
-    public record GetAllEscalationMatrixContractQuery(int pageNumber, int pageSize) : IRequest<(IEnumerable<GetEscalationMatrixContractDto>, int)>;
+    public record GetAllEscalationMatrixContractQuery(int pageNumber, int pageSize) : IRequest<(IEnumerable<GetEscalationMatrixContractDto> , int)>;
     
 }

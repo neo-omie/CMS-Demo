@@ -11,7 +11,7 @@ namespace CMS.Application.Contracts.Persistence
     public interface IDocumentRepository
     {
 
-        Task<(IEnumerable<MasterDocument> Documents, int TotalCount)> GetAllDocuments(int pageNumber, int pageSize);
+        Task<(IEnumerable<MasterDocument> docs, int totalCount)> GetAllDocuments(int pageNumber, int pageSize);
         Task<MasterDocument> GetDocumentById(int id);
         Task<string> UploadDocument(DocumentUploadDto model);
 

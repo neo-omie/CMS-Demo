@@ -28,7 +28,7 @@ namespace CMS.Persistence.Repositories
             _environment = environment;
         }
 
-        public async Task<(IEnumerable<MasterDocument> , int )> GetAllDocuments(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<MasterDocument> docs, int totalCount)> GetAllDocuments(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
             {
@@ -41,9 +41,9 @@ namespace CMS.Persistence.Repositories
             }
 
             
-            var totalCount = await _context.MasterDocuments.Where(x => x.IsDeleted == false).CountAsync();
+            var totalCount = await _context.MasterDocuments.CountAsync();
             string sql = "EXEC SP_GetAllDocuments @PageNumber = {0}, @PageSize = {1}";
-            var docs = _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize);
+            var docs =await  _context.MasterDocuments.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
 
             //var docs = _context.MasterDocuments.ToListAsync();
             return (docs, totalCount);

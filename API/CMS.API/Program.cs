@@ -17,7 +17,7 @@ namespace CMS.API
             // Add services to the container.
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
-            builder.Services.AddInfrastructureServices(builder.Configuration);
+            //builder.Services.AddInfrastructureServices(builder.Configuration);
 
             //using serilog for loggin 
             IConfiguration configurationBuilder = new ConfigurationBuilder()
@@ -49,7 +49,8 @@ namespace CMS.API
             builder.Services.AddAuthentication(); // For Auth
             builder.Services.AddCors(); // For Angular Frontend joining
 
-
+            //for caching
+            builder.Services.AddMemoryCache();
 
             var app = builder.Build();
 

@@ -103,7 +103,7 @@ namespace CMS.Persistence.Repositories
             //.Skip((pageNumber - 1) * pageSize)
             //.Take(pageSize)
             string sql = "EXEC SP_GetAllCompanies @PageNumber= {0}, @PageSize={1}, @searchTerm= {2}";
-            var res = _context.GetCompanyDtos.FromSqlRaw(sql, pageNumber, pageSize, searchTerm);
+            var res = await _context.GetCompanyDtos.FromSqlRaw(sql, pageNumber, pageSize, searchTerm).ToListAsync();
             return res;
         }
 

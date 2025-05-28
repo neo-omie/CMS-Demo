@@ -11,15 +11,38 @@ namespace CMS.Application.Features.ContractTypeMaster.Query.GetAllContract
 {
     public class GetAllContractQueryHandler : IRequestHandler<GetAllContractQuery, IEnumerable<GetAllContractTypesDTO>>
     {
+        private readonly ICacheService _cacheService;
+
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
 
-        public GetAllContractQueryHandler(IContractTypeMasterRepository contractTypeMasterRepository)
+        public GetAllContractQueryHandler(IContractTypeMasterRepository contractTypeMasterRepository, ICacheService cacheService)
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
+            _cacheService = cacheService;
         }
-        public Task<IEnumerable<GetAllContractTypesDTO>> Handle(GetAllContractQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetAllContractTypesDTO>> Handle(GetAllContractQuery request, CancellationToken cancellationToken)
         {
-            return _contractTypeMasterRepository.GetAllContractAsync(request.pageNumber, request.pageSize);
+            string cacheKey = $"contracts_{request.pageNumber}_{request.pageSize}";
+
+            //getting from cache
+            var cachedContracts = await _cacheService.GetAsync<IEnumerable<GetAllContractTypesDTO>>(cacheKey);
+            if (cachedContracts!=null)
+            {
+                return cachedContracts;
+            }
+
+            //not in cache then fetching from repo
+            var contracts = await _contractTypeMasterRepository.GetAllContractAsync(
+                request.pageNumber, request.pageSize
+                );
+
+            //store in cache
+            await _cacheService.SetAsync(cacheKey, contracts, TimeSpan.FromMinutes(1));
+
+            return contracts;
+
+
+            //return _contractTypeMasterRepository.GetAllContractAsync(request.pageNumber, request.pageSize);
         }
     }
 }
