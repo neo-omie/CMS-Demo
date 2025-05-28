@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Core\CMS.Application\CMS.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Cache\" />
+  </ItemGroup>
+
 </Project>

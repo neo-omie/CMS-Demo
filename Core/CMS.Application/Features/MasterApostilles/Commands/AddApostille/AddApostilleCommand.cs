@@ -6,6 +6,6 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterApostilles.Commands.AddApostille
 {
-    public record AddApostilleCommand(AddApostilleDto ApostilleDTO) : IRequest<CMS.Domain.Entities.MasterApostille>;
+    public record AddApostilleCommand(AddApostilleDto ApostilleDTO,string empCode) : IRequest<CMS.Domain.Entities.MasterApostille>;
     
 }

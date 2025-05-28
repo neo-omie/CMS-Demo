@@ -21,7 +21,7 @@ namespace CMS.Application.Features.MasterCompanies.Command.AddCompany
         public Task<MasterCompany> Handle(AddCompanyCommand request, CancellationToken cancellationToken)
         {
 
-            return _MasterRepository.AddCompanyAsync(request.mastercomp);
+            return _MasterRepository.AddCompanyAsync(request.mastercomp,request.empCode);
         }
     }
 }

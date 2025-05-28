@@ -7,7 +7,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEscalationMatrixContracts.Command
 {
-    public record UpdateEscalationMatrixContractCommand(int id,UpdateEscalationMatrixContractDto updateDto) : IRequest<int>;
+    public record UpdateEscalationMatrixContractCommand(int id,UpdateEscalationMatrixContractDto updateDto,string empCode) : IRequest<int>;
     
     
 }

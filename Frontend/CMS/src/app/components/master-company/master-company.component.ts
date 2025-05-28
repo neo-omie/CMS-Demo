@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { PDFExport } from '../../utils/pdfExport';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-master-company',
@@ -188,8 +189,9 @@ export class MasterCompanyComponent implements OnInit{
 
   addCompany(companyForm: NgForm) {
     this.company = companyForm.value;
+      let empCode =DecodeToken.ECode;
 
-    this.companyService.addCompany(this.company).subscribe({
+    this.companyService.addCompany(this.company,empCode).subscribe({
       next: (response) => {
         Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
         companyForm.resetForm();
@@ -211,13 +213,14 @@ export class MasterCompanyComponent implements OnInit{
 
 
   deleteCompany(id:number){
+    let empCode =DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
     Alert.confirmToast("Are you sure you want to delete this Company?",
                        "You won't be able to revert this!", TYPE.WARNING,
                        "Yes, delete it!",
                        "Deleted successfully!",
                        "Company has been deleted.", TYPE.SUCCESS,() => {
-                        this.companyService.deleteCompany(id).subscribe({
+                        this.companyService.deleteCompany(id,empCode).subscribe({
                           next:(response:boolean)=>{
                             if(response){
                               // Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
@@ -263,6 +266,7 @@ export class MasterCompanyComponent implements OnInit{
       panNo : new FormControl('',[Validators.required])
     })
     onAddFormSubmit(){
+      let empCode =DecodeToken.ECode;
       if(this.masterCompanyAddForm.invalid){
         this.masterCompanyAddForm.markAllAsTouched();
         return;
@@ -312,7 +316,7 @@ export class MasterCompanyComponent implements OnInit{
           addFormValues.iFSCCode =this.masterCompanyAddForm.value.iFSCCode;
           addFormValues.PanNo =this.masterCompanyAddForm.value.panNo;
           console.log(addFormValues);
-          this.companyService.addCompany(addFormValues).subscribe({
+          this.companyService.addCompany(addFormValues,empCode).subscribe({
             next:(response:MasterCompany) => {
               if(response != undefined || response != null){
                 Alert.toast(TYPE.SUCCESS,true,'Added successfully');
@@ -433,6 +437,7 @@ export class MasterCompanyComponent implements OnInit{
       })
     }
     onUpdateFormSubmit(compID:number){
+      let empCode =DecodeToken.ECode;
       if(this.masterCompanyAddForm.invalid){
         this.masterCompanyAddForm.markAllAsTouched();
         return;
@@ -482,7 +487,7 @@ export class MasterCompanyComponent implements OnInit{
           addFormValues.iFSCCode =this.masterCompanyAddForm.value.iFSCCode;
           addFormValues.PanNo =this.masterCompanyAddForm.value.panNo;
           console.log('Check changes', addFormValues);
-          this.companyService.updateCompany(compID, addFormValues).subscribe({
+          this.companyService.updateCompany(compID, addFormValues,empCode).subscribe({
             next:(response:MasterCompany) => {
               if(response != undefined || response != null){
                 Alert.toast(TYPE.SUCCESS,true,'Updated successfully');

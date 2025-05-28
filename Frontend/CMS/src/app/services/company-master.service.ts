@@ -19,17 +19,17 @@ private apiUrl = `${environment.apiUrl}/MasterCompany`;
       return this.http.get<MasterCompany>(`${this.apiUrl}/${valueId}`);
     }
 
-  addCompany(addCompanyDto:AddCompanyDto):Observable<MasterCompany>{
-    return this.http.post<MasterCompany>(`${this.apiUrl}`,addCompanyDto)
+  addCompany(addCompanyDto:AddCompanyDto,empCode:string|null):Observable<MasterCompany>{
+    return this.http.post<MasterCompany>(`${this.apiUrl}/${empCode}`,addCompanyDto)
   }
 
 
 
-  updateCompany(valueId:number, addCompanyDto:AddCompanyDto):Observable<MasterCompany>{
-    return this.http.put<MasterCompany>(`${this.apiUrl}/${valueId}`,addCompanyDto );
+  updateCompany(valueId:number, addCompanyDto:AddCompanyDto,empCode:string|null):Observable<MasterCompany>{
+    return this.http.put<MasterCompany>(`${this.apiUrl}/${valueId}/${empCode}`,addCompanyDto );
   }
 
-  deleteCompany(valueId:number):Observable<boolean>{
-    return this.http.delete<boolean>(`${this.apiUrl}/${valueId}`);
+  deleteCompany(valueId:number,empCode:string|null):Observable<boolean>{
+    return this.http.delete<boolean>(`${this.apiUrl}/${valueId}/${empCode}`);
   }
 }

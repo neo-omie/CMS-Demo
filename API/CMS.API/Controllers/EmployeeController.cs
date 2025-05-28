@@ -44,24 +44,24 @@ public class EmployeeController : ControllerBase
         return Ok(await _mediator.Send(query));
     }
 
-    [HttpPost]
-    public async Task<ActionResult<MasterEmployee>> AddEmployee([FromBody]AddEmployeeDto employee)
+    [HttpPost("{empCode}")]
+    public async Task<ActionResult<MasterEmployee>> AddEmployee([FromBody]AddEmployeeDto employee, [FromRoute] string empCode)
     {
-        var command = new AddEmployeeCommand(employee);
+        var command = new AddEmployeeCommand(employee,empCode);
         return Ok(await _mediator.Send(command));
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<MasterEmployee>> UpdateEmployee(int id, [FromBody]UpdateEmployeeDto employee)
+    [HttpPut("{id}/{empCode}")]
+    public async Task<ActionResult<MasterEmployee>> UpdateEmployee(int id, [FromBody]UpdateEmployeeDto employee, [FromRoute] string empCode)
     {
-        var command = new UpdateEmployeeCommand(id,employee);
+        var command = new UpdateEmployeeCommand(id,employee, empCode);
         return await _mediator.Send(command);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEmployee(int id)
+    [HttpDelete("{id}/{empCode}")]
+    public async Task<IActionResult> DeleteEmployee(int id, [FromRoute] string empCode)
     {
-        var command = new DeleteEmployeeCommand(id);
+        var command = new DeleteEmployeeCommand(id,empCode);
         var checkDelete= await _mediator.Send(command);
         if (checkDelete)
             return Ok(checkDelete);

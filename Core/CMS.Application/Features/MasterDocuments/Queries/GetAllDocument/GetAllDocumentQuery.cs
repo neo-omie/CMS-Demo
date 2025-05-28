@@ -8,7 +8,7 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterDocuments.Queries.GetAllDocument
 {
-    public record GetAllDocumentQuery(int pageNumber, int pageSize) :IRequest<(IEnumerable<MasterDocument>, int)>;
+    public record GetAllDocumentQuery(int pageNumber, int pageSize) :IRequest<(IEnumerable<MasterDocument>, int )>;
    
     
 }

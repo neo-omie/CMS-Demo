@@ -8,6 +8,9 @@ using CMS.Application.Features.MasterApostilles.ApostilleDtos;
 using CMS.Application.Exceptions;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using CMS.Domain.Constants;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Reflection.Emit;
 
 namespace CMS.Persistence.Repositories
 {
@@ -52,7 +55,7 @@ namespace CMS.Persistence.Repositories
             return foundApostille;
         }
 
-        public async Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille)
+        public async Task<MasterApostille> AddMasterApostilleAsync(MasterApostille masterApostille, string empCode)
         {
             //await _context.MasterApostilles.AddAsync(masterApostille);
             //if (await _context.SaveChangesAsync() > 0)
@@ -77,15 +80,19 @@ namespace CMS.Persistence.Repositories
                 }
             };
             var addingApostille = await _context.Database.ExecuteSqlRawAsync(sql, parameters);
+            var getApostille = _context.MasterApostilles.OrderBy(x => x.ValueId).Last();
             if (addingApostille > 0)
             {
                 masterApostille.ValueId = (int)parameters[3].Value;
+
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, getApostille.ValueId, TableList.MasterApostille, $"New Apostille '{getApostille.ApostilleName}' has been Added by '{ empCode}'", empCode, LogStatus.Created);
                 return masterApostille;
             }
             throw new Exception("Failed to add apostille");
         }
 
-        public async Task<bool> DeleteMasterApostilleAsync(int id)
+        public async Task<bool> DeleteMasterApostilleAsync(int id,string empCode)
         {
             //var apostille = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
             //if (apostille == null)
@@ -101,17 +108,20 @@ namespace CMS.Persistence.Repositories
             //{
             //    throw new Exception("Master Apostille not deleted. Failed :(");
             //}
-
+            var getApostille = await _context.MasterApostilles.FindAsync(id);
             var sql = "EXEC sp_DeleteApostille @Id={0}";
             var deleteApostille = await _context.Database.ExecuteSqlRawAsync(sql, id);
             if (deleteApostille > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterApostille, $"Apostille '{getApostille.ApostilleName}' has been Deleted by '{ empCode}'", empCode, LogStatus.Deleted);
+               
                 return true;
             }
             return false;
         }
 
-        public async Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille)
+        public async Task<MasterApostille> UpdateMasterApostilleAsync(int id, MasterApostille masterApostille,string empCode)
         {
             //var checkApostille = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
             //if (checkApostille == null)
@@ -131,6 +141,7 @@ namespace CMS.Persistence.Repositories
             //{
             //    throw new Exception("Master Apostille not updated. Failed :(");
             //}
+            var getApostille = await _context.MasterApostilles.FindAsync(id);
 
             var sql = "EXEC sp_UpdateApostille @Id={0}, @ApostilleName={1}, @Status={2}";
             var parameters = new[]
@@ -146,9 +157,12 @@ namespace CMS.Persistence.Repositories
                 var checkApostille = await _context.MasterApostilles.FirstOrDefaultAsync(m => m.ValueId == id);
                 if (checkApostille != null)
                 {
+                    string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                    await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterApostille, $"Apostille '{getApostille.ApostilleName}' has been Updated by '{empCode}'", empCode, LogStatus.Updated);
+
                     return checkApostille;
                 }
-                throw new Exception("Apostille VlaueId not found after update");
+                throw new Exception("Apostille ValueId not found after update");
             }
             throw new Exception("Failed to update apostille");
         }

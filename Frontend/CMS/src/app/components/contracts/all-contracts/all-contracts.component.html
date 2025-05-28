@@ -12,12 +12,78 @@
   <button class="print-btn btn btn-outline-primary mb-2" mat-button [matMenuTriggerFor]="menu">
     <i class="fa-solid fa-file-export"></i> Print
   </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="printToPDF('#contracts-table','CMS-contracts.pdf')"><i
-        class="fa-solid fa-file-pdf"></i> To PDF</button>
-    <button mat-menu-item (click)="exportToExcel('contracts-table','CMS-contracts.xlsx')"><i
-        class="fa-solid fa-file-excel"></i> To EXCEL</button>
-  </mat-menu>
+  <button class="add-btn btn btn-outline-primary mb-2 margin-left" data-bs-toggle="collapse"
+    data-bs-target="#filter-container">
+    Filters<i class="fa-solid fa-angle-down"></i>
+  </button>
+  <div class="card mb-2">
+    <div class="card-body collapse" id="filter-container">
+      <form class="filters">
+        <div class="mb-3">
+          <p class="mb-1">From date</p>
+          <input class="form-control" type="date" />
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">To date</p>
+          <input class="form-control" type="date" />
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract type</p>
+          <select class="form-select" name="contract-type" id="filter-contract-type">
+            <option value="0">--Select--</option>
+            <option *ngFor="let cont of contractTypes" value="{{cont.valueId}}">{{cont.contractTypeName}}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Renewal due in</p>
+          <select class="form-select" name="contract-renewal-in" id="filter-renewal-in">
+            <option value="-1">--Select--</option>
+            <option value="0">Today</option>
+            <option value="30">30</option>
+            <option value="60">60</option>
+            <option value="90">90</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract status</p>
+          <select class="form-select" name="contract-status" id="filter-contract-status">
+            <option value="0">--Select--</option>
+            @for (key of statusKeys; track $index) {
+              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract department</p>
+          <select class="form-select" name="department" id="filter-department">
+            <option value="0">--Select--</option>
+            <option *ngFor="let dept of departments" value="{{dept.departmentId}}">{{dept.departmentName}}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Contract location</p>
+          <select class="form-select" name="loaction" id="filter-loction">
+            <option value="0">--Select--</option>
+            @for (key of locationSelectKeys; track $index) {
+              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{locationSelect[+key]}}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <p class="mb-1">Has addendum</p>
+          <select class="form-select" name="contract-type" id="filter-contract-type">
+            <option value="-1">--Select--</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="add-btn btn btn-outline-primary mb-3">Filter</button>
+          <button type="reset" class="add-btn btn btn-outline-primary mb-3 margin-left">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <table mat-table [dataSource]="dataSource" matSort
     class="table table-striped table-bordered align-middle mat-elevation-z8" id="contracts-table">
     <ng-container matColumnDef="contractID">

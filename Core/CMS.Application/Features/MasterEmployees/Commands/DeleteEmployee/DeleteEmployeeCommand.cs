@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterEmployees.Commands.DeleteEmployee
 {
-    public record DeleteEmployeeCommand(int ValueId):IRequest<bool>;
+    public record DeleteEmployeeCommand(int ValueId,string empCode):IRequest<bool>;
  }

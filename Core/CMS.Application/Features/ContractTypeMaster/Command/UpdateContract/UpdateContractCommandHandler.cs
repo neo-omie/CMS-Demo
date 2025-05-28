@@ -28,7 +28,7 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.UpdateContract
                 throw new Exception($"Contract not found");
             }
             var mapcontract = _Imapper.Map<ContractTypeMasters>(request.ctp);
-            return await _contractTypeMasterRepository.UpdateContractAsync(request.id, mapcontract);
+            return await _contractTypeMasterRepository.UpdateContractAsync(request.id, mapcontract,request.empCode);
         }
     }
 }

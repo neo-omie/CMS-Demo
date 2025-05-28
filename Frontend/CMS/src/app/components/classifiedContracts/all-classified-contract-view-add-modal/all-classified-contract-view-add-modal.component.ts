@@ -1,0 +1,319 @@
+declare var bootstrap: any;
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { GetAllDepartmentsDto } from '../../../models/master-department';
+import { ClassifiedContractsService } from '../../../services/classified-contracts.service';
+import { MasterApostilleService } from '../../../services/master-apostille.service';
+import { TYPE } from '../../auth/login/values.constants';
+import { Alert } from '../../../utils/alert';
+import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
+import {
+  MasterApostille,
+  MasterApostilleDto,
+} from '../../../models/master-apostille';
+import { CompanyMasterDto } from '../../../models/master-company';
+import { MasterEmployee } from '../../../models/master-employee';
+import {
+  AddClassifiedContractDto,
+  GetClassifiedContractByIdDto,
+} from '../../../models/classified-contracts';
+import { firstValueFrom } from 'rxjs';
+import { DecodeToken } from '../../../utils/decodeToken';
+
+@Component({
+  selector: 'app-all-classified-contract-view-add-modal',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './all-classified-contract-view-add-modal.component.html',
+  styleUrl: './all-classified-contract-view-add-modal.component.css',
+})
+export class AllClassifiedContractViewAddModalComponent {
+  @Output() loaderEmit = new EventEmitter<boolean>();
+  @Input() approverCheck: boolean = false;
+  @Input() terminationCheck: boolean = false;
+  @Input() withdrawCheck: boolean = false;
+  @Input() contractDetails?: GetClassifiedContractByIdDto;
+  @Input() isCreate = false;
+  @Input() termStatus!: (status: number) => void;
+  @Input() getContractIdforPostTerm!: (classifiedContractID?: string) => void;
+  @Input() approveRejectContract!: (id?: string, status?: number) => void;
+  @Input() GetAllContracts!: (pageSize: number, pageNumber: number) => void;
+
+  approverStatusColor: string[] = [
+    '',
+    '#ffc107',
+    '#adff2f',
+    '#ff4500',
+    '',
+    '#a9a9a9',
+    '#ffc107',
+    '#f08205',
+    '#6a82c5',
+  ];
+  approverStatusValue: string[] = [
+    '',
+    'Pending Approval',
+    'Active',
+    'Rejected',
+    'Terminated',
+    'Expired',
+    'Pending Termination',
+    'Approved for Termination',
+    'Pending Notice  Withdrawal',
+  ];
+  departments: GetAllDepartmentsDto[] = [];
+  contractTypes: ContractTypeMasterDTO[] = [];
+  apostilleTypes: MasterApostille[] = [];
+  companies: CompanyMasterDto[] = [];
+  employeeCustodians: MasterEmployee[] = [];
+
+  @ViewChild('addEmpCustodianCollapse') addEmpCustodianCollapse!: ElementRef;
+
+  masterContractAddForm = new FormGroup({
+    classifiedContractName: new FormControl('', [Validators.required]),
+    departmentId: new FormControl('', [Validators.required]),
+    contractWithCompanyId: new FormControl('', [Validators.required]),
+    contractTypeId: new FormControl('', [Validators.required]),
+    apostilleTypeId: new FormControl('', [Validators.required]),
+    actualDocRefNo: new FormControl('', [Validators.required]),
+    retainerContract: new FormControl('', [Validators.required]),
+    termsAndConditions: new FormControl('', [Validators.required]),
+    validFrom: new FormControl('', [Validators.required]),
+    validTill: new FormControl('', [Validators.required]),
+    renewalFrom: new FormControl(''),
+    renewalTill: new FormControl(''),
+    addendumDate: new FormControl(''),
+    empCustodianName: new FormControl('', [Validators.required]),
+    empCustodianId: new FormControl('', [Validators.required]),
+    location: new FormControl('', [Validators.required]),
+    approver1Status: new FormControl('1', [
+      Validators.required,
+      Validators.pattern('^[0-9]$'),
+    ]),
+    approver2Status: new FormControl('1', [
+      Validators.required,
+      Validators.pattern('^[0-9]$'),
+    ]),
+    approver3Status: new FormControl('1', [
+      Validators.required,
+      Validators.pattern('^[0-9]$'),
+    ]),
+    skipApproval: new FormControl(true, [Validators.required]),
+  });
+
+  constructor(
+    private contractsService: ClassifiedContractsService,
+    private renderer: Renderer2,
+    private masterApostilleService: MasterApostilleService
+  ) {}
+
+  ngOnInit(): void {
+    this.initialRequirementLoad();
+  }
+
+  formfield(name: string) {
+    if (name === 'reset') {
+      this.masterContractAddForm.reset({
+        skipApproval: true,
+        departmentId: '',
+        contractWithCompanyId: '',
+        contractTypeId: '',
+        apostilleTypeId: '',
+        retainerContract: '',
+        renewalFrom: '',
+        renewalTill: '',
+        addendumDate: '',
+        empCustodianName: '',
+      });
+      return;
+    } else {
+      return this.masterContractAddForm.get(name);
+    }
+  }
+
+  returnValue(value?: number): number {
+    if (value) {
+      return value;
+    }
+    return 0;
+  }
+
+  error(error: any) {
+    console.error('Error :(', error);
+    let errorMsg = JSON.stringify(
+      error.message !== undefined ? error.error.title : error.message
+    );
+    Alert.toast(TYPE.ERROR, true, errorMsg);
+  }
+
+  initialRequirementLoad() {
+    this.contractsService.GetDepartments().subscribe({
+      next: (response: GetAllDepartmentsDto[]) => {
+        this.departments = response;
+      },
+      error: (error) => this.error(error),
+    });
+
+    this.contractsService.GetContractTypes().subscribe({
+      next: (response: ContractTypeMasterDTO[]) => {
+        this.contractTypes = response;
+      },
+      error: (error) => this.error(error),
+    });
+
+    this.masterApostilleService.getApostilles(1, 100).subscribe({
+      next: (response: MasterApostilleDto) => {
+        this.apostilleTypes = response.data;
+      },
+      error: (error) => this.error(error),
+    });
+
+    this.contractsService.GetCompanies().subscribe({
+      next: (response: CompanyMasterDto[]) => {
+        this.companies = response;
+      },
+      error: (error) => this.error(error),
+    });
+  }
+
+  textChangeEmployeeCustodian(departmentId: number, event: Event) {
+    let input = event.target as HTMLInputElement;
+    this.contractsService
+      .GetEmployeeForInputText(departmentId, input.value)
+      .subscribe({
+        next: (response: MasterEmployee[]) => {
+          this.employeeCustodians = response;
+        },
+        error: (error) => this.error(error),
+      });
+  }
+
+  fillEmployeeCustodian(employeeId: number, employeeName: string) {
+    const input =
+      this.addEmpCustodianCollapse.nativeElement.querySelector('input');
+    input.value = '';
+    this.employeeCustodians.length = 0;
+    this.renderer.removeClass(
+      this.addEmpCustodianCollapse.nativeElement,
+      'show'
+    );
+    this.formfield('empCustodianId')?.setValue(employeeId);
+    this.formfield('empCustodianName')?.setValue(employeeName);
+  }
+
+  async onAddFormSubmit() {
+    let empName = DecodeToken.ECode;
+    this.formfield('approver1Status')?.setValue(1);
+    this.formfield('approver2Status')?.setValue(1);
+    this.formfield('approver3Status')?.setValue(1);
+    if (this.masterContractAddForm.invalid) {
+      this.masterContractAddForm.markAllAsTouched();
+      console.log(
+        'MasterContractAddForm is invalid : ',
+        this.masterContractAddForm.value
+      );
+      return;
+    } else {
+      this.loaderEmit.emit(true);
+      const departmentId = this.masterContractAddForm.value.departmentId;
+      const contractWithCompanyId =
+        this.masterContractAddForm.value.contractWithCompanyId;
+      const contractTypeId = this.masterContractAddForm.value.contractTypeId;
+      const apostilleTypeId = this.masterContractAddForm.value.apostilleTypeId;
+      const actualDocRefNo = this.masterContractAddForm.value.actualDocRefNo;
+      const retainerContract =
+        this.masterContractAddForm.value.retainerContract;
+      const empCustodianId = this.masterContractAddForm.value.empCustodianId;
+      const approver1Status = this.masterContractAddForm.value.approver1Status;
+      const approver2Status = this.masterContractAddForm.value.approver2Status;
+      const approver3Status = this.masterContractAddForm.value.approver3Status;
+      if (
+        Number(departmentId) &&
+        Number(contractWithCompanyId) &&
+        Number(contractTypeId) &&
+        Number(apostilleTypeId) &&
+        Number(actualDocRefNo) &&
+        Number(retainerContract) &&
+        Number(empCustodianId) &&
+        Number(approver1Status) &&
+        Number(approver2Status) &&
+        Number(approver3Status)
+      ) {
+        const addFormValues: AddClassifiedContractDto =
+          new AddClassifiedContractDto();
+        addFormValues.classifiedContractName =
+          this.masterContractAddForm.value.classifiedContractName;
+        addFormValues.departmentId = Number(departmentId);
+        addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
+        addFormValues.contractTypeId = Number(contractTypeId);
+        addFormValues.apostilleTypeId = Number(apostilleTypeId);
+        addFormValues.actualDocRefNo = Number(actualDocRefNo);
+        addFormValues.retainerContract = Number(retainerContract);
+        addFormValues.termsAndConditions =
+          this.masterContractAddForm.value.termsAndConditions;
+        addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
+        addFormValues.validTill = this.masterContractAddForm.value.validTill;
+        addFormValues.renewalFrom =
+          this.masterContractAddForm.value.renewalFrom != ''
+            ? String(this.masterContractAddForm.value.renewalFrom)
+            : null;
+        addFormValues.renewalTill =
+          this.masterContractAddForm.value.renewalTill != ''
+            ? String(this.masterContractAddForm.value.renewalTill)
+            : null;
+        addFormValues.addendumDate =
+          this.masterContractAddForm.value.addendumDate != ''
+            ? String(this.masterContractAddForm.value.addendumDate)
+            : null;
+        addFormValues.skipApproval =
+          this.masterContractAddForm.value.skipApproval;
+        addFormValues.empCustodianId = Number(empCustodianId);
+        addFormValues.location = this.masterContractAddForm.value.location;
+        addFormValues.approver1Status = Number(approver1Status);
+        addFormValues.approver2Status = Number(approver2Status);
+        addFormValues.approver3Status = Number(approver3Status);
+
+        try {
+          const response = await firstValueFrom(
+            this.contractsService.addContract(addFormValues, empName)
+          );
+
+          if (response !== false) {
+            Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
+            this.formfield('reset');
+            this.GetAllContracts(1, 10);
+            const modalElement = document.getElementById('contract-add');
+            if (modalElement) {
+              const modalInstance =
+                bootstrap.Modal.getInstance(modalElement) ||
+                new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
+          }
+        } catch (error) {
+          console.error('Error :(', error);
+          Alert.toast(TYPE.ERROR, true, JSON.stringify(error));
+        } finally {
+          this.loaderEmit.emit(false);
+        }
+      } else {
+        Alert.toast(TYPE.ERROR, true, 'Got a non number value in number field');
+        this.loaderEmit.emit(false);
+      }
+    }
+  }
+}

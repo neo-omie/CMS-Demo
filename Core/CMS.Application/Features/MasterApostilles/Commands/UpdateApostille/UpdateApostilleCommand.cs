@@ -4,5 +4,5 @@ using MediatR;
 
 namespace CMS.Application.Features.MasterApostilles.Commands.UpdateApostille
 {
-    public record UpdateApostilleCommand(int id, UpdateApostilleDto apostilleDTO) : IRequest<CMS.Domain.Entities.MasterApostille>;
+    public record UpdateApostilleCommand(int id, UpdateApostilleDto apostilleDTO,string empCode) : IRequest<CMS.Domain.Entities.MasterApostille>;
 }

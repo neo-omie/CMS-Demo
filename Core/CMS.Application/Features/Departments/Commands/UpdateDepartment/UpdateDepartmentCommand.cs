@@ -7,5 +7,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Departments.Commands.UpdateDepartment
 {
-    public record UpdateDepartmentCommand(int id, string departmentName) : IRequest<bool>;
+    public record UpdateDepartmentCommand(int id, string departmentName,string empCode) : IRequest<bool>;
 }

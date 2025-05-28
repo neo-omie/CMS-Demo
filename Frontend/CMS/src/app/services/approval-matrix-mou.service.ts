@@ -20,7 +20,7 @@ private apiUrl = `${environment.apiUrl}/ApprovalMatrixMOU`;
     GetApproversForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
       return this.http.get<MasterEmployee[]>(`${environment.apiUrl}/Employee/search/${departmentId}/${inputText}`)
     }
-    EditApproverMatrixMOU(id:number,editApprovalMatrixMouDto:EditApprovalMatrixMOUDto):Observable<boolean>{
-      return this.http.put<boolean>(`${this.apiUrl}/UpdateApprovalMatrixMOU?id=${id}`,editApprovalMatrixMouDto);
+    EditApproverMatrixMOU(id:number,editApprovalMatrixMouDto:EditApprovalMatrixMOUDto,empCode:string |null):Observable<boolean>{
+      return this.http.put<boolean>(`${this.apiUrl}/UpdateApprovalMatrixMOU?id=${id}/${empCode}`,editApprovalMatrixMouDto);
     }
 }

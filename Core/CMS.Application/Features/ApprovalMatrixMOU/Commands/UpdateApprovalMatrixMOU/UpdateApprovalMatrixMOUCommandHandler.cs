@@ -18,7 +18,7 @@ namespace CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatr
         }
         public async Task<bool> Handle(UpdateApprovalMatrixMOUCommand request, CancellationToken cancellationToken)
         {
-            return await _masterApprovalMatrixMOURepository.UpdateApprovalMatrixMOU(request.id, request.mou);
+            return await _masterApprovalMatrixMOURepository.UpdateApprovalMatrixMOU(request.id, request.mou,request.empCode);
         }
     }
 }

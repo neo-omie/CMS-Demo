@@ -30,9 +30,9 @@ export class EscalationMatrixContractService {
   postMatrixContractById(
       valueId: number,
       updateMatrixContractDto: UpdateMatrixContractDto
-    ): Observable<any> {
+    ,empCode:string|null): Observable<any> {
       return this.http.post<any>(
-        `${this.apiUrl}/${valueId}`,updateMatrixContractDto
+        `${this.apiUrl}/${valueId}/${empCode}`,updateMatrixContractDto
       );
     }
 }

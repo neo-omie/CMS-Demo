@@ -37,24 +37,24 @@ namespace CMS.API.Controllers
             return Ok(await _mediator.Send(query));
         }
 
-        [HttpPost]
-        public async Task<ActionResult<MasterApostille>> AddApostilleAsync([FromBody] AddApostilleDto apostille)
+        [HttpPost("{empCode}")]
+        public async Task<ActionResult<MasterApostille>> AddApostilleAsync([FromBody] AddApostilleDto apostille, [FromRoute] string empCode)
         {
-            var command = new AddApostilleCommand(apostille);
+            var command = new AddApostilleCommand(apostille,empCode);
             return Ok(await _mediator.Send(command));
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<MasterApostille>> UpdateApostilleAsync(int id, [FromBody] UpdateApostilleDto apostille)
+        [HttpPut("{id}/{empCode}")]
+        public async Task<ActionResult<MasterApostille>> UpdateApostilleAsync(int id, [FromBody] UpdateApostilleDto apostille, [FromRoute] string empCode)
         {
-            var command= new UpdateApostilleCommand(id, apostille);
+            var command= new UpdateApostilleCommand(id, apostille,empCode);
             return Ok(await _mediator.Send(command));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> DeleteMasterApostilleAsync(int id)
+        [HttpDelete("{id}/{empCode}")]
+        public async Task<ActionResult<bool>> DeleteMasterApostilleAsync(int id, [FromRoute] string empCode)
         {
-            var command= new DeleteApostilleCommand(id);
+            var command= new DeleteApostilleCommand(id,empCode);
             var result = await _mediator.Send(command);
             if(result)
             {

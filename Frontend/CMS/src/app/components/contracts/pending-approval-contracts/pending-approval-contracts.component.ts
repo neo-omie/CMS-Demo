@@ -146,6 +146,8 @@ export class PendingApprovalContractsComponent implements OnInit {
     });
   }
   DeleteContract(id?: number) {
+        let empName= DecodeToken.ECode;
+
     Alert.confirmToast(
       'Are you sure you want to delete this contract?',
       "You won't be able to revert this!!",
@@ -156,7 +158,7 @@ export class PendingApprovalContractsComponent implements OnInit {
       TYPE.SUCCESS,
       () => {
         if (id !== undefined) {
-          this.contractsService.deleteContract(id).subscribe({
+          this.contractsService.deleteContract(id,empName).subscribe({
             next: () => {
               // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
               this.GetAllContracts(1, 10);

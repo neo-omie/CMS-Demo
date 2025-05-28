@@ -1,6 +1,8 @@
 ﻿using CMS.Application.Features.ClassifiedContracts;
 using CMS.Application.Features.ClassifiedContracts.Commands.ApproveRejectContract;
-using CMS.Application.Features.ClassifiedContracts.Commands.CreateNewContract;
+using CMS.Application.Features.ClassifiedContracts.Commands.CreateNewClassifiedContract;
+
+//using CMS.Application.Features.ClassifiedContracts.Commands.CreateNewContract;
 using CMS.Application.Features.ClassifiedContracts.Commands.EditClassifiedContract;
 using CMS.Application.Features.ClassifiedContracts.Commands.RemoveClassifiedContract;
 using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts;
@@ -77,11 +79,12 @@ namespace CMS.API.Controllers
         //    _logger.LogInformation("GetContractById method performed");
         //    return Ok(foundContract);
         //}
-        [HttpPost]
-        public async Task<IActionResult> AddContract(ClassifiedContractDTO cont)
+        //[HttpPost]
+        [HttpPost("{empName}")]
+        public async Task<IActionResult> AddContract(ClassifiedContractDTO cont,[FromRoute]string empName)
         {
             _logger.LogInformation("AddClassifiedContract method initiated");
-            var addedContract = await _mediator.Send(new CreateNewClassifiedContractCommand(cont));
+            var addedContract = await _mediator.Send(new CreateNewClassifiedContractCommand(cont, empName));
             _logger.LogInformation("AddClassifiedContract method performed");
             if (addedContract != null)
                 return Ok(true);
@@ -96,12 +99,12 @@ namespace CMS.API.Controllers
             _logger.LogInformation("UpdateContract method performed");
             return Ok(editedContract); // bool
         }
-        [Route("{id}")]
+        [Route("{id}/{empCode}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteClassifiedContract([FromRoute] int id)
+        public async Task<IActionResult> DeleteClassifiedContract([FromRoute] int id, [FromRoute]string empCode)
         {
             _logger.LogInformation("DeleteClassifiedContract method initiated");
-            var deletedContract = await _mediator.Send(new RemoveClassifiedContractCommand(id));
+            var deletedContract = await _mediator.Send(new RemoveClassifiedContractCommand(id,empCode));
             _logger.LogInformation("DeleteClassifiedContract method performed");
             return Ok(deletedContract); // bool
         }

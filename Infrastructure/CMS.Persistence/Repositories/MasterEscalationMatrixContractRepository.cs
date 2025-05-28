@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
@@ -9,6 +10,7 @@ using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatr
 
 using CMS.Application.Features.MasterEscalationMatrixContracts;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +40,7 @@ namespace CMS.Persistence.Repositories
             }
             var totalCount = await _context.MasterEscalationMatrixContracts.CountAsync();
             string sql = "EXEC SP_GetAllEscalationMatrixContracts @PageNumber = {0}, @PageSize = {1}";
-            var allEscalations = _context.GetEscalationMatrixContractDtos.FromSqlRaw(sql,pageNumber, pageSize);
+            var allEscalations = await  _context.GetEscalationMatrixContractDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return (allEscalations, totalCount);
         }
 
@@ -68,7 +70,7 @@ namespace CMS.Persistence.Repositories
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<int> UpdateMatrixContract(int valueId, UpdateEscalationMatrixContractDto updateDto)
+        public async Task<int> UpdateMatrixContract(int valueId, UpdateEscalationMatrixContractDto updateDto,string empCode)
         {
             var contract = await _context.MasterEscalationMatrixContracts.FirstOrDefaultAsync(x => x.MatrixContractId == valueId);
             if (contract == null)
@@ -83,9 +85,16 @@ namespace CMS.Persistence.Repositories
             contract.TriggerDaysEscalation3 = updateDto.TriggerDaysEscalation3;
 
             _context.MasterEscalationMatrixContracts.Update(contract);
-            return _context.SaveChanges();
+            int res = _context.SaveChanges();
+            if(res > 0)
+            {
 
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, valueId, TableList.MasterEscalationMatrixContract, $"Escalator for {contract.Department.DepartmentName} has been Updated by {empCode} ", empCode, LogStatus.Updated);
 
+                return res;
+            }
+            return res;
         }
     }
 }

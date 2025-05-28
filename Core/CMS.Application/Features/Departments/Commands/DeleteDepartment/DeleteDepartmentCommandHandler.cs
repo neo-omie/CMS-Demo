@@ -17,7 +17,7 @@ namespace CMS.Application.Features.Departments.Commands.DeleteDepartment
         }
         public async Task<bool> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
         {
-            return await _departmentRepository.DeleteDepartment(request.id);
+            return await _departmentRepository.DeleteDepartment(request.id,request.empCode);
         }
     }
 }

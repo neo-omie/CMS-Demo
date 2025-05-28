@@ -30,19 +30,20 @@ import { PostTermination } from '../../../models/post-termination';
 import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { DecodeToken } from '../../../utils/decodeToken';
-import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
-import { ExcelExport } from '../../../utils/excelExport';
+import { ContractStatus, Location } from '../../../utils/constants';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [MatButtonModule, MatMenuModule, FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
 export class AllContractsComponent implements OnInit {
+  contractStatus = ContractStatus
+  locationSelect = Location
+  statusKeys = Object.keys(this.contractStatus);
+  locationSelectKeys = Object.keys(this.locationSelect);
   displayedColumns: string[] = ['contractID', 'contractName', 'contractType', 'departmentName', 'effectiveDate',
     'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
     'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
@@ -107,7 +108,10 @@ export class AllContractsComponent implements OnInit {
   @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
   @ViewChild('addFile') addFile!: ElementRef;
 
-
+  checkNotNaN(number:string){
+      if(isNaN(Number(number))) return false
+      return true
+    }
 
   GetAllContracts(pageNumber: number, pageSize: number) {
     this.contractsService.getContracts(pageNumber, pageSize).subscribe({
@@ -210,6 +214,7 @@ export class AllContractsComponent implements OnInit {
     });
   }
   DeleteContract(id?: number) {
+    let empName = DecodeToken.ECode;
     Alert.confirmToast(
       'Are you sure you want to delete this contract?',
       "You won't be able to revert this!!",
@@ -220,7 +225,7 @@ export class AllContractsComponent implements OnInit {
       TYPE.SUCCESS,
       () => {
         if (id !== undefined) {
-          this.contractsService.deleteContract(id).subscribe({
+          this.contractsService.deleteContract(id,empName).subscribe({
             next: () => {
               // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
               this.GetAllContracts(1, 10);
@@ -310,6 +315,7 @@ export class AllContractsComponent implements OnInit {
   });
 
   async onAddFormSubmit() {
+    let empName = DecodeToken.ECode;
     this.loading = true
     this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
     if (this.masterContractAddForm.invalid) {
@@ -361,7 +367,7 @@ export class AllContractsComponent implements OnInit {
         addFormValues.approver3Status = Number(approver3Status);
         console.log(addFormValues);
         try {
-          const response = await firstValueFrom(this.contractsService.addContract(addFormValues));
+          const response = await firstValueFrom(this.contractsService.addContract(addFormValues,empName));
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
             this.GetAllContracts(1, 10);
@@ -675,6 +681,7 @@ export class AllContractsComponent implements OnInit {
   onAddAddendumFormSubmit(contractID: number) {
     this.loading = true;
     const addendum = new AddAddendumContract();
+    let empCode = DecodeToken.ECode;
     // var todaysDate = new Date().toISOString().split('T')[0];
     addendum.contractId = Number(this.addaddendumForm.value.contractId);
     addendum.contractName = String(this.addaddendumForm.value.contractName);
@@ -694,7 +701,7 @@ export class AllContractsComponent implements OnInit {
     // console.log('Date', todaysDate);
     
 
-    this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum).subscribe({
+    this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum,empCode).subscribe({
       next: () => {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
         this.GetAllContracts(1, 10);
@@ -1085,7 +1092,7 @@ export class AllContractsComponent implements OnInit {
 
     switch(status){
       case 1: return 'Approval for'; 
-      case 2: return 'Active'; // optional — maybe don't show this
+      case 2: return 'Active'; // optional � maybe don't show this
       case 3: return 'Rejection for';
       case 4: return 'Termination of';
       case 5: return 'Expiration of';

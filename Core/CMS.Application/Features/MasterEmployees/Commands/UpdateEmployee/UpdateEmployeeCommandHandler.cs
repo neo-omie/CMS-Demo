@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace CMS.Application.Features.MasterEmployees.Commands.UpdateEmployee
             //   newValue: newValues,
             //   loggedBy: request.EmpDTO.LoggedBy // Assuming LoggedBy is part of the DTO
             //);
-            return await _masterEmployeeRepository.UpdateEmployeeAsync(request.id, employee);
+            return await _masterEmployeeRepository.UpdateEmployeeAsync(request.id, employee,request.empCode);
 
         }
     }

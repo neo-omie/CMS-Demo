@@ -12,6 +12,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-master-apostille',
@@ -100,12 +101,13 @@ onFilterChange(){
 }
 
 deleteApostille(apostille:MasterApostille){
+  let empCode =DecodeToken.ECode;
   Alert.confirmToast("Are you sure you want to delete this Apostille?",
     "You won't be able to revert this!", TYPE.WARNING,
     "Yes, delete it!",
     "Deleted successfully!",
     "Company has been deleted.", TYPE.SUCCESS,() => {
-      this.apostilleService.deleteApostille(apostille.valueId).subscribe({
+      this.apostilleService.deleteApostille(apostille.valueId,empCode).subscribe({
         next:(response:boolean)=>{
           if(response){
             // Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
@@ -178,6 +180,7 @@ displayedColumns: string[] = ['apostilleName', 'status', 'action'];
 }
 
 onSubmit(){
+
   this.formsValue=this.addApostilleForm.value;
   if(this.addApostilleForm.invalid){
         this.addApostilleForm.markAllAsTouched();
@@ -186,13 +189,14 @@ onSubmit(){
 
   const formValues=this.addApostilleForm.value;
   if(this.mode==='add'){
+    let empCode =DecodeToken.ECode;
     const apostilleName = this.addApostilleForm.value.apostilleName;
     const status = this.addApostilleForm.value.status;
       const addFormValues:AddApostilleDto = new AddApostilleDto();
       addFormValues.apostilleName = this.addApostilleForm.value.apostilleName;
       addFormValues.status = Number(status) == 1 ? true : false;
       console.log(addFormValues);
-      this.apostilleService.addApostille(addFormValues).subscribe({
+      this.apostilleService.addApostille(addFormValues,empCode).subscribe({
         next:(response:AddApostilleDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Added successfully');
             this.fetchApostille();
@@ -206,6 +210,7 @@ onSubmit(){
       });
   }
   else if(this.mode === 'edit'){
+    let empCode =DecodeToken.ECode;
     console.log(this.addApostilleForm);
     const apostilleName = this.addApostilleForm.value.apostilleName;
     const status = this.addApostilleForm.value.status;
@@ -213,7 +218,7 @@ onSubmit(){
       addFormValues.apostilleName = this.addApostilleForm.value.apostilleName;
       addFormValues.status = Number(status) == 1 ? true : false;
       console.log(addFormValues);
-      this.apostilleService.updateApostille(this.apoID, addFormValues).subscribe({
+      this.apostilleService.updateApostille(this.apoID, addFormValues,empCode).subscribe({
         next: (res: EditApostilleDto) => {
           Alert.toast(TYPE.SUCCESS, true, 'Updated Successfully')
           this.fetchApostille();

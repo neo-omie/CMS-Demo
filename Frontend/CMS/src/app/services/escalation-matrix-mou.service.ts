@@ -29,10 +29,11 @@ export class EscalationMatrixMouService {
   }
   postMatrixMouById(
     valueId: number,
-    updateMatrixMouDto: UpdateMatrixMouDto
+    updateMatrixMouDto: UpdateMatrixMouDto,
+    empCode : string
   ): Observable<any> {
     return this.http.post<any>(
-      `${this.apiUrl}/${valueId}`,updateMatrixMouDto
+      `${this.apiUrl}/empCode/${empCode}/${valueId}`,updateMatrixMouDto
     );
   }
 }

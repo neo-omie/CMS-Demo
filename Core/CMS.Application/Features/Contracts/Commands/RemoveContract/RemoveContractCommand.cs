@@ -7,5 +7,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Contracts.Commands.RemoveContract
 {
-    public record RemoveContractCommand(int id) : IRequest<bool>;
+    public record RemoveContractCommand(int id, string empCode) : IRequest<bool>;
 }

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou
 {
-    public class UpdateEscalationMatrixMouCommandHandler : IRequestHandler<UpdateEscalationMatrixMouCommand, int>
+    public class UpdateEscalationMatrixMouCommandHandler : IRequestHandler<UpdateEscalationMatrixMouCommand, bool>
     {
         private readonly IMasterEscalationMatrixMouRepository _mouRepository;
 
@@ -12,9 +12,9 @@ namespace CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEsca
             _mouRepository = mouRepository;
 
         }
-        public Task<int> Handle(UpdateEscalationMatrixMouCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(UpdateEscalationMatrixMouCommand request, CancellationToken cancellationToken)
         {
-            return _mouRepository.UpdateMatrixMou(request.id,request.updateDto);
+            return _mouRepository.UpdateMatrixMou(request.id,request.updateDto,request.empCode);
         }
     }
 }

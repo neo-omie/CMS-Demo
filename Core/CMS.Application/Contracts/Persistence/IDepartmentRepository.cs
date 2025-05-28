@@ -17,9 +17,9 @@ namespace CMS.Application.Contracts.Persistence
         public Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize);
         public Task<Department> GetDepartmentById(int id);
         public Task<IEnumerable<Department>> SearchDepartment(string searchQuery);
-        public Task<Department> AddNewDepartment(string departmentName);
-        public Task<bool> DeleteDepartment(int id);
-        public Task<bool> UpdateApprovalMatrixMOU(int id, string departmentName);
+        public Task<Department> AddNewDepartment(string departmentName,string empCode);
+        public Task<bool> DeleteDepartment(int id,string empCode);
+        public Task<bool> UpdateApprovalMatrixMOU(int id, string departmentName,string empCode);
 
         public Task<MasterApprovalMatrixContract> AddContractApprovers(int id, UpdateApprovalMatrixContractDto addApprovers);
         public Task<MasterApprovalMatrixMOU> AddMOUApprovers(int id, UpdateApprovalMatrixMOUDto addApprovers);

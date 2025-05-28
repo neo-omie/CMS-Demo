@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { PDFExport } from '../../utils/pdfExport';
 import { ProgressBarComponent } from '../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
@@ -204,4 +205,7 @@ export class AddendumContractsComponent {
   //     }
   //   });
   // }
+    printToPDF(tableID: string, fileName: string) {
+    PDFExport.printToPDF(tableID, fileName);
+  }
 }

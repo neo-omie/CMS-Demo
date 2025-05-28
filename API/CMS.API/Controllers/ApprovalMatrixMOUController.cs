@@ -31,14 +31,14 @@ namespace CMS.API.Controllers
             return Ok(approvalMatrixContract);
         }
 
-        [HttpPut("UpdateApprovalMatrixMOU")]
-        public async Task<IActionResult> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou)
+        [HttpPut("UpdateApprovalMatrixMOU/{empCode}")]
+        public async Task<IActionResult> UpdateApprovalMatrixMOU(int id, UpdateApprovalMatrixMOUDto mou, [FromRoute] string empCode)
         {
             if (mou.ApproverId1 == mou.ApproverId2 || mou.ApproverId1 == mou.ApproverId3 || mou.ApproverId2 == mou.ApproverId3)
             {
                 throw new Exception("Approvers cannot be same");
             }
-            var updatedApprovalMatrixMOU = await _mediator.Send(new UpdateApprovalMatrixMOUCommand(id, mou));
+            var updatedApprovalMatrixMOU = await _mediator.Send(new UpdateApprovalMatrixMOUCommand(id, mou,empCode));
             return Ok(updatedApprovalMatrixMOU);
         }
     }

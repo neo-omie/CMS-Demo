@@ -42,7 +42,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       return true;
     }
     return false;
-    // return true;
   }
   logoutUser() {
     if (localStorage.getItem('token') != null) {

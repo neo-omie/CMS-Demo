@@ -3,17 +3,7 @@ h2 {
     font-weight: 600;
     text-align: center;
 }
-div::-webkit-scrollbar {
-    display: none;
-}
-.thead{
-    background-color: #5f5fee;
-    border-top-color: #5f5fee;
-    border-bottom-color: #5f5fee;
-}
-.mat-header-cell {
-    color: white;
-}
+
 .icon{
     cursor: pointer;
     display: inline-block;
@@ -89,6 +79,15 @@ div::-webkit-scrollbar {
     width: 3vw;
     aspect-ratio: 1/1;
 }
-.printPdf{
-    margin-left: 5px;
+.printPdf,.margin-left{
+    margin-left: 1rem;
+}
+.filters{
+    display: flex;
+    justify-content: flex-start;
+    align-items: end;
+    flex-wrap: wrap;
+}
+.filters > div{
+    margin-right: 1rem;
 }

@@ -6,6 +6,7 @@ import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
 import { ApprovalMatrixMou, EditApprovalMatrixMOUDto } from '../../../models/approval-matrix-mou';
 import { CommonModule } from '@angular/common';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 @Component({
   selector: 'app-approval-matrix-mou-modal',
@@ -114,13 +115,14 @@ export class ApprovalMatrixMouModalComponent {
   }
 
   editApproverMatrixContractSubmit(id: number) {
+    let empCode = DecodeToken.ECode;
     let nod = this.editNumberOfDays?.nativeElement.value;
     if (nod !== "" && Number(nod) > 0) {
       this.editApprovalMatrixMOUDto.approverId1 = this.editApproverId1?.nativeElement.value;
       this.editApprovalMatrixMOUDto.approverId2 = this.editApproverId2?.nativeElement.value;
       this.editApprovalMatrixMOUDto.approverId3 = this.editApproverId3?.nativeElement.value;
       this.editApprovalMatrixMOUDto.numberOfDays = nod;
-      this.approverMatrixMouService.EditApproverMatrixMOU(id, this.editApprovalMatrixMOUDto).subscribe({
+      this.approverMatrixMouService.EditApproverMatrixMOU(id, this.editApprovalMatrixMOUDto,empCode).subscribe({
         next: (response: boolean) => {
           if (response) {
             Alert.toast(TYPE.SUCCESS, true, "Updated successfully");

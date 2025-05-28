@@ -9,5 +9,5 @@ using CMS.Application.Features.AddendumContract.AddendumContractDto;
 
 namespace CMS.Application.Features.AddendumContracts.Commands.AddAddendumContract
 {
-    public  record AddAddendumContractCommand(int id, AddAddendumContractDto addendumDto):IRequest<AddAddendumContractDto>;
+    public  record AddAddendumContractCommand(int id, AddAddendumContractDto addendumDto,string empCode):IRequest<AddAddendumContractDto>;
 }
