@@ -10,5 +10,5 @@ using Microsoft.AspNetCore.Http;
 namespace CMS.Application.Features.MasterDocuments.Command.UploadDocument
 {
 
-    public record UploadDocumentCommand(DocumentUploadDto model) : IRequest<string>;
+    public record UploadDocumentCommand(DocumentUploadDto model,string empCode) : IRequest<string>;
 }

@@ -15,7 +15,7 @@ export class NotificationService {
 
   private apiUrl = `${environment.apiUrl}/Notification`;
   constructor(private http:HttpClient) { }
-  getAllNotifications(employeeCode:string) : Observable<Notification[]> {
+  getAllNotifications(employeeCode:string | null) : Observable<Notification[]> {
     return this.http.get<Notification[]>(`${this.apiUrl}/${employeeCode}`);
   }
   getNotificationDetails(id:number, employeeCode:string) : Observable<Notification> {
@@ -24,7 +24,7 @@ export class NotificationService {
       this.triggerSubject.next(); // Emits only after the HTTP call succeeds
     }));
   }
-  getUnreadNotificationCount(employeeCode:string) : Observable<number> {
+  getUnreadNotificationCount(employeeCode:string | null) : Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/UnreadNotifications/${employeeCode}`);
   }
 }

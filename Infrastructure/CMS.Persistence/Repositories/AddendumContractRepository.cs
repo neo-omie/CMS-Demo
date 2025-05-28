@@ -77,7 +77,7 @@ namespace CMS.Persistence.Repositories
             return showAddendum;
         }
 
-        public async Task<bool> DeleteAddendumContractAsync(int id)
+        public async Task<bool> DeleteAddendumContractAsync(int id, string empCode)
         {
             var addendum = await _dbContext.AddendumContracts.FirstOrDefaultAsync(me => me.AddendumContractId == id);
             if(addendum == null)
@@ -89,12 +89,15 @@ namespace CMS.Persistence.Repositories
 
             if(await _dbContext.SaveChangesAsync() > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _dbContext.Database.ExecuteSqlRawAsync(query, id, TableList.AddendumContract, $" Addendum  {addendum.ContractName}  has been Deleted by {empCode}", empCode, LogStatus.Deleted);
+
                 return true;
             }
             else { return false; }
         }
 
-        public async Task<AddAddendumContractDto> AddAddendumContractAsync(int id, AddAddendumContractDto addendumContract)
+        public async Task<AddAddendumContractDto> AddAddendumContractAsync(int id, AddAddendumContractDto addendumContract, string empCode)
         {
             var contractIdCheck = await _dbContext.ContractsEntity.FirstOrDefaultAsync(ce => ce.ContractId == id && ce.Approver3Status == ContractStatus.Active);
 
@@ -151,6 +154,9 @@ namespace CMS.Persistence.Repositories
                 await SendMailAdd(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, contractIdCheck.ContractId, contractIdCheck.ContractName
                 );
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _dbContext.Database.ExecuteSqlRawAsync(query, newAddendumContract.AddendumContractId, TableList.AddendumContract, $" Addendum  {foundContract.ContractName}  has been Added by {empCode}", empCode, LogStatus.Created);
+
                 return addendumContract;
             }
             throw new Exception("Failed to add Addendum Contract");
@@ -222,6 +228,7 @@ namespace CMS.Persistence.Repositories
         public async Task<AddendumContract> ApproveRejectAddendum(int contractId, ContractStatus addendumStatus, int addendumId, string empCode)
         {
             var contract = await _dbContext.ContractsEntity.Where(c => c.ContractId == contractId).FirstOrDefaultAsync();
+            var employee = await _dbContext.MasterEmployees.Where(c => c.Email == empCode).FirstOrDefaultAsync();
             if (contract == null)
             {
                 throw new NotFoundException("Contract not found");
@@ -358,11 +365,18 @@ namespace CMS.Persistence.Repositories
                 contract.Approver1Status = addendumStatus;
                 contract.Approver2Status = addendumStatus;
                 contract.Approver3Status = addendumStatus;
+
+                string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _dbContext.Database.ExecuteSqlRawAsync(rejectedQuery, addendumId, TableList.AddendumContract, $"Addendum  {foundContract.ContractName} has been Rejected by {empCode}", empCode, LogStatus.Rejected);
                 if (await _dbContext.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception($"For some reaons , contract status has not been changed to {addendumStatus}");
+                    throw new Exception($"For some reasons , contract status has not been changed to {addendumStatus}");
                 }
+
             }
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _dbContext.Database.ExecuteSqlRawAsync(query, addendumId, TableList.AddendumContract, $"Addendum  {foundContract.ContractName} has been Approved by {employee.EmployeeCode}", employee.EmployeeCode, LogStatus.Approved);
+
             return addedum;
         }
         //private string GenerateEmailBodyAddendum(string empCode, string contractName, int contractID, string approveOrReject, string approverCode, int approverLevel)

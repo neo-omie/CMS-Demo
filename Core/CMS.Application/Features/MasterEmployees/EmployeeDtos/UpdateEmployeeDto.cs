@@ -12,5 +12,6 @@ namespace CMS.Application.Features.MasterEmployees.EmployeeDtos
         public long EmployeeMobile { get; set; }
         public string Email { get; set; }
         public string EmployeeExtension { get; set; }
+        //public string LoggedBy { get; set; }
     }
 }

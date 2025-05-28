@@ -17,7 +17,7 @@ namespace CMS.Application.Features.MasterApostilles.Commands.UpdateApostille
         public Task<CMS.Domain.Entities.MasterApostille> Handle(UpdateApostilleCommand request, CancellationToken cancellationToken)
         {
             var apostille= _mapper.Map<CMS.Domain.Entities.MasterApostille>(request.apostilleDTO);
-            return _masterApostilleRepository.UpdateMasterApostilleAsync(request.id, apostille);
+            return _masterApostilleRepository.UpdateMasterApostilleAsync(request.id, apostille,request.empCode);
         }
     }
 }

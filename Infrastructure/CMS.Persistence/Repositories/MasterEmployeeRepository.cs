@@ -3,6 +3,7 @@ using System.Text;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
 using CMS.Application.Features.MasterEmployees.EmployeeDtos;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using MediatR;
@@ -77,7 +78,7 @@ namespace CMS.Persistence.Repositories
             return (employee);
         }
 
-        public async Task<MasterEmployee> AddEmployeeAsync(MasterEmployee employee)
+        public async Task<MasterEmployee> AddEmployeeAsync(MasterEmployee employee,string empCode)
         {
             //var hasher = new PasswordHasher<MasterEmployee>();
             //var hashedPswd = hasher.HashPassword(null, employee.Password);
@@ -99,6 +100,7 @@ namespace CMS.Persistence.Repositories
             var hashedPswd = hasher.HashPassword(null, employee.Password);
             employee.Password = hashedPswd;
             employee.LastPasswordChanged = DateTime.Now;
+
 
             //var propertiesName = employee.GetType().GetProperties().Select(p => p.Name).ToArray();
             //var sb = new StringBuilder("EXEC sp_AddEmployee ");
@@ -145,8 +147,14 @@ namespace CMS.Persistence.Repositories
             };
 
             var result = await _context.Database.ExecuteSqlRawAsync("EXEC sp_AddEmployee @EmployeeName, @Password, @Role, @EmployeeCode, @Unit, @DepartmentId, @EmployeeMobile, @Email, @EmployeeExtension, @LastPasswordChanged, @IsDeleted, @ValueId OUTPUT", parameters);
+
+
             if (result > 0)
             {
+                var getID = await _context.MasterEmployees.FirstOrDefaultAsync(e => e.EmployeeName ==  employee.EmployeeName && e.Email == employee.Email);
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, getID.ValueId, TableList.MasterEmployee, "New Employee "+ getID.EmployeeName +" Added by " + empCode , empCode, LogStatus.Created);
+
                 employee.ValueId = (int)parameters[11].Value;
                 return employee;
             }
@@ -154,7 +162,7 @@ namespace CMS.Persistence.Repositories
             throw new Exception("Failed to add employee");
         }
 
-        public async Task<bool> DeleteEmployeeAsync(int id)
+        public async Task<bool> DeleteEmployeeAsync(int id,string empCode)
         {
             //var employee = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
             //if (employee == null)
@@ -171,12 +179,17 @@ namespace CMS.Persistence.Repositories
             //{
             //    throw new Exception("Employee not deleted. Failed :(");
             //}
+            var employee = await _context.MasterEmployees.FindAsync(id); 
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterEmployee, $" Employee {employee.EmployeeName}  has been Deleted by {empCode}", empCode, LogStatus.Deleted);
+
 
             var affectedRows = await _context.Database.ExecuteSqlRawAsync("EXEC sp_DeleteEmployee {0}", id);
+
             return affectedRows > 0;
         }
 
-        public async Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee)
+        public async Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee,string empCode)
         {
             //var checkEmp = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
             //if (checkEmp == null)
@@ -201,16 +214,21 @@ namespace CMS.Persistence.Repositories
             //{
             //    throw new Exception("Employee not updated. Failed :(");
             //}
+
             var hasher = new PasswordHasher<MasterEmployee>();
             var hashedPswd = hasher.HashPassword(null, employee.Password);
             employee.Password = hashedPswd;
             employee.LastPasswordChanged = DateTime.Now;
+
             var affectedRows = await _context.Database.ExecuteSqlRawAsync("EXEC sp_UpdateEmployee @Id={0}, @EmployeeName={1}, @Password={2}, @Role={3}, @EmployeeCode={4}, @Unit={5}, @DepartmentId={6}, @EmployeeMobile={7}, @Email={8}, @EmployeeExtension={9}",
                 id, employee.EmployeeName, employee.Password, employee.Role, employee.EmployeeCode, employee.Unit, employee.DepartmentId, employee.EmployeeMobile, employee.Email, employee.EmployeeExtension);
 
 
             if (affectedRows > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterEmployee, " Employee "+employee.EmployeeName +" Details updated by " + empCode, empCode, LogStatus.Updated);
+
                 return employee;
             }
             throw new Exception("Failed to update employee");

@@ -18,7 +18,7 @@ namespace CMS.Application.Features.MasterApostilles.Commands.DeleteApostille
         }
         public async Task<bool> Handle(DeleteApostilleCommand request, CancellationToken cancellationToken)
         {
-            return await _masterApostilleRepository.DeleteMasterApostilleAsync(request.Id);
+            return await _masterApostilleRepository.DeleteMasterApostilleAsync(request.Id,request.empCode);
         }
     }
 }

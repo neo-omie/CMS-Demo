@@ -13,10 +13,10 @@ namespace CMS.Application.Contracts.Persistence
 
         Task<(IEnumerable<MasterDocument> docs, int totalCount)> GetAllDocuments(int pageNumber, int pageSize);
         Task<MasterDocument> GetDocumentById(int id);
-        Task<string> UploadDocument(DocumentUploadDto model);
+        Task<string> UploadDocument(DocumentUploadDto model,string empCode);
 
-        Task<object> UpdateDocument(int id, DocumentFormDTO model);
-        Task<bool> DeleteDocument(int id);
+        Task<object> UpdateDocument(int id, DocumentFormDTO model,string empCode);
+        Task<bool> DeleteDocument(int id,string empCode);
 
         Task<bool> CheckFileExists(DocumentFormDTO model);
     }

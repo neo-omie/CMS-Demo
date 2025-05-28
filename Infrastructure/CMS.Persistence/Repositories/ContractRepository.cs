@@ -27,13 +27,15 @@ namespace CMS.Persistence.Repositories
             _context = context;
             _notificationRepository = notificationRepository;
         }
-        //public async Task<ContractsCount> GetContractsCountAsync()
-        //{
-        //    string sql = "EXEC SP_ContractsCounts";
-        //    var counter = _context.ContractsCounts.FromSqlRaw(sql).AsNoTracking().ToList();
-        //    var allCounters = counter.FirstOrDefault();
-        //    return allCounters;
-        //}
+        public async Task<ContractsCount> GetContractsCountAsync()
+        {
+            string sql = "EXEC SP_ContractsCounts";
+            var counter = _context.ContractsCounter.FromSqlRaw(sql).AsNoTracking().ToList();
+            var allCounters = counter.FirstOrDefault();
+            if (allCounters == null)
+                throw new NotFoundException("Contracts count not found for some reason");
+            return allCounters;
+        }
         public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize)
         {
             int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
@@ -62,6 +64,13 @@ namespace CMS.Persistence.Repositories
             var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
             return allContracts;
         }
+        public async Task<IEnumerable<GetAllContractsDto>> GetExpiredContractsAsync(int pageNumber, int pageSize)
+        {
+            int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
+            string sql = "EXEC SP_GetExpiredContractsEntity @PageNumber = {0}, @PageSize = {1}";
+            var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            return allContracts;
+        }
 
         public async Task<GetContractByIdDto> GetContractByIdAsync(int id)
         {
@@ -87,7 +96,7 @@ namespace CMS.Persistence.Repositories
             return foundContract;
 
         }
-        public async Task<Contract> AddContractAsync(Contract cp)
+        public async Task<Contract> AddContractAsync(Contract cp,string empName)
         {
             var addedContract = await _context.ContractsEntity.AddAsync(cp);
             if(await _context.SaveChangesAsync() <= 0)
@@ -128,13 +137,18 @@ namespace CMS.Persistence.Repositories
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ContractId, cp.ContractName,subject, emailBody
                 );
+
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, " New Contract created by " + empCode, empName, LogStatus.Created);
+
             }
             return cp;
         }
         public async Task<Contract> ApproveRejectContract(int id, string empCode, ContractStatus status)
         {
             var contract = await _context.ContractsEntity.Where(c => c.ContractId == id).FirstOrDefaultAsync();
-            if(contract == null)
+            var emp = await _context.MasterEmployees.Where(e => e.Email == empCode).FirstOrDefaultAsync();
+            if (contract == null)
             {
                 throw new NotFoundException("Contract not found");
             }
@@ -263,11 +277,21 @@ namespace CMS.Persistence.Repositories
                 contract.Approver1Status = status;
                 contract.Approver2Status = status;
                 contract.Approver3Status = status;
+
+                string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ContractId, TableList.Contract, "Contract Rejected by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Rejected);
+
                 if (await _context.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception($"For some reaons , contract status has not been changed to {status}");
+                    throw new Exception($"For some reasons , contract status has not been changed to {status}");
                 }
+                return contract;
             }
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, " Contract Approved by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Approved);
+
+
             return contract;
         }
 
@@ -309,7 +333,7 @@ namespace CMS.Persistence.Repositories
             };
             await _emailService.SendEmail(mailRequest);
         }
-        public async Task<bool> DeleteContractAsync(int id)
+        public async Task<bool> DeleteContractAsync(int id, string empCode)
         {
             var foundContract = await _context.ContractsEntity.FirstOrDefaultAsync(ce => ce.ContractId == id);
             if (foundContract == null)
@@ -318,8 +342,16 @@ namespace CMS.Persistence.Repositories
             }
             foundContract.IsDeleted = true;
             _context.ContractsEntity.Update(foundContract);
-            if(await _context.SaveChangesAsync() > 0)
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, "Contract "+foundContract.ContractName+" Deleted by " + empCode, empCode, LogStatus.Deleted);
+
+
                 return true;
+            }
             return false;
         }
 

@@ -166,7 +166,9 @@ namespace CMS.Persistence.Repositories
         {
             var contract = await _context.ContractsEntity.Where(c => c.ContractId == id).FirstOrDefaultAsync();
             var forDoc = await _context.NoticeWithdrawals.FirstOrDefaultAsync(c => c.ContractId == id);
-            
+            var emp = await _context.MasterEmployees.Where(e => e.Email == empCode).FirstOrDefaultAsync();
+
+
             if (contract ==null)
             {
                 throw new NotFoundException("Contract not found");
@@ -286,11 +288,24 @@ namespace CMS.Persistence.Repositories
                 contract.Approver1Status = status;
                 contract.Approver2Status = status;
                 contract.Approver3Status = status;
+
+                string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ContractId, TableList.Contract, "Contract " + foundContract.ContractName + ", Rejected for Withdrawal Notice by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Rejected);
+
+
+
                 if (await _context.SaveChangesAsync() <= 0)
                 {
                     throw new Exception($"For some reaons , contract status has not been changed to {status}");
                 }
+
+                return contract;
             }
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId , TableList.Contract, " Contract " + foundContract.ContractName + ", Approved for Withdrawal Notice by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Approved);
+
+
             return contract;
         }
     }

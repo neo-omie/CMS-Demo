@@ -31,4 +31,6 @@
 
 ## Completed with ✅
 - ✔ Sprint 1 (Masters Tables and Contract Transaction Pages)
-- Sprint 2 (Notification API and Approval/Rejection)
+- ✔ Sprint 2 (Notification API, Post-Termination/Withdraw Notice, Addendum/Classified Contracts and Approval/Rejection of Contracts)
+- Sprint 3 (Dashboard, Role-based Authorization, Audit Trails and Reports)
+

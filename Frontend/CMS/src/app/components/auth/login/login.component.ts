@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthResponse, Login } from '../../../models/auth/login';
 import { UserService } from '../../../services/auth/user.service';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,6 +7,9 @@ import { TYPE } from './values.constants';;
 import { RouterService } from '../../../services/router.service';
 import { Alert } from '../../../utils/alert';
 import { Title } from '@angular/platform-browser';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { JwtClaims } from '../../../models/jwt-claims';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +18,11 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   errorMsg = '';
   loginPasswordEyeOpen = false;
   loginModel: Login = new Login('', '');
-
+  decodedToken: JwtClaims = new JwtClaims('','','','');
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$')])
@@ -27,6 +30,12 @@ export class LoginComponent {
 
   constructor(private userService: UserService, private route: RouterService, private title: Title) {
     this.title.setTitle("Login - CMS");
+  }
+
+  ngOnInit(): void {
+    if(localStorage.getItem('token') != null) {
+      this.route.goToDashboard();
+    }
   }
 
   loginUser() {
@@ -42,10 +51,15 @@ export class LoginComponent {
         this.loginModel.password = password;
         this.userService.login(this.loginModel).subscribe({
           next: (response: AuthResponse) => {
+            this.decodedToken = jwtDecode(response.token); // Decoding JWT Token
+            DecodeToken.decodeJWTToken(response.token);
+            console.log(DecodeToken.ECode, DecodeToken.ERole, DecodeToken.email, DecodeToken.sub);
+            
             localStorage.setItem('token', response.token);
-            localStorage.setItem('email', response.email);
-            localStorage.setItem('name', response.name);
-            localStorage.setItem('empCode', response.userId);
+            // localStorage.setItem('email', this.decodedToken.email);
+            // localStorage.setItem('name', this.decodedToken.sub);
+            // localStorage.setItem('role', this.decodedToken.ERole);
+            // localStorage.setItem('empCode', this.decodedToken.ECode);
             Alert.toast(TYPE.SUCCESS, true, 'Signed in successfully');
             this.route.goToDashboard();
           },

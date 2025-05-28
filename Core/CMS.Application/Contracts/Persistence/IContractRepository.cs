@@ -12,16 +12,18 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface IContractRepository
     {
-        //Task<ContractsCount> GetContractsCountAsync();
+        Task<ContractsCount> GetContractsCountAsync();
         Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetTerminatedContractsAsync(int pageNumber, int pageSize);
         Task<IEnumerable<GetAllContractsDto>> GetPendingApprovalContractsAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<GetAllContractsDto>> GetExpiredContractsAsync(int pageNumber, int pageSize);
         public Task<Contract> ApproveRejectContract(int id, string empCode, ContractStatus status);
         Task<GetContractByIdDto> GetContractByIdAsync(int id);
         Task<GetContractByIdDto> GetContractByNameAsync(string name);
-        Task<Contract> AddContractAsync(Contract cp);
+        //Task<Contract> AddContractAsync(Contract cp);
+        Task<Contract> AddContractAsync(Contract cp, string empName);
         Task<bool> UpdateContractAsync(int id, Contract cp);
-        Task<bool> DeleteContractAsync(int id);
+        Task<bool> DeleteContractAsync(int id, string empCode);
     }
 }

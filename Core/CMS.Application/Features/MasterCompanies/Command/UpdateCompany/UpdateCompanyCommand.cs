@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.MasterCompanies.Command.UpdateCompany
 {
-    public record UpdateCompanyCommand(int id, MasterCompany comp):IRequest<MasterCompany>;
+    public record UpdateCompanyCommand(int id, MasterCompany comp,string empCode):IRequest<MasterCompany>;
     
 }

@@ -1,4 +1,6 @@
-CREATE  OR ALTER PROCEDURE SP_GetAllContractsTypes @PageNumber int, @PageSize int
+USE CMS_Trailblazers
+-- Get All Contract Types
+CREATE OR ALTER PROCEDURE SP_GetAllContractsTypes @PageNumber int, @PageSize int
 AS
 BEGIN
 	SELECT * FROM contracts
@@ -9,10 +11,8 @@ BEGIN
 END
 EXEC SP_GetAllContractsTypes @PageNumber = 1, @PageSize = 10;
 
-go 
-
---addContract
-CREATE PROCEDURE SP_AddContractType
+-- Add Contract
+CREATE OR ALTER PROCEDURE SP_AddContractType
     @ContractTypeName NVARCHAR(255),
 	@Status bit
 AS
@@ -28,13 +28,12 @@ BEGIN
 	 @Status,
 	 0
     );
-END;
-
+END
 Exec SP_AddContractType @ContractTypeName='CSMR',@Status=1
 
 
---deleting company by id
-CREATE  OR Alter PROCEDURE SP_DeleteContractyId @ValId int
+-- Delete Contract by id
+CREATE OR ALTER PROCEDURE SP_DeleteContractyId @ValId int
 AS 
 BEGIN
 	update contracts

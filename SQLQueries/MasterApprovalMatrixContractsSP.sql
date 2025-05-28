@@ -1,7 +1,9 @@
-CREATE procedure SP_GetAllApprovalMatrixContract @pageNumber int, @pageSize int
-as
-begin
-declare @totalRecords int
+USE CMS_Trailblazers
+-- Get All Approval Matrix Contract
+CREATE OR ALTER PROCEDURE SP_GetAllApprovalMatrixContract @pageNumber int, @pageSize int
+AS
+BEGIN
+	declare @totalRecords int
 	select 
 		@totalRecords = count(MasterApprovalMatrixContractId) 
 	from 
@@ -29,10 +31,10 @@ declare @totalRecords int
 	fetch next @pageSize rows only
 end
 
--- Get By ID
-CREATE procedure SP_GetApprovalMatrixContractById @id int
-as
-begin
+-- Get Approval Matrix Contract By ID
+CREATE OR ALTER PROCEDURE SP_GetApprovalMatrixContractById @id int
+AS
+BEGIN
 	declare @count int
 	select 
 		@count = count(MasterApprovalMatrixContractId)
@@ -75,11 +77,27 @@ begin
 	end
 end
 
--- Update
-CREATE procedure SP_UpdateApprovalMatrixContract @id int, @ApproverId1 varchar(20), @ApproverId2 varchar(20), @ApproverId3 varchar(20), @NumberOfDays int
-as
-begin
+-- Update Approval Matrix Contract
+CREATE OR ALTER PROCEDURE SP_UpdateApprovalMatrixContract 
+@id int, 
+@ApproverId1 varchar(20), 
+@ApproverId2 varchar(20), 
+@ApproverId3 varchar(20), 
+@NumberOfDays int, 
+@UpdatedBy nvarchar(20),
+@ForTable int,
+@Status int
+AS
+BEGIN
 	declare @count int
+	declare @currentApproverId1 nvarchar(50)
+	declare @currentApproverId2 nvarchar(50)
+	declare @currentApproverId3 nvarchar(50)
+	declare @currentNumberOfDays int
+	declare @description nvarchar(200)
+	declare @isChanged int
+	set @isChanged = 0
+	set @description = @UpdatedBy + ' updated'
 	select 
 		@count = count(MasterApprovalMatrixContractId)
 	from
@@ -89,15 +107,63 @@ begin
  
 	if @count = 1
 	begin
-		update 
+		select
+			@currentApproverId1 = ApproverId1,
+			@currentApproverId2 = ApproverId2,
+			@currentApproverId3 = ApproverId3,
+			@currentNumberOfDays = NumberOfDays
+		from
 			MasterApprovalMatrixContracts
-		set 
-			ApproverId1 = @ApproverId1,
-			ApproverId2 = @ApproverId2,
-			ApproverId3 = @ApproverId3,
-			NumberOfDays = @NumberOfDays
-		where
+		where 
 			MasterApprovalMatrixContractId = @id
+
+		if @currentApproverId1 <> @ApproverId1
+		begin 
+			set @description = @description + ' approver1 from ' + @currentApproverId1 + ' to ' + @ApproverId1
+			set @isChanged = 1
+		end
+		if @currentApproverId2 <> @ApproverId2
+		begin 
+			set @description = @description + ' approver2 from ' + @currentApproverId2 + ' to ' + @ApproverId2
+			set @isChanged = 1
+		end
+		if @currentApproverId3 <> @ApproverId3
+		begin 
+			set @description = @description + ' approver3 from ' + @currentApproverId3 + ' to ' + @ApproverId3
+			set @isChanged = 1
+		end
+		if @currentNumberOfDays <> @NumberOfDays
+		begin 
+			set @description = @description + ' number of days from ' + @currentNumberOfDays + ' to ' + @NumberOfDays
+			set @isChanged = 1
+		end
+		begin try
+			begin transaction
+				if @isChanged = 1
+				begin
+					update 
+						MasterApprovalMatrixContracts
+					set 
+						ApproverId1 = @ApproverId1,
+						ApproverId2 = @ApproverId2,
+						ApproverId3 = @ApproverId3,
+						NumberOfDays = @NumberOfDays,
+						UpdatedBy = @UpdatedBy,
+						UpdateOn = getdate()
+					where
+						MasterApprovalMatrixContractId = @id;
+
+					insert into AuditTrails 
+						(TableId,ForTable,ActionDescription,LogTime,LoggedBy,Status)
+					values 
+						(@id, @ForTable, @description,getdate(),@UpdatedBy,@Status);
+
+				end
+			commit transaction
+		end try
+		begin catch
+			rollback transaction
+		end catch
 	end
 	else
 	begin

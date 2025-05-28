@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import { DecodeToken } from './utils/decodeToken';
 
 @Component({
   selector: 'app-root',
@@ -22,13 +23,19 @@ export class AppComponent implements AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
-    setTimeout(() => this.calculateMinHeight());
+    if (this.checkLogin()) {
+      setTimeout(() => {
+        this.calculateMinHeight();
+      },0);
+    }
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.viewportHeight = window.innerHeight;
-    this.calculateMinHeight();
+    if (this.checkLogin()) {
+      this.calculateMinHeight();
+    }
   }
 
   calculateMinHeight() {
@@ -38,7 +45,7 @@ export class AppComponent implements AfterViewInit {
 
       this.mainContainerMinHeight = this.viewportHeight - navbarHeight - footerHeight;
 
-      this.cdr.detectChanges(); // Safe here after setTimeout or resize
+      this.cdr.detectChanges();
     } else {
       console.log('Navbar or footer not available yet');
     }
@@ -46,7 +53,8 @@ export class AppComponent implements AfterViewInit {
 
   checkLogin(): boolean {
     if (localStorage.getItem('token') != null) {
-      this.username = localStorage.getItem('name');
+      DecodeToken.decodeJWTToken(String(localStorage.getItem('token')));
+      this.username = DecodeToken.sub;
       return true;
     }
     return false;

@@ -1,5 +1,5 @@
-
---getting all companies
+USE CMS_Trailblazers
+-- Get All Companies
 CREATE OR ALTER PROCEDURE SP_GetAllCompanies @PageNumber int, @PageSize int,@searchTerm nvarchar(50)
 AS
 DECLARE @TotalRecords int
@@ -17,7 +17,7 @@ EXEC SP_GetAllCompanies @PageNumber = 1, @PageSize = 10, @searchTerm='';
 
 go
 
---deleting company by id
+-- Delete Company By ID
 CREATE OR Alter PROCEDURE SP_DeleteCompanyById @ValId int
 AS 
 BEGIN
@@ -28,7 +28,7 @@ EXEC SP_DeleteCompanyById @ValId=1
 
 
 
---getting company by id 
+-- Get Company By ID
 CREATE OR ALTER PROCEDURE SP_GetCompanyByID @ValId int
 AS 
 BEGIN 
@@ -37,7 +37,7 @@ BEGIN
 END
 EXEC SP_GetCompanyById @ValId=1
 
---Updating Company
+-- Update Company
 CREATE OR ALTER PROCEDURE SP_UpdateCompany 
 	@ValId int, @CompanyName nvarchar(255),
 	@PocName nvarchar(255), @CompanyStatus bit,
@@ -73,7 +73,7 @@ EXEC SP_UpdateCompany @ValId=1, @CompanyName=null,
 	@MSMERegistrationNo=null, @IFSCCode=null, @PanNo =null
 
 
---inserting values into company
+-- Add New Company
 CREATE PROCEDURE SP_AddCompany
 @CompanyName NVARCHAR(255),
     @PocName NVARCHAR(255),

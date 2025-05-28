@@ -7,6 +7,8 @@ import { TYPE } from '../../auth/login/values.constants';
 import { Alert } from '../../../utils/alert';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DecodeToken } from '../../../utils/decodeToken';
+import { UserService } from '../../../services/auth/user.service';
 
 @Component({
   selector: 'app-approver-matrix-contract-modal',
@@ -40,7 +42,8 @@ export class ApproverMatrixContractModalComponent {
   constructor(
     private approverMatrixContractService: ApproverMatrixContractService, 
     private renderer: Renderer2,
-    private route: Router
+    private route: Router,
+    private authService: UserService
   ) { }
 
   closeEditApproverCollapses() {
@@ -119,7 +122,7 @@ export class ApproverMatrixContractModalComponent {
   }
 
   editApproverMatrixContractSubmit(id: number) {
-    let empCode = localStorage.getItem("empCode");
+    let empCode = DecodeToken.ECode;
     if(empCode){
       let nod = this.editNumberOfDays?.nativeElement.value;
       if (nod !== "" && Number(nod) > 0) {
@@ -153,6 +156,7 @@ export class ApproverMatrixContractModalComponent {
     }
     else{
       localStorage.clear();
+      DecodeToken.clearUserCredentials();
       this.route.navigate(["/"]);
     }
   }

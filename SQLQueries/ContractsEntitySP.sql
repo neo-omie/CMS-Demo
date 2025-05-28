@@ -1,3 +1,4 @@
+USE CMS_Trailblazers
 -- Get All
 CREATE PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
 AS
@@ -144,6 +145,33 @@ BEGIN
 END
 EXEC SP_GetPendingApprovalContractsEntity @PageNumber = 1, @PageSize = 10;
 
+-- Expired Contracts
+CREATE PROCEDURE SP_GetExpiredContractsEntity @PageNumber int, @PageSize int
+AS
+DECLARE @TotalRecords int
+BEGIN
+	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+
+	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+	cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+	c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+	c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+	c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+	me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+	c.Location as Location, @TotalRecords as TotalRecords
+	FROM ContractsEntity c
+	LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+	LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+	LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+	LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+	WHERE c.IsDeleted = 0 AND c.Approver3Status = 5
+	ORDER BY c.ContractId
+	OFFSET(@PageNumber-1)*@PageSize ROWS
+	FETCH NEXT @PageSize ROWS ONLY
+END
+EXEC SP_GetExpiredContractsEntity @PageNumber = 1, @PageSize = 10;
+
+-- Get Contract By Name
 CREATE PROCEDURE SP_GetContractEntityByName @Name nvarchar(100)
 AS
 BEGIN

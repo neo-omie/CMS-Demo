@@ -7,6 +7,8 @@ using CMS.Application.Features.Contracts.Queries.GetActiveContracts;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractByContractName;
 using CMS.Application.Features.Contracts.Queries.GetContractById;
+using CMS.Application.Features.Contracts.Queries.GetContractsCount;
+using CMS.Application.Features.Contracts.Queries.GetExpiredContracts;
 using CMS.Application.Features.Contracts.Queries.GetPendingApprovalContracts;
 using CMS.Application.Features.Contracts.Queries.GetTerminatedContracts;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
@@ -62,8 +64,23 @@ namespace CMS.API.Controllers
             _logger.LogInformation("GetPendingApprovalContracts method performed");
             return Ok(pendingApprovalContracts);
         }
+        [HttpGet("GetExpiredContracts")]
+        public async Task<IActionResult> GetExpiredContracts(int pageNumber, int pageSize)
+        {
+            _logger.LogInformation("GetExpiredContracts method initiated");
+            var expiredContracts = await _mediator.Send(new GetExpiredContractsQuery(pageNumber, pageSize));
+            _logger.LogInformation("GetExpiredContracts method performed");
+            return Ok(expiredContracts);
+        }
 
-
+        [HttpGet("GetContractsCount")]
+        public async Task<IActionResult> GetContractsCount()
+        {
+            _logger.LogInformation("GetContractsCount method initiated");
+            var contractCounts = await _mediator.Send(new GetContractsCountQuery());
+            _logger.LogInformation("GetContractsCount method performed");
+            return Ok(contractCounts);
+        }
 
         [Route("{id}")]
         [HttpGet]
@@ -83,11 +100,11 @@ namespace CMS.API.Controllers
                 _logger.LogInformation("GetContractById method performed");
             return Ok(foundContract);
         }
-        [HttpPost]
-        public async Task<IActionResult> AddContract(ContractDTO cont)
+        [HttpPost("{empCode}")]
+        public async Task<IActionResult> AddContract(ContractDTO cont, [FromRoute]string empCode)
         {
             _logger.LogInformation("AddContract method initiated");
-            var addedContract = await _mediator.Send(new CreateNewContractCommand(cont));
+            var addedContract = await _mediator.Send(new CreateNewContractCommand(cont,empCode));
             _logger.LogInformation("AddContract method performed");
             if(addedContract != null)
                 return Ok(true);
@@ -102,12 +119,12 @@ namespace CMS.API.Controllers
             _logger.LogInformation("UpdateContract method performed");
             return Ok(editedContract); // bool
         }
-        [Route("{id}")]
+        [Route("{id}/{empCode}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteContract([FromRoute] int id)
+        public async Task<IActionResult> DeleteContract([FromRoute] int id, [FromRoute]string empCode)
         {
             _logger.LogInformation("DeleteContract method initiated");
-            var deletedContract = await _mediator.Send(new RemoveContractCommand(id));
+            var deletedContract = await _mediator.Send(new RemoveContractCommand(id,empCode));
             _logger.LogInformation("DeleteContract method performed");
             return Ok(deletedContract); // bool
         }

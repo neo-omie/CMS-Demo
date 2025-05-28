@@ -14,6 +14,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-master-employee',
@@ -129,12 +130,13 @@ getPageNumbers():number[]{
 }
 
 deleteEmployee(employee:MasterEmployee){
+        const loggedInEmpCode=DecodeToken.ECode;
   Alert.confirmToast("Are you sure you want to delete this Employee?",
     "You won't be able to revert this!", TYPE.WARNING,
     "Yes, delete it!",
     "Deleted successfully!",
     "Company has been deleted.", TYPE.SUCCESS,() => {
-     this.employeeService.deleteEmployee(employee.valueId).subscribe({
+     this.employeeService.deleteEmployee(employee.valueId,loggedInEmpCode).subscribe({
        next:(response:boolean)=>{
          if(response){
            Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
@@ -211,6 +213,8 @@ onSubmit(){
 
   const formValues=this.addEmployeeForm.value;
   if(this.mode==='add'){
+          const loggedInEmpCode=DecodeToken.ECode;
+
     const employeeName = this.addEmployeeForm.value.employeeName;
     const password = this.addEmployeeForm.value.password;
     const role = this.addEmployeeForm.value.role;
@@ -234,7 +238,7 @@ onSubmit(){
       addFormValues.email =this.addEmployeeForm.value.email;
       addFormValues.employeeExtension =this.addEmployeeForm.value.employeeExtension;
       console.log(addFormValues);
-      this.employeeService.addEmployee(addFormValues).subscribe({
+      this.employeeService.addEmployee(addFormValues,loggedInEmpCode).subscribe({
         next:(response:AddEmployeeDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Added successfully');
             this.router.navigate(['masters/employeeMasters']);
@@ -273,13 +277,23 @@ onSubmit(){
 
       addFormValues.email =this.addEmployeeForm.value.email;
       addFormValues.employeeExtension =this.addEmployeeForm.value.employeeExtension;
+      //addFormValues.loggedBy =this.addEmployeeForm.value.loggedBy;
+
+      const loggedInEmpCode=DecodeToken.ECode;
+      if(!loggedInEmpCode){
+        console.log("LoggedInUser EmpCode is not found in localstorage");
+        Alert.toast(TYPE.ERROR, true, 'Unable to retrieve logged-in user information.');
+        return;
+      }
+      addFormValues.loggedBy=loggedInEmpCode;
       console.log(addFormValues);
+
       if (!this.empId) {
         console.error('valueId is undefined. Cannot update employee.');
         Alert.toast(TYPE.ERROR, true, 'Invalid employee ID.');
         return;
       }
-      this.employeeService.updateEmployee(this.empId, addFormValues).subscribe({
+      this.employeeService.updateEmployee(this.empId, addFormValues,loggedInEmpCode).subscribe({
         next:(response:EditEmployeeDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Updated successfully');
             this.router.navigate(['masters/employeeMasters']);

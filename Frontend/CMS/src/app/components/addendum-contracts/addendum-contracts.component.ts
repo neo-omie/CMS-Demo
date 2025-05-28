@@ -13,6 +13,8 @@ import { PaginationComponent } from '../UtilComponents/pagination/pagination.com
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
+import { PDFExport } from '../../utils/pdfExport';
 
 @Component({
   selector: 'app-addendum-contracts',
@@ -117,7 +119,7 @@ export class AddendumContractsComponent {
   async approveRejectContract(contractId?:number, id?: number, status?: number) {
       this.loading = true;
       console.log('came here')
-      let email = localStorage.getItem('email');
+      let email = DecodeToken.email;
       if (email) {
         try {
           const response = await firstValueFrom(this.addAddendumContractsService.approveRejectContract(contractId, id, email, status))
@@ -145,12 +147,12 @@ export class AddendumContractsComponent {
       this.addAddendumContractsService.GetAddenduByAddendumId(addedumId).subscribe({
         next:(response)=>{
           this.addAddendumContract=response;
-          if ((this.addAddendumContract.approver1Email == localStorage.getItem('email') &&
+          if ((this.addAddendumContract.approver1Email == DecodeToken.email &&
           this.addAddendumContract.approver1Status == 1) ||
-          (this.addAddendumContract.approver2Email == localStorage.getItem('email') &&
+          (this.addAddendumContract.approver2Email == DecodeToken.email &&
             this.addAddendumContract.approver1Status == 2 &&
             this.addAddendumContract.approver2Status == 1) ||
-          (this.addAddendumContract.approver3Email == localStorage.getItem('email') &&
+          (this.addAddendumContract.approver3Email == DecodeToken.email &&
             this.addAddendumContract.approver1Status == 2 &&
             this.addAddendumContract.approver2Status == 2 &&
             this.addAddendumContract.approver3Status == 1)
@@ -162,18 +164,7 @@ export class AddendumContractsComponent {
         }
       })
     }
-
-  // GetContract(id: number, isEdit: boolean) {
-  //   this.isEdit = isEdit;
-  //   this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
-  //     next: (response: ApprovalMatrixContract) => {
-  //       this.approvalMatrixContract = response;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error :(', error);
-  //       this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-  //       Alert.toast(TYPE.ERROR, true, this.errorMsg);
-  //     }
-  //   });
-  // }
+    printToPDF(tableID: string, fileName: string) {
+    PDFExport.printToPDF(tableID, fileName);
+  }
 }

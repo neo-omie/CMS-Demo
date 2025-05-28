@@ -32,14 +32,16 @@ namespace CMS.API.Controllers
         }
 
 
-        [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateMatrixMou(int id, [FromBody] UpdateEscalationMatrixMouDto updateDto)
+        [HttpPost("empCode/${empCode}/{id}")]
+        public async Task<IActionResult> UpdateMatrixMou(int id, [FromBody] UpdateEscalationMatrixMouDto updateDto, [FromRoute] string empCode)
         {
-            if (updateDto.EscalationId1 == updateDto.EscalationId2 || updateDto.EscalationId1 == updateDto.EscalationId3 || updateDto.EscalationId2 == updateDto.EscalationId3)
+            if (updateDto.EscalationId1 == updateDto.EscalationId2 && updateDto.EscalationId1 != "NEO1" || 
+                updateDto.EscalationId1 == updateDto.EscalationId3 && updateDto.EscalationId1 != "NEO1" || 
+                updateDto.EscalationId2 == updateDto.EscalationId3 && updateDto.EscalationId2 != "NEO1")
             {
                 throw new Exception("Escalators cannot be same");
             }
-            await _mediator.Send(new UpdateEscalationMatrixMouCommand(id, updateDto));
+            await _mediator.Send(new UpdateEscalationMatrixMouCommand(id, updateDto, empCode));
             return Ok(new { Message = "Updated successfully" });
         }
     }

@@ -22,7 +22,7 @@ namespace CMS.Application.Features.Contracts.Commands.CreateNewContract
         public async Task<Contract> Handle(CreateNewContractCommand request, CancellationToken cancellationToken)
         {
             var mappedContract = _mapper.Map<Contract>(request.cont);
-            return await _contractRepository.AddContractAsync(mappedContract);
+            return await _contractRepository.AddContractAsync(mappedContract,request.empName);
         }
     }
 }

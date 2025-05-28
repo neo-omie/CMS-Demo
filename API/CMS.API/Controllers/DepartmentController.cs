@@ -14,6 +14,7 @@ using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalati
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ namespace CMS.API.Controllers
         {
             _mediator = mediator;
         }
-
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllDepartments(int pageNumber, int pageSize)
         {

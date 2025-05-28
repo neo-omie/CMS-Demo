@@ -7,5 +7,5 @@ using MediatR;
 
 namespace CMS.Application.Features.ClassifiedContracts.Commands.RemoveClassifiedContract
 {
-    public record RemoveClassifiedContractCommand(int id) : IRequest<bool>;
+    public record RemoveClassifiedContractCommand(int id, string empCode) : IRequest<bool>;
 }

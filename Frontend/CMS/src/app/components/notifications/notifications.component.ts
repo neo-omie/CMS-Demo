@@ -9,6 +9,7 @@ import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-notifications',
@@ -36,7 +37,7 @@ export class NotificationsComponent implements OnInit {
   }
   constructor(private notificationService: NotificationService, private renderer: Renderer2) { }
   GetAllNotifications() {
-    let empCode:string = String(localStorage.getItem('empCode'));
+    let empCode:string | null = DecodeToken.ECode;
     this.notificationService.getAllNotifications(empCode).subscribe({
       next: (response: Notification[]) => {
         this.loading = false;

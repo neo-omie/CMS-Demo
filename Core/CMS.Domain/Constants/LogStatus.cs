@@ -8,6 +8,6 @@ namespace CMS.Domain.Constants
 {
     public enum LogStatus
     {
-        Created = 1, Updated, Deleted, Approved, Rejected
+        Created = 1, Updated, Deleted, Approved, Rejected ,Terminated
     }
 }
