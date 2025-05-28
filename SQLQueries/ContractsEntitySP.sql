@@ -1,29 +1,101 @@
 USE CMS_Trailblazers
 -- Get All
-CREATE PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int
+CREATE OR ALTER PROCEDURE SP_GetAllContractsEntity @PageNumber int, @PageSize int,
+@SearchTerm nvarchar(200), @FromDate date, @ToDate date, @ContractType int,
+@RenewalDueIn int, @ContractStatus int, @Department int, @Location nvarchar(100),
+@HasAddendum bit
 AS
 DECLARE @TotalRecords int
 BEGIN
-	SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
-
-	SELECT c.ContractId as ContractID, c.ContractName as ContractName,
-	cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
-	c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
-	c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
-	c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
-	me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
-	c.Location as Location, @TotalRecords as TotalRecords
-	FROM ContractsEntity c
-	LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
-	LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
-	LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
-	LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
-	WHERE c.IsDeleted = 0
-	ORDER BY c.ContractId
-	OFFSET(@PageNumber-1)*@PageSize ROWS
-	FETCH NEXT @PageSize ROWS ONLY
+	IF(@HasAddendum = 1)
+	BEGIN
+		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+		SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+		cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+		c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+		c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+		c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+		me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+		c.Location as Location, @TotalRecords as TotalRecords
+		FROM ContractsEntity c
+		LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+		LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+		LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+		LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+		WHERE c.IsDeleted = 0 AND
+		((@SearchTerm IS NOT NULL AND c.ContractName LIKE '%' + @SearchTerm + '%') OR (@SearchTerm IS NULL)) AND
+		((@FromDate IS NOT NULL AND c.ValidFrom >= @FromDate) OR (@FromDate IS NULL)) AND
+		((@ToDate IS NOT NULL AND c.ValidTill <= @ToDate) OR (@ToDate IS NULL)) AND
+		((@ContractType IS NOT NULL AND c.ContractTypeId = @ContractType) OR (@ContractType IS NULL)) AND
+		((@RenewalDueIn IS NOT NULL AND c.RenewalFrom < DATEADD(day, @RenewalDueIn, CONVERT(DATE,GETDATE()))) OR (@RenewalDueIn IS NULL)) AND
+		((@ContractStatus IS NOT NULL AND c.Approver3Status = @ContractStatus) OR (@ContractStatus IS NULL)) AND
+		((@Department IS NOT NULL AND c.DepartmentId = @Department) OR (@Department IS NULL)) AND
+		((@Location IS NOT NULL AND c.Location = @Location) OR (@Location IS NULL)) AND
+		EXISTS (SELECT 1 FROM AddendumContracts ac WHERE ac.ContractId = c.ContractId)
+		ORDER BY c.ContractId
+		OFFSET(@PageNumber-1)*@PageSize ROWS
+		FETCH NEXT @PageSize ROWS ONLY
+	END
+	ELSE IF(@HasAddendum = 0)
+	BEGIN
+		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+		SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+		cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+		c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+		c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+		c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+		me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+		c.Location as Location, @TotalRecords as TotalRecords
+		FROM ContractsEntity c
+		LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+		LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+		LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+		LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+		WHERE c.IsDeleted = 0 AND
+		((@SearchTerm IS NOT NULL AND c.ContractName LIKE '%' + @SearchTerm + '%') OR (@SearchTerm IS NULL)) AND
+		((@FromDate IS NOT NULL AND c.ValidFrom >= @FromDate) OR (@FromDate IS NULL)) AND
+		((@ToDate IS NOT NULL AND c.ValidTill <= @ToDate) OR (@ToDate IS NULL)) AND
+		((@ContractType IS NOT NULL AND c.ContractTypeId = @ContractType) OR (@ContractType IS NULL)) AND
+		((@RenewalDueIn IS NOT NULL AND c.RenewalFrom < DATEADD(day, @RenewalDueIn, CONVERT(DATE,GETDATE()))) OR (@RenewalDueIn IS NULL)) AND
+		((@ContractStatus IS NOT NULL AND c.Approver3Status = @ContractStatus) OR (@ContractStatus IS NULL)) AND
+		((@Department IS NOT NULL AND c.DepartmentId = @Department) OR (@Department IS NULL)) AND
+		((@Location IS NOT NULL AND c.Location = @Location) OR (@Location IS NULL)) AND
+		NOT EXISTS (SELECT 1 FROM AddendumContracts ac WHERE ac.ContractId = c.ContractId)
+		ORDER BY c.ContractId
+		OFFSET(@PageNumber-1)*@PageSize ROWS
+		FETCH NEXT @PageSize ROWS ONLY
+	END
+	ELSE BEGIN
+		SELECT @TotalRecords = COUNT(ContractId) FROM ContractsEntity WHERE IsDeleted=0
+		SELECT c.ContractId as ContractID, c.ContractName as ContractName,
+		cc.ContractTypeName as ContractType, dd.DepartmentName as DepartmentName,
+		c.ValidFrom as EffectiveDate, c.ValidTill as ExpiryDate,
+		c.RenewalFrom as ToBeRenewedOn, c.RenewalTill as AddendumDate,
+		c.Approver3Status as Status, me.EmployeeName as ApprovalPendingFrom,
+		me.EmployeeName as RenewalContractPerson, CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn,
+		c.Location as Location, @TotalRecords as TotalRecords
+		FROM ContractsEntity c
+		LEFT JOIN contracts cc ON cc.ValueId = c.ContractTypeId
+		LEFT JOIN MasterApprovalMatrixContracts d ON d.DepartmentId = c.DepartmentId
+		LEFT JOIN Departments dd ON dd.DepartmentId = c.DepartmentId
+		LEFT JOIN MasterEmployees me ON me.EmployeeCode = d.ApproverId3
+		WHERE c.IsDeleted = 0 AND
+		((@SearchTerm IS NOT NULL AND c.ContractName LIKE '%' + @SearchTerm + '%') OR (@SearchTerm IS NULL)) AND
+		((@FromDate IS NOT NULL AND c.ValidFrom >= @FromDate) OR (@FromDate IS NULL)) AND
+		((@ToDate IS NOT NULL AND c.ValidTill <= @ToDate) OR (@ToDate IS NULL)) AND
+		((@ContractType IS NOT NULL AND c.ContractTypeId = @ContractType) OR (@ContractType IS NULL)) AND
+		((@RenewalDueIn IS NOT NULL AND c.RenewalFrom < DATEADD(day, @RenewalDueIn, CONVERT(DATE,GETDATE()))) OR (@RenewalDueIn IS NULL)) AND
+		((@ContractStatus IS NOT NULL AND c.Approver3Status = @ContractStatus) OR (@ContractStatus IS NULL)) AND
+		((@Department IS NOT NULL AND c.DepartmentId = @Department) OR (@Department IS NULL)) AND
+		((@Location IS NOT NULL AND c.Location = @Location) OR (@Location IS NULL))
+		ORDER BY c.ContractId
+		OFFSET(@PageNumber-1)*@PageSize ROWS
+		FETCH NEXT @PageSize ROWS ONLY
+	END
 END
-EXEC SP_GetAllContractsEntity @PageNumber = 1, @PageSize = 10;
+EXEC SP_GetAllContractsEntity 1, 10, 'Contract', '2025/03/03', '2025/09/06', null, null, null, null, null, 1;
+EXEC SP_GetAllContractsEntity 1, 10, null, null, null, null, null, null, null, null, 0;
+-- EXEC SP_GetAllContractsEntity @PageNumber = 1, @PageSize = 10;
 
 SELECT CAST(CAST((CAST(c.RenewalTill as datetime) - GETDATE()) as int) as nvarchar(50)) as RenewalDueIn FROM ContractsEntity c;
 SELECT CAST(RenewalTill as datetime) FROM ContractsEntity;

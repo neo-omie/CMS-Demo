@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Contracts.Queries.GetAllContracts
 {
-    public record GetAllContractsQuery(int pageNumber, int pageSize) : IRequest<IEnumerable<GetAllContractsDto>>;
+    public record GetAllContractsQuery(FiltersContractDto filters) : IRequest<IEnumerable<GetAllContractsDto>>;
 }
