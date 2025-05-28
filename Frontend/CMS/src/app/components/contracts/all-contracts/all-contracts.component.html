@@ -1,42 +1,42 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3">Contracts List - All</h2>
 <div class="table-responsive p-md-5 p-3">
-  <button class="add-btn btn btn-outline-primary mb-2">
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right">
     <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New
       Contract</a>
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2" routerLink="/contracts/addendumContract">
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right" routerLink="/contracts/addendumContract">
     <a><i class="fa-solid fa-file-circle-plus"></i> Add
       Addendum</a>
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right" (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-left" data-bs-toggle="collapse"
+  <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse"
     data-bs-target="#filter-container">
     Filters<i class="fa-solid fa-angle-down"></i>
   </button>
   <div class="card mb-2">
     <div class="card-body collapse" id="filter-container">
-      <form class="filters">
+      <form [formGroup]="filterForm" (ngSubmit)="onFilterSubmit()" class="filters">
         <div class="mb-3">
           <p class="mb-1">From date</p>
-          <input class="form-control" type="date" />
+          <input class="form-control" type="date" formControlName="FromDate"/>
         </div>
         <div class="mb-3">
           <p class="mb-1">To date</p>
-          <input class="form-control" type="date" />
+          <input class="form-control" type="date" formControlName="ToDate"/>
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract type</p>
-          <select class="form-select" name="contract-type" id="filter-contract-type">
+          <select class="form-select" name="contract-type" id="filter-contract-type" formControlName="ContractType">
             <option value="0">--Select--</option>
             <option *ngFor="let cont of contractTypes" value="{{cont.valueId}}">{{cont.contractTypeName}}</option>
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Renewal due in</p>
-          <select class="form-select" name="contract-renewal-in" id="filter-renewal-in">
+          <select class="form-select" name="contract-renewal-in" id="filter-renewal-in" formControlName="RenewalDueIn">
             <option value="-1">--Select--</option>
             <option value="0">Today</option>
             <option value="30">30</option>
@@ -46,7 +46,7 @@
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract status</p>
-          <select class="form-select" name="contract-status" id="filter-contract-status">
+          <select class="form-select" name="contract-status" id="filter-contract-status" formControlName="ContractStatus">
             <option value="0">--Select--</option>
             @for (key of statusKeys; track $index) {
               <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
@@ -55,23 +55,23 @@
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract department</p>
-          <select class="form-select" name="department" id="filter-department">
+          <select class="form-select" name="department" id="filter-department" formControlName="Department">
             <option value="0">--Select--</option>
             <option *ngFor="let dept of departments" value="{{dept.departmentId}}">{{dept.departmentName}}</option>
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract location</p>
-          <select class="form-select" name="loaction" id="filter-loction">
-            <option value="0">--Select--</option>
+          <select class="form-select" name="loaction" id="filter-loction" formControlName="Location">
+            <option value="">--Select--</option>
             @for (key of locationSelectKeys; track $index) {
-              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{locationSelect[+key]}}</option>
+              <option value="{{getEnum(key)}}">{{key}}</option>
             }
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Has addendum</p>
-          <select class="form-select" name="contract-type" id="filter-contract-type">
+          <select class="form-select" name="contract-type" id="filter-contract-type" formControlName="HasAddendum">
             <option value="-1">--Select--</option>
             <option value="1">Yes</option>
             <option value="0">No</option>

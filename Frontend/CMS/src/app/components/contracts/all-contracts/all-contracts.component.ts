@@ -65,7 +65,6 @@ export class AllContractsComponent implements OnInit {
   withdrawCheck: boolean = true;
   mode: any;
   deptID?: number;
-  // Dropdowns
   employeeCustodians: MasterEmployee[] = [];
   departments: GetAllDepartmentsDto[] = [];
   contractTypes: ContractTypeMasterDTO[] = [];
@@ -74,8 +73,31 @@ export class AllContractsComponent implements OnInit {
   postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
   withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
   contIdForPostTerm?: number = 0;
+  filterForm: FormGroup= new FormGroup({
+  SearchTerm:new FormControl(null),
+  FromDate:new FormControl(null),
+  ToDate:new FormControl(null),
+  ContractType:new FormControl(0),
+  RenewalDueIn:new FormControl(-1),
+  ContractStatus: new FormControl(0),
+  Department: new FormControl(0),
+  Location:new FormControl(''),
+  HasAddendum: new FormControl(-1)
+})
   ngOnInit(): void {
-    this.GetAllContracts(1, 10);
+    this.GetAllContracts({
+      PageNumber : 1,
+      PageSize : 10,
+      SearchTerm : null,
+      FromDate : null,
+      ToDate : null,
+      ContractType : null,
+      RenewalDueIn : null,
+      ContractStatus : null,
+      Department : null,
+      Location : null,
+      HasAddendum : null
+    });
     this.getAllDepartments();
     this.getAllContractTypes();
     this.getAllApostilleTypes();
@@ -101,14 +123,43 @@ export class AllContractsComponent implements OnInit {
   @ViewChild('addAddendumEmpCustodianCollapse') addAddendumEmpCustodianCollapse!: ElementRef;
   @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
   @ViewChild('addFile') addFile!: ElementRef;
-
+  getEnum(key:string){
+    return this.locationSelect[key as keyof typeof this.locationSelect];
+  }
   checkNotNaN(number:string){
       if(isNaN(Number(number))) return false
       return true
     }
 
-  GetAllContracts(pageNumber: number, pageSize: number) {
-    this.contractsService.getContracts(pageNumber, pageSize).subscribe({
+  onFilterSubmit(){
+    const searchTerm = this.filterForm.get('SearchTerm')?.value;
+    const fromDate = this.filterForm.get('FromDate')?.value;
+    const toDate = this.filterForm.get('ToDate')?.value;
+    const contractType = this.filterForm.get('ContractType')?.value;
+    const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+    const contractStatus = this.filterForm.get('ContractStatus')?.value;
+    const department = this.filterForm.get('Department')?.value;
+    const location = this.filterForm.get('Location')?.value;
+    const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+    console.log(department,location,hasAddendum);
+      this.GetAllContracts({
+        PageNumber : 1,
+        PageSize : 10,
+        SearchTerm : searchTerm == '' ? null : searchTerm,
+        FromDate : fromDate == '' ? null : fromDate,
+        ToDate : toDate == '' ? null : toDate,
+        ContractType : contractType == 0 ? null : contractType,
+        RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+        ContractStatus : contractStatus == 0 ? null : contractStatus,
+        Department : department == 0 ? null : department,
+        Location : location == '' ? null : location,
+        HasAddendum : hasAddendum == -1 ? null : hasAddendum == 1 ? true : false,
+      })
+  }
+
+  GetAllContracts(filter:any) {
+    console.log(filter);
+    this.contractsService.getContracts(filter).subscribe({
       next: (res: ContractsEntity[]) => {
         this.loading = false;
         this.dataSource.data = res;
@@ -120,9 +171,9 @@ export class AllContractsComponent implements OnInit {
 
         if (this.allContracts != undefined && this.allContracts.length > 0) {
           let result = Pagination.paginator(
-            pageNumber,
+            filter.PageNumber,
             this.allContracts[0].totalRecords,
-            pageSize
+            filter.PageSize
           );
           this.maxPage = result.maxPage;
           this.pageNumbers = result.pageNumbers;
@@ -141,7 +192,28 @@ export class AllContractsComponent implements OnInit {
 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
-      this.GetAllContracts(pgNumber, 10);
+      const searchTerm = this.filterForm.get('SearchTerm')?.value;
+      const fromDate = this.filterForm.get('FromDate')?.value;
+      const toDate = this.filterForm.get('ToDate')?.value;
+      const contractType = this.filterForm.get('ContractType')?.value;
+      const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+      const contractStatus = this.filterForm.get('ContractStatus')?.value;
+      const department = this.filterForm.get('Department')?.value;
+      const location = this.filterForm.get('Location')?.value;
+      const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+      this.GetAllContracts({
+        PageNumber : pgNumber,
+        PageSize : 10,
+        SearchTerm : searchTerm == '' ? null : searchTerm,
+        FromDate : fromDate == '' ? null : fromDate,
+        ToDate : toDate == '' ? null : toDate,
+        ContractType : contractType == 0 ? null : contractType,
+        RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+        ContractStatus : contractStatus == 0 ? null : contractStatus,
+        Department : department == 0 ? null : department,
+        Location : location == '' ? null : location,
+        HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+      })
     }
   }
   GetContract(contractID: number) {
@@ -220,8 +292,28 @@ export class AllContractsComponent implements OnInit {
         if (id !== undefined) {
           this.contractsService.deleteContract(id,empName).subscribe({
             next: () => {
-              // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
-              this.GetAllContracts(1, 10);
+              const searchTerm = this.filterForm.get('SearchTerm')?.value;
+            const fromDate = this.filterForm.get('FromDate')?.value;
+            const toDate = this.filterForm.get('ToDate')?.value;
+            const contractType = this.filterForm.get('ContractType')?.value;
+            const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+            const contractStatus = this.filterForm.get('ContractStatus')?.value;
+            const department = this.filterForm.get('Department')?.value;
+            const location = this.filterForm.get('Location')?.value;
+            const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+              this.GetAllContracts({
+                PageNumber : 1,
+                PageSize : 10,
+                SearchTerm : searchTerm == '' ? null : searchTerm,
+                FromDate : fromDate == '' ? null : fromDate,
+                ToDate : toDate == '' ? null : toDate,
+                ContractType : contractType == 0 ? null : contractType,
+                RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                ContractStatus : contractStatus == 0 ? null : contractStatus,
+                Department : department == 0 ? null : department,
+                Location : department == '' ? null : location,
+                HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+              })
             },
             error: (error) => {
               console.error('Deletion Failed', error);
@@ -363,7 +455,28 @@ export class AllContractsComponent implements OnInit {
           const response = await firstValueFrom(this.contractsService.addContract(addFormValues,empName));
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
-            this.GetAllContracts(1, 10);
+            const searchTerm = this.filterForm.get('SearchTerm')?.value;
+            const fromDate = this.filterForm.get('FromDate')?.value;
+            const toDate = this.filterForm.get('ToDate')?.value;
+            const contractType = this.filterForm.get('ContractType')?.value;
+            const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+            const contractStatus = this.filterForm.get('ContractStatus')?.value;
+            const department = this.filterForm.get('Department')?.value;
+            const location = this.filterForm.get('Location')?.value;
+            const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+              this.GetAllContracts({
+                PageNumber : 1,
+                PageSize : 10,
+                SearchTerm : searchTerm == '' ? null : searchTerm,
+                FromDate : fromDate == '' ? null : fromDate,
+                ToDate : toDate == '' ? null : toDate,
+                ContractType : contractType == 0 ? null : contractType,
+                RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                ContractStatus : contractStatus == 0 ? null : contractStatus,
+                Department : department == 0 ? null : department,
+                Location : location == '' ? null : location,
+                HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+              })
             this.masterContractAddForm.reset();
             const modalElement = document.getElementById('contract-add');
             if (modalElement) {
@@ -697,7 +810,28 @@ export class AllContractsComponent implements OnInit {
     this.addAddendumContractsService.AddAddendum(addendum.contractId, addendum,empCode).subscribe({
       next: () => {
         Alert.toast(TYPE.SUCCESS, true, 'Approve Request to add addendum is sent to Approver 1');
-        this.GetAllContracts(1, 10);
+        const searchTerm = this.filterForm.get('SearchTerm')?.value;
+        const fromDate = this.filterForm.get('FromDate')?.value;
+        const toDate = this.filterForm.get('ToDate')?.value;
+        const contractType = this.filterForm.get('ContractType')?.value;
+        const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+        const contractStatus = this.filterForm.get('ContractStatus')?.value;
+        const department = this.filterForm.get('Department')?.value;
+        const location = this.filterForm.get('Location')?.value;
+        const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+          this.GetAllContracts({
+            PageNumber : 1,
+            PageSize : 10,
+            SearchTerm : searchTerm == '' ? null : searchTerm,
+            FromDate : fromDate == '' ? null : fromDate,
+            ToDate : toDate == '' ? null : toDate,
+            ContractType : contractType == 0 ? null : contractType,
+            RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+            ContractStatus : contractStatus == 0 ? null : contractStatus,
+            Department : department == 0 ? null : department,
+            Location : location == '' ? null : location,
+            HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+          })
         this.masterContractAddForm.reset();
         this.loading = false;
       },
@@ -717,7 +851,7 @@ export class AllContractsComponent implements OnInit {
 
   onSubmitCheck() {
     const enteredValue = this.checkContractId.value.contractId;
-    this.contractsService.getContracts(1, 100).subscribe({
+    this.contractsService.getContracts({}).subscribe({
       next: (res: ContractsEntity[]) => {
         this.dataSource.data = res;
         console.log(this.dataSource.data);
@@ -781,7 +915,28 @@ export class AllContractsComponent implements OnInit {
         const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
         if (response !== false) {
           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-          this.GetAllContracts(1, 10);
+         const searchTerm = this.filterForm.get('SearchTerm')?.value;
+        const fromDate = this.filterForm.get('FromDate')?.value;
+        const toDate = this.filterForm.get('ToDate')?.value;
+        const contractType = this.filterForm.get('ContractType')?.value;
+        const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+        const contractStatus = this.filterForm.get('ContractStatus')?.value;
+        const department = this.filterForm.get('Department')?.value;
+        const location = this.filterForm.get('Location')?.value;
+        const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+          this.GetAllContracts({
+            PageNumber : 1,
+            PageSize : 10,
+            SearchTerm : searchTerm == '' ? null : searchTerm,
+            FromDate : fromDate == '' ? null : fromDate,
+            ToDate : toDate == '' ? null : toDate,
+            ContractType : contractType == 0 ? null : contractType,
+            RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+            ContractStatus : contractStatus == 0 ? null : contractStatus,
+            Department : department == 0 ? null : department,
+            Location : location == 0 ? null : location,
+            HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+          })
         }
       }
       catch (error) {
@@ -917,7 +1072,28 @@ export class AllContractsComponent implements OnInit {
           const response = await firstValueFrom(this.postTermService.ApproveTerminationContract(this.postTermination))
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-            this.GetAllContracts(1, 10);
+            const searchTerm = this.filterForm.get('SearchTerm')?.value;
+            const fromDate = this.filterForm.get('FromDate')?.value;
+            const toDate = this.filterForm.get('ToDate')?.value;
+            const contractType = this.filterForm.get('ContractType')?.value;
+            const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+            const contractStatus = this.filterForm.get('ContractStatus')?.value;
+            const department = this.filterForm.get('Department')?.value;
+            const location = this.filterForm.get('Location')?.value;
+            const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+              this.GetAllContracts({
+                PageNumber : 1,
+                PageSize : 10,
+                SearchTerm : searchTerm == '' ? null : searchTerm,
+                FromDate : fromDate == '' ? null : fromDate,
+                ToDate : toDate == '' ? null : toDate,
+                ContractType : contractType == 0 ? null : contractType,
+                RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                ContractStatus : contractStatus == 0 ? null : contractStatus,
+                Department : department == 0 ? null : department,
+                Location : location == 0 ? null : location,
+                HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+              })
             // const modalElement = document.getElementById('postTerm-mail');
             // if (modalElement) {
             //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
@@ -1047,7 +1223,28 @@ export class AllContractsComponent implements OnInit {
           const response = await firstValueFrom(this.noticeWithdrawalService.ApproveWithdrawalTermination(this.withdrawNoticeSend))
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-            this.GetAllContracts(1, 10);
+            const searchTerm = this.filterForm.get('SearchTerm')?.value;
+            const fromDate = this.filterForm.get('FromDate')?.value;
+            const toDate = this.filterForm.get('ToDate')?.value;
+            const contractType = this.filterForm.get('ContractType')?.value;
+            const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+            const contractStatus = this.filterForm.get('ContractStatus')?.value;
+            const department = this.filterForm.get('Department')?.value;
+            const location = this.filterForm.get('Location')?.value;
+            const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+              this.GetAllContracts({
+                PageNumber : 1,
+                PageSize : 10,
+                SearchTerm : searchTerm == '' ? null : searchTerm,
+                FromDate : fromDate == '' ? null : fromDate,
+                ToDate : toDate == '' ? null : toDate,
+                ContractType : contractType == 0 ? null : contractType,
+                RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                ContractStatus : contractStatus == 0 ? null : contractStatus,
+                Department : department == 0 ? null : department,
+                Location : location == 0 ? null : location,
+                HasAddendum : hasAddendum == -1 ? null : hasAddendum,
+              })
             // const modalElement = document.getElementById('withdrawal-mail');
             // if (modalElement) {
             //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);

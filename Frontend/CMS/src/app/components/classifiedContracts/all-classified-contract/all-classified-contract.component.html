@@ -3,7 +3,7 @@
   All Classified Contracts<img class="classifiedImg" src="ClassifiedContract.png" alt="CMS-logo" />
 </h2>
 <div *ngIf="!loading" class="table-responsive p-md-5 p-3">
-  <button data-bs-toggle="modal" data-bs-target="#contract-add" class="add-btn btn btn-outline-primary mb-2"
+  <button data-bs-toggle="modal" data-bs-target="#contract-add" class="add-btn btn btn-outline-primary mb-2 margin-right"
     (click)="isCreate = true">
     <i class="fa-solid fa-file-circle-plus"></i> Add New Contract
   </button>
@@ -12,7 +12,7 @@
         ">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-left" data-bs-toggle="collapse"
+  <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse"
     data-bs-target="#filter-container">
     Filters<i class="fa-solid fa-angle-down"></i>
   </button>
@@ -65,7 +65,7 @@
           <select class="form-select" name="loaction" id="filter-loction">
             <option value="0">--Select--</option>
             @for (key of locationSelectKeys; track $index) {
-              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{locationSelect[+key]}}</option>
+              <option *ngIf="checkNotNaN(key)" value="{{getEnum(key)}}">{{key}}</option>
             }
           </select>
         </div>

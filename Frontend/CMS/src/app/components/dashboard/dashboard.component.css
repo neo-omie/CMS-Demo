@@ -15,6 +15,9 @@ hr {
     justify-content: space-around;
     flex-wrap: wrap;
 }
+.card-hover{
+    background-color: whitesmoke;
+}
 .card-hover:hover{
     box-shadow: 0 0 5px #5f5fee;
     scale: 1.03;

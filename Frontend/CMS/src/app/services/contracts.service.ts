@@ -17,8 +17,8 @@ export class ContractsService {
   private apiUrl = `${environment.apiUrl}/Contract`;
   constructor(private http:HttpClient) { }
 
-  getContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
-    return this.http.get<ContractsEntity[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  getContracts(filters:any) : Observable<ContractsEntity[]> {
+    return this.http.post<ContractsEntity[]>(`${this.apiUrl}/GetAllContracts`,filters);
   }
   getActiveContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
     return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetActiveContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);

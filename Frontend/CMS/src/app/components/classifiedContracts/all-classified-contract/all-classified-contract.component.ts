@@ -68,6 +68,9 @@ export class AllClassifiedContractComponent implements OnInit{
       'isSort' ?: boolean,
       'templateRef' : TemplateRef<any> | null,
     }} = {};
+    getEnum(key:string){
+        return this.locationSelect[key as keyof typeof this.locationSelect];
+  }
     checkNotNaN(number:string){
       if(isNaN(Number(number))) return false
       return true

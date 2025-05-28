@@ -85,3 +85,15 @@ div::-webkit-scrollbar {
     color: whitesmoke;
     font-weight: 600;
 }
+.margin-right{
+    margin-right: 1rem;
+}
+.filters{
+    display: flex;
+    justify-content: flex-start;
+    align-items: end;
+    flex-wrap: wrap;
+}
+.filters > div{
+    margin-right: 1rem;
+}
