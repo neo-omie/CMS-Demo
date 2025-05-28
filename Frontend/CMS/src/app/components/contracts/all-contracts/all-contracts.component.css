@@ -85,3 +85,16 @@ div::-webkit-scrollbar {
     color: whitesmoke;
     font-weight: 600;
 }
+.print-btn {
+    color: rgba(95, 95, 238);
+    background-color: whitesmoke;
+    border: 2px solid #5f5fee;
+    margin: 2px;
+    border-radius: 5px;
+}
+.print-btn:hover{
+    background-color: #5f5fee;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}

@@ -233,7 +233,19 @@
             (click)="approveRejectContract(addAddendumContract?.contractId, addAddendumContract?.addendumContractId,2)">Approve</button>
           <button class="btn btn-danger" data-bs-dismiss="modal" *ngIf="approverCheck"
             (click)="approveRejectContract(addAddendumContract?.contractId, addAddendumContract?.addendumContractId,3)">Reject</button>
+          <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button>
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+        </div>
+        <!-- Progress bar horizontal -->
+        <div id="progress" class="collapse" *ngIf="addAddendumContract?.contractId!==null">
+          <div class="d-flex justify-content-center">
+            <p style="color: #5f5fee;" class="fs-5 fw-bolder text-center">
+              Progress of {{ getProgressType(addAddendumContract?.approver3Status) }} {{ addAddendumContract?.contractName }}
+            </p>
+          </div>
+          <div class="progress-scroll-container">
+            <app-progress-bar [contractId]="addAddendumContract!= undefined && addAddendumContract.addendumContractId!= undefined?(+(addAddendumContract.addendumContractId)):0" type="addendum" [phases]="phases"></app-progress-bar>
+          </div>
         </div>
       </div>
     </div>

@@ -31,11 +31,14 @@ import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../mo
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { DecodeToken } from '../../../utils/decodeToken';
 import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { ExcelExport } from '../../../utils/excelExport';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
+  imports: [MatButtonModule, MatMenuModule, FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
@@ -70,6 +73,12 @@ export class AllContractsComponent implements OnInit {
   postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
   withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
   contIdForPostTerm?: number = 0;
+  // progressVisible: boolean = false;
+
+  // resetProgressBarState() {
+  //   this.progressVisible = false;
+  // }
+
   ngOnInit(): void {
     this.GetAllContracts(1, 10);
     this.getAllDepartments();
@@ -137,6 +146,7 @@ export class AllContractsComponent implements OnInit {
       this.GetAllContracts(pgNumber, 10);
     }
   }
+  
   GetContract(contractID: number) {
     this.contractsService.getContractByID(contractID).subscribe({
       next: (response: GetContractByIdDto) => {
@@ -1064,4 +1074,33 @@ export class AllContractsComponent implements OnInit {
   printToPDF(tableID: string, fileName: string) {
     PDFExport.printToPDF(tableID, fileName);
   }
+  exportToExcel(tableID:string, fileName: string): void {
+    ExcelExport.printToExcel(tableID,fileName);
+  }
+
+  getProgressType(status:number|undefined):string{
+    if(status===undefined || status===null){
+      return '';
+    }
+
+    switch(status){
+      case 1: return 'Approval for'; 
+      case 2: return 'Active'; // optional — maybe don't show this
+      case 3: return 'Rejection for';
+      case 4: return 'Termination of';
+      case 5: return 'Expiration of';
+      case 6: return 'Termination in progress for';
+      case 7: return 'Termination approved for';
+      case 8: return 'Notice withdrawal pending for';
+      default: return 'Progress for ';
+    }
+  }
+  phases=[
+    'Contract Created',
+    'L1 Approver Approval',
+    'L2 Approver Approval',
+    'L3 Approver Approval',
+    'Contract Active',
+  ];
 }
+

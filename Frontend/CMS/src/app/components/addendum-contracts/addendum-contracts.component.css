@@ -59,3 +59,21 @@ h2 {
     color: whitesmoke;
     border-radius: 5px;
 }
+
+.prog.step-label{
+    display: flex;
+    flex-direction: column;
+}
+
+.step-label {
+    font-size: 12px;
+    text-align: center;
+    color: #5f5fee;
+    margin-bottom: 4px;
+}
+
+.progress-scroll-container {
+  max-height: 30vh;
+  overflow-y: auto;
+  padding: 1rem;
+}

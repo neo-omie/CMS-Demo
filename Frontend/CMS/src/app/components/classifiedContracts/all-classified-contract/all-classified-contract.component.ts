@@ -32,12 +32,13 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { PostTerminationService } from '../../../services/post-termination.service';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../../utils/decodeToken';
+import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 
 
 @Component({
   selector: 'app-all-classified-contract',
   standalone: true,
-  imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
   templateUrl: './all-classified-contract.component.html',
   styleUrl: './all-classified-contract.component.css'
 })
@@ -1027,4 +1028,30 @@ export class AllClassifiedContractComponent implements OnInit{
                 printToPDF(tableID: string, fileName: string) {
                   PDFExport.printToPDF(tableID, fileName);
                 }
+
+ getProgressType(status:number|undefined):string{
+    if(status===undefined || status===null){
+      return '';
+    }
+
+    switch(status){
+      case 1: return 'Approval for'; 
+      case 2: return 'Active'; 
+      case 3: return 'Rejection for';
+      case 4: return 'Termination of';
+      case 5: return 'Expiration of';
+      case 6: return 'Termination in progress for';
+      case 7: return 'Termination approved for';
+      case 8: return 'Notice withdrawal pending for';
+      default: return 'Progress for ';
+    }
+  }
+
+  phases=[
+    'Classified Created',
+    'L1 Approver Approval',
+    'L2 Approver Approval',
+    'L3 Approver Approval',
+    'Classified Active',
+  ]
 }

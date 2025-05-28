@@ -312,8 +312,18 @@
 
           <!--<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
             *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.classifiedContractId)">+ Add Addendum</button> -->
-
+          <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button>
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+        </div>
+        <div id="progress" class="collapse" *ngIf="contractDetails?.classifiedContractId!==null">
+          <div class="d-flex justify-content-center">
+            <p style="color: #5f5fee;" class="fs-5 fw-bolder text-center">
+              Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.classifiedContractName }}
+            </p>
+          </div>
+          <div class="progress-scroll-container">
+            <app-progress-bar [contractId]="contractDetails!= undefined && contractDetails.classifiedContractId!= undefined?(+(contractDetails.classifiedContractId)):0" type="classified" [phases]="phases"></app-progress-bar>
+          </div>
         </div>
       </div>
     </div>
