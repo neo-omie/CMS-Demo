@@ -153,7 +153,7 @@ namespace CMS.Persistence.Repositories
             {
                 var getID = await _context.MasterEmployees.FirstOrDefaultAsync(e => e.EmployeeName ==  employee.EmployeeName && e.Email == employee.Email);
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, getID.ValueId, TableList.MasterEmployee, "New Employee "+ getID.EmployeeName +" Added by " + empCode , empCode, LogStatus.Created);
+                await _context.Database.ExecuteSqlRawAsync(query, getID.ValueId, TableList.MasterEmployee, $"New Employee '{getID.EmployeeName}' Added by '{empCode}'" , empCode, LogStatus.Created);
 
                 employee.ValueId = (int)parameters[11].Value;
                 return employee;
@@ -181,7 +181,7 @@ namespace CMS.Persistence.Repositories
             //}
             var employee = await _context.MasterEmployees.FindAsync(id); 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterEmployee, $" Employee {employee.EmployeeName}  has been Deleted by {empCode}", empCode, LogStatus.Deleted);
+            await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterEmployee, $"Employee '{employee.EmployeeName}' has been Deleted by '{empCode}'", empCode, LogStatus.Deleted);
 
 
             var affectedRows = await _context.Database.ExecuteSqlRawAsync("EXEC sp_DeleteEmployee {0}", id);
@@ -191,7 +191,8 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterEmployee> UpdateEmployeeAsync(int id,MasterEmployee employee,string empCode)
         {
-            //var checkEmp = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
+            var checkEmp = await _context.MasterEmployees.FirstOrDefaultAsync(me => me.ValueId == id);
+            string checkEmpName = checkEmp.EmployeeName;
             //if (checkEmp == null)
             //{
             //    throw new Exception("Employee not Found. :(");
@@ -227,7 +228,7 @@ namespace CMS.Persistence.Repositories
             if (affectedRows > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterEmployee, " Employee "+employee.EmployeeName +" Details updated by " + empCode, empCode, LogStatus.Updated);
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterEmployee, $"Employee '{checkEmpName}' details Updated by '{empCode}'", empCode, LogStatus.Updated);
 
                 return employee;
             }

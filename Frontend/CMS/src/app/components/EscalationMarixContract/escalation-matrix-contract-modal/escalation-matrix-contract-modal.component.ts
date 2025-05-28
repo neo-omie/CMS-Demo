@@ -7,6 +7,7 @@ import { EscalationMatrixContractService } from '../../../services/escalation-ma
 import { Alert } from '../../../utils/alert';
 import { TYPE } from '../../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
+import { DecodeToken } from '../../../utils/decodeToken';
 
 @Component({
   selector: 'app-escalation-matrix-contract-modal',
@@ -118,6 +119,7 @@ export class EscalationMatrixContractModalComponent {
   }
 
   editApproverMatrixContractSubmit(id: number) {
+    let empCode = DecodeToken.ECode;
     let updateMatrixContractDto = new UpdateMatrixContractDto('','','','','','',0,0,0);
     let nod1 = this.editNumberOfDays1.nativeElement.value;
     let nod2 = this.editNumberOfDays2.nativeElement.value;
@@ -134,7 +136,7 @@ export class EscalationMatrixContractModalComponent {
       updateMatrixContractDto.triggerDaysEscalation1 = nod1;
       updateMatrixContractDto.triggerDaysEscalation2 = nod2;
       updateMatrixContractDto.triggerDaysEscalation3 = nod3;
-      this.escalationService.postMatrixContractById(id, updateMatrixContractDto).subscribe({
+      this.escalationService.postMatrixContractById(id, updateMatrixContractDto,empCode).subscribe({
         next: (response: any) => {
           Alert.toast(TYPE.SUCCESS, true, response.message);
           this.getMatrixMous(1, 10);

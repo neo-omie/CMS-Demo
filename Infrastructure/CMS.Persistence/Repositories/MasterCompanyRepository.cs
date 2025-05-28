@@ -35,7 +35,7 @@ namespace CMS.Persistence.Repositories
             if (result > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, company.ValueId, TableList.MasterCompany, $"New Company {company.CompanyName} has been Added by {empCode}", empCode, LogStatus.Created);
+                await _context.Database.ExecuteSqlRawAsync(query, company.ValueId, TableList.MasterCompany, $"New Company '{company.CompanyName}' has been Added by '{empCode}'", empCode, LogStatus.Created);
 
 
                 return masterCompany;
@@ -69,7 +69,7 @@ namespace CMS.Persistence.Repositories
             if (compbyId >0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, company.ValueId, TableList.MasterCompany, $"Company {company.CompanyName } has been Deleted by  {empCode}", empCode, LogStatus.Deleted);
+                await _context.Database.ExecuteSqlRawAsync(query, company.ValueId, TableList.MasterCompany, $"Company '{company.CompanyName }' has been Deleted by  '{empCode}'", empCode, LogStatus.Deleted);
 
 
                 return true;
@@ -159,7 +159,7 @@ namespace CMS.Persistence.Repositories
             if (result > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, checkComp.ValueId, TableList.MasterCompany, $"Company {checkComp.CompanyName} has been updated by  { empCode}", empCode, LogStatus.Updated);
+                await _context.Database.ExecuteSqlRawAsync(query, checkComp.ValueId, TableList.MasterCompany, $"Company  '{checkComp.CompanyName}' details has been Updated by '{ empCode}'", empCode, LogStatus.Updated);
 
                 return masterCompany;
             }

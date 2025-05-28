@@ -146,6 +146,7 @@ export class ExpiredContractsComponent {
       });
     }
     DeleteContract(id?: number) {
+      let empCode= DecodeToken.ECode;
       Alert.confirmToast(
         'Are you sure you want to delete this contract?',
         "You won't be able to revert this!!",
@@ -156,7 +157,7 @@ export class ExpiredContractsComponent {
         TYPE.SUCCESS,
         () => {
           if (id !== undefined) {
-            this.contractsService.deleteContract(id).subscribe({
+            this.contractsService.deleteContract(id,empCode).subscribe({
               next: () => {
                 // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
                 this.GetAllContracts(1, 10);

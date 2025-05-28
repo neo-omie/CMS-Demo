@@ -1,5 +1,6 @@
 ﻿using CMS.Application.Contracts.Persistence;
 using CMS.Application.Features.ContractTypeMaster.Query;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
 using CMS.Persistence.Context;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
@@ -25,7 +27,7 @@ namespace CMS.Persistence.Repositories
             _cacheService = cacheService;
         }
         //adding contract
-        public async Task<ContractTypeMasters> AddContractAsync(ContractTypeMasters ctp)
+        public async Task<ContractTypeMasters> AddContractAsync(ContractTypeMasters ctp,string empCode)
         {
             //await _context.contracts.AddAsync(ctp);
             //if (await _context.SaveChangesAsync() > 0)
@@ -38,8 +40,13 @@ namespace CMS.Persistence.Repositories
             //}
             string sql = "EXEC SP_AddContractType  @ContractTypeName={0},@Status={1}";
             int result = await _context.Database.ExecuteSqlRawAsync(sql, ctp.ContractTypeName, ctp.Status, 0);
+
+            var contractType =await _context.contracts.OrderBy(x=>x.ValueId).LastAsync();
             if (result > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, contractType.ValueId, TableList.MasterContractType, $"New ContractType '{ctp.ContractTypeName}' has been Added by '{empCode}'", empCode, LogStatus.Created);
+
                 return ctp;
             }
             else
@@ -49,7 +56,7 @@ namespace CMS.Persistence.Repositories
         }
 
         //deleting contract
-        public async Task<bool> DeletContract(int id)
+        public async Task<bool> DeletContract(int id,string empCode)
         {
             var contr = await _context.contracts.FirstOrDefaultAsync(dl => dl.ValueId == id);
             if (contr==null)
@@ -61,6 +68,9 @@ namespace CMS.Persistence.Repositories
             var compbyId = await _context.Database.ExecuteSqlRawAsync(sql, id);
             if (compbyId > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterContractType, $"ContractType '{contr.ContractTypeName}' has been Deleted by '{empCode}' ", empCode, LogStatus.Deleted);
+
                 return true;
             }
             return false;
@@ -120,9 +130,10 @@ namespace CMS.Persistence.Repositories
             return gotCont;
         }
 
-        public async Task<ContractTypeMasters> UpdateContractAsync(int id, ContractTypeMasters ctp)
+        public async Task<ContractTypeMasters> UpdateContractAsync(int id, ContractTypeMasters ctp,string empCode)
         {
             var checkCont = await _context.contracts.FirstOrDefaultAsync(up => up.ValueId == id);
+            string contractNa = checkCont.ContractTypeName;
             if (checkCont == null)
             {
                 throw new Exception("contract not found :(");
@@ -131,7 +142,12 @@ namespace CMS.Persistence.Repositories
             checkCont.ContractTypeName = ctp.ContractTypeName;
             _context.contracts.Update(checkCont);
             if(await _context.SaveChangesAsync() > 0)
+            {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterContractType, $"Contract type name '{contractNa}' has been Updated to '{ctp.ContractTypeName}' by '{empCode}' ", empCode, LogStatus.Updated);
+
                 return checkCont;
+            }
             throw new Exception($"For some reasons, contract has not been updated");
         }
     }

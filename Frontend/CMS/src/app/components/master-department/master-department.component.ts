@@ -11,6 +11,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-master-department',
@@ -84,10 +85,11 @@ export class MasterDepartmentComponent {
     });
   }
   editDepartment(id: number) {
+    let empCode = DecodeToken.ECode;
     let deptName = this.editDepartmentName.nativeElement.value;
     if (deptName !== "") {
       console.log(deptName);
-      this.departmentService.updateDepartment(id, deptName).subscribe({
+      this.departmentService.updateDepartment(id, deptName,empCode).subscribe({
         next: (response: boolean) => {
           if (response) {
             Alert.toast(TYPE.SUCCESS, true, "Updated successfully");
@@ -108,13 +110,14 @@ export class MasterDepartmentComponent {
     this.closeEditApproverCollapses();
   }
   deleteDepartment(id: number) {
+    let empCode = DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
     Alert.confirmToast("Are you sure you want to delete this department?",
       "You won't be able to revert this!", TYPE.WARNING,
       "Yes, delete it!",
       "Deleted successfully!",
       "Department has been deleted.", TYPE.SUCCESS, () => {
-        this.departmentService.deleteDepartment(id).subscribe({
+        this.departmentService.deleteDepartment(id,empCode).subscribe({
           next: (response: boolean) => {
             if (response) {
               // Alert.toast(TYPE.SUCCESS, true, "Deleted successfully");
@@ -132,10 +135,11 @@ export class MasterDepartmentComponent {
   }
   addDept: AddDepartmentDto = new AddDepartmentDto('');
   addDepartment(departmentForm: NgForm) {
+    let empCode = DecodeToken.ECode;
     this.addDept = departmentForm.value;
     console.log(departmentForm);
 
-    this.departmentService.addDepartment(this.addDept.departmentName).subscribe({
+    this.departmentService.addDepartment(this.addDept.departmentName,empCode).subscribe({
       next: (response) => {
         Alert.bigToast('Success!', 'Department added successfully.', TYPE.SUCCESS, 'Ok');
         departmentForm.resetForm();

@@ -18,7 +18,7 @@ namespace CMS.Application.Features.MasterEscalationMatrixContracts.Command
         }
         public Task<int> Handle(UpdateEscalationMatrixContractCommand request, CancellationToken cancellationToken)
         {
-            return _repository.UpdateMatrixContract(request.id,request.updateDto);
+            return _repository.UpdateMatrixContract(request.id,request.updateDto,request.empCode);
         }
     }
 }

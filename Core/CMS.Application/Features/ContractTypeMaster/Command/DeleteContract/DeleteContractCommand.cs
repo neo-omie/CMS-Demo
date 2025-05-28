@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Application.Features.ContractTypeMaster.Command.DeleteContract
 {
-   public record DeleteContractCommand(int id):IRequest<bool>;
+   public record DeleteContractCommand(int id, string empCode) :IRequest<bool>;
     
     
 }

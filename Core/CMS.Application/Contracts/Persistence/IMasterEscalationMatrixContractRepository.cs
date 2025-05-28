@@ -11,7 +11,7 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface IMasterEscalationMatrixContractRepository
     {
-        Task<int> UpdateMatrixContract(int valueId,UpdateEscalationMatrixContractDto updateDto);
+        Task<int> UpdateMatrixContract(int valueId,UpdateEscalationMatrixContractDto updateDto,string empCode);
 
         Task<GetEscalationMatrixContractDto> GetEscalationMatrixContract(int valueId);
 
