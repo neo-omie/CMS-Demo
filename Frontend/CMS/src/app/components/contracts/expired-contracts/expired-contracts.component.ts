@@ -156,7 +156,7 @@ export class ExpiredContractsComponent {
         TYPE.SUCCESS,
         () => {
           if (id !== undefined) {
-            this.contractsService.deleteContract(id).subscribe({
+            this.contractsService.deleteContract(id,null).subscribe({
               next: () => {
                 // Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
                 this.GetAllContracts(1, 10);
