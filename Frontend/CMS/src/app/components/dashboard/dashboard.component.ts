@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   contractchartOptions: Highcharts.Options = {
     credits: { enabled: false },
     chart: { type: 'pie' },
-    title: { text: 'Contracts' },
+    title: { text: '' },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
   classifiedcontractchartOptions: Highcharts.Options = {
     credits: { enabled: false },
     chart: { type: 'pie' },
-    title: { text: 'Classified contracts' },
+    title: { text: '' },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
       }
     },
     series: [{
-      name: 'Contracts',
+      name: 'Classified contracts',
       type: 'pie',
       data: []
     }]

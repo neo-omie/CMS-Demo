@@ -30,16 +30,20 @@ import { PostTermination } from '../../../models/post-termination';
 import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { DecodeToken } from '../../../utils/decodeToken';
-import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
+import { ContractStatus, Location } from '../../../utils/constants';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
 export class AllContractsComponent implements OnInit {
+  contractStatus = ContractStatus
+  locationSelect = Location
+  statusKeys = Object.keys(this.contractStatus);
+  locationSelectKeys = Object.keys(this.locationSelect);
   displayedColumns: string[] = ['contractID', 'contractName', 'contractType', 'departmentName', 'effectiveDate',
     'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
     'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
@@ -98,7 +102,10 @@ export class AllContractsComponent implements OnInit {
   @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
   @ViewChild('addFile') addFile!: ElementRef;
 
-
+  checkNotNaN(number:string){
+      if(isNaN(Number(number))) return false
+      return true
+    }
 
   GetAllContracts(pageNumber: number, pageSize: number) {
     this.contractsService.getContracts(pageNumber, pageSize).subscribe({
