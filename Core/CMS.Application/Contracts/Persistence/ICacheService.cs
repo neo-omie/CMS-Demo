@@ -8,8 +8,8 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface ICacheService
     {
-        bool TryGet<T>(string cacheKey, out T value);
-        T Set<T>(string cacheKey, T value);
-        void Remove(string cacheKey);
+        Task<T?> GetAsync<T>(string key);
+
+        Task SetAsync<T>(string key, T value, TimeSpan? expiration = null);
     }
 }

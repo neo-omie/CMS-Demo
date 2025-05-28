@@ -42,8 +42,12 @@ namespace CMS.API.Controllers
             (
                searchTerm, pageNumber, pageSize
             );
+            if (query==null)
+            {
+                var name = "checking";
+            }
             var runQuery = await _mediator.Send(query);
-            _logger.LogInformation("GetAllCompany method Performed");
+            _logger.LogInformation("GetAllCompany method Performed",runQuery);
             return Ok(runQuery);
         }
 
