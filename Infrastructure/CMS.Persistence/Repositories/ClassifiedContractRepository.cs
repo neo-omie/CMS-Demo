@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Reflection.Emit;
 using System.Data;
+using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 
 namespace CMS.Persistence.Repositories
 {
@@ -46,11 +47,16 @@ namespace CMS.Persistence.Repositories
             return allCounters;
         }
 
-        public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(FiltersContractDto filters)
         {
             int totalRecords = await _context.ClassifiedContracts.Where(x => x.IsDeleted == false).CountAsync();
-            string sql = "EXEC SP_GetAllClassifiedContracts @PageNumber = {0}, @PageSize = {1}";
-            var allContracts = await _context.GetClassifiedContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            string sql = "EXEC SP_GetAllClassifiedContracts @PageNumber = {0}, @PageSize = {1}, @SearchTerm = {2}, " +
+                         "@FromDate = {3}, @ToDate = {4}, @ContractType = {5}, @RenewalDueIn = {6}, " +
+                         "@ContractStatus = {7}, @Department = {8}, @Location = {9}";
+            var allContracts = await _context.GetClassifiedContractsDtos.FromSqlRaw(sql, filters.PageNumber, filters.PageSize,
+                filters.SearchTerm, filters.FromDate.ToString(), filters.ToDate.ToString(), filters.ContractType, filters.RenewalDueIn,
+                filters.ContractStatus, filters.Department, filters.Location).ToListAsync();
+
             return allContracts;
         }
 

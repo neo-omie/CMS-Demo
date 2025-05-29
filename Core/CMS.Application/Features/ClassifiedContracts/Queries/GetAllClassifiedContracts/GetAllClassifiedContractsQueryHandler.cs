@@ -18,7 +18,7 @@ namespace CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedC
         }
         public async Task<IEnumerable<GetAllClassifiedContractsDto>> Handle(GetAllClassifiedContractsQuery request, CancellationToken cancellationToken)
         {
-            return await _contractRepository.GetAllClassifiedContractsAsync(request.pageNumber, request.pageSize);
+            return await _contractRepository.GetAllClassifiedContractsAsync(request.filterContractDto);
         }
     }
 }

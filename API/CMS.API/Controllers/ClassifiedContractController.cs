@@ -36,11 +36,11 @@ namespace CMS.API.Controllers
             _mediator = mediator;
             _logger = logger;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllClassifiedContracts(int pageNumber, int pageSize)
+        [HttpPost]
+        public async Task<IActionResult> GetAllClassifiedContracts(FiltersContractDto filters)
         {
             _logger.LogInformation("GetAllClassifiedContracts method initiated");
-            var allContracts = await _mediator.Send(new GetAllClassifiedContractsQuery(pageNumber, pageSize));
+            var allContracts = await _mediator.Send(new GetAllClassifiedContractsQuery(filters));
             _logger.LogInformation("GetAllClassifiedClassifiedContracts method performed");
             return Ok(allContracts);
         }
