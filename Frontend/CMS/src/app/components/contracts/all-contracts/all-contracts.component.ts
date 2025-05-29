@@ -32,7 +32,7 @@ import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.ser
 import { DecodeToken } from '../../../utils/decodeToken';
 import { ContractStatus, Location } from '../../../utils/constants';
 import { ExcelExport } from '../../../utils/excelExport';
-import { ProgressBarComponent } from "../../UtilComponents/progress-bar/progress-bar.component";
+import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-all-contracts',

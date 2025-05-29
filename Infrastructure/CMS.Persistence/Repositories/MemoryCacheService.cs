@@ -13,7 +13,7 @@ namespace CMS.Persistence.Repositories
         private readonly IMemoryCache _memoryCache;
         public MemoryCacheService(IMemoryCache memoryCache)
         {
-            _memoryCache = memoryCache;
+            _memoryCache = memoryCache; //Provides In-Memory Caching
         }
         public Task<T?> GetAsync<T>(string key)
         {

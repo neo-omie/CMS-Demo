@@ -18,25 +18,25 @@ namespace CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApproval
         }
         public async Task<IEnumerable<GetAllApprovalMatrixContractDTO>> Handle(GetAllApprovalMatrixContractQuery request, CancellationToken cancellationToken)
         {
-            string cacheKey = $"ApprovalMatrixContract_{request.pageNumber}_{request.pageSize}";
+            //string cacheKey = $"ApprovalMatrixContract_{request.pageNumber}_{request.pageSize}";
 
-            //getting from cache 
-            var cachedAmc= await _cacheService.GetAsync<IEnumerable<GetAllApprovalMatrixContractDTO>>(cacheKey);
-            if (cachedAmc != null)
-            {
-                return cachedAmc;
-            }
+            ////getting from cache 
+            //var cachedAmc= await _cacheService.GetAsync<IEnumerable<GetAllApprovalMatrixContractDTO>>(cacheKey);
+            //if (cachedAmc != null)
+            //{
+            //    return cachedAmc;
+            //}
 
-            //not in cache then fetching from repo
-            var Amc = await _masterApprovalMatrixContractRepository.GetAllApprovalMatrixContract(request.pageNumber, request.pageSize
-                );
+            ////not in cache then fetching from repo
+            //var Amc = await _masterApprovalMatrixContractRepository.GetAllApprovalMatrixContract(request.pageNumber, request.pageSize
+            //    );
 
-            //store in cache 
-            await _cacheService.SetAsync(cacheKey, Amc, TimeSpan.FromMinutes(1));
+            ////store in cache 
+            //await _cacheService.SetAsync(cacheKey, Amc, TimeSpan.FromMinutes(1));
 
-            return Amc;
+            //return Amc;
 
-            //return _masterApprovalMatrixContractRepository.GetAllApprovalMatrixContract(request.pageNumber,request.pageSize);
+            return await _masterApprovalMatrixContractRepository.GetAllApprovalMatrixContract(request.pageNumber,request.pageSize);
         }
     }
 }
