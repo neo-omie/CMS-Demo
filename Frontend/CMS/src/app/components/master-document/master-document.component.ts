@@ -1,3 +1,4 @@
+declare var bootstrap :any 
 import {
   Component,
   ElementRef,
@@ -154,6 +155,11 @@ export class MasterDocumentComponent implements OnInit {
           'Ok'
         );
         this.GetPage(this.maxPage);
+        const closeModal = document.getElementById('document-add') ;
+        if (closeModal) {
+          const closeModalInstance = bootstrap.Modal.getInstance(closeModal) || new bootstrap.Modal(closeModal);
+          closeModalInstance.hide();
+        }
       },
       error: (error) => {
         console.error('Error adding Document:', error);
