@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -15,8 +16,8 @@ import { ValidateFile } from '../../../utils/validateFile';
   styleUrl: './all-classified-contract-post-termination-modal.component.css'
 })
 export class AllClassifiedContractPostTerminationModalComponent {
-  @Input() currentPgNumber:number = 1;
-  @Input() GetPage !:(pgNumber:number) => void;
+  @Input() currentPgNumber: number = 1;
+  @Input() GetPage !: (pgNumber: number) => void;
   @Input() contIdForPostTerm?: number = 0;
   file: File | null = null;
   @ViewChild('addFile') addFile!: ElementRef;
@@ -24,7 +25,7 @@ export class AllClassifiedContractPostTerminationModalComponent {
 
   constructor(private postTermService: PostTerminationService) { }
 
-  uploadFile(event : Event){
+  uploadFile(event: Event) {
     this.file = ValidateFile.validateFile(event);
   }
 
@@ -77,6 +78,13 @@ export class AllClassifiedContractPostTerminationModalComponent {
           'Ok'
         );
         this.GetPage(this.currentPgNumber);
+
+        const modalElement = document.getElementById('Termination-Notice-Detail');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
+        }
+
       },
       error: (error) => {
         console.error('Error in creating Notice:', error);
