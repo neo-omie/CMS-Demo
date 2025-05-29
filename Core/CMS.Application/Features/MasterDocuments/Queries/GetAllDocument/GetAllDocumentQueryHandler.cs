@@ -20,25 +20,25 @@ namespace CMS.Application.Features.MasterDocuments.Queries.GetAllDocument
         }
         public  async Task<(IEnumerable<MasterDocument> , int )> Handle(GetAllDocumentQuery request, CancellationToken cancellationToken)
         {
-            string cacheKey = $"Documents_{request.pageNumber}_{request.pageSize}";
+            //string cacheKey = $"Documents_{request.pageNumber}_{request.pageSize}";
 
-            //getting from cache
-            var cachedDocument = await _cacheService.GetAsync<(IEnumerable<MasterDocument> docs, int totalCount)>(cacheKey);
-            if (cachedDocument.docs != null && cachedDocument.totalCount != null)
-            {
-                return (cachedDocument.docs, cachedDocument.totalCount);
-                
-            }
+            ////getting from cache
+            //var cachedDocument = await _cacheService.GetAsync<(IEnumerable<MasterDocument> docs, int totalCount)>(cacheKey);
+            //if (cachedDocument.docs != null && cachedDocument.totalCount != null)
+            //{
+            //    return (cachedDocument.docs, cachedDocument.totalCount);
 
-            //not in cache then fetching from repo
-            var docu = await _documentRepository.GetAllDocuments(request.pageNumber, request.pageSize);
+            //}
 
-            //storing in cache
-            await _cacheService.SetAsync(cacheKey, docu, TimeSpan.FromMinutes(1));
+            ////not in cache then fetching from repo
+            //var docu = await _documentRepository.GetAllDocuments(request.pageNumber, request.pageSize);
 
-            return (docu.docs, docu.totalCount);
-            
-           // return _documentRepository.GetAllDocuments(request.pageNumber, request.pageSize);
+            ////storing in cache
+            //await _cacheService.SetAsync(cacheKey, docu, TimeSpan.FromMilliseconds(1));
+
+            //return (docu.docs, docu.totalCount);
+
+            return await _documentRepository.GetAllDocuments(request.pageNumber, request.pageSize);
         }
     }
 }

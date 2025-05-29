@@ -17,25 +17,25 @@ namespace CMS.Application.Features.EscalationMatrixMouMaster.Queries.GetAllEscal
         }
         async Task<IEnumerable<EscalationMatrixMoutDto>> IRequestHandler<GetAllEscalationMatrixMouQuery, IEnumerable<EscalationMatrixMoutDto>>.Handle(GetAllEscalationMatrixMouQuery request, CancellationToken cancellationToken)
         {
-            string cacheKey = $"EscalationMatrixMou_{request.pageNumber}_{request.pageSize}";
+            //string cacheKey = $"EscalationMatrixMou_{request.pageNumber}_{request.pageSize}";
 
-            //getting from cache
-            var cachedEMM = await _cacheService.GetAsync<IEnumerable<EscalationMatrixMoutDto>>(cacheKey);
+            ////getting from cache
+            //var cachedEMM = await _cacheService.GetAsync<IEnumerable<EscalationMatrixMoutDto>>(cacheKey);
 
-            if (cachedEMM != null)
-            {
-                return cachedEMM;
-            }
+            //if (cachedEMM != null)
+            //{
+            //    return cachedEMM;
+            //}
 
-            //not in cache then fetching from repo
-            var Emm = await _mouRepository.GetAllEscalationMatrixMou(request.pageNumber, request.pageSize);
+            ////not in cache then fetching from repo
+            //var Emm = await _mouRepository.GetAllEscalationMatrixMou(request.pageNumber, request.pageSize);
 
-            //store in cache 
-            await _cacheService.SetAsync(cacheKey, Emm, TimeSpan.FromMinutes(1));
+            ////store in cache 
+            //await _cacheService.SetAsync(cacheKey, Emm, TimeSpan.FromMinutes(1));
 
-            return Emm;
+            //return Emm;
 
-           // return _mouRepository.GetAllEscalationMatrixMou(request.pageNumber, request.pageSize);
+            return await _mouRepository.GetAllEscalationMatrixMou(request.pageNumber, request.pageSize);
         }
     }
 }
