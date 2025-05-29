@@ -66,7 +66,7 @@ namespace CMS.Persistence.Repositories
 
             var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
             var fileExtension = Path.GetExtension(model.File.FileName).ToLowerInvariant();
-            int id;
+            int id,res =-1;
             MasterDocument gotDocument  =null;
             if (!allowedExtensions.Contains(fileExtension))
             {
@@ -135,12 +135,12 @@ namespace CMS.Persistence.Repositories
                     status = model.Status
                 };
                 await _context.MasterDocuments.AddAsync(document);
-
+                res=  await _context.SaveChangesAsync();
                  gotDocument =await _context.MasterDocuments.OrderBy(x => x.ValueId).LastAsync();
                 id = gotDocument.ValueId;
             }
 
-            if (await _context.SaveChangesAsync() > 0)
+            if (res > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
                 await _context.Database.ExecuteSqlRawAsync(query, id , TableList.MasterDocument, $"New Document '{originalFileName}' has been Added by '{ empCode}'", empCode, LogStatus.Created);
@@ -212,31 +212,6 @@ namespace CMS.Persistence.Repositories
                 throw new Exception("File size exceeds the 25MB limit.");
             }
 
-
-            // Retrieve the existing document
-            var existingDocument = await _context.MasterDocuments.FirstOrDefaultAsync(f => f.DisplayDocumentName == model.File.FileName);
-            if (existingDocument == null)
-            {
-                throw new Exception("Document not found.");
-            }
-            var currentPresentDoc = await GetDocumentById(id);
-            _context.MasterDocuments.Remove(currentPresentDoc);
-            
-
-            // Delete the old file if exists
-            var oldFilePath = existingDocument.DocumentPath;
-            if (File.Exists(oldFilePath))
-            {
-                try
-                {
-                    File.Delete(oldFilePath);
-                }
-                catch (IOException ex)
-                {
-                    throw new Exception($"Failed to delete old file: {ex.Message}");
-                }
-            }
-
             // Prepare uploads folder
             var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
             if (!Directory.Exists(uploadsFolder))
@@ -244,26 +219,63 @@ namespace CMS.Persistence.Repositories
                 Directory.CreateDirectory(uploadsFolder);
             }
 
-            
-
             // Generate unique file name and save new file
-            //var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
             var originalFileName = Path.GetFileName(model.File.FileName);
 
             var newFilePath = Path.Combine(uploadsFolder, originalFileName);
 
-            using (var stream = new FileStream(newFilePath, FileMode.Create))
+            var existingDocument = await _context.MasterDocuments.FirstOrDefaultAsync(d => d.DisplayDocumentName == model.File.FileName);
+            //var existingDocument = _context.MasterDocuments.Where(d=>d.DisplayDocumentName == model.File.FileName);
+            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                var currDocument = await GetDocumentById(id);
+            _context.MasterDocuments.Remove(currDocument);
+            if (existingDocument != null)
             {
-                await model.File.CopyToAsync(stream);
+                if (File.Exists(existingDocument.DocumentPath))
+                {
+                    File.Delete(existingDocument.DocumentPath);
+
+                }
+                
+                //_context.Master();
+
+                //existingDocument.status = (Status)model.Status;
+                //existingDocument.DocumentPath = newFilePath;
+                //existingDocument.DisplayDocumentName = originalFileName;
+                //existingDocument.IsDeleted = false;
+
+                var document = new MasterDocument
+                {
+                    DocumentPath = newFilePath,
+                    DisplayDocumentName = originalFileName,
+                    status = (Status)model.Status,
+                    UniqueDocumentName = uniqueFileName
+                   
+                };
+                using (var stream = new FileStream(originalFileName, FileMode.Create))
+                {
+                   await model.File.CopyToAsync(stream);
+                }
+
+                await _context.MasterDocuments.AddAsync(document);
+            }
+            else
+            {
+                var document = new MasterDocument
+                {
+                    DocumentPath = newFilePath,
+                    DisplayDocumentName = originalFileName,
+                    status = (Status)model.Status,
+                    UniqueDocumentName = uniqueFileName,
+                    
+                };
+                using (var stream = new FileStream(originalFileName, FileMode.Create))
+                {
+                    await model.File.CopyToAsync(stream);
+                }
+                await _context.MasterDocuments.AddAsync(document);
             }
 
-            // Update document properties
-            existingDocument.DocumentPath = newFilePath;
-            existingDocument.DisplayDocumentName = Path.GetFileName(model.File.FileName);
-            //existingDocument.UniqueDocumentName = uniqueFileName;
-            existingDocument.status = (Status)model.Status;
-
-            _context.MasterDocuments.Update(existingDocument);
             if (await _context.SaveChangesAsync() > 0)
             {
 
@@ -277,6 +289,7 @@ namespace CMS.Persistence.Repositories
             throw new Exception("Failed to update document.");
 
         }
+        
 
         public async Task<bool> CheckFileExists( DocumentFormDTO model)
         {
