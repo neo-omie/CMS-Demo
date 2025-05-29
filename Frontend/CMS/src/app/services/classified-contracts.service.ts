@@ -18,8 +18,8 @@ export class ClassifiedContractsService {
   private apiUrl = `${environment.apiUrl}/ClassifiedContract`;
     constructor(private http:HttpClient) { }
   
-    getContracts(pageNumber: number, pageSize: number) : Observable<ClassifiedContracts[]> {
-      return this.http.get<ClassifiedContracts[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    getContracts(filter:any) : Observable<ClassifiedContracts[]> {
+      return this.http.post<ClassifiedContracts[]>(`${this.apiUrl}`,filter);
     }
     getContractByID(classifiedContractID: number) : Observable<GetClassifiedContractByIdDto> {
       return this.http.get<GetClassifiedContractByIdDto>(`${this.apiUrl}/${classifiedContractID}`);

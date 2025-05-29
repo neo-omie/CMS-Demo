@@ -31,11 +31,13 @@ import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../mo
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { DecodeToken } from '../../../utils/decodeToken';
 import { ContractStatus, Location } from '../../../utils/constants';
+import { ExcelExport } from '../../../utils/excelExport';
+import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
