@@ -20,24 +20,24 @@ namespace CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatri
         }
         public async Task<IEnumerable<GetAllApprovalMatrixMOUDto>> Handle(GetAllApprovalMatrixMOUQuery request, CancellationToken cancellationToken)
         {
-            string cacheKey = $"MAMO_{request.pageNumber}_{request.pageSize}";
+            //string cacheKey = $"MAMO_{request.pageNumber}_{request.pageSize}";
 
-            //getting from cache 
-            var cachedMomu = await _cacheService.GetAsync<IEnumerable<GetAllApprovalMatrixMOUDto>>(cacheKey);
-            if (cachedMomu !=null)
-            {
-                return cachedMomu;
-            }
+            ////getting from cache 
+            //var cachedMomu = await _cacheService.GetAsync<IEnumerable<GetAllApprovalMatrixMOUDto>>(cacheKey);
+            //if (cachedMomu !=null)
+            //{
+            //    return cachedMomu;
+            //}
 
-            //if not in cache then fetching from repo 
-            var Cmomu = await _masterApprovalMatrixMOURepository.GetAllApprovalMatrixMOU(request.pageNumber, request.pageSize);
+            ////if not in cache then fetching from repo 
+            //var Cmomu = await _masterApprovalMatrixMOURepository.GetAllApprovalMatrixMOU(request.pageNumber, request.pageSize);
 
-            //store in cache 
+            ////store in cache 
 
-            await _cacheService.SetAsync(cacheKey, Cmomu, TimeSpan.FromMinutes(1));
+            //await _cacheService.SetAsync(cacheKey, Cmomu, TimeSpan.FromMinutes(1));
 
-            return Cmomu;
-            //return await _masterApprovalMatrixMOURepository.GetAllApprovalMatrixMOU(request.pageNumber, request.pageSize);
+            //return Cmomu;
+            return await _masterApprovalMatrixMOURepository.GetAllApprovalMatrixMOU(request.pageNumber, request.pageSize);
         }
     }
 }

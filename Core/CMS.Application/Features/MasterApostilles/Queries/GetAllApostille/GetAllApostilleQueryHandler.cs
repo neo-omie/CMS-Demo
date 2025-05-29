@@ -16,31 +16,31 @@ namespace CMS.Application.Features.MasterApostilles.Queries.GetAllApostille
         }
         public async Task<object> Handle(GetAllApostilleQuery request, CancellationToken cancellationToken)
         {
-            string cacheKey = $"Apostille_{request.pageNumber}_{request.pageSize}_{request.searchTerm}";
+            //string cacheKey = $"Apostille_{request.pageNumber}_{request.pageSize}_{request.searchTerm}";
 
-            //getting from cache
-            var cachedApostille = await _cacheService.GetAsync<(IEnumerable<MasterApostille> Data, int TotalCount)>(cacheKey);
-            if (cachedApostille.Data!=null && cachedApostille.TotalCount !=null)
-            {
-                return new
-                {
-                    data = cachedApostille.Data,
-                    totalCount = cachedApostille.TotalCount
-                };
-            }
+            ////getting from cache
+            //var cachedApostille = await _cacheService.GetAsync<(IEnumerable<MasterApostille> Data, int TotalCount)>(cacheKey);
+            //if (cachedApostille.Data!=null && cachedApostille.TotalCount !=null)
+            //{
+            //    return new
+            //    {
+            //        data = cachedApostille.Data,
+            //        totalCount = cachedApostille.TotalCount
+            //    };
+            //}
 
-            //not in cache then fecthing from repo
-            var apostillee = await _masterApostilleRepository.GetAllMasterApostilleAsync(request.pageNumber, request.pageSize, request.searchTerm);
+            ////not in cache then fecthing from repo
+            //var apostillee = await _masterApostilleRepository.GetAllMasterApostilleAsync(request.pageNumber, request.pageSize, request.searchTerm);
 
-            //storing in cache
-            await _cacheService.SetAsync(cacheKey, apostillee, TimeSpan.FromMinutes(1));
+            ////storing in cache
+            //await _cacheService.SetAsync(cacheKey, apostillee, TimeSpan.FromMinutes(1));
 
-          //  var result = await _masterApostilleRepository.GetAllMasterApostilleAsync(request.pageNumber, request.pageSize, request?.searchTerm);
+           var result = await _masterApostilleRepository.GetAllMasterApostilleAsync(request.pageNumber, request.pageSize, request?.searchTerm);
            
             return new
             {
-                data = apostillee.Data,
-                totalCount = apostillee.TotalCount
+                data = result.Data,
+                totalCount = result.TotalCount
             }; 
         }
     }
