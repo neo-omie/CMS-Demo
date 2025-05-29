@@ -3,6 +3,7 @@ using CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContr
 using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContractById;
 using CMS.Application.Features.ClassifiedNoticeWithdraw.Command.AddNoticeWithdrawalDetails;
 using CMS.Application.Features.ClassifiedPostTermination.Command.AddCommand;
+using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 
@@ -11,7 +12,7 @@ namespace CMS.Application.Contracts.Persistence
     public interface IClassifiedContractRepository
     {
         Task<ContractsCount> GetClassifiedContractsCountAsync();
-        Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(FiltersContractDto filtersClassifiedContractDto);
         Task<GetClassifiedContractByIdDto> GetClassifiedContractByIdAsync(int id);
 
          Task<ClassifiedContract> ApproveRejectContract(int id, string empCode, ContractStatus status);

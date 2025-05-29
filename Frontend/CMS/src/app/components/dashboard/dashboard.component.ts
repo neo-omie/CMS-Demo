@@ -26,7 +26,6 @@ export class DashboardComponent implements OnInit {
   updateFlag1:boolean = false;
   updateFlag2:boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
-  // HighchartsClassifiedContract: typeof Highcharts = Highcharts;
 
   contractchartOptions: Highcharts.Options = {
     credits: { enabled: false },

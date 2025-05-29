@@ -35,7 +35,7 @@ namespace CMS.API.Controllers
         [HttpPost("GetAllContracts")]
         public async Task<IActionResult> GetAllContracts([FromBody]FiltersContractDto filters)
         {
-            _logger.LogInformation("GetAllContracts method initiated");
+           _logger.LogInformation("GetAllContracts method initiated");
             var allContracts = await _mediator.Send(new GetAllContractsQuery(filters));
             _logger.LogInformation("GetAllContracts method performed");
             return Ok(allContracts);

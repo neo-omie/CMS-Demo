@@ -143,7 +143,7 @@ namespace CMS.Persistence.Repositories
             if (await _context.SaveChangesAsync() > 0)
             {
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, id , TableList.MasterDocument, $"New Document {originalFileName} has been Added by " + empCode, empCode, LogStatus.Created);
+                await _context.Database.ExecuteSqlRawAsync(query, id , TableList.MasterDocument, $"New Document '{originalFileName}' has been Added by ''{ empCode}'", empCode, LogStatus.Created);
 
                 return "Document uploaded successfully";
             }
@@ -185,7 +185,7 @@ namespace CMS.Persistence.Repositories
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDocument, $"Document {document.DisplayDocumentName} has been deleted by " + empCode, empCode, LogStatus.Deleted);
+            await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDocument, $"Document '{document.DisplayDocumentName}' has been Deleted by '{ empCode}'", empCode, LogStatus.Deleted);
 
 
             return true;
@@ -268,7 +268,7 @@ namespace CMS.Persistence.Repositories
             {
 
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDocument, $"Document {originalFileName} has been updated by " + empCode, empCode, LogStatus.Updated);
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDocument, $"Document '{originalFileName}' has been Updated by '{ empCode}'", empCode, LogStatus.Updated);
 
 
                 return new { Message = "Document updated" };

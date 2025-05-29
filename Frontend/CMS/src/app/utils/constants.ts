@@ -10,7 +10,9 @@ export enum ContractStatus {
 }
 
 export enum Location {
-    Thane = 1, 
-    Indore, 
-    Pune
+    Thane = 'Thane', 
+    Indore = 'Indore', 
+    Pune = 'Pune',
+    Mumbai = 'Mumbai',
+    Banglore = 'Banglore'
 }

@@ -169,11 +169,11 @@ namespace CMS.Persistence.Repositories
             var emp = await _context.MasterEmployees.Where(e => e.Email == empCode).FirstOrDefaultAsync();
 
 
-            if (contract ==null)
+            if (contract == null)
             {
                 throw new NotFoundException("Contract not found");
             }
-            if(forDoc == null)
+            if (forDoc == null)
             {
                 throw new NotFoundException($"Notice Withdrawal not found for contract id {id}");
             }
@@ -181,26 +181,26 @@ namespace CMS.Persistence.Repositories
             var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
             var foundContract = findingContract.FirstOrDefault();
 
-            if (foundContract==null)
+            if (foundContract == null)
             {
                 throw new NotFoundException("Contract Not Found");
             }
 
             string activeOrTerminate = (status == ContractStatus.Active) ? "Withdrawn" : "Terminated";
-            string notificationSubject=(status==ContractStatus.Active)? $"Withdrawal notice for the contract id {id} has been approved under your department. Contract's status is back to active" : "Contract has been Terminated under your department.";
+            string notificationSubject = (status == ContractStatus.Active) ? $"Withdrawal notice for the contract id {id} has been approved under your department. Contract's status is back to active" : "Contract has been Terminated under your department.";
 
-            if (foundContract.Approver1Email==empCode)
+            if (foundContract.Approver1Email == empCode)
             {
-                if (contract.Approver1Status!=ContractStatus.PendingNoticeWithdrawn)
+                if (contract.Approver1Status != ContractStatus.PendingNoticeWithdrawn)
                 {
                     throw new Exception("Invalid approval action");
                 }
 
                 contract.Approver1Status = status;
 
-                if (await _context.SaveChangesAsync()<=0)
+                if (await _context.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception ("For some reasons contract status has not been updated");
+                    throw new Exception("For some reasons contract status has not been updated");
                 }
 
                 await AddNewNotifications(foundContract.Approver2EmployeeCode, notificationSubject, $"contract called'{foundContract.ContractName} {activeOrTerminate} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
@@ -209,22 +209,22 @@ namespace CMS.Persistence.Repositories
                     );
 
                 await AddNewNotifications(foundContract.EmpCustodianCode, notificationSubject.Split('.')[0] + "'",
-                                          $"Contract called '{foundContract.ContractName}'{activeOrTerminate} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");                                                
-                
+                                          $"Contract called '{foundContract.ContractName}'{activeOrTerminate} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
+
                 await SendMail(foundContract.EmpCustodianEmail, subject, emailBody, foundContract.EmpCustodianCode, id, foundContract.ContractName, forDoc.DocumentPath
                     );
 
             }
             else if (foundContract.Approver2Email == empCode)
             {
-                if(contract.Approver1Status!=ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingNoticeWithdrawn)
+                if (contract.Approver1Status != ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingNoticeWithdrawn)
                 {
                     throw new Exception("Invalid approval action");
                 }
 
                 contract.Approver2Status = status;
 
-                if (await _context.SaveChangesAsync()<=0)
+                if (await _context.SaveChangesAsync() <= 0)
                 {
                     throw new Exception("For some reasons, Contract status has not been approved.");
                 }
@@ -239,20 +239,20 @@ namespace CMS.Persistence.Repositories
                 await AddNewNotifications(foundContract.EmpCustodianCode, notificationSubject.Split('.')[0] + "'",
                     $"Contract called '{foundContract.ContractName}' {activeOrTerminate} by '{foundContract.Approver2EmployeeCode}' (Approver 2)!");
 
-                
+
                 await SendMail(foundContract.EmpCustodianEmail, subject, emailBody, foundContract.EmpCustodianCode, id, foundContract.ContractName, forDoc.DocumentPath
                     );
             }
-            else if(foundContract.Approver3Email==empCode)
+            else if (foundContract.Approver3Email == empCode)
             {
-                if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status!=ContractStatus.Active || contract.Approver3Status != ContractStatus.PendingNoticeWithdrawn)
+                if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status != ContractStatus.Active || contract.Approver3Status != ContractStatus.PendingNoticeWithdrawn)
                 {
                     throw new Exception("Invalid approval action");
                 }
 
                 contract.Approver3Status = status;
 
-                if (await _context.SaveChangesAsync()<=0)
+                if (await _context.SaveChangesAsync() <= 0)
                 {
                     throw new Exception("For some reaons , Contract status has not been approved.");
                 }
@@ -272,9 +272,9 @@ namespace CMS.Persistence.Repositories
                 await SendMail(foundContract.Approver2Email, subject, emailBody, foundContract.Approver2EmployeeCode, id, foundContract.ContractName, forDoc.DocumentPath);
 
                 await AddNewNotifications(foundContract.EmpCustodianCode, notificationSubject.Split('.')[0] + "'",
-                                         $"Contract called '{foundContract.ContractName}'{activeOrTerminate} by '{foundContract.Approver2EmployeeCode}'(Approver 3)!");                                              
+                                         $"Contract called '{foundContract.ContractName}'{activeOrTerminate} by '{foundContract.Approver2EmployeeCode}'(Approver 3)!");
 
-                
+
                 await SendMail(foundContract.EmpCustodianEmail, subject, emailBody, foundContract.EmpCustodianCode, id, foundContract.ContractName, forDoc.DocumentPath
                     );
 
@@ -296,14 +296,14 @@ namespace CMS.Persistence.Repositories
 
                 if (await _context.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception($"For some reaons , contract status has not been changed to {status}");
+                    throw new Exception($"For some reasons , contract status has not been changed to {status}");
                 }
 
                 return contract;
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId , TableList.Contract, " Contract " + foundContract.ContractName + ", Approved for Withdrawal Notice by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Approved);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, $" Contract  '{foundContract.ContractName}', Approved for Withdrawal Notice by '{ emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
 
 
             return contract;

@@ -39,14 +39,14 @@ namespace CMS.API.Controllers
         }
 
 
-        [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateMatrixContract( int id, [FromBody] UpdateEscalationMatrixContractDto updateDto)
+        [HttpPost("{id}/{empCode}")]
+        public async Task<IActionResult> UpdateMatrixContract( int id, [FromBody] UpdateEscalationMatrixContractDto updateDto,[FromRoute]string empCode)
         {
             if (updateDto.EscalationId1 == updateDto.EscalationId2 || updateDto.EscalationId1 == updateDto.EscalationId3 || updateDto.EscalationId2 == updateDto.EscalationId3)
             {
                 throw new Exception("Escalators cannot be same");
             }
-            await _mediator.Send(new UpdateEscalationMatrixContractCommand(id, updateDto));
+            await _mediator.Send(new UpdateEscalationMatrixContractCommand(id, updateDto,empCode));
             return Ok(new {Message = "SuccessFully updated"});
         }
 

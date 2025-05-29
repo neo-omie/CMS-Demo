@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
@@ -11,9 +12,11 @@ using CMS.Application.Features.ApprovalMatrixMOU.Queries.GetAllApprovalMatrixMOU
 using CMS.Application.Features.Departments.Queries.GetAllDepartments;
 using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
+using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMS.Persistence.Repositories
 {
@@ -65,7 +68,7 @@ namespace CMS.Persistence.Repositories
             }
             return searchDepartment;
         }
-        public async Task<Department> AddNewDepartment(string departmentName)
+        public async Task<Department> AddNewDepartment(string departmentName,string empCode)
         {
             var checkDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentName == departmentName);
             if(checkDepartment != null)
@@ -78,7 +81,7 @@ namespace CMS.Persistence.Repositories
             {
                 MasterApprovalMatrixContract cApprovers = new MasterApprovalMatrixContract
                 {
-                    DepartmentId = newDepartment.DepartmentId, ApproverId1 = "NEO1", ApproverId2 = "NEO1", ApproverId3 = "NEO1", UpdatedBy = "NEO1", UpdateOn = DateTime.Now
+                    DepartmentId = newDepartment.DepartmentId, ApproverId1 = "NEO1", ApproverId2 = "NEO1", ApproverId3 = "NEO1", UpdatedBy = "NEO1", UpdateOn = DateTime.Now,CreatedBy = empCode,CreatedOn=DateTime.Now
                 };
                 _context.MasterApprovalMatrixContracts.Add(cApprovers);
                 MasterApprovalMatrixMOU mApprovers = new MasterApprovalMatrixMOU
@@ -93,10 +96,19 @@ namespace CMS.Persistence.Repositories
                 _context.MasterEscalationMatrixContracts.Add(cEscalators);
                 MasterEscalationMatrixMou mEscalators = new MasterEscalationMatrixMou
                 {
-                    DepartmentId = newDepartment.DepartmentId, EscalationId1 = "NEO1", EscalationId2 = "NEO1", EscalationId3 = "NEO1", UpdatedBy = "NEO1", UpdateOn = DateTime.Now
+                    DepartmentId = newDepartment.DepartmentId, EscalationId1 = "NEO1", EscalationId2 = "NEO1", EscalationId3 = "NEO1", UpdatedBy = "NEO1", UpdateOn = DateTime.Now,
+                    CreatedBy = empCode,
+                    CreatedOn = DateTime.Now
                 };
                 _context.MasterEscalationMatrixMous.Add(mEscalators);
                 await _context.SaveChangesAsync();
+
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+
+                await _context.Database.ExecuteSqlRawAsync(query, newDepartment.DepartmentId, TableList.MasterDepartment, $"New Department '{departmentName}' has been Added by '{empCode}', default Approvers/Escalators are Admin for Contract/MOU", empCode, LogStatus.Created);
+                
+           
+
                 return newDepartment;
             }
             else
@@ -105,7 +117,7 @@ namespace CMS.Persistence.Repositories
             }
         }
 
-        public async Task<bool> DeleteDepartment(int id)
+        public async Task<bool> DeleteDepartment(int id,string empCode)
         {
 
             var checkDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
@@ -114,7 +126,7 @@ namespace CMS.Persistence.Repositories
                 throw new NotFoundException($"Department with {id} not found.");
             }
             var meContract = await _context.MasterEscalationMatrixContracts.FirstOrDefaultAsync(memc => memc.DepartmentId == id);
-            _context.MasterEscalationMatrixContracts.Remove(meContract);
+             _context.MasterEscalationMatrixContracts.Remove(meContract);
             var meMOU = await _context.MasterEscalationMatrixMous.FirstOrDefaultAsync(memc => memc.DepartmentId == id);
             _context.MasterEscalationMatrixMous.Remove(meMOU);
 
@@ -127,6 +139,9 @@ namespace CMS.Persistence.Repositories
             _context.Departments.Remove(checkDepartment);
             if (await _context.SaveChangesAsync() > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDepartment, $"Department '{checkDepartment.DepartmentName}' has been Deleted by '{empCode}' ", empCode, LogStatus.Deleted);
+
                 return true;
             }
             else
@@ -136,9 +151,10 @@ namespace CMS.Persistence.Repositories
         }
 
 
-        public async Task<bool> UpdateApprovalMatrixMOU(int id, string departmentName)
+        public async Task<bool> UpdateApprovalMatrixMOU(int id, string departmentName,string empCode)
         {
             var checkDepartment = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
+            string dept = checkDepartment.DepartmentName;
             if (checkDepartment == null)
             {
                 throw new NotFoundException($"Department with {id} not found.");
@@ -147,6 +163,9 @@ namespace CMS.Persistence.Repositories
             _context.Departments.Update(checkDepartment);
             if (await _context.SaveChangesAsync() > 0)
             {
+                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(query, id, TableList.MasterDepartment, $"Department '{dept}' has been Updated to '{departmentName}' by '{empCode}'", empCode, LogStatus.Updated);
+
                 return true;
             }
             else

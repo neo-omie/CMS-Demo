@@ -20,15 +20,15 @@ export class ContractTypeMasterService {
         return this.http.get<ContractTypeMaster>(`${this.apiUrl}/${valueId}`);
       }
   
-    addContract(addContractDTO:AddContractDTO):Observable<ContractTypeMaster>{
-      return this.http.post<ContractTypeMaster>(`${this.apiUrl}`,addContractDTO)
+    addContract(addContractDTO:AddContractDTO,empCode:string|null):Observable<ContractTypeMaster>{
+      return this.http.post<ContractTypeMaster>(`${this.apiUrl}/${empCode}`,addContractDTO)
     }
   
-    updateContract(valueId:number, contract:AddContractDTO):Observable<ContractTypeMaster>{
-      return this.http.put<ContractTypeMaster>(`${this.apiUrl}/${valueId}`, contract);
+    updateContract(valueId:number, contract:AddContractDTO,empCode:string|null):Observable<ContractTypeMaster>{
+      return this.http.put<ContractTypeMaster>(`${this.apiUrl}/${valueId}/${empCode}`, contract);
     }
   
-    deleteContract(valueId:number):Observable<boolean>{
-      return this.http.delete<boolean>(`${this.apiUrl}/${valueId}`);
+    deleteContract(valueId:number,empCode:string|null):Observable<boolean>{
+      return this.http.delete<boolean>(`${this.apiUrl}/${valueId}/${empCode}`);
     }
 }

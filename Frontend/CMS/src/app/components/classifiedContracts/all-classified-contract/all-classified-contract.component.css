@@ -63,6 +63,7 @@ h2 {
     color: rgba(95, 95, 238);
     background-color: whitesmoke;
     border-color: #5f5fee;
+    margin: 2px;
 }
 .add-btn:hover{
     background-color: #5f5fee;
@@ -79,8 +80,8 @@ h2 {
     width: 3vw;
     aspect-ratio: 1/1;
 }
-.printPdf,.margin-left{
-    margin-left: 1rem;
+.printPdf,.margin-right{
+    margin-right: 1rem;
 }
 .filters{
     display: flex;

@@ -36,6 +36,7 @@ import { PaginationComponent } from '../../UtilComponents/pagination/pagination.
 import { AllClassifiedContractViewAddModalComponent } from '../all-classified-contract-view-add-modal/all-classified-contract-view-add-modal.component';
 import { DecodeToken } from '../../../utils/decodeToken';
 import { ContractStatus, Location } from '../../../utils/constants';
+import { AllClassifiedContractPostTerminationModalComponent } from '../all-classified-contract-post-termination-modal/all-classified-contract-post-termination-modal.component';
 
 
 @Component({
@@ -52,12 +53,14 @@ import { ContractStatus, Location } from '../../../utils/constants';
     ReactiveFormsModule, 
     MatTableModule, 
     MatSortModule, 
-    MatFormFieldModule, 
+    MatFormFieldModule,
+    AllClassifiedContractPostTerminationModalComponent, 
     MatInputModule],
   templateUrl: './all-classified-contract.component.html',
   styleUrl: './all-classified-contract.component.css'
 })
 export class AllClassifiedContractComponent implements OnInit{
+  currentPgNumber : number = 1;
   isCreate:boolean = false
   contractStatus = ContractStatus
   locationSelect = Location
@@ -68,6 +71,9 @@ export class AllClassifiedContractComponent implements OnInit{
       'isSort' ?: boolean,
       'templateRef' : TemplateRef<any> | null,
     }} = {};
+    getEnum(key:string){
+        return this.locationSelect[key as keyof typeof this.locationSelect];
+  }
     checkNotNaN(number:string){
       if(isNaN(Number(number))) return false
       return true
@@ -95,7 +101,7 @@ export class AllClassifiedContractComponent implements OnInit{
            approverCheck: boolean = true;
            terminationCheck: boolean = true;
            withdrawCheck:boolean = true;
-        
+    
     mode:any;
     deptID?:number;
     // Dropdowns
@@ -107,8 +113,31 @@ export class AllClassifiedContractComponent implements OnInit{
     postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
       withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
       contIdForPostTerm?: number = 0;
+
+      filterForm: FormGroup= new FormGroup({
+        SearchTerm:new FormControl(null),
+        FromDate:new FormControl(null),
+        ToDate:new FormControl(null),
+        ContractType:new FormControl(0),
+        RenewalDueIn:new FormControl(-1),
+        ContractStatus: new FormControl(0),
+        Department: new FormControl(0),
+        Location:new FormControl('')
+      })
+
     ngOnInit(): void {
-      this.GetAllContracts(1, 10);
+      this.GetAllContracts({
+        PageNumber : 1,
+        PageSize : 10,
+        SearchTerm : null,
+        FromDate : null,
+        ToDate : null,
+        ContractType : null,
+        RenewalDueIn : null,
+        ContractStatus : null,
+        Department : null,
+        Location : null
+      });
       this.getAllDepartments();
       this.getAllContractTypes();
       this.getAllApostilleTypes();
@@ -205,16 +234,16 @@ export class AllClassifiedContractComponent implements OnInit{
   @ViewChild('addAddendumEmpCustodianId') addAddendumEmpCustodianId!: ElementRef;
   @ViewChild('addFile') addFile!: ElementRef;
   
-   GetAllContracts(pageNumber: number, pageSize: number) {
-       this.contractsService.getContracts(pageNumber, pageSize).subscribe({
+   GetAllContracts(filter:any) {
+       this.contractsService.getContracts(filter).subscribe({
          next: (res: ClassifiedContracts[]) => {
            this.loading = false;
            this.allContracts = res;
            if (this.allContracts != undefined && this.allContracts.length > 0) {
              let result = Pagination.paginator(
-               pageNumber,
+               filter.PageNumber,
                this.allContracts[0].totalRecords,
-               pageSize
+               filter.PageSize
              );
              this.maxPage = result.maxPage;
              this.pageNumbers = result.pageNumbers;
@@ -231,9 +260,29 @@ export class AllClassifiedContractComponent implements OnInit{
        });
      }
      GetPage(pgNumber: number) {
-       if (this.maxPage >= pgNumber && pgNumber >= 1) {
-         this.GetAllContracts(pgNumber, 10);
-       }
+      if (this.maxPage >= pgNumber && pgNumber >= 1) {
+        this.currentPgNumber = pgNumber;
+            const searchTerm = this.filterForm.get('SearchTerm')?.value;
+            const fromDate = this.filterForm.get('FromDate')?.value;
+            const toDate = this.filterForm.get('ToDate')?.value;
+            const contractType = this.filterForm.get('ContractType')?.value;
+            const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+            const contractStatus = this.filterForm.get('ContractStatus')?.value;
+            const department = this.filterForm.get('Department')?.value;
+            const location = this.filterForm.get('Location')?.value;
+            this.GetAllContracts({
+              PageNumber : pgNumber,
+              PageSize : 10,
+              SearchTerm : searchTerm == '' ? null : searchTerm,
+              FromDate : fromDate == '' ? null : fromDate,
+              ToDate : toDate == '' ? null : toDate,
+              ContractType : contractType == 0 ? null : contractType,
+              RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+              ContractStatus : contractStatus == 0 ? null : contractStatus,
+              Department : department == 0 ? null : department,
+              Location : location == '' ? null : location,
+            })
+          }
      }
   
 
@@ -366,7 +415,26 @@ export class AllClassifiedContractComponent implements OnInit{
             this.contractsService.deleteContract(id,empName).subscribe({
               next: () => {
                 Alert.toast(TYPE.SUCCESS, true, 'Contract Deleted successfully');
-                this.GetAllContracts(1, 10);
+                const searchTerm = this.filterForm.get('SearchTerm')?.value;
+                const fromDate = this.filterForm.get('FromDate')?.value;
+                const toDate = this.filterForm.get('ToDate')?.value;
+                const contractType = this.filterForm.get('ContractType')?.value;
+                const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+                const contractStatus = this.filterForm.get('ContractStatus')?.value;
+                const department = this.filterForm.get('Department')?.value;
+                const location = this.filterForm.get('Location')?.value;
+                this.GetAllContracts({
+                  PageNumber : this.currentPgNumber,
+                  PageSize : 10,
+                  SearchTerm : searchTerm == '' ? null : searchTerm,
+                  FromDate : fromDate == '' ? null : fromDate,
+                  ToDate : toDate == '' ? null : toDate,
+                  ContractType : contractType == 0 ? null : contractType,
+                  RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                  ContractStatus : contractStatus == 0 ? null : contractStatus,
+                  Department : department == 0 ? null : department,
+                  Location : location == '' ? null : location,
+                })
               },
               error: (error: { error: { message: any; }; }) => {
                 console.error('Deletion Failed', error);
@@ -479,7 +547,18 @@ export class AllClassifiedContractComponent implements OnInit{
       
                onSubmitCheck() {
                   const enteredValue = this.checkContractId.value.contractId;
-                  this.contractsService.getContracts(1, 100).subscribe({
+                  this.contractsService.getContracts({
+                    PageNumber : 1,
+                    PageSize : 100,
+                    SearchTerm : null,
+                    FromDate : null,
+                    ToDate : null,
+                    ContractType : null,
+                    RenewalDueIn : null,
+                    ContractStatus : null,
+                    Department : null,
+                    Location : null
+                  }).subscribe({
                     next: (res: ClassifiedContracts[]) => {
                       this.allContracts = res;
                       if (this.checkContractId.valid) {
@@ -526,7 +605,6 @@ export class AllClassifiedContractComponent implements OnInit{
               
                 getContractIdforPostTerm(classifiedContractID?: string) {
                   this.contIdForPostTerm = Number(classifiedContractID);
-                  console.log(this.contIdForPostTerm, classifiedContractID);
                 }
                 async approveRejectContract(id?: string, status?: number) {
                   this.loading = true;
@@ -539,7 +617,26 @@ export class AllClassifiedContractComponent implements OnInit{
                       const response = await firstValueFrom(this.contractsService.approveRejectContract(Number(id), email, status))
                       if (response !== false) {
                         Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-                        this.GetAllContracts(1, 10);
+                        const searchTerm = this.filterForm.get('SearchTerm')?.value;
+                const fromDate = this.filterForm.get('FromDate')?.value;
+                const toDate = this.filterForm.get('ToDate')?.value;
+                const contractType = this.filterForm.get('ContractType')?.value;
+                const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+                const contractStatus = this.filterForm.get('ContractStatus')?.value;
+                const department = this.filterForm.get('Department')?.value;
+                const location = this.filterForm.get('Location')?.value;
+                this.GetAllContracts({
+                  PageNumber : this.currentPgNumber,
+                  PageSize : 10,
+                  SearchTerm : searchTerm == '' ? null : searchTerm,
+                  FromDate : fromDate == '' ? null : fromDate,
+                  ToDate : toDate == '' ? null : toDate,
+                  ContractType : contractType == 0 ? null : contractType,
+                  RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                  ContractStatus : contractStatus == 0 ? null : contractStatus,
+                  Department : department == 0 ? null : department,
+                  Location : location == '' ? null : location,
+                })
                       }
                     }
                     catch (error) {
@@ -670,7 +767,26 @@ export class AllClassifiedContractComponent implements OnInit{
                         const response = await firstValueFrom(this.postTermService.ApproveTerminationClassifiedContract(this.postTermination))
                         if (response !== false) {
                           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-                          this.GetAllContracts(1, 10);
+                          const searchTerm = this.filterForm.get('SearchTerm')?.value;
+                const fromDate = this.filterForm.get('FromDate')?.value;
+                const toDate = this.filterForm.get('ToDate')?.value;
+                const contractType = this.filterForm.get('ContractType')?.value;
+                const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+                const contractStatus = this.filterForm.get('ContractStatus')?.value;
+                const department = this.filterForm.get('Department')?.value;
+                const location = this.filterForm.get('Location')?.value;
+                this.GetAllContracts({
+                  PageNumber : this.currentPgNumber,
+                  PageSize : 10,
+                  SearchTerm : searchTerm == '' ? null : searchTerm,
+                  FromDate : fromDate == '' ? null : fromDate,
+                  ToDate : toDate == '' ? null : toDate,
+                  ContractType : contractType == 0 ? null : contractType,
+                  RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                  ContractStatus : contractStatus == 0 ? null : contractStatus,
+                  Department : department == 0 ? null : department,
+                  Location : location == '' ? null : location,
+                })
                         }
                       }
                       catch (error) {
@@ -690,76 +806,76 @@ export class AllClassifiedContractComponent implements OnInit{
                 }
               
                 //uploading the Withdrawal Notice 
-                OnSaveWithdrawalNotice(documentForm: NgForm) {
-                  console.log(documentForm.value);
-                  console.log(this.file);
+                // OnSaveWithdrawalNotice(documentForm: NgForm) {
+                //   console.log(documentForm.value);
+                //   console.log(this.file);
               
-                  if (!this.file || !documentForm.valid) {
-                    this.addFile.nativeElement.value = "";
-                    this.withdrawNotice.file = null
-                    this.withdrawNotice.Remark = "";
-                    Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
-                    return;
-                  }
-                  const allowedExtensions = ['.pdf', '.doc', '.docx'];
-                  const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+                //   if (!this.file || !documentForm.valid) {
+                //     this.addFile.nativeElement.value = "";
+                //     this.withdrawNotice.file = null
+                //     this.withdrawNotice.Remark = "";
+                //     Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
+                //     return;
+                //   }
+                //   const allowedExtensions = ['.pdf', '.doc', '.docx'];
+                //   const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
               
-                  if (!allowedExtensions.includes(fileExtension)) {
-                    this.addFile.nativeElement.value = "";
-                    this.withdrawNotice.file = null;
-                    this.withdrawNotice.Remark = "";
-                    Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
-                    return;
-                  }
-                  if (this.file.size > 25 * 1048576) {
-                    this.addFile.nativeElement.value = "";
-                    this.withdrawNotice.file = null;
-                    Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
-                    return;
-                  }
+                //   if (!allowedExtensions.includes(fileExtension)) {
+                //     this.addFile.nativeElement.value = "";
+                //     this.withdrawNotice.file = null;
+                //     this.withdrawNotice.Remark = "";
+                //     Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
+                //     return;
+                //   }
+                //   if (this.file.size > 25 * 1048576) {
+                //     this.addFile.nativeElement.value = "";
+                //     this.withdrawNotice.file = null;
+                //     Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+                //     return;
+                //   }
               
-                  const formData = new FormData();
-                  formData.append('file', this.file)
-                  formData.append('contractId', String(this.contIdForPostTerm))
-                  formData.append('postTermId', String(1))
-                  formData.append('Remark', String(this.withdrawNotice.Remark))
-                  this.noticeWithdrawalService.AddClassifiedWithdrawalNotice(formData).subscribe({
-                    next: (res) => {
-                      this.file = null;
-                      documentForm.reset();
-                      // this.addFile.nativeElement.value = "";
-                      //      this.postTerm.file=null;
+                //   const formData = new FormData();
+                //   formData.append('file', this.file)
+                //   formData.append('contractId', String(this.contIdForPostTerm))
+                //   formData.append('postTermId', String(1))
+                //   formData.append('Remark', String(this.withdrawNotice.Remark))
+                //   this.noticeWithdrawalService.AddClassifiedWithdrawalNotice(formData).subscribe({
+                //     next: (res) => {
+                //       this.file = null;
+                //       documentForm.reset();
+                //       // this.addFile.nativeElement.value = "";
+                //       //      this.postTerm.file=null;
               
-                      Alert.bigToast(
-                        'Success!',
-                        'Withdrawal Notice Added Successfully!',
-                        TYPE.SUCCESS,
-                        'Ok'
-                      );
-                      this.GetPage(this.maxPage);
-                    },
-                    error: (error) => {
-                      console.error('Error in adding notice withdrawal:', error);
-                      Alert.bigToast(
-                        'Error!',
-                        'There was an error adding notice withdrawal.',
-                        TYPE.ERROR,
-                        'Try Again'
-                      );
-                      // this.file = null;
-                      // documentForm.reset();
-                      // this.addFile.nativeElement.value = "";
-                      // this.postTerm.file = null;
-                      // this.document.status = 1;
-                    },
-                  });
-                  // this.file = null;
-                  // documentForm.reset();
-                  // this.addFile.nativeElement.value = "";
-                  // this.document.file = null;
-                  // this.document.status = 1;
+                //       Alert.bigToast(
+                //         'Success!',
+                //         'Withdrawal Notice Added Successfully!',
+                //         TYPE.SUCCESS,
+                //         'Ok'
+                //       );
+                //       this.GetPage(this.maxPage);
+                //     },
+                //     error: (error) => {
+                //       console.error('Error in adding notice withdrawal:', error);
+                //       Alert.bigToast(
+                //         'Error!',
+                //         'There was an error adding notice withdrawal.',
+                //         TYPE.ERROR,
+                //         'Try Again'
+                //       );
+                //       // this.file = null;
+                //       // documentForm.reset();
+                //       // this.addFile.nativeElement.value = "";
+                //       // this.postTerm.file = null;
+                //       // this.document.status = 1;
+                //     },
+                //   });
+                //   // this.file = null;
+                //   // documentForm.reset();
+                //   // this.addFile.nativeElement.value = "";
+                //   // this.document.file = null;
+                //   // this.document.status = 1;
               
-                }
+                // }
               
                 withdrawalNoticeEmailForm = new FormGroup({
                   emailSubject: new FormControl('', [Validators.required]),
@@ -790,7 +906,26 @@ export class AllClassifiedContractComponent implements OnInit{
                         const response = await firstValueFrom(this.noticeWithdrawalService.ClassifiedApproveWithdrawalTermination(this.withdrawNoticeSend))
                         if (response !== false) {
                           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-                          this.GetAllContracts(1, 10);
+                          const searchTerm = this.filterForm.get('SearchTerm')?.value;
+                const fromDate = this.filterForm.get('FromDate')?.value;
+                const toDate = this.filterForm.get('ToDate')?.value;
+                const contractType = this.filterForm.get('ContractType')?.value;
+                const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+                const contractStatus = this.filterForm.get('ContractStatus')?.value;
+                const department = this.filterForm.get('Department')?.value;
+                const location = this.filterForm.get('Location')?.value;
+                this.GetAllContracts({
+                  PageNumber : this.currentPgNumber,
+                  PageSize : 10,
+                  SearchTerm : searchTerm == '' ? null : searchTerm,
+                  FromDate : fromDate == '' ? null : fromDate,
+                  ToDate : toDate == '' ? null : toDate,
+                  ContractType : contractType == 0 ? null : contractType,
+                  RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+                  ContractStatus : contractStatus == 0 ? null : contractStatus,
+                  Department : department == 0 ? null : department,
+                  Location : location == '' ? null : location,
+                })
                         }
                       }
                       catch (error) {

@@ -17,7 +17,7 @@ namespace CMS.Application.Features.Departments.Commands.UpdateDepartment
         }
         public async Task<bool> Handle(UpdateDepartmentCommand request, CancellationToken cancellationToken)
         {
-            return await _departmentRepository.UpdateApprovalMatrixMOU(request.id, request.departmentName);
+            return await _departmentRepository.UpdateApprovalMatrixMOU(request.id, request.departmentName,request.empCode);
         }
     }
 }

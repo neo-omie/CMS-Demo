@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Reflection.Emit;
 using System.Data;
+using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 
 namespace CMS.Persistence.Repositories
 {
@@ -46,11 +47,16 @@ namespace CMS.Persistence.Repositories
             return allCounters;
         }
 
-        public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetAllClassifiedContractsDto>> GetAllClassifiedContractsAsync(FiltersContractDto filters)
         {
             int totalRecords = await _context.ClassifiedContracts.Where(x => x.IsDeleted == false).CountAsync();
-            string sql = "EXEC SP_GetAllClassifiedContracts @PageNumber = {0}, @PageSize = {1}";
-            var allContracts = await _context.GetClassifiedContractsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            string sql = "EXEC SP_GetAllClassifiedContracts @PageNumber = {0}, @PageSize = {1}, @SearchTerm = {2}, " +
+                         "@FromDate = {3}, @ToDate = {4}, @ContractType = {5}, @RenewalDueIn = {6}, " +
+                         "@ContractStatus = {7}, @Department = {8}, @Location = {9}";
+            var allContracts = await _context.GetClassifiedContractsDtos.FromSqlRaw(sql, filters.PageNumber, filters.PageSize,
+                filters.SearchTerm, filters.FromDate.ToString(), filters.ToDate.ToString(), filters.ContractType, filters.RenewalDueIn,
+                filters.ContractStatus, filters.Department, filters.Location).ToListAsync();
+
             return allContracts;
         }
 
@@ -126,7 +132,7 @@ namespace CMS.Persistence.Repositories
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName, subject, emailBody
                 );
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                 await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract ," New Classified Contract created by "+empCode, empName , LogStatus.Created);
+                 await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract ,$" New Classified Contract created by '{empCode}'", empName , LogStatus.Created);
             }
             return cp;
         }
@@ -267,7 +273,7 @@ namespace CMS.Persistence.Repositories
 
 
                 string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, " Classified Contract Rejected by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Rejected);
+                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract Rejected by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Rejected);
 
                 if (await _context.SaveChangesAsync() <= 0)
                 {
@@ -278,7 +284,7 @@ namespace CMS.Persistence.Repositories
 
             
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, " Classified Contract Approved by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Approved)  ;
+                await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract Approved by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved)  ;
             
             return contract;
         }
@@ -355,7 +361,7 @@ namespace CMS.Persistence.Repositories
             _context.ClassifiedContracts.Update(foundContract);
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, "Classified Contract Deleted by " + empCode, empCode, LogStatus.Deleted);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $"Classified Contract Deleted by '{empCode}'", empCode, LogStatus.Deleted);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;
@@ -694,17 +700,17 @@ namespace CMS.Persistence.Repositories
                 contract.Approver3Status = status;
 
                 string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, "classified contract "+foundContract.ClassifiedContractName +" Termination Request has been Rejected by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Rejected);
+                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $"classified contract '{foundContract.ClassifiedContractName}' Termination Request has been Rejected by '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Rejected);
 
                 if (await _context.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception($"For some reaons , contract status has not been changed to {status}");
+                    throw new Exception($"For some reasons , contract status has not been changed to {status}");
                 }
                 return contract;
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, " Classified Contract "+foundContract.ClassifiedContractName+", Approved for Termination by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Terminated);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract {foundContract.ClassifiedContractName}', Approved for Termination by '{ emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Terminated);
 
             return contract;
 
@@ -802,7 +808,7 @@ namespace CMS.Persistence.Repositories
 
                 if (await _context.SaveChangesAsync() <= 0)
                 {
-                    throw new Exception("For some reaons , Contract status has not been approved.");
+                    throw new Exception("For some reasons , Contract status has not been approved.");
                 }
 
                 //to approver 1
@@ -838,19 +844,19 @@ namespace CMS.Persistence.Repositories
                 contract.Approver3Status = status;
 
                 string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, " Classified Contract " + foundContract.ClassifiedContractName + ", Rejected for Withdrawal Notice by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Rejected);
+                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract  {foundContract.ClassifiedContractName}', Rejected for Withdrawal Notice by '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Rejected);
 
 
                 if (await _context.SaveChangesAsync() <= 0)
                 {
                     throw new Exception($"For some reaons , contract status has not been changed to {status}");
                 }
-            return contract;
+                return contract;
 
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, " Classified Contract " + foundContract.ClassifiedContractName + ", Approved for Withdrawal Notice by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Approved);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract '{ foundContract.ClassifiedContractName}', Approved for Withdrawal Notice by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
 
             return contract;
         }

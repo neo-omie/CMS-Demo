@@ -18,7 +18,7 @@ namespace CMS.Application.Features.Departments.Commands.AddDepartment
         }
         public async Task<Department> Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
         {
-            return await _departmentRepository.AddNewDepartment(request.departmentName);
+            return await _departmentRepository.AddNewDepartment(request.departmentName,request.empCode);
         }
     }
 }

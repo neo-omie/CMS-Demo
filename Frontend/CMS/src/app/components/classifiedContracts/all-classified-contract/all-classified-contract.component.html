@@ -3,8 +3,8 @@
   All Classified Contracts<img class="classifiedImg" src="ClassifiedContract.png" alt="CMS-logo" />
 </h2>
 <div *ngIf="!loading" class="table-responsive p-md-5 p-3">
-  <button data-bs-toggle="modal" data-bs-target="#contract-add" class="add-btn btn btn-outline-primary mb-2"
-    (click)="isCreate = true">
+  <button data-bs-toggle="modal" data-bs-target="#contract-add"
+    class="add-btn btn btn-outline-primary mb-2 margin-right" (click)="isCreate = true">
     <i class="fa-solid fa-file-circle-plus"></i> Add New Contract
   </button>
   <button class="add-btn btn btn-outline-primary mb-2 printPdf" (click)="
@@ -12,8 +12,7 @@
         ">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-left" data-bs-toggle="collapse"
-    data-bs-target="#filter-container">
+  <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#filter-container">
     Filters<i class="fa-solid fa-angle-down"></i>
   </button>
   <div class="card mb-2">
@@ -49,7 +48,7 @@
           <select class="form-select" name="contract-status" id="filter-contract-status">
             <option value="0">--Select--</option>
             @for (key of statusKeys; track $index) {
-              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
+            <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
             }
           </select>
         </div>
@@ -65,7 +64,7 @@
           <select class="form-select" name="loaction" id="filter-loction">
             <option value="0">--Select--</option>
             @for (key of locationSelectKeys; track $index) {
-              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{locationSelect[+key]}}</option>
+            <option *ngIf="checkNotNaN(key)" value="{{getEnum(key)}}">{{key}}</option>
             }
           </select>
         </div>
@@ -86,130 +85,7 @@
   </div>
   <app-table [data]="allContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
 </div>
-<app-pagination [maxPage]="maxPage" [records]="this.allContracts.length" [pageNumbers]="pageNumbers"
-  [GetPage]="GetPage.bind(this)"></app-pagination>
-<!-- <div *ngIf="!loading" class="table-responsive p-3"> -->
-  <!-- notice withdraw -->
-  <div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header d-flex justify-content-between">
-          <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
-            Withdraw Termination Notice
-          </h1>
-          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form #documentForm="ngForm" (ngSubmit)="OnSaveWithdrawalNotice(documentForm)">
-            <div class="mb-3">
-              <p class="m-1">File Upload<span style="color: red">*</span></p>
-              <div class="input-group">
-                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
-                  accept=".pdf" />
-              </div>
-            </div>
-            <div class="mb-3">
-              <p class="m-1">
-                Remark <span style="color: red">*</span>
-                <span *ngIf="
-                    !withdrawNotice.Remark || withdrawNotice.Remark.length <= 0
-                  " style="color: red">Required</span>
-              </p>
-              <div class="input-group">
-                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
-                  [(ngModel)]="withdrawNotice.Remark"></textarea>
-              </div>
-            </div>
 
-            <div class="modal-footer">
-              <button class="btn btn-outline-primary" type="submit">
-                Save
-              </button>
-              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Post termination -->
-  <div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header d-flex justify-content-between">
-          <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
-            Post Termination Notice
-          </h1>
-          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form #documentForm="ngForm" (ngSubmit)="OnSavePostTermination(documentForm)">
-            <div class="mb-3">
-              <p class="m-1">
-                Upload Termination Notice<span style="color: red">*</span>
-              </p>
-              <div class="input-group">
-                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
-                  accept=".pdf" />
-              </div>
-            </div>
-            <!-- (change)="onFileSelected($event)"
-              (click)="triggerFileInput()" -->
-            <div class="mb-3">
-              <p class="m-1">
-                End date
-                <!-- <span style="color: red;">*</span> -->
-              </p>
-              <div class="input-group">
-                <input type="date" name="end_Date" class="form-control" id="end_Date" min="0" max="30"
-                  placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date" />
-              </div>
-            </div>
-            <div class="mb-3">
-              <p class="m-1">
-                Notice Duration
-                <!-- <span style="color: red;">*</span> -->
-              </p>
-              <div class="input-group">
-                <input type="number" name="notice_Duration" class="form-control" id="notice_Duration" min="0"
-                  placeholder="Enter the end date" [(ngModel)]="postTerm.notice_Duration" />
-              </div>
-            </div>
-            <div class="mb-3">
-              <p class="m-1">
-                Remark <span style="color: red">*</span>
-                <span *ngIf="!postTerm.Remark || postTerm.Remark.length <= 0" style="color: red">Required</span>
-                <!-- <span *ngIf="(postTerm.Remark.touched && !postTerm.Remark) || (postTerm.Remark.touched && postTerm.Remark.length <= 0)"style="color: red;">Required</span> -->
-              </p>
-              <div class="input-group">
-                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
-                  [(ngModel)]="postTerm.Remark"></textarea>
-              </div>
-            </div>
-
-            <div class="modal-footer">
-              <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">
-                Save
-              </button>
-              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- </div> -->
 <ng-template #effectiveDateRef let-row>
   {{ row.effectiveDate.toString().split("T")[0] }}
 </ng-template>
@@ -261,12 +137,139 @@
   <i class="fa-solid fa-trash icon" data-bs-toggle="modal" *ngIf="row.status == 1" data-bs-target="#contract-delete"
     (click)="DeleteContract(row.classifiedContractID)"></i>
 </ng-template>
+
+<app-pagination [maxPage]="maxPage" [records]="this.allContracts.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage.bind(this)"></app-pagination>
+
+<!-- <div *ngIf="!loading" class="table-responsive p-3"> -->
+<!-- notice withdraw -->
+<!-- <div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+            Withdraw Termination Notice
+          </h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #documentForm="ngForm" (ngSubmit)="OnSaveWithdrawalNotice(documentForm)">
+            <div class="mb-3">
+              <p class="m-1">File Upload<span style="color: red">*</span></p>
+              <div class="input-group">
+                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
+                  accept=".pdf" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">
+                Remark <span style="color: red">*</span>
+                <span *ngIf="
+                    !withdrawNotice.Remark || withdrawNotice.Remark.length <= 0
+                  " style="color: red">Required</span>
+              </p>
+              <div class="input-group">
+                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                  [(ngModel)]="withdrawNotice.Remark"></textarea>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-outline-primary" type="submit">
+                Save
+              </button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+<!-- Post termination -->
+
+<!-- <div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+            Post Termination Notice
+          </h1>
+          <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #documentForm="ngForm" (ngSubmit)="OnSavePostTermination(documentForm)">
+            <div class="mb-3">
+              <p class="m-1">
+                Upload Termination Notice<span style="color: red">*</span>
+              </p>
+              <div class="input-group">
+                <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
+                  accept=".pdf" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">
+                End date
+              </p>
+              <div class="input-group">
+                <input type="date" name="end_Date" class="form-control" id="end_Date" min="0" max="30"
+                  placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">
+                Notice Duration
+              </p>
+              <div class="input-group">
+                <input type="number" name="notice_Duration" class="form-control" id="notice_Duration" min="0"
+                  placeholder="Enter the end date" [(ngModel)]="postTerm.notice_Duration" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <p class="m-1">
+                Remark <span style="color: red">*</span>
+                <span *ngIf="!postTerm.Remark || postTerm.Remark.length <= 0" style="color: red">Required</span>
+              </p>
+              <div class="input-group">
+                <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                  [(ngModel)]="postTerm.Remark"></textarea>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">
+                Save
+              </button>
+              <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<!-- </div> -->
+
 <app-all-classified-contract-view-add-modal [isCreate]="isCreate" [contractDetails]="isCreate?undefined:contractDetails"
   [approverCheck]="isCreate?false:approverCheck" [terminationCheck]="isCreate?false:terminationCheck"
   [withdrawCheck]="isCreate?false:withdrawCheck" (loaderEmit)="setLoader($event)" [termStatus]="termStatus.bind(this)"
   [approveRejectContract]="approveRejectContract.bind(this)"
   [getContractIdforPostTerm]="getContractIdforPostTerm.bind(this)"
   [GetAllContracts]="GetAllContracts.bind(this)"></app-all-classified-contract-view-add-modal>
+
+<app-all-classified-contract-post-termination-modal [currentPgNumber]="maxPage" [GetPage]="GetPage.bind(this)"
+  [contIdForPostTerm]="contIdForPostTerm"></app-all-classified-contract-post-termination-modal>
+
 <div class="modal fade" id="withdrawal-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
