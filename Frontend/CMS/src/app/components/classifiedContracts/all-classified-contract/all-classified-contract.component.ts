@@ -1,7 +1,7 @@
 declare var bootstrap: any;
 
 import { Component, ElementRef, Inject, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ClassifiedContractsService } from '../../../services/classified-contracts.service';
 import { AddClassifiedContractDto, ClassifiedContracts, GetClassifiedContractByIdDto } from '../../../models/classified-contracts';
 import { Pagination } from '../../../utils/pagination';
@@ -126,6 +126,7 @@ export class AllClassifiedContractComponent implements OnInit{
       })
 
     ngOnInit(): void {
+      this.route.queryParamMap.subscribe(params => {
       this.GetAllContracts({
         PageNumber : 1,
         PageSize : 10,
@@ -133,11 +134,20 @@ export class AllClassifiedContractComponent implements OnInit{
         FromDate : null,
         ToDate : null,
         ContractType : null,
-        RenewalDueIn : null,
-        ContractStatus : null,
+        RenewalDueIn : params.get('renewalIn'),
+        ContractStatus : params.get('status'),
         Department : null,
-        Location : null
+        Location : null,
       });
+      if(params.get('status')){
+        this.filterForm.patchValue({"ContractStatus" : params.get('status')})
+        this.filterForm.get("ContractStatus")?.disable();
+      }
+      if(params.get('renewalIn')){
+        this.filterForm.patchValue({"RenewalDueIn" : params.get('renewalIn')})
+        this.filterForm.get("RenewalDueIn")?.disable();
+      }
+    });
       this.getAllDepartments();
       this.getAllContractTypes();
       this.getAllApostilleTypes();
@@ -212,6 +222,7 @@ export class AllClassifiedContractComponent implements OnInit{
       }
     }
   constructor(
+    private route:ActivatedRoute,
     private contractsService: ClassifiedContractsService, 
     private router: Router,
     private renderer : Renderer2, 
@@ -806,76 +817,76 @@ export class AllClassifiedContractComponent implements OnInit{
                 }
               
                 //uploading the Withdrawal Notice 
-                // OnSaveWithdrawalNotice(documentForm: NgForm) {
-                //   console.log(documentForm.value);
-                //   console.log(this.file);
+                OnSaveWithdrawalNotice(documentForm: NgForm) {
+                  console.log(documentForm.value);
+                  console.log(this.file);
               
-                //   if (!this.file || !documentForm.valid) {
-                //     this.addFile.nativeElement.value = "";
-                //     this.withdrawNotice.file = null
-                //     this.withdrawNotice.Remark = "";
-                //     Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
-                //     return;
-                //   }
-                //   const allowedExtensions = ['.pdf', '.doc', '.docx'];
-                //   const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
+                  if (!this.file || !documentForm.valid) {
+                    this.addFile.nativeElement.value = "";
+                    this.withdrawNotice.file = null
+                    this.withdrawNotice.Remark = "";
+                    Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
+                    return;
+                  }
+                  const allowedExtensions = ['.pdf', '.doc', '.docx'];
+                  const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
               
-                //   if (!allowedExtensions.includes(fileExtension)) {
-                //     this.addFile.nativeElement.value = "";
-                //     this.withdrawNotice.file = null;
-                //     this.withdrawNotice.Remark = "";
-                //     Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
-                //     return;
-                //   }
-                //   if (this.file.size > 25 * 1048576) {
-                //     this.addFile.nativeElement.value = "";
-                //     this.withdrawNotice.file = null;
-                //     Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
-                //     return;
-                //   }
+                  if (!allowedExtensions.includes(fileExtension)) {
+                    this.addFile.nativeElement.value = "";
+                    this.withdrawNotice.file = null;
+                    this.withdrawNotice.Remark = "";
+                    Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx ");
+                    return;
+                  }
+                  if (this.file.size > 25 * 1048576) {
+                    this.addFile.nativeElement.value = "";
+                    this.withdrawNotice.file = null;
+                    Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
+                    return;
+                  }
               
-                //   const formData = new FormData();
-                //   formData.append('file', this.file)
-                //   formData.append('contractId', String(this.contIdForPostTerm))
-                //   formData.append('postTermId', String(1))
-                //   formData.append('Remark', String(this.withdrawNotice.Remark))
-                //   this.noticeWithdrawalService.AddClassifiedWithdrawalNotice(formData).subscribe({
-                //     next: (res) => {
-                //       this.file = null;
-                //       documentForm.reset();
-                //       // this.addFile.nativeElement.value = "";
-                //       //      this.postTerm.file=null;
+                  const formData = new FormData();
+                  formData.append('file', this.file)
+                  formData.append('contractId', String(this.contIdForPostTerm))
+                  formData.append('postTermId', String(1))
+                  formData.append('Remark', String(this.withdrawNotice.Remark))
+                  this.noticeWithdrawalService.AddClassifiedWithdrawalNotice(formData).subscribe({
+                    next: (res) => {
+                      this.file = null;
+                      documentForm.reset();
+                      // this.addFile.nativeElement.value = "";
+                      //      this.postTerm.file=null;
               
-                //       Alert.bigToast(
-                //         'Success!',
-                //         'Withdrawal Notice Added Successfully!',
-                //         TYPE.SUCCESS,
-                //         'Ok'
-                //       );
-                //       this.GetPage(this.maxPage);
-                //     },
-                //     error: (error) => {
-                //       console.error('Error in adding notice withdrawal:', error);
-                //       Alert.bigToast(
-                //         'Error!',
-                //         'There was an error adding notice withdrawal.',
-                //         TYPE.ERROR,
-                //         'Try Again'
-                //       );
-                //       // this.file = null;
-                //       // documentForm.reset();
-                //       // this.addFile.nativeElement.value = "";
-                //       // this.postTerm.file = null;
-                //       // this.document.status = 1;
-                //     },
-                //   });
-                //   // this.file = null;
-                //   // documentForm.reset();
-                //   // this.addFile.nativeElement.value = "";
-                //   // this.document.file = null;
-                //   // this.document.status = 1;
+                      Alert.bigToast(
+                        'Success!',
+                        'Withdrawal Notice Added Successfully!',
+                        TYPE.SUCCESS,
+                        'Ok'
+                      );
+                      this.GetPage(this.maxPage);
+                    },
+                    error: (error) => {
+                      console.error('Error in adding notice withdrawal:', error);
+                      Alert.bigToast(
+                        'Error!',
+                        'There was an error adding notice withdrawal.',
+                        TYPE.ERROR,
+                        'Try Again'
+                      );
+                      // this.file = null;
+                      // documentForm.reset();
+                      // this.addFile.nativeElement.value = "";
+                      // this.postTerm.file = null;
+                      // this.document.status = 1;
+                    },
+                  });
+                  // this.file = null;
+                  // documentForm.reset();
+                  // this.addFile.nativeElement.value = "";
+                  // this.document.file = null;
+                  // this.document.status = 1;
               
-                // }
+                }
               
                 withdrawalNoticeEmailForm = new FormGroup({
                   emailSubject: new FormControl('', [Validators.required]),

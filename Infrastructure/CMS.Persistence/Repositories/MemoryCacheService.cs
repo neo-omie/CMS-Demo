@@ -30,5 +30,12 @@ namespace CMS.Persistence.Repositories
             _memoryCache.Set(key, value, options);
             return Task.CompletedTask;
         }
+
+        public Task RemoveAsync(string key)
+        {
+            _memoryCache.Remove(key);
+            return Task.CompletedTask;
+        }
+
     }
 }

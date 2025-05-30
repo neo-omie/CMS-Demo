@@ -7,56 +7,56 @@
             <div class="col-12 col-sm-6 p-2">
                 <div class="card card-hover">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Total: <span class="fs-5">17</span></p>
+                        <p class="fs-6 mb-0">Total: <span class="fs-5">{{contractTotal}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTable(contractStatu.Active)">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Active: <span class="fs-5">9</span></p>
+                        <p class="fs-6 mb-0">Active: <span class="fs-5">{{contractActive}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTable(contractStatu.Expired)">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expired/Terminated: <span class="fs-5">7/1</span></p>
+                        <p class="fs-6 mb-0">Expired: <span class="fs-5">{{contractExpired}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableRenewalIn('30')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring &lt; 30 Days: <span class="fs-5">2</span></p>
+                        <p class="fs-6 mb-0">Renewing &lt; 30 Days: <span class="fs-5">{{contractRenew30}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableRenewalIn('60')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring &lt; 60 Days: <span class="fs-5">2</span></p>
+                        <p class="fs-6 mb-0">Renewing &lt; 60 Days: <span class="fs-5">{{contractRenew60}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableRenewalIn('90')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring &lt; 90 Days: <span class="fs-5">2</span></p>
+                        <p class="fs-6 mb-0">Renewing &lt; 90 Days: <span class="fs-5">{{contractRenew90}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableRenewalIn('0')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring Today: <span class="fs-5">0</span></p>
+                        <p class="fs-6 mb-0">Renewing Today: <span class="fs-5">{{contractRenew0}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTable(contractStatu.Terminated)">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Active Termination Notice: <span class="fs-5">0</span></p>
+                        <p class="fs-6 mb-0">Terminated: <span class="fs-5">{{contractTerminated}}</span></p>
                     </div>
                 </div>
             </div>
@@ -81,56 +81,56 @@
             <div class="col-12 col-sm-6 p-2">
                 <div class="card card-hover">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Total: <span class="fs-5">17</span></p>
+                        <p class="fs-6 mb-0">Total: <span class="fs-5">{{classifiedContractTotal}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassified(contractStatu.Active)">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Active: <span class="fs-5">9</span></p>
+                        <p class="fs-6 mb-0">Active: <span class="fs-5">{{classifiedContractActive}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassified(contractStatu.Expired)">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expired/Terminated: <span class="fs-5">7/1</span></p>
+                        <p class="fs-6 mb-0">Expired: <span class="fs-5">{{classifiedContractExpired}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassifiedRenewalIn('30')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring &lt; 30 Days: <span class="fs-5">2</span></p>
+                        <p class="fs-6 mb-0">Renewing &lt; 30 Days: <span class="fs-5">{{classifiedContractRenew30}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassifiedRenewalIn('60')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring &lt; 60 Days: <span class="fs-5">2</span></p>
+                        <p class="fs-6 mb-0">Renewing &lt; 60 Days: <span class="fs-5">{{classifiedContractRenew60}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassifiedRenewalIn('90')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring &lt; 90 Days: <span class="fs-5">2</span></p>
+                        <p class="fs-6 mb-0">Renewing &lt; 90 Days: <span class="fs-5">{{classifiedContractRenew90}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassifiedRenewalIn('0')">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Expiring Today: <span class="fs-5">0</span></p>
+                        <p class="fs-6 mb-0">Renewing Today: <span class="fs-5">{{classifiedContractRenew0}}</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goToTableClassified(contractStatu.Terminated)">
                     <div class="card-body">
-                        <p class="fs-6 mb-0">Active Termination Notice: <span class="fs-5">0</span></p>
+                        <p class="fs-6 mb-0">Terminated: <span class="fs-5">{{classifiedContractTerminated}}</span></p>
                     </div>
                 </div>
             </div>

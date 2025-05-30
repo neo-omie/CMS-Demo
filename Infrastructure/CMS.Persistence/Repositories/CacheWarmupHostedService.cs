@@ -39,22 +39,22 @@ namespace CMS.Persistence.Repositories
             //}
 
             //2 for All Contract Types
-            //using (var scope= _serviceProvider.CreateScope())
-            //{
-            //    var repo = scope.ServiceProvider.GetRequiredService<IContractTypeMasterRepository>();
-            //    var cache = scope.ServiceProvider.GetRequiredService<ICacheService>();
+            using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repo = scope.ServiceProvider.GetRequiredService<IContractTypeMasterRepository>();
+                    var cache = scope.ServiceProvider.GetRequiredService<ICacheService>();
 
-            //    //defining preload
-            //    int pageNumber = 1;
-            //    int pageSize = 100;
+                    //defining preload
+                    int pageNumber = 1;
+                    int pageSize = 10;
 
-            //    var contracts = await repo.GetAllContractAsync(pageNumber, pageSize);
+                    var contracts = await repo.GetAllContractAsync(pageNumber, pageSize);
 
-            //    string cacheKey = $"contracts_{pageNumber}_{pageSize}";
+                    string cacheKey = $"contracts_{pageNumber}_{pageSize}";
 
-            //    await cache.SetAsync(cacheKey, contracts, TimeSpan.FromMinutes(5));
+                    await cache.SetAsync(cacheKey, contracts, TimeSpan.FromMinutes(5));
 
-            //}
+                }
             ////3 for All Employees
             //using(var scope= _serviceProvider.CreateScope())
             //{

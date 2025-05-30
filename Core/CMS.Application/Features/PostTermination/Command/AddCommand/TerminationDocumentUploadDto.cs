@@ -14,7 +14,7 @@ namespace CMS.Application.Features.PostTermination.Command.AddCommand
         public IFormFile File { get; set; }
 
         [Required]
-        public int Notice_Duration { get; set; }
+        public int Notice_Duration { get; set; } = 0;
 
         [Required]
         public DateTime End_Date { get; set; }

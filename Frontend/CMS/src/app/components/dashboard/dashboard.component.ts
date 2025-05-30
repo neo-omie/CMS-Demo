@@ -10,6 +10,8 @@ import { ClassifiedContractsService } from '../../services/classified-contracts.
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import Highcharts from 'highcharts';
+import { ContractStatus } from '../../utils/constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +24,23 @@ import Highcharts from 'highcharts';
 })
 export class DashboardComponent implements OnInit {
   loading: boolean = false;
+  contractTotal : number = 0;
+  contractActive : number = 0;
+  contractTerminated : number = 0;
+  contractExpired : number = 0;
+  contractRenew0 : number = 0;
+  contractRenew30 : number = 0;
+  contractRenew60 : number = 0;
+  contractRenew90 : number = 0;
+  classifiedContractTotal : number = 0;
+  classifiedContractActive : number = 0;
+  classifiedContractTerminated : number = 0;
+  classifiedContractExpired : number = 0;
+  classifiedContractRenew0 : number = 0;
+  classifiedContractRenew30 : number = 0;
+  classifiedContractRenew60 : number = 0;
+  classifiedContractRenew90 : number = 0;
+  contractStatu = ContractStatus;
   viewportWidth:number = window.innerWidth
   updateFlag1:boolean = false;
   updateFlag2:boolean = false;
@@ -72,6 +91,7 @@ export class DashboardComponent implements OnInit {
   };
 
   constructor(private title: Title,
+    private router: Router,
     private contractsService: ContractsService,
     private classifiedContractsService: ClassifiedContractsService) {
     this.title.setTitle("Dashboard - CMS");
@@ -81,6 +101,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.GetContractsCount();
     this.GetClassifiedContractsCount();
+    this.GetContractCounts();
+    this.GetClassifiedContractsCounts();
   }
 
   ngAfterViewInit() {
@@ -92,13 +114,144 @@ export class DashboardComponent implements OnInit {
     this.viewportWidth = window.innerWidth;
   }
 
+  GetContractCounts(){
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      ContractStatus : ContractStatus.Active,
+    }).subscribe({
+      next:(res) => { this.contractActive = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      ContractStatus : ContractStatus.Expired,
+    }).subscribe({
+      next:(res) => { this.contractExpired = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      ContractStatus : ContractStatus.Terminated,
+    }).subscribe({
+      next:(res) => { this.contractTerminated = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 0,
+    }).subscribe({
+      next:(res) => { this.contractRenew0 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 30,
+    }).subscribe({
+      next:(res) => { this.contractRenew30 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 60,
+    }).subscribe({
+      next:(res) => { this.contractRenew60 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.contractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 90,
+    }).subscribe({
+      next:(res) => { this.contractRenew90 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+  }
+
+  GetClassifiedContractsCounts(){
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      ContractStatus : ContractStatus.Active,
+    }).subscribe({
+      next:(res) => { this.classifiedContractActive = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      ContractStatus : ContractStatus.Expired,
+    }).subscribe({
+      next:(res) => { this.classifiedContractExpired = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      ContractStatus : ContractStatus.Terminated,
+    }).subscribe({
+      next:(res) => { this.classifiedContractTerminated = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 0,
+    }).subscribe({
+      next:(res) => { this.classifiedContractRenew0 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 30,
+    }).subscribe({
+      next:(res) => { this.classifiedContractRenew30 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 60,
+    }).subscribe({
+      next:(res) => { this.classifiedContractRenew60 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+
+    this.classifiedContractsService.getContracts({
+      PageNumber : 1,
+      PageSize : 1000,
+      RenewalDueIn : 90,
+    }).subscribe({
+      next:(res) => { this.classifiedContractRenew90 = res.length; },
+      error:(err) => { Alert.toast(TYPE.ERROR, true, err.error.message); }
+    })
+  }
+
   GetContractsCount() {
     this.contractsService.getContractCounts().subscribe({
       next: (response: ContractsCount) => {
         const formatted = []
         const keys = Object.keys(response);
-        let sum = 0;
         const values = Object.values(response);
+        this.contractTotal = response.allContractsCount;
+        let sum = 0;
         for (let index = 0; index < keys.length; index++) {
           if (keys[index] != 'allContractsCount'){
             sum += values[index];
@@ -107,7 +260,6 @@ export class DashboardComponent implements OnInit {
               y: values[index],
             })
           }
-
         }
         formatted.push({
           name: "Others",
@@ -126,6 +278,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
   GetClassifiedContractsCount() {
     this.classifiedContractsService.getClassifiedContractCounts().subscribe({
       next: (response: ContractsCount) => {
@@ -133,6 +286,7 @@ export class DashboardComponent implements OnInit {
         const keys = Object.keys(response);
         const values = Object.values(response);
         let sum = 0;
+        this.classifiedContractTotal = response.allContractsCount
         for (let index = 0; index < keys.length; index++) {
           if (keys[index] != 'allContractsCount'){
             sum += values[index];
@@ -158,6 +312,30 @@ export class DashboardComponent implements OnInit {
       }, error: (error) => {
         Alert.toast(TYPE.ERROR, true, error.error.message);
       }
+    });
+  }
+
+  goToTable(status:ContractStatus) {
+    this.router.navigate(['/contracts/allContracts'], {
+      queryParams: { status }
+    });
+  }
+
+  goToTableClassified(status:ContractStatus) {
+    this.router.navigate(['/classifiedContracts/allContracts'], {
+      queryParams: { status }
+    });
+  }
+
+  goToTableRenewalIn(renewalIn:string) {
+    this.router.navigate(['/contracts/allContracts'], {
+      queryParams: { renewalIn }
+    });
+  }
+
+  goToTableClassifiedRenewalIn(renewalIn:string) {
+    this.router.navigate(['/classifiedContracts/allContracts'], {
+      queryParams: { renewalIn }
     });
   }
 }
