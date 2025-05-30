@@ -2,7 +2,7 @@ declare var bootstrap: any;
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../../../models/contracts';
 import { ContractsService } from '../../../services/contracts.service';
 import { Pagination } from '../../../utils/pagination';
@@ -87,25 +87,37 @@ export class AllContractsComponent implements OnInit {
   HasAddendum: new FormControl(-1)
 })
   ngOnInit(): void {
-    this.GetAllContracts({
-      PageNumber : 1,
-      PageSize : 10,
-      SearchTerm : null,
-      FromDate : null,
-      ToDate : null,
-      ContractType : null,
-      RenewalDueIn : null,
-      ContractStatus : null,
-      Department : null,
-      Location : null,
-      HasAddendum : null
+    this.route.queryParamMap.subscribe(params => {
+      this.GetAllContracts({
+        PageNumber : 1,
+        PageSize : 10,
+        SearchTerm : null,
+        FromDate : null,
+        ToDate : null,
+        ContractType : null,
+        RenewalDueIn : params.get('renewalIn'),
+        ContractStatus : params.get('status'),
+        Department : null,
+        Location : null,
+        HasAddendum : null
+      });
+      if(params.get('status')){
+        this.filterForm.patchValue({"ContractStatus" : params.get('status')})
+        this.filterForm.get("ContractStatus")?.disable();
+      }
+      if(params.get('renewalIn')){
+        this.filterForm.patchValue({"RenewalDueIn" : params.get('renewalIn')})
+        this.filterForm.get("RenewalDueIn")?.disable();
+      }
     });
     this.getAllDepartments();
     this.getAllContractTypes();
     this.getAllApostilleTypes();
     this.getAllCompanies();
   }
+
   constructor(private contractsService: ContractsService, private router: Router,
+    private route: ActivatedRoute,
     private renderer: Renderer2, private title: Title,
     private masterApostilleService: MasterApostilleService,
     private postTermService: PostTerminationService,
