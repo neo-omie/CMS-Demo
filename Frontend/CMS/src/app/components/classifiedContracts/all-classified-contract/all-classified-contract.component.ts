@@ -951,4 +951,30 @@ export class AllClassifiedContractComponent implements OnInit{
                 setLoader(data:boolean){
                   this.loading = data;
                 }
+
+                onFilterSubmit(){
+    const searchTerm = this.filterForm.get('SearchTerm')?.value;
+    const fromDate = this.filterForm.get('FromDate')?.value;
+    const toDate = this.filterForm.get('ToDate')?.value;
+    const contractType = this.filterForm.get('ContractType')?.value;
+    const renewalDueIn = this.filterForm.get('RenewalDueIn')?.value;
+    const contractStatus = this.filterForm.get('ContractStatus')?.value;
+    const department = this.filterForm.get('Department')?.value;
+    const location = this.filterForm.get('Location')?.value;
+    const hasAddendum = this.filterForm.get('HasAddendum')?.value;
+    console.log(department,location,hasAddendum);
+      this.GetAllContracts({
+        PageNumber : 1,
+        PageSize : 10,
+        SearchTerm : searchTerm == '' ? null : searchTerm,
+        FromDate : fromDate == '' ? null : fromDate,
+        ToDate : toDate == '' ? null : toDate,
+        ContractType : contractType == 0 ? null : contractType,
+        RenewalDueIn : renewalDueIn == -1 ? null : renewalDueIn ,
+        ContractStatus : contractStatus == 0 ? null : contractStatus,
+        Department : department == 0 ? null : department,
+        Location : location == '' ? null : location,
+        HasAddendum : hasAddendum == -1 ? null : hasAddendum == 1 ? true : false,
+      })
+  }
 }

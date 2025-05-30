@@ -8,5 +8,4 @@ import { Component } from '@angular/core';
   styleUrl: './all-classified-contract-screen.component.css'
 })
 export class AllClassifiedContractScreenComponent {
-
 }
