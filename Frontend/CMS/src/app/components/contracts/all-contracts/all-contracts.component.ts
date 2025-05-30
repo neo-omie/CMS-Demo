@@ -963,7 +963,7 @@ export class AllContractsComponent implements OnInit {
     if (!this.file || !documentForm.valid) {
       this.addFile.nativeElement.value = "";
       this.postTerm.file = null
-      this.postTerm.notice_Duration = 1;
+      this.postTerm.notice_Duration = 0;
       this.postTerm.end_Date = new Date();
       this.postTerm.Remark = "";
       Alert.toast(TYPE.WARNING, true, "Please select a file and fill the Form Correctly");
@@ -1304,3 +1304,7 @@ export class AllContractsComponent implements OnInit {
   ];
 }
 
+//for required validations 
+//  get EndDate(){
+//       return this.masterCompanyAddForm.get('pocContactNumber');
+//     }

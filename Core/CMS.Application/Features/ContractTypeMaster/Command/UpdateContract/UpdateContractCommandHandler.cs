@@ -14,11 +14,13 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.UpdateContract
     {
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
         private readonly IMapper _Imapper;
+        private readonly ICacheService _cacheService;
 
-        public UpdateContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, IMapper Imapper)
+        public UpdateContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, IMapper Imapper, ICacheService cacheService)
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
             _Imapper = Imapper;
+            _cacheService = cacheService;
         }
         public async Task<ContractTypeMasters> Handle(UpdateContractCommand request, CancellationToken cancellationToken)
         {
@@ -28,7 +30,13 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.UpdateContract
                 throw new Exception($"Contract not found");
             }
             var mapcontract = _Imapper.Map<ContractTypeMasters>(request.ctp);
-            return await _contractTypeMasterRepository.UpdateContractAsync(request.id, mapcontract,request.empCode);
+            var updated = await  _contractTypeMasterRepository.UpdateContractAsync(request.id, mapcontract,request.empCode);
+
+            //clearing cache for fresh data
+            string cacheKey = $"contracts_1_10";
+            await _cacheService.RemoveAsync(cacheKey);
+
+            return updated;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace CMS.Persistence.Repositories
                          "@FromDate = {3}, @ToDate = {4}, @ContractType = {5}, @RenewalDueIn = {6}, " +
                          "@ContractStatus = {7}, @Department = {8}, @Location = {9}";
             var allContracts = await _context.GetClassifiedContractsDtos.FromSqlRaw(sql, filters.PageNumber, filters.PageSize,
-                filters.SearchTerm, filters.FromDate.ToString(), filters.ToDate.ToString(), filters.ContractType, filters.RenewalDueIn,
+                filters.SearchTerm, filters.FromDate, filters.ToDate, filters.ContractType, filters.RenewalDueIn,
                 filters.ContractStatus, filters.Department, filters.Location).ToListAsync();
 
             return allContracts;

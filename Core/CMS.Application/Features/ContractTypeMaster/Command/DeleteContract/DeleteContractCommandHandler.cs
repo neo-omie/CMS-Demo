@@ -11,13 +11,23 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.DeleteContract
     public class DeleteContractCommandHandler : IRequestHandler<DeleteContractCommand, bool>
     {
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
-        public DeleteContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository)
+        private readonly ICacheService _cacheService;
+        public DeleteContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, ICacheService cacheService)
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
+            _cacheService = cacheService;
         }
-        public Task<bool> Handle(DeleteContractCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteContractCommand request, CancellationToken cancellationToken)
         {
-            return _contractTypeMasterRepository.DeletContract(request.id,request.empCode);
+            var result=await  _contractTypeMasterRepository.DeletContract(request.id,request.empCode);
+
+            if (result)
+            {
+                string cacheKey = $"contracts_1_10";
+                await _cacheService.RemoveAsync(cacheKey);
+            }
+
+            return result;
         }
     }
 }

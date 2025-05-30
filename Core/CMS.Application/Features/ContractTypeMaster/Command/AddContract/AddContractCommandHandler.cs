@@ -14,15 +14,24 @@ namespace CMS.Application.Features.ContractTypeMaster.Command.AddContract
     {
         private readonly IContractTypeMasterRepository _contractTypeMasterRepository;
         private readonly IMapper _Imapper;
-        public AddContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, IMapper Imapper)
+
+        private readonly ICacheService _cacheService;
+        public AddContractCommandHandler(IContractTypeMasterRepository contractTypeMasterRepository, IMapper Imapper, ICacheService cacheService)
         {
             _contractTypeMasterRepository = contractTypeMasterRepository;
             _Imapper = Imapper;
+            _cacheService = cacheService;
         }
         public async Task<ContractTypeMasters> Handle(AddContractCommand request, CancellationToken cancellationToken)
         {
             var mapcontract =  _Imapper.Map<ContractTypeMasters>(request.ctp);
-            return await _contractTypeMasterRepository.AddContractAsync(mapcontract,request.empCode);
+            var result = await _contractTypeMasterRepository.AddContractAsync(mapcontract, request.empCode);
+
+            string cacheKey = $"contracts_1_10";
+
+            await _cacheService.RemoveAsync(cacheKey);
+            return result;
+            // return await _contractTypeMasterRepository.AddContractAsync(mapcontract,request.empCode);
         }
     }
 }

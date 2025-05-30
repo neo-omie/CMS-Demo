@@ -6,7 +6,7 @@ export class PostTerminationNotice {
 
 export class PostTerminationNoticeUploadDTO{
     file:Blob | null;
-    notice_Duration:number;
+    notice_Duration=0;
     end_Date:Date;
     Remark:string;
 
