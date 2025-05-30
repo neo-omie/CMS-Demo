@@ -20,29 +20,29 @@ namespace CMS.Application.Features.ContractTypeMaster.Query.GetAllContract
             _contractTypeMasterRepository = contractTypeMasterRepository;
             _cacheService = cacheService;
         }
-        public async Task<IEnumerable<GetAllContractTypesDTO>> Handle(GetAllContractQuery request, CancellationToken cancellationToken)
-        {
-            //string cacheKey = $"contracts_{request.pageNumber}_{request.pageSize}";
+            public async Task<IEnumerable<GetAllContractTypesDTO>> Handle(GetAllContractQuery request, CancellationToken cancellationToken)
+            {
+                string cacheKey = $"contracts_{request.pageNumber}_{request.pageSize}";
 
-            ////getting from cache
-            //var cachedContracts = await _cacheService.GetAsync<IEnumerable<GetAllContractTypesDTO>>(cacheKey);
-            //if (cachedContracts!=null)
-            //{
-            //    return cachedContracts;
-            //}
+                //getting from cache
+                var cachedContracts = await _cacheService.GetAsync<IEnumerable<GetAllContractTypesDTO>>(cacheKey);
+                if (cachedContracts != null)
+                {
+                    return cachedContracts;
+                }
 
-            ////not in cache then fetching from repo
-            //var contracts = await _contractTypeMasterRepository.GetAllContractAsync(
-            //    request.pageNumber, request.pageSize
-            //    );
+                //not in cache then fetching from repo
+                var contracts = await _contractTypeMasterRepository.GetAllContractAsync(
+                    request.pageNumber, request.pageSize
+                    );
 
-            ////store in cache
-            //await _cacheService.SetAsync(cacheKey, contracts, TimeSpan.FromMinutes(1));
+                //store in cache
+                await _cacheService.SetAsync(cacheKey, contracts, TimeSpan.FromMinutes(1));
 
-            //return contracts;
+                return contracts;
 
 
-            return await  _contractTypeMasterRepository.GetAllContractAsync(request.pageNumber, request.pageSize);
-        }
+                //return await  _contractTypeMasterRepository.GetAllContractAsync(request.pageNumber, request.pageSize);
+            }
     }
 }

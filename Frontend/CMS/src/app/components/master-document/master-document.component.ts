@@ -1,3 +1,4 @@
+declare var bootstrap :any 
 import {
   Component,
   ElementRef,
@@ -154,6 +155,11 @@ export class MasterDocumentComponent implements OnInit {
           'Ok'
         );
         this.GetPage(this.maxPage);
+        const closeModal = document.getElementById('document-add') ;
+        if (closeModal) {
+          const closeModalInstance = bootstrap.Modal.getInstance(closeModal) || new bootstrap.Modal(closeModal);
+          closeModalInstance.hide();
+        }
       },
       error: (error) => {
         console.error('Error adding Document:', error);
@@ -177,10 +183,8 @@ export class MasterDocumentComponent implements OnInit {
     this.document.status = 1;
   }
 
-
-
-  
     editDocument(id: number) {
+      let empCode = DecodeToken.ECode;
       if(this.file){
         const formData = new FormData();
         formData.append('File',this.file)
@@ -196,7 +200,7 @@ export class MasterDocumentComponent implements OnInit {
                 "",
                 TYPE.SUCCESS,
                 () =>{
-                  this.documentService.updateDocument(id, formData).subscribe({
+                  this.documentService.updateDocument(id, formData,empCode).subscribe({
                     next: (response: any) => {
                       if (response) {
                         this.getMasterDocumentById = undefined;
@@ -226,7 +230,7 @@ export class MasterDocumentComponent implements OnInit {
               this.file = null;
             }
             else{
-              this.documentService.updateDocument(id, formData).subscribe({
+              this.documentService.updateDocument(id, formData,empCode).subscribe({
                 next: (response: any) => {
                   if (response) {
                     this.getMasterDocumentById = undefined;
@@ -321,8 +325,6 @@ export class MasterDocumentComponent implements OnInit {
               Alert.toast(TYPE.ERROR,true,this.errorMsg);
           }});
         }
-
-  
 
         uploadFile(event: Event) {
           const input = event.target as HTMLInputElement;

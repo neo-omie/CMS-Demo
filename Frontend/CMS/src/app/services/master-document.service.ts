@@ -30,8 +30,8 @@ export class MasterDocumentService {
   // uploadDocument()
 
 
-  updateDocument(docId?:number, data?:FormData):Observable<any>{
-    return this.http.put<any>(`${this.apiUrl}/${docId}`, data)
+  updateDocument(docId?:number, data?:FormData, empCode?:string|null):Observable<any>{
+    return this.http.put<any>(`${this.apiUrl}/${docId}/${empCode}`, data)
   }
 
   updateDocumentWithoutFille(docId?:number, data?:any):Observable<any>{
