@@ -34,9 +34,13 @@ export class Alert{
       if (result.isConfirmed) {
         callback();
         Swal.fire({
-          title: successTitle,
-          text: successText,
-          icon: successIcon
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          icon: TYPE.SUCCESS,
+          timerProgressBar:true,
+          timer: 2000,
+          title: "Deleted successfully"
         });
       }
     });

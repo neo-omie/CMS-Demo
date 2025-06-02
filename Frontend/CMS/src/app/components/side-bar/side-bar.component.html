@@ -27,6 +27,8 @@
         <a class="btn sideBar-nav-links mt-2" data-bs-dismiss="offcanvas" routerLink="/contracts">Contracts</a>
         <a class="btn sideBar-nav-links mt-2" *ngIf="userRole == 'Admin' || userRole == 'Management User'" data-bs-dismiss="offcanvas"
             routerLink="/classifiedContracts/allContracts">Contracts-Classified</a>
+        <a class="btn sideBar-nav-links mt-2" *ngIf="userRole == 'Admin' || userRole == 'Management User'" data-bs-dismiss="offcanvas"
+            routerLink="/reports">Report</a>
     </div>
 </aside>
 }

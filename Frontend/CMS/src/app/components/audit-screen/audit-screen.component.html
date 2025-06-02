@@ -1,0 +1,7 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="pt-3 fs-1">
+  Audit Trails
+</h2>
+<div *ngIf="!loading" class="table-responsive p-md-5 p-3">
+    <app-table [columnsInfo]="columnsInfo" [data]="allAudit" [displayedColumns]="displayedColumns"></app-table>
+</div>

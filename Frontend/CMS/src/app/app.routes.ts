@@ -28,6 +28,7 @@ import { EscalationMatrixContractScreenComponent } from './components/Escalation
 import { AddendumContractsComponent } from './components/addendum-contracts/addendum-contracts.component';
 import { roleGuard } from './role.guard';
 import { ExpiredContractsComponent } from './components/contracts/expired-contracts/expired-contracts.component';
+import { AuditScreenComponent } from './components/audit-screen/audit-screen.component';
 
 export const routes: Routes = [
     { path: '', component: LoginScreenComponent },
@@ -63,6 +64,7 @@ export const routes: Routes = [
     {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
     // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
     { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard, roleGuard] },
+    { path: 'reports', component: AuditScreenComponent, canActivate: [authGuard, roleGuard] },
 
 
     { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard] },

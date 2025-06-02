@@ -1,3 +1,4 @@
+declare var bootstrap : any;
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -169,7 +170,7 @@ let empCode =DecodeToken.ECode;
   }
 
   contractTypeMasterAddForm = new FormGroup({
-    contractTypeName: new FormControl('', [Validators.required]),
+    contractTypeName: new FormControl('', [Validators.required,Validators.maxLength(20),Validators.pattern('^[a-zA-Z]+$')]),
     status: new FormControl('', [Validators.required])
   })
   onAddFormSubmitContract() {
@@ -181,7 +182,6 @@ let empCode =DecodeToken.ECode;
       return;
     }
     else {
-      const contractTypeName = this.contractTypeMasterAddForm.value.contractTypeName;
       const status = this.contractTypeMasterAddForm.value.status;
         const addFormValues: AddContractDTO = new AddContractDTO();
         addFormValues.contractTypeName = this.contractTypeMasterAddForm.value.contractTypeName;
@@ -191,12 +191,21 @@ let empCode =DecodeToken.ECode;
           next: (response: ContractTypeMaster) => {
             if (response != undefined || response != null) {
               Alert.toast(TYPE.SUCCESS, true, 'Added Successfully');
+              const modal = document.getElementById("contract-add");
+              if(modal){
+                const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+                modalInstance.hide();
+              }
+              this.contractTypeMasterAddForm.reset({
+                contractTypeName : "",
+                status : ""
+              })
               this.getContract(1, 10);
             }
           },
           error: (error) => {
             console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.message);
             Alert.toast(TYPE.ERROR, true, this.errorMsg);
           }
         });
@@ -242,6 +251,15 @@ let empCode =DecodeToken.ECode;
               Alert.toast(TYPE.SUCCESS, true, 'Updated Successfully')
               this.contractTypeMasterAddForm.reset();
               this.getContract(1, 10);
+              const modal = document.getElementById("contract-edit");
+              if(modal){
+                const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+                modalInstance.hide();
+              }
+               this.contractTypeMasterAddForm.reset({
+                contractTypeName : "",
+                status : ""
+              })
             }
           }, error: (error) => {
             Alert.toast(TYPE.ERROR, true, error.error.message)
