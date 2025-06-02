@@ -5,7 +5,7 @@
         <div class="card-header m-2 fs-5" style="background-color: transparent; border: none;">Contracts at a glance</div>
         <div class="card-body row">
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="go()">
                     <div class="card-body">
                         <p class="fs-6 mb-0">Total: <span class="fs-5">{{contractTotal}}</span></p>
                     </div>
@@ -79,7 +79,7 @@
         <div class="card-header m-2 fs-5" style="background-color: transparent; border: none;">Classified contracts at a glance</div>
         <div class="card-body row">
             <div class="col-12 col-sm-6 p-2">
-                <div class="card card-hover">
+                <div class="card card-hover" (click)="goClassified()">
                     <div class="card-body">
                         <p class="fs-6 mb-0">Total: <span class="fs-5">{{classifiedContractTotal}}</span></p>
                     </div>

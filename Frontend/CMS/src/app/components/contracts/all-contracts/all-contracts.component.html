@@ -700,7 +700,7 @@
                 <!-- <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID" formControlName="departmentId" [(ngModel)]="deptID"> -->
                 <select class="form-select" name="departmentId" id="departmentId" formControlName="departmentId"
                   [(ngModel)]="deptID">
-                  <option value="" disabled selected>--Select one Department--</option>
+                  <option value="0" disabled selected>--Select one Department--</option>
                   <option *ngFor="let department of departments" value="{{department.departmentId}}">
                     {{department.departmentName}}</option>
                 </select>

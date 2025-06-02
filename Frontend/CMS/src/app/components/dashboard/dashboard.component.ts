@@ -338,4 +338,11 @@ export class DashboardComponent implements OnInit {
       queryParams: { renewalIn }
     });
   }
+
+  go(){
+    this.router.navigate(['/contracts/allContracts']);
+  }
+  goClassified(){
+    this.router.navigate(['/classifiedContracts/allContracts']);
+  }
 }
