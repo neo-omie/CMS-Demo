@@ -201,6 +201,14 @@
             class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
+        <div id="progress" class="mb-3" *ngIf="contractDetails?.contractId!==null">
+          <div class="d-flex justify-content-center ">
+            <p style="color: #5f5fee;" class="modal-title fs-5 fw-bolder text-center">
+              Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.contractName }}
+            </p>
+          </div>
+        <app-progress-bar [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0" type="contract" [phases]="phases"></app-progress-bar>
+      </div>
         <div class="mb-3">
           <p class="m-1">Contract Name</p>
           <div class="input-group">
@@ -433,19 +441,19 @@
           *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.contractId)">+ Add
           Addendum</button>
 
-        <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button>
+        <!-- <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button> -->
         <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
 
       </div>
       <!-- Progress bar horizontal -->
-      <div id="progress" class="collapse" *ngIf="contractDetails?.contractId!==null">
+      <!-- <div id="progress" class="collapse" *ngIf="contractDetails?.contractId!==null">
         <div class="d-flex justify-content-center ">
           <p style="color: #5f5fee;" class="modal-title fs-5 fw-bolder text-center">
             Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.contractName }}
           </p>
         </div>
         <app-progress-bar [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0" type="contract" [phases]="phases"></app-progress-bar>
-      </div>
+      </div> -->
   </div>
 </div>
 </div>
