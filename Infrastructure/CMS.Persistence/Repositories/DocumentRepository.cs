@@ -135,10 +135,10 @@ namespace CMS.Persistence.Repositories
                     status = model.Status
                 };
                 await _context.MasterDocuments.AddAsync(document);
-                res=  await _context.SaveChangesAsync();
                  gotDocument =await _context.MasterDocuments.OrderBy(x => x.ValueId).LastAsync();
                 id = gotDocument.ValueId;
             }
+                res=  await _context.SaveChangesAsync();
 
             if (res > 0)
             {
@@ -176,7 +176,7 @@ namespace CMS.Persistence.Repositories
                 throw new Exception($"File '{document.DisplayDocumentName}' does not exist.");
             }
 
-            document.IsDeleted = true;
+            //document.IsDeleted = true;
             _context.Remove(document);
             //_context.Update(document);
             if (await _context.SaveChangesAsync() <= 0)
@@ -224,21 +224,25 @@ namespace CMS.Persistence.Repositories
 
             var newFilePath = Path.Combine(uploadsFolder, originalFileName);
 
-            var existingDocument = await _context.MasterDocuments.FirstOrDefaultAsync(d => d.DisplayDocumentName == model.File.FileName);
-            //var existingDocument = _context.MasterDocuments.Where(d=>d.DisplayDocumentName == model.File.FileName);
+            //var existingDocument = await _context.MasterDocuments.FirstOrDefaultAsync(d => d.DisplayDocumentName == model.File.FileName);
+            var existingDocument = _context.MasterDocuments.Where(d => d.DisplayDocumentName == model.File.FileName);
             var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
                 var currDocument = await GetDocumentById(id);
             _context.MasterDocuments.Remove(currDocument);
+
             if (existingDocument != null)
             {
-                if (File.Exists(existingDocument.DocumentPath))
+                await existingDocument.ForEachAsync(d => {
+                    _context.MasterDocuments.Remove(d);
+                   
+                if (File.Exists(d.DocumentPath))
                 {
-                    File.Delete(existingDocument.DocumentPath);
+                    File.Delete(d.DocumentPath);
 
-                }
+                } });
+
                 
                 //_context.Master();
-
                 //existingDocument.status = (Status)model.Status;
                 //existingDocument.DocumentPath = newFilePath;
                 //existingDocument.DisplayDocumentName = originalFileName;

@@ -6,7 +6,7 @@ export class ValidateFile {
         const input = event.target as HTMLInputElement;
         if (input.files?.length) {
             if (!input.files[0]) {
-                Alert.toast(TYPE.WARNING, true, "Please select a file and fill the form correctly.");
+                Alert.toast(TYPE.WARNING, true, "Please select a file.");
                 return null;
             }
     
