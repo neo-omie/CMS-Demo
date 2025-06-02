@@ -89,11 +89,11 @@
   row.toBeRenewedOn != null ? row.toBeRenewedOn.toString().split("T")[0] : "-"
   }}
 </ng-template>
-<ng-template #addendumDateRef let-row>
+<!-- <ng-template #addendumDateRef let-row>
   {{
   row.addendumDate != null ? row.addendumDate.toString().split("T")[0] : "-"
   }}
-</ng-template>
+</ng-template> -->
 <ng-template #statusRef let-row>
   @if(row.status == 1){
   <button class="btn btn-warning" disabled><b>Pending Approval</b></button> }

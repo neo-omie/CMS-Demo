@@ -79,7 +79,7 @@ export class AllClassifiedContractComponent implements OnInit{
       return true
     }
    displayedColumns: string[] = ['classifiedContractName', 'contractType', 'departmentName', 'effectiveDate',
-                                  'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
+                                  'expiryDate', 'toBeRenewedOn', 'status', 'approvalPendingFrom',
                                   'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
 
     @ViewChild('effectiveDateRef', { static: true }) effectiveDateRef!: TemplateRef<any>;

@@ -9,16 +9,16 @@ using MediatR;
 
 namespace CMS.Application.Features.Notifications.Queries.GetAllNotifications
 {
-    public class GetAllNotificationsQueryHandler : IRequestHandler<GetAllNotificationsQuery, IEnumerable<Notification>>
+    public class GetAllNotificationsQueryHandler : IRequestHandler<GetAllNotificationsQuery, IEnumerable<GetAllNotificationsDto>>
     {
         readonly INotificationRepository _notificationRepository;
         public GetAllNotificationsQueryHandler(INotificationRepository notificationRepository)
         {
             _notificationRepository = notificationRepository;
         }
-        public async Task<IEnumerable<Notification>> Handle(GetAllNotificationsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetAllNotificationsDto>> Handle(GetAllNotificationsQuery request, CancellationToken cancellationToken)
         {
-            return await _notificationRepository.GetAllNotifications(request.employeeCode);
+            return await _notificationRepository.GetAllNotifications(request.pageNumber,request.pageSize,request.employeeCode);
         }
     }
 }

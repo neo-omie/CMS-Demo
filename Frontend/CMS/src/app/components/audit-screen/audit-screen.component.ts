@@ -1,19 +1,36 @@
-import { AfterViewInit, Component, OnInit, TemplateRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { Audit } from '../../models/audit';
 import { AuditReportService } from '../../services/audit-report.service';
 import { TableComponent } from '../UtilComponents/table/table.component';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { CommonModule } from '@angular/common';
+import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
+import { Title } from '@angular/platform-browser';
+import { Pagination } from '../../utils/pagination';
+import { Alert } from '../../utils/alert';
+import { TYPE } from '../auth/login/values.constants';
 
 @Component({
   selector: 'app-audit-screen',
   standalone: true,
-  imports: [TableComponent, LoaderComponent, CommonModule],
+  imports: [TableComponent, LoaderComponent, CommonModule, PaginationComponent],
   templateUrl: './audit-screen.component.html',
   styleUrl: './audit-screen.component.css',
 })
 export class AuditScreenComponent implements OnInit, AfterViewInit {
   loading: boolean = true;
+  maxPage: number = 1;
+  pageNumbers: number[] = [];
+
+  @ViewChild('logTime', { static: true }) logTime!: TemplateRef<any>;
+
   displayedColumns = [
     'tableName',
     'loggedBy',
@@ -23,37 +40,68 @@ export class AuditScreenComponent implements OnInit, AfterViewInit {
   ];
   columnsInfo: {
     [key: string]: {
-      'title'?: string,
-      'isSort'?: boolean,
-      'templateRef': TemplateRef<any> | null,
-    }
+      title?: string;
+      isSort?: boolean;
+      templateRef: TemplateRef<any> | null;
+    };
   } = {};
   allAudit: Audit[] = [];
+  errorMsg?: string;
 
-  constructor(private auditService: AuditReportService) {}
-  ngAfterViewInit(): void {
-    
+  constructor(private auditService: AuditReportService, private title: Title) {
+    this.title.setTitle('Audits  - CMS');
   }
-  ngOnInit(): void {
-    this.GetAllAudit(1, 10);
-    this.columnsInfo = { 'tableName': { isSort: true ,'title':'Table Name','templateRef':null},
-    'loggedBy' :{ isSort: true ,'title':'Employee Code','templateRef':null},
-    'logTime' :{ isSort: true ,'title':'Date and Time','templateRef':null},
-    'actionDescription' :{ isSort: true ,'title':'Action Description','templateRef':null},
-    'statusName' :{ isSort: true ,'title':'Action','templateRef':null}};
+  ngAfterViewInit(): void {}
+  ngOnInit() {
+    this.getAllAudit(1, 10);
+    this.columnsInfo = {
+      tableName: { isSort: true, title: 'Table Name', templateRef: null },
+      loggedBy: { isSort: true, title: 'Emp Code', templateRef: null },
+      logTime: {
+        isSort: true,
+        title: 'Date and Time',
+        templateRef: this.logTime,
+      },
+      actionDescription: {
+        isSort: true,
+        title: 'Action Description',
+        templateRef: null,
+      },
+      statusName: { isSort: true, title: 'Action', templateRef: null },
+    };
   }
 
-  GetAllAudit(pageNumber: Number, pageSize: Number) {
+  GetPage(pgNumber: number) {
+    if (this.maxPage >= pgNumber && pgNumber >= 1) {
+      this.getAllAudit(pgNumber, 10);
+    }
+  }
+
+  getAllAudit(pageNumber: number, pageSize: number) {
     this.auditService.getAllAudits(pageNumber, pageSize).subscribe({
       next: (res: Audit[]) => {
         this.loading = false;
         this.allAudit = res;
-        // console.log(res);
+        console.log(res);
+        if (this.allAudit != undefined && this.allAudit.length > 0) {
+          let result = Pagination.paginator(
+            pageNumber,
+            this.allAudit[0].totalRecords,
+            pageSize
+          );
+          this.maxPage = result.maxPage;
+          this.pageNumbers = result.pageNumbers;
+        }
       },
-      error:(err)=>{
-        console.log(err);
-        
-      }
+      error: (err) => {
+        console.log(err.error.message);
+        console.error('Error getting audits:', err);
+        this.errorMsg = JSON.stringify(
+          err.message !== undefined ? err.error.title : err.message
+        );
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        this.loading = false;
+      },
     });
   }
 }

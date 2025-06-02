@@ -10,16 +10,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { DecodeToken } from '../../utils/decodeToken';
+import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
+import { Pagination } from '../../utils/pagination';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, LoaderComponent, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule,PaginationComponent],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css'
 })
 export class NotificationsComponent implements OnInit {
-  loading: boolean = true
+  loading: boolean = true;
+  currentPage = 1;
   displayedColumns: string[] = ['notificationDate', 'notificationSubject', 'action'];
   dataSource = new MatTableDataSource<Notification>();
   @ViewChild(MatSort) sort!: MatSort;
@@ -33,21 +36,40 @@ export class NotificationsComponent implements OnInit {
   errorMsg?: string;
   totalNotifications: number = 0;
   ngOnInit() {
-    this.GetAllNotifications();
+    this.GetAllNotifications(1,10);
   }
+
+  
   constructor(private notificationService: NotificationService, private renderer: Renderer2) { }
-  GetAllNotifications() {
+  
+  GetPage(pgNumber: number) {
+   if (this.maxPage >= pgNumber && pgNumber >= 1) {
+     this.GetAllNotifications(pgNumber, 10);
+   }
+ }
+  GetAllNotifications(pageNumber:number,pageSize:number) {
     let empCode:string | null = DecodeToken.ECode;
-    this.notificationService.getAllNotifications(empCode).subscribe({
+    this.notificationService.getAllNotifications(empCode,pageNumber,pageSize).subscribe({
       next: (response: Notification[]) => {
         this.loading = false;
         this.notifications = response;
         this.totalNotifications = response.length;
+        this.currentPage =pageNumber;
+        console.log(this.notifications);
         
         this.dataSource.data = response;
           if (this.sort) {
             this.dataSource.sort = this.sort;
           }
+           if (this.notifications != undefined && this.notifications.length > 0) {
+                    let result = Pagination.paginator(
+                      pageNumber,
+                      this.notifications[0].totalRecords,
+                      pageSize
+                    );
+                    this.maxPage = result.maxPage;
+                    this.pageNumbers = result.pageNumbers;
+                  }
         // console.log(this.notifications);
       }, error: (error) => {
         console.error(error.error);
@@ -56,9 +78,13 @@ export class NotificationsComponent implements OnInit {
       }
     });
   }
-  SeeNotificationDetails(id:number, empCode:string) {
+  SeeNotificationDetails(id:number) {
+    // console.log(this.notifications);
+    let empCode = DecodeToken.ECode;
+    console.log(id,empCode);
     this.notificationService.getNotificationDetails(id, empCode).subscribe({
       next: (response: Notification) => {
+        console.log(id,empCode);
         this.notification = response;
         this.notification.notificationDate = this.formatDate(String(this.notification.notificationDate))
         console.log(this.notification);

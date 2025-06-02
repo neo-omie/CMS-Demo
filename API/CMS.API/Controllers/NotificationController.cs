@@ -17,11 +17,11 @@ namespace CMS.API.Controllers
             _mediator = mediator;
         }
 
-        [Route("{employeeCode}")]
-        [HttpGet]
-        public async Task<IActionResult> GetAllNotifications([FromRoute] string employeeCode)
+        //[Route("{employeeCode}")]
+        [HttpGet("{pageNumber}/{pageSize}/{employeeCode}")]
+        public async Task<IActionResult> GetAllNotifications([FromRoute] string employeeCode, [FromRoute] int pageNumber, [FromRoute] int pageSize)
         {
-            var allNotifs = await _mediator.Send(new GetAllNotificationsQuery(employeeCode));
+            var allNotifs = await _mediator.Send(new GetAllNotificationsQuery(pageNumber,pageSize,employeeCode));
             return Ok(allNotifs);
         }
         [Route("{id}/{employeeCode}")]

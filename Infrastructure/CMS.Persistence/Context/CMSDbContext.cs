@@ -19,6 +19,7 @@ using CMS.Application.Features.ClassifiedContracts.Queries.GetClassifiedContract
 using CMS.Application.Features.PostTermination.Command.AddCommand;
 using CMS.Application.Features.AddendumContracts.AddendumContractDto;
 using CMS.Application.Features.AuditTrails.Queries.GetAllAudits;
+using CMS.Application.Features.Notifications.Queries.GetAllNotifications;
 
 namespace CMS.Persistence.Context
 {
@@ -62,6 +63,7 @@ namespace CMS.Persistence.Context
 
 
         public DbSet<Notification> ContractNotifications { get; set; }
+        public DbSet<GetAllNotificationsDto> ContractNotificationsDto { get; set; }
 
         public DbSet<PostTerminationNotice> PostTerminationNotices { get; set; }
         public DbSet<ClassifiedPostTerminationNotice> ClassifiedPostTerminationNotices { get; set; }
@@ -86,6 +88,7 @@ namespace CMS.Persistence.Context
             modelBuilder.Ignore<GetAllClassifiedContractsDto>().Entity<GetAllClassifiedContractsDto>().HasNoKey();
             modelBuilder.Ignore<GetAddendumContractByIdDto>().Entity<GetAddendumContractByIdDto>().HasNoKey();
             modelBuilder.Ignore<GetAllAuditDto>().Entity<GetAllAuditDto>().HasNoKey();
+            modelBuilder.Ignore<GetAllNotificationsDto>().Entity<GetAllNotificationsDto>().HasNoKey();
 
             modelBuilder.Entity<GetMastersDTO>().HasNoKey();
             modelBuilder.Ignore<GetAllApprovalMatrixContractDTO>().Entity<GetAllApprovalMatrixContractDTO>().HasNoKey();
