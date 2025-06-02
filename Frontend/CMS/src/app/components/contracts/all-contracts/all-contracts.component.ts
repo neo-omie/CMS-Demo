@@ -66,7 +66,7 @@ export class AllContractsComponent implements OnInit {
   terminationCheck: boolean = true;
   withdrawCheck: boolean = true;
   mode: any;
-  deptID?: number;
+  deptID?: number = 0;
   employeeCustodians: MasterEmployee[] = [];
   departments: GetAllDepartmentsDto[] = [];
   contractTypes: ContractTypeMasterDTO[] = [];
@@ -88,26 +88,40 @@ export class AllContractsComponent implements OnInit {
 })
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
-      this.GetAllContracts({
-        PageNumber : 1,
-        PageSize : 10,
-        SearchTerm : null,
-        FromDate : null,
-        ToDate : null,
-        ContractType : null,
-        RenewalDueIn : params.get('renewalIn'),
-        ContractStatus : params.get('status'),
-        Department : null,
-        Location : null,
-        HasAddendum : null
-      });
-      if(params.get('status')){
-        this.filterForm.patchValue({"ContractStatus" : params.get('status')})
-        this.filterForm.get("ContractStatus")?.disable();
+      let renewalIn = params.get('renewalIn');
+      let status = params.get('status');
+      if((!renewalIn && !status) || (Number(renewalIn) && (
+          Number(renewalIn) == 0 ||
+          Number(renewalIn) == 30 ||
+          Number(renewalIn) == 60||
+          Number(renewalIn) == 90)) || 
+          (Number(status) && Number(status) > 0 &&
+          Number(status) < Object.keys(ContractStatus).length)){
+            console.log(Object.keys(ContractStatus).length);
+        this.GetAllContracts({
+          PageNumber : 1,
+          PageSize : 10,
+          SearchTerm : null,
+          FromDate : null,
+          ToDate : null,
+          ContractType : null,
+          RenewalDueIn : renewalIn,
+          ContractStatus : status,
+          Department : null,
+          Location : null,
+          HasAddendum : null
+        });
+        if(status){
+          this.filterForm.patchValue({"ContractStatus" : status})
+          this.filterForm.get("ContractStatus")?.disable();
+        }
+        if(renewalIn){
+          this.filterForm.patchValue({"RenewalDueIn" : renewalIn})
+          this.filterForm.get("RenewalDueIn")?.disable();
+        }
       }
-      if(params.get('renewalIn')){
-        this.filterForm.patchValue({"RenewalDueIn" : params.get('renewalIn')})
-        this.filterForm.get("RenewalDueIn")?.disable();
+      else{
+        this.router.navigate(['/pageNotFound'])
       }
     });
     this.getAllDepartments();
@@ -395,7 +409,7 @@ export class AllContractsComponent implements OnInit {
 
   masterContractAddForm = new FormGroup({
     contractName: new FormControl('', [Validators.required]),
-    departmentId: new FormControl('', [Validators.required]),
+    departmentId: new FormControl('0', [Validators.required]),
     contractWithCompanyId: new FormControl('', [Validators.required]),
     contractTypeId: new FormControl('', [Validators.required]),
     apostilleTypeId: new FormControl('', [Validators.required]),
@@ -626,8 +640,26 @@ export class AllContractsComponent implements OnInit {
   }
 
   onClick() {
-    this.router.navigate(['contracts/allContracts']);
-    this.masterContractAddForm.reset();
+    this.masterContractAddForm.reset({
+      contractName: '',
+    departmentId: '0',
+    contractWithCompanyId: '',
+    contractTypeId: '',
+    apostilleTypeId: '',
+    actualDocRefNo: '',
+    retainerContract: '',
+    termsAndConditions: '',
+    validFrom:'',
+    validTill: '',
+    renewalFrom: '',
+    renewalTill: '',
+    addendumDate: '',
+    empCustodianId: '',
+    location: '',
+    approver1Status:'1',
+    approver2Status:'1',
+    approver3Status: '1'
+    });
   }
 
   addaddendumForm = new FormGroup({

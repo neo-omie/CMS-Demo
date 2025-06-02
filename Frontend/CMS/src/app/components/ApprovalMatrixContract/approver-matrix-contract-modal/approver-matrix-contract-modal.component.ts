@@ -129,7 +129,7 @@ export class ApproverMatrixContractModalComponent {
         this.editApprovalMatrixContractDto.approverId1 = this.editApproverId1?.nativeElement.value;
         this.editApprovalMatrixContractDto.approverId2 = this.editApproverId2?.nativeElement.value;
         this.editApprovalMatrixContractDto.approverId3 = this.editApproverId3?.nativeElement.value;
-        this.editApprovalMatrixContractDto.numberOfDays = nod;
+        this.editApprovalMatrixContractDto.numberOfDays = Number(nod);
         this.approverMatrixContractService.EditApproverMatrixContract(id, this.editApprovalMatrixContractDto, empCode).subscribe({
           next: (response: boolean) => {
             if (response) {
