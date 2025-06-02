@@ -21,22 +21,22 @@ namespace CMS.Persistence.Repositories
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             // 1 for All Companies
-            //using (var scope = _serviceProvider.CreateScope())
-            //{
+            using (var scope = _serviceProvider.CreateScope())
+            {
 
-            //    var repo = scope.ServiceProvider.GetRequiredService<IMasterCompanyRepository>();
-            //    var cache = scope.ServiceProvider.GetRequiredService<ICacheService>();
+                var repo = scope.ServiceProvider.GetRequiredService<IMasterCompanyRepository>();
+                var cache = scope.ServiceProvider.GetRequiredService<ICacheService>();
 
-            //    //defining preload
-            //    string searchTerm = "";
-            //    int pageNumber = 1;
-            //    int pageSize = 100;
+                //defining preload
+                string searchTerm = "";
+                int pageNumber = 1;
+                int pageSize = 10;
 
-            //    var companies = await repo.GetAllCompanyDetailsAsync(searchTerm, pageNumber, pageSize);
-            //    string cacheKey = $"companies_{searchTerm}_{pageNumber}_{pageSize}";
+                var companies = await repo.GetAllCompanyDetailsAsync(searchTerm, pageNumber, pageSize);
+                string cacheKey = $"companies_{searchTerm}_{pageNumber}_{pageSize}";
 
-            //    await cache.SetAsync(cacheKey, companies, TimeSpan.FromMinutes(5));
-            //}
+                await cache.SetAsync(cacheKey, companies, TimeSpan.FromMinutes(5));
+            }
 
             //2 for All Contract Types
             using (var scope = _serviceProvider.CreateScope())

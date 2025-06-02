@@ -403,7 +403,8 @@ export class MasterCompanyComponent implements OnInit{
     }
   
     onClick(){
-      this.router.navigate(['masters/companyMasters']);
+      // this.router.navigate(['masters/companyMasters']);
+      this.masterCompanyAddForm.reset();
     }
     compID:number = 0
     fetchCompanyData(companyID:number) {
@@ -498,6 +499,7 @@ export class MasterCompanyComponent implements OnInit{
             const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
             modalInstance.hide();
           }
+          this.masterCompanyAddForm.reset();
               }
             }, 
             error:(error) => {
