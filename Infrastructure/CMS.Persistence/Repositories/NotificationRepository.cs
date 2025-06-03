@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.Exceptions;
+using CMS.Application.Features.Notifications.Queries.GetAllNotifications;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,17 @@ namespace CMS.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Notification>> GetAllNotifications(string employeeCode)
+        public async  Task<IEnumerable<GetAllNotificationsDto>> GetAllNotifications(int pageNumber,int pageSize ,string employeeCode)
         {
-            var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode && cn.isDeleted == false).OrderByDescending(cn => cn.NotificationDate).ToListAsync();
-            if(allNotifs == null)
+            //var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode && cn.isDeleted == false).OrderByDescending(cn => cn.NotificationDate).ToListAsync();
+
+            string query = " EXEC SP_GetAllNotifications @pageNumber={0} ,@pageSize={1},@employeeCode={2}";
+            var allNotifs =  _context.ContractNotificationsDto.FromSqlRaw(query, pageNumber, pageSize, employeeCode); 
+            if (allNotifs == null)
             {
                 throw new NotFoundException("No Notifications found currently");
             }
+            //await allNotifs.ForEachAsync(n => { n.totalRecords =  _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode && cn.isDeleted == false).Count(); });
             return allNotifs;
         }
 

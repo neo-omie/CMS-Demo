@@ -1,7 +1,7 @@
 declare var bootstrap: any;
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../../../models/contracts';
 import { ContractsService } from '../../../services/contracts.service';
@@ -30,14 +30,27 @@ import { PostTermination } from '../../../models/post-termination';
 import { ApproveRejectWithdrawalDTO, WithdrawNoticeUploadDTO } from '../../../models/notice-withdrawal';
 import { NoticeWithdrawalService } from '../../../services/notice-withdrawal.service';
 import { DecodeToken } from '../../../utils/decodeToken';
-import { ContractStatus, Location } from '../../../utils/constants';
+import { ContractStatus, Location, MY_DATE_FORMATS } from '../../../utils/constants';
 import { ExcelExport } from '../../../utils/excelExport';
 import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { dateBetweenValidator, dateRangeValidator, dateValidator } from '../../../utils/dateValidator';
 
 @Component({
   selector: 'app-all-contracts',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, ProgressBarComponent],
+  imports: [FormsModule, 
+    CommonModule, 
+    RouterModule, 
+    LoaderComponent, 
+    ReactiveFormsModule, 
+    MatTableModule, 
+    MatSortModule, ProgressBarComponent,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,],
   templateUrl: './all-contracts.component.html',
   styleUrl: './all-contracts.component.css'
 })
@@ -47,7 +60,7 @@ export class AllContractsComponent implements OnInit {
     remarkTouched: boolean = false;
   statusKeys = Object.keys(this.contractStatus);
   locationSelectKeys = Object.keys(this.locationSelect);
-  displayedColumns: string[] = ['contractID', 'contractName', 'contractType', 'departmentName', 'effectiveDate',
+  displayedColumns: string[] = ['contractName', 'contractType', 'departmentName', 'effectiveDate',
     'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
     'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
   dataSource = new MatTableDataSource<ContractsEntity>();
@@ -67,7 +80,7 @@ export class AllContractsComponent implements OnInit {
   terminationCheck: boolean = true;
   withdrawCheck: boolean = true;
   mode: any;
-  deptID?: number;
+  deptID?: number = 0;
   employeeCustodians: MasterEmployee[] = [];
   departments: GetAllDepartmentsDto[] = [];
   contractTypes: ContractTypeMasterDTO[] = [];
@@ -90,26 +103,40 @@ export class AllContractsComponent implements OnInit {
 })
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
-      this.GetAllContracts({
-        PageNumber : 1,
-        PageSize : 10,
-        SearchTerm : null,
-        FromDate : null,
-        ToDate : null,
-        ContractType : null,
-        RenewalDueIn : params.get('renewalIn'),
-        ContractStatus : params.get('status'),
-        Department : null,
-        Location : null,
-        HasAddendum : null
-      });
-      if(params.get('status')){
-        this.filterForm.patchValue({"ContractStatus" : params.get('status')})
-        this.filterForm.get("ContractStatus")?.disable();
+      let renewalIn = params.get('renewalIn');
+      let status = params.get('status');
+      if((!renewalIn && !status) || (Number(renewalIn) && (
+          Number(renewalIn) == 0 ||
+          Number(renewalIn) == 30 ||
+          Number(renewalIn) == 60||
+          Number(renewalIn) == 90)) || 
+          (Number(status) && Number(status) > 0 &&
+          Number(status) < Object.keys(ContractStatus).length)){
+            console.log(Object.keys(ContractStatus).length);
+        this.GetAllContracts({
+          PageNumber : 1,
+          PageSize : 10,
+          SearchTerm : null,
+          FromDate : null,
+          ToDate : null,
+          ContractType : null,
+          RenewalDueIn : renewalIn,
+          ContractStatus : status,
+          Department : null,
+          Location : null,
+          HasAddendum : null
+        });
+        if(status){
+          this.filterForm.patchValue({"ContractStatus" : status})
+          this.filterForm.get("ContractStatus")?.disable();
+        }
+        if(renewalIn){
+          this.filterForm.patchValue({"RenewalDueIn" : renewalIn})
+          this.filterForm.get("RenewalDueIn")?.disable();
+        }
       }
-      if(params.get('renewalIn')){
-        this.filterForm.patchValue({"RenewalDueIn" : params.get('renewalIn')})
-        this.filterForm.get("RenewalDueIn")?.disable();
+      else{
+        this.router.navigate(['/pageNotFound'])
       }
     });
     this.getAllDepartments();
@@ -397,30 +424,33 @@ export class AllContractsComponent implements OnInit {
 
   masterContractAddForm = new FormGroup({
     contractName: new FormControl('', [Validators.required]),
-    departmentId: new FormControl('', [Validators.required]),
+    departmentId: new FormControl('0', [Validators.required]),
     contractWithCompanyId: new FormControl('', [Validators.required]),
     contractTypeId: new FormControl('', [Validators.required]),
     apostilleTypeId: new FormControl('', [Validators.required]),
     actualDocRefNo: new FormControl('', [Validators.required]),
     retainerContract: new FormControl('', [Validators.required]),
     termsAndConditions: new FormControl('', [Validators.required]),
-    validFrom: new FormControl('', [Validators.required]),
-    validTill: new FormControl('', [Validators.required]),
-    renewalFrom: new FormControl('', [Validators.required]),
-    renewalTill: new FormControl('', [Validators.required]),
-    addendumDate: new FormControl('', [Validators.required]),
+    validFrom: new FormControl('', [Validators.required, dateValidator()]),
+    validTill: new FormControl('', [Validators.required, dateValidator()]),
+    renewalFrom: new FormControl('', [Validators.required, dateValidator()]),
+    renewalTill: new FormControl('', [Validators.required, dateValidator()]),
+    addendumDate: new FormControl('', [dateValidator()]),
     empCustodianId: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
     approver1Status: new FormControl('1', [Validators.required, Validators.pattern('^[0-9]$')]),
     approver2Status: new FormControl('1', [Validators.required, Validators.pattern('^[0-9]$')]),
     approver3Status: new FormControl('1', [Validators.required, Validators.pattern('^[0-9]$')])
-  });
+  },[dateRangeValidator('validFrom','validTill'),
+     dateRangeValidator('renewalFrom','renewalTill'), 
+     dateBetweenValidator('validFrom','renewalFrom','validTill'),]);
 
   async onAddFormSubmit() {
     let empName = DecodeToken.ECode;
     this.loading = true
     this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
     if (this.masterContractAddForm.invalid) {
+      console.log("bhru Invalid form : ", this.masterContractAddForm.value)
       this.masterContractAddForm.markAllAsTouched();
       this.loading = false;
       // Alert.toast(TYPE.WARNING, true, 'There is still few fields to fill out. Please fill all the required fields.');
@@ -461,7 +491,7 @@ export class AllContractsComponent implements OnInit {
         addFormValues.validTill = this.masterContractAddForm.value.validTill;
         addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom;
         addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill;
-        addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
+        // addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
         addFormValues.empCustodianId = Number(empCustodianId);
         addFormValues.location = this.masterContractAddForm.value.location;
         addFormValues.approver1Status = Number(approver1Status);
@@ -628,8 +658,26 @@ export class AllContractsComponent implements OnInit {
   }
 
   onClick() {
-    this.router.navigate(['contracts/allContracts']);
-    this.masterContractAddForm.reset();
+    this.masterContractAddForm.reset({
+      contractName: '',
+    departmentId: '0',
+    contractWithCompanyId: '',
+    contractTypeId: '',
+    apostilleTypeId: '',
+    actualDocRefNo: '',
+    retainerContract: '',
+    termsAndConditions: '',
+    validFrom:'',
+    validTill: '',
+    renewalFrom: '',
+    renewalTill: '',
+    // addendumDate: '',
+    empCustodianId: '',
+    location: '',
+    approver1Status:'1',
+    approver2Status:'1',
+    approver3Status: '1'
+    });
   }
 
   addaddendumForm = new FormGroup({

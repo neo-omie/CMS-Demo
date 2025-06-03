@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Notifications.Queries.GetAllNotifications
 {
-    public record GetAllNotificationsQuery(string employeeCode) : IRequest<IEnumerable<Notification>>;
+    public record GetAllNotificationsQuery(int pageNumber, int pageSize, string employeeCode) : IRequest<IEnumerable<GetAllNotificationsDto>>;
 }

@@ -11,7 +11,7 @@ export class AuditReportService {
 private apiUrl = `${environment.apiUrl}/AuditTrail`
   constructor(private http :HttpClient) { }
 
-  getAllAudits(pageNumber:Number,pageSize:Number):Observable<Audit[]>{
+  getAllAudits(pageNumber:number,pageSize:number):Observable<Audit[]>{
     return this.http.get<Audit[]>(`${this.apiUrl}/${pageNumber}/${pageSize}`)
   }
 }

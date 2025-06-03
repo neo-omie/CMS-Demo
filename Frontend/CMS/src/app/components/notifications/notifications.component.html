@@ -17,8 +17,8 @@
     <ng-container matColumnDef="action">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
       <td mat-cell *matCellDef="let notification">
-        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#notification-detail"
-          (click)="SeeNotificationDetails(notification.valueId, notification.employeeCode)"></i>
+        <i [ngStyle]="notification.isRead ? null :{'color':'#5f5fee'}" class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#notification-detail"
+          (click)="SeeNotificationDetails(notification.valueId)"></i>
       </td>
     </ng-container>
 
@@ -27,13 +27,15 @@
   </table>
   
   <p class="fs-5" *ngIf="notifications.length == 0" style="text-align: center;">No records</p>
+  <app-pagination [maxPage]="maxPage" [records]="this.notifications.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage.bind(this)"></app-pagination>
 </div>
 <div class="modal fade" id="notification-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
         <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Notification Details</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="GetAllNotifications(currentPage,10)"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
         <p class="m-1">Notification Date</p>

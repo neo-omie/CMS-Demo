@@ -1,13 +1,11 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { RouterService } from '../../services/router.service';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { JwtClaims } from '../../models/jwt-claims';
-import { jwtDecode } from 'jwt-decode';
 import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
@@ -19,17 +17,20 @@ import { DecodeToken } from '../../utils/decodeToken';
 })
 export class SideBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
+  notificationFlag = true;
   username: string | null = '';
   userRole: string | null = '';
   totalNotifications: number = 0;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
 
-  constructor(private notificationService: NotificationService, private route: RouterService) { }
+  constructor(
+    private notificationService: NotificationService, 
+    private route: RouterService,
+  ) { }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
   ngOnInit(): void {
-    this.GetAllNotifications();
     this.subscription = this.notificationService.trigger$.subscribe(() => {
       this.GetAllNotifications();
     });
@@ -39,6 +40,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
     if (localStorage.getItem('token')) {
       this.username = DecodeToken.sub;
       this.userRole = DecodeToken.ERole;
+      if(this.notificationFlag){
+        this.GetAllNotifications();
+        this.notificationFlag = false;
+      }
       return true;
     }
     return false;
@@ -53,15 +58,22 @@ export class SideBarComponent implements OnInit, OnDestroy {
   }
   GetAllNotifications() {
     let empCode: string | null = DecodeToken.ECode;
-    this.notificationService.getUnreadNotificationCount(empCode).subscribe({
-      next: (response: number) => {
-        this.totalNotifications = response;
-        console.log(response);
-      }, error: (error) => {
-        console.error(error.error);
-        let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
-        Alert.toast(TYPE.ERROR, true, errorMsg);
-      }
-    });
+    if (empCode) {
+      this.notificationService.getUnreadNotificationCount(empCode).subscribe({
+        next: (response: number) => {
+          this.totalNotifications = response;
+          console.log("Notification number", response);
+        }, error: (error) => {
+          console.error(error.error);
+          let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
+          Alert.toast(TYPE.ERROR, true, errorMsg);
+        }
+      });
+    }
+    else{
+      localStorage.clear();
+      DecodeToken.clearUserCredentials();
+      this.route.goToLogin();
+    }
   }
 }

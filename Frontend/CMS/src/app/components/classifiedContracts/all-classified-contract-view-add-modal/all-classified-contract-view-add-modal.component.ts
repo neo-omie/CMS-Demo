@@ -51,7 +51,7 @@ export class AllClassifiedContractViewAddModalComponent {
   @Input() termStatus!: (status: number) => void;
   @Input() getContractIdforPostTerm!: (classifiedContractID?: string) => void;
   @Input() approveRejectContract!: (id?: string, status?: number) => void;
-  @Input() GetAllContracts!: (pageSize: number, pageNumber: number) => void;
+  @Input() GetAllContracts!: (filter:any) => void;
 
   approverStatusColor: string[] = [
     '',
@@ -295,7 +295,9 @@ export class AllClassifiedContractViewAddModalComponent {
           if (response !== false) {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
             this.formfield('reset');
-            this.GetAllContracts(1, 10);
+            this.GetAllContracts({
+        PageNumber : 1,
+        PageSize : 10,});
             const modalElement = document.getElementById('contract-add');
             if (modalElement) {
               const modalInstance =

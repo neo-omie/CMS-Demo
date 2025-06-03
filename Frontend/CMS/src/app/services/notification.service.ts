@@ -15,10 +15,10 @@ export class NotificationService {
 
   private apiUrl = `${environment.apiUrl}/Notification`;
   constructor(private http:HttpClient) { }
-  getAllNotifications(employeeCode:string | null) : Observable<Notification[]> {
-    return this.http.get<Notification[]>(`${this.apiUrl}/${employeeCode}`);
+  getAllNotifications(employeeCode:string | null,pageNumber:number,pageSize:number) : Observable<Notification[]> {
+    return this.http.get<Notification[]>(`${this.apiUrl}/${pageNumber}/${pageSize}/${employeeCode}`);
   }
-  getNotificationDetails(id:number, employeeCode:string) : Observable<Notification> {
+  getNotificationDetails(id:number, employeeCode:string | null) : Observable<Notification> {
     return this.http.get<Notification>(`${this.apiUrl}/${id}/${employeeCode}`).pipe(
     tap(() => {
       this.triggerSubject.next(); // Emits only after the HTTP call succeeds
