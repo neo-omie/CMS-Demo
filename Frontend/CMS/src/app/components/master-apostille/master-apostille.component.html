@@ -124,7 +124,8 @@
 
                     <div class="m-3">
                       <label for="apostilleName" class="form-label">Apostille Name<span style="color: red;">*</span></label>
-                      <!-- <span *ngIf="apostilleName?.hasError('required') && (apostilleName?.dirty || apostilleName?.touched)" style="color: red;">Required</span> -->
+                      <span *ngIf="apostilleName?.hasError('required') && (apostilleName?.dirty || apostilleName?.touched)" style="color: red;">Required</span>
+                       <span *ngIf="apostilleName?.hasError('maxlength') && (apostilleName?.dirty || apostilleName?.touched)" style="color: red;">Only 30 characters are allowed</span>
                       <input class="form-control" type="text" id="apostilleName" placeholder="Enter apostille name" formControlName="apostilleName">
                     </div>
     

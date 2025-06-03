@@ -24,6 +24,12 @@
                     <label for="CompanyName" class="form-label">Company Name<span style="color: red;">*</span></label>
                     <span *ngIf="companyName?.hasError('required') && (companyName?.dirty || companyName?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="companyName?.hasError('maxlength') && (companyName?.dirty || companyName?.touched)"
+                      style="color: red;">
+                      Maximum 30 characters allowed </span>
+                    <span *ngIf="companyName?.hasError('pattern') && (companyName?.dirty || companyName?.touched)"
+                      style="color: red;">
+                      Only alphabets and numbers are allowed </span>
                     <input class="form-control" type="text" id="companyName" placeholder="Enter company name"
                       formControlName="companyName">
                   </div>
@@ -31,6 +37,12 @@
                     <label for="PocName" class="form-label">POC Name<span style="color: red;">*</span></label>
                     <span *ngIf="pocName?.hasError('required') && (pocName?.dirty || pocName?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="pocName?.hasError('maxlength') && (pocName?.dirty || pocName?.touched)"
+                      style="color: red;">
+                      Maximum 40 characters allowed </span>
+                    <span *ngIf="pocName?.hasError('pattern') && (pocName?.dirty || pocName?.touched)"
+                      style="color: red;">
+                      Only alphabets are allowed </span>
                     <input class="form-control" type="text" id="pocName" placeholder="Enter poc Name"
                       formControlName="pocName">
                   </div>
@@ -46,6 +58,10 @@
                     <span
                       *ngIf="pocContactNumber?.hasError('pattern') && (pocContactNumber?.dirty || pocContactNumber?.touched)"
                       style="color: red;">Invalid number</span>
+                    <span
+                      *ngIf="pocContactNumber?.hasError('maxlength') && (pocContactNumber?.dirty || pocContactNumber?.touched)"
+                      style="color: red;">
+                      Only 10 digits are allowed </span>
                     <input class="form-control" type="text" id="pocContactNumber" placeholder="Enter poc contact number"
                       formControlName="pocContactNumber">
                   </div>
@@ -67,6 +83,9 @@
                       style="color: red;">Required</span>
                     <span *ngIf="pocEmailId?.hasError('email') && (pocEmailId?.dirty || pocEmailId?.touched)"
                       style="color: red;">Invalid email</span>
+                    <span *ngIf="pocEmailId?.hasError('maxlength') && (pocEmailId?.dirty || pocEmailId?.touched)"
+                      style="color: red;">
+                      Enter email length under 70 characters </span>
                     <input class="form-control" type="text" id="pocEmailId" placeholder="Enter poc emailId"
                       formControlName="pocEmailId">
                   </div>
@@ -88,14 +107,26 @@
                     <span
                       *ngIf="companyAddressLine1?.hasError('required') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)"
                       style="color: red;">Required</span>
+                    <span
+                      *ngIf="companyAddressLine1?.hasError('maxlength') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)"
+                      style="color: red;">
+                      Enter address length under 70 characters </span>
                     <input class="form-control" type="text" id="companyAddressLine1"
                       placeholder="Enter company address line 1" formControlName="companyAddressLine1">
                   </div>
                   <div class="m-3">
+                    <span
+                      *ngIf="companyAddressLine2?.hasError('maxlength') && (companyAddressLine2?.dirty || companyAddressLine2?.touched)"
+                      style="color: red;">
+                      Enter address length under 50 characters </span>
                     <input class="form-control" type="text" id="companyAddressLine2"
                       placeholder="Enter company address line 2" formControlName="companyAddressLine2">
                   </div>
                   <div class="m-3">
+                    <span
+                      *ngIf="companyAddressLine3?.hasError('maxlength') && (companyAddressLine3?.dirty || companyAddressLine3?.touched)"
+                      style="color: red;">
+                      Enter address length under 20 characters </span>
                     <input class="form-control" type="text" id="companyAddressLine3"
                       placeholder="Enter company address line 3" formControlName="companyAddressLine3">
                   </div>
@@ -135,6 +166,12 @@
                     <label for="Zipcode" class="form-label">Zipcode<span style="color: red;">*</span></label>
                     <span *ngIf="zipcode?.hasError('required') && (zipcode?.dirty || zipcode?.touched)"
                       style="color: red;">Required</span>
+                    <!-- <span *ngIf="(zipcode?.hasError('maxlength') ) && (zipcode?.dirty || zipcode?.touched)"
+                      style="color: red;">
+                      Only 5  digits are allowed </span> -->
+                    <span *ngIf="zipcode?.hasError('pattern') && (zipcode?.dirty || zipcode?.touched)"
+                      style="color: red;">Exact 5 digits are allowed</span>
+
                     <input class="form-control" type="text" id="zipcode" placeholder="Enter zip code"
                       formControlName="zipcode">
                   </div>
@@ -146,7 +183,7 @@
                       style="color: red;">Required</span>
                     <span
                       *ngIf="(companyContactNo?.hasError('pattern') || companyContactNo?.hasError('minLength') || companyContactNo?.hasError('maxLength'))&& (companyContactNo?.dirty || companyContactNo?.touched)"
-                      style="color: red;">Invalid number</span>
+                      style="color: red;">Invalid number exact 10 digits are allowed</span>
                     <input class="form-control" type="text" id="companyContactNo"
                       placeholder="Enter company contact no." formControlName="companyContactNo">
                   </div>
@@ -159,6 +196,9 @@
                     <span
                       *ngIf="companyEmailId?.hasError('email') && (companyEmailId?.dirty || companyEmailId?.touched)"
                       style="color: red;">Invalid email</span>
+
+                    <!-- <span *ngIf="companyEmailId?.hasError('maxLength') && (companyEmailId?.dirty || companyEmailId?.touched)"
+                      style="color: red;">Only 50 characters are allowed</span> -->
                     <input class="form-control" type="text" id="companyEmailId" placeholder="Enter company emailId"
                       formControlName="companyEmailId">
                   </div>
@@ -168,6 +208,9 @@
                     <span
                       *ngIf="companyWebsiteUrl?.hasError('required') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)"
                       style="color: red;">Required</span>
+                    <span
+                      *ngIf="companyWebsiteUrl?.hasError('pattern') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)"
+                      style="color: red;">Enter valid website url</span>
                     <input class="form-control" type="text" id="companyWebsiteUrl"
                       placeholder="Enter company website url" formControlName="companyWebsiteUrl">
                   </div>
@@ -188,6 +231,9 @@
                     <span
                       *ngIf="companyBankName?.hasError('required') && (companyBankName?.dirty || companyBankName?.touched)"
                       style="color: red;">Required</span>
+                    <span
+                      *ngIf="companyBankName?.hasError('maxlength')&& (companyBankName?.dirty || companyBankName?.touched)"
+                      style="color: red;">Enter characters less than 40</span>
                     <input class="form-control" type="text" id="companyBankName" placeholder="Enter company bank name"
                       formControlName="companyBankName">
                   </div>
@@ -195,6 +241,8 @@
                     <label for="gSTno" class="form-label">GST no<span style="color: red;">*</span></label>
                     <span *ngIf="gSTno?.hasError('required') && (gSTno?.dirty || gSTno?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="gSTno?.hasError('pattern') && (gSTno?.dirty || gSTno?.touched)"
+                      style="color: red;">Exact 15 digits are allowed</span>
                     <input class="form-control" type="text" id="gSTno" placeholder="Enter gst no."
                       formControlName="gSTno">
                   </div>
@@ -202,6 +250,8 @@
                     <label for="bankAccNo" class="form-label">Bank AccNo<span style="color: red;">*</span></label>
                     <span *ngIf="bankAccNo?.hasError('required') && (bankAccNo?.dirty || bankAccNo?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="bankAccNo?.hasError('pattern') && (bankAccNo?.dirty || bankAccNo?.touched)"
+                      style="color: red;">Digits between 12 and 16 only allowed</span>
                     <input class="form-control" type="text" id="bankAccNo" placeholder="Enter bank Acc no."
                       formControlName="bankAccNo">
                   </div>
@@ -211,6 +261,10 @@
                     <span
                       *ngIf="mSMERegistrationNo?.hasError('required') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)"
                       style="color: red;">Required</span>
+
+                    <span
+                      *ngIf="mSMERegistrationNo?.hasError('pattern') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)"
+                      style="color: red;">Exact 12 digits are allowed</span>
                     <input class="form-control" type="text" id="mSMERegistrationNo"
                       placeholder="Enter msme registration no." formControlName="mSMERegistrationNo">
                   </div>
@@ -218,6 +272,8 @@
                     <label for="iFSCCode" class="form-label">IFSCCode<span style="color: red;">*</span></label>
                     <span *ngIf="iFSCCode?.hasError('required') && (iFSCCode?.dirty || iFSCCode?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="iFSCCode?.hasError('pattern') && (iFSCCode?.dirty || iFSCCode?.touched)"
+                      style="color: red;">Enter the correct IFSC code</span>
                     <input class="form-control" type="text" id="iFSCCode" placeholder="Enter ifsc code"
                       formControlName="iFSCCode">
                   </div>
@@ -225,6 +281,8 @@
                     <label for="panNo" class="form-label">Pan No<span style="color: red;">*</span></label>
                     <span *ngIf="panNo?.hasError('required') && (panNo?.dirty || panNo?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="panNo?.hasError('pattern') && (panNo?.dirty || panNo?.touched)"
+                      style="color: red;">Enter the correct PAN number</span>
                     <input class="form-control" type="text" id="panNo" placeholder="Enter pan no."
                       formControlName="panNo">
                   </div>
@@ -248,8 +306,9 @@
 <div class="table-responsive p-md-5 p-3">
   <div class="searchheader row mb-2">
     <div class="col-12 col-sm-3 col-md-3 col-lg-2 mb-2 mb-sm-0 mr-4">
-      <button class="add-btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#company-add"><i class="fa-solid fa-file-circle-plus"></i> Add
-          Company
+      <button class="add-btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#company-add"><i
+          class="fa-solid fa-file-circle-plus"></i> Add
+        Company
       </button>
     </div>
     <div class="col-sm-3 col-md-3 col-lg-4">
@@ -347,10 +406,10 @@
           <p class="m-1">Company Status </p>
           <div class="input-group">
             <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
-            <input *ngIf="comp?.companyStatus==true" type="text" name="companyStatus" class="form-control" id="companyStatus"
-              value="Active" disabled>
-              <input *ngIf="comp?.companyStatus==false" type="text" name="companyStatus" class="form-control" id="companyStatus"
-              value="InActive" disabled>
+            <input *ngIf="comp?.companyStatus==true" type="text" name="companyStatus" class="form-control"
+              id="companyStatus" value="Active" disabled>
+            <input *ngIf="comp?.companyStatus==false" type="text" name="companyStatus" class="form-control"
+              id="companyStatus" value="InActive" disabled>
           </div>
         </div>
         <div class="mb-3">
@@ -534,6 +593,12 @@
                     <label for="CompanyName" class="form-label">Company Name<span style="color: red;">*</span></label>
                     <span *ngIf="companyName?.hasError('required') && (companyName?.dirty || companyName?.touched)"
                       style="color: red;">Required</span>
+                    <span *ngIf="companyName?.hasError('maxlength') && (companyName?.dirty || companyName?.touched)"
+                      style="color: red;">
+                      Maximum 30 characters allowed </span>
+                    <span *ngIf="companyName?.hasError('pattern') && (companyName?.dirty || companyName?.touched)"
+                      style="color: red;">
+                      Only alphabets and numbers are allowed </span>
                     <input class="form-control" type="text" id="companyName" placeholder="Enter company name"
                       formControlName="companyName">
                   </div>
@@ -541,6 +606,12 @@
                     <label for="PocName" class="form-label">POC Name<span style="color: red;">*</span></label>
                     <span *ngIf="pocName?.hasError('required') && (pocName?.dirty || pocName?.touched)"
                       style="color: red;">Required</span>
+                      <span *ngIf="pocName?.hasError('maxlength') && (pocName?.dirty || pocName?.touched)"
+                      style="color: red;">
+                      Maximum 40 characters allowed </span>
+                    <span *ngIf="pocName?.hasError('pattern') && (pocName?.dirty || pocName?.touched)"
+                      style="color: red;">
+                      Only alphabets are allowed </span>
                     <input class="form-control" type="text" id="pocName" placeholder="Enter poc Name"
                       formControlName="pocName">
                   </div>
@@ -556,6 +627,10 @@
                     <span
                       *ngIf="pocContactNumber?.hasError('pattern') && (pocContactNumber?.dirty || pocContactNumber?.touched)"
                       style="color: red;">Invalid number</span>
+                      <span
+                      *ngIf="pocContactNumber?.hasError('maxlength') && (pocContactNumber?.dirty || pocContactNumber?.touched)"
+                      style="color: red;">
+                      Only 10 digits are allowed </span>
                     <input class="form-control" type="text" id="pocContactNumber" placeholder="Enter poc contact number"
                       formControlName="pocContactNumber">
                   </div>
@@ -577,6 +652,9 @@
                       style="color: red;">Required</span>
                     <span *ngIf="pocEmailId?.hasError('email') && (pocEmailId?.dirty || pocEmailId?.touched)"
                       style="color: red;">Invalid email</span>
+                      <span *ngIf="pocEmailId?.hasError('maxlength') && (pocEmailId?.dirty || pocEmailId?.touched)"
+                      style="color: red;">
+                      Enter email length under 70 characters </span>
                     <input class="form-control" type="text" id="pocEmailId" placeholder="Enter poc emailId"
                       formControlName="pocEmailId">
                   </div>
@@ -598,14 +676,26 @@
                     <span
                       *ngIf="companyAddressLine1?.hasError('required') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)"
                       style="color: red;">Required</span>
+                      <span
+                      *ngIf="companyAddressLine1?.hasError('maxlength') && (companyAddressLine1?.dirty || companyAddressLine1?.touched)"
+                      style="color: red;">
+                      Enter address length under 70 characters </span>
                     <input class="form-control" type="text" id="companyAddressLine1"
                       placeholder="Enter company address line 1" formControlName="companyAddressLine1">
                   </div>
                   <div class="m-3">
+                    <span
+                      *ngIf="companyAddressLine2?.hasError('maxlength') && (companyAddressLine2?.dirty || companyAddressLine2?.touched)"
+                      style="color: red;">
+                      Enter address length under 50 characters </span>
                     <input class="form-control" type="text" id="companyAddressLine2"
                       placeholder="Enter company address line 2" formControlName="companyAddressLine2">
                   </div>
                   <div class="m-3">
+                    <span
+                      *ngIf="companyAddressLine3?.hasError('maxlength') && (companyAddressLine3?.dirty || companyAddressLine3?.touched)"
+                      style="color: red;">
+                      Enter address length under 20 characters </span>
                     <input class="form-control" type="text" id="companyAddressLine3"
                       placeholder="Enter company address line 3" formControlName="companyAddressLine3">
                   </div>
@@ -645,6 +735,8 @@
                     <label for="Zipcode" class="form-label">Zipcode<span style="color: red;">*</span></label>
                     <span *ngIf="zipcode?.hasError('required') && (zipcode?.dirty || zipcode?.touched)"
                       style="color: red;">Required</span>
+                       <span *ngIf="zipcode?.hasError('pattern') && (zipcode?.dirty || zipcode?.touched)"
+                      style="color: red;">Exact 5 digits are allowed</span>
                     <input class="form-control" type="text" id="zipcode" placeholder="Enter zip code"
                       formControlName="zipcode">
                   </div>
@@ -656,7 +748,7 @@
                       style="color: red;">Required</span>
                     <span
                       *ngIf="(companyContactNo?.hasError('pattern') || companyContactNo?.hasError('minLength') || companyContactNo?.hasError('maxLength'))&& (companyContactNo?.dirty || companyContactNo?.touched)"
-                      style="color: red;">Invalid number</span>
+                      style="color: red;">Invalid number exact 10 digits are allowed</span>
                     <input class="form-control" type="text" id="companyContactNo"
                       placeholder="Enter company contact no." formControlName="companyContactNo">
                   </div>
@@ -678,6 +770,9 @@
                     <span
                       *ngIf="companyWebsiteUrl?.hasError('required') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)"
                       style="color: red;">Required</span>
+                      <span
+                      *ngIf="companyWebsiteUrl?.hasError('pattern') && (companyWebsiteUrl?.dirty || companyWebsiteUrl?.touched)"
+                      style="color: red;">Enter valid website url</span>
                     <input class="form-control" type="text" id="companyWebsiteUrl"
                       placeholder="Enter company website url" formControlName="companyWebsiteUrl">
                   </div>
@@ -698,6 +793,12 @@
                     <span
                       *ngIf="companyBankName?.hasError('required') && (companyBankName?.dirty || companyBankName?.touched)"
                       style="color: red;">Required</span>
+                      <span
+                      *ngIf="companyBankName?.hasError('maxlength')&& (companyBankName?.dirty || companyBankName?.touched)"
+                      style="color: red;">Enter characters less than 40</span>
+                      <span
+                      *ngIf="companyBankName?.hasError('pattern')&& (companyBankName?.dirty || companyBankName?.touched)"
+                      style="color: red;">Only alphabets are allowed</span>
                     <input class="form-control" type="text" id="companyBankName" placeholder="Enter company bank name"
                       formControlName="companyBankName">
                   </div>
@@ -705,6 +806,8 @@
                     <label for="gSTno" class="form-label">GST no<span style="color: red;">*</span></label>
                     <span *ngIf="gSTno?.hasError('required') && (gSTno?.dirty || gSTno?.touched)"
                       style="color: red;">Required</span>
+                       <span *ngIf="gSTno?.hasError('pattern') && (gSTno?.dirty || gSTno?.touched)"
+                      style="color: red;">Exact 15 digits are allowed</span>
                     <input class="form-control" type="text" id="gSTno" placeholder="Enter gst no."
                       formControlName="gSTno">
                   </div>
@@ -712,6 +815,8 @@
                     <label for="bankAccNo" class="form-label">Bank AccNo<span style="color: red;">*</span></label>
                     <span *ngIf="bankAccNo?.hasError('required') && (bankAccNo?.dirty || bankAccNo?.touched)"
                       style="color: red;">Required</span>
+                       <span *ngIf="bankAccNo?.hasError('pattern') && (bankAccNo?.dirty || bankAccNo?.touched)"
+                      style="color: red;">Digits between 12 and 16 only allowed</span>
                     <input class="form-control" type="text" id="bankAccNo" placeholder="Enter bank Acc no."
                       formControlName="bankAccNo">
                   </div>
@@ -721,6 +826,9 @@
                     <span
                       *ngIf="mSMERegistrationNo?.hasError('required') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)"
                       style="color: red;">Required</span>
+                      <span
+                      *ngIf="mSMERegistrationNo?.hasError('pattern') && (mSMERegistrationNo?.dirty || mSMERegistrationNo?.touched)"
+                      style="color: red;">Exact 16 digits are allowed</span>
                     <input class="form-control" type="text" id="mSMERegistrationNo"
                       placeholder="Enter msme registration no." formControlName="mSMERegistrationNo">
                   </div>
@@ -728,6 +836,8 @@
                     <label for="iFSCCode" class="form-label">IFSCCode<span style="color: red;">*</span></label>
                     <span *ngIf="iFSCCode?.hasError('required') && (iFSCCode?.dirty || iFSCCode?.touched)"
                       style="color: red;">Required</span>
+                       <span *ngIf="iFSCCode?.hasError('pattern') && (iFSCCode?.dirty || iFSCCode?.touched)"
+                      style="color: red;">Enter the correct IFSC code</span>
                     <input class="form-control" type="text" id="iFSCCode" placeholder="Enter ifsc code"
                       formControlName="iFSCCode">
                   </div>
@@ -735,6 +845,8 @@
                     <label for="panNo" class="form-label">Pan No<span style="color: red;">*</span></label>
                     <span *ngIf="panNo?.hasError('required') && (panNo?.dirty || panNo?.touched)"
                       style="color: red;">Required</span>
+                      <span *ngIf="panNo?.hasError('pattern') && (panNo?.dirty || panNo?.touched)"
+                      style="color: red;">Enter the correct PAN number</span>
                     <input class="form-control" type="text" id="panNo" placeholder="Enter pan no."
                       formControlName="panNo">
                   </div>

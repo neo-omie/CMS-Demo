@@ -36,7 +36,7 @@ mode?:string;
 formsValue:any;
 empId:number = 0;
 addApostilleForm: FormGroup= new FormGroup({
-  apostilleName:new FormControl('',[Validators.required]),
+  apostilleName:new FormControl('',[Validators.required,Validators.maxLength(30)]),
   status:new FormControl('1',Validators.required)
 })
 
@@ -46,7 +46,9 @@ ngOnInit(): void {
   this.fetchApostille();
 }
 
-
+get apostilleName(){
+  return this.addApostilleForm.get('apostilleName');
+}
 
 resetForm() {
   this.addApostilleForm.reset();
