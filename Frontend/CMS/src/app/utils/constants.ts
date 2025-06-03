@@ -16,3 +16,15 @@ export enum Location {
     Mumbai = 'Mumbai',
     Banglore = 'Banglore'
 }
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD-MM-YYYY',
+  },
+  display: {
+    dateInput: 'dd-MM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'dd-MM-yyyy',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};

@@ -9,11 +9,11 @@
     <a><i class="fa-solid fa-file-circle-plus"></i> Add
       Addendum</a>
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-right" (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right"
+    (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse"
-    data-bs-target="#filter-container">
+  <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#filter-container">
     Filters<i class="fa-solid fa-angle-down"></i>
   </button>
   <div class="card mb-2">
@@ -21,11 +21,11 @@
       <form [formGroup]="filterForm" (ngSubmit)="onFilterSubmit()" class="filters">
         <div class="mb-3">
           <p class="mb-1">From date</p>
-          <input class="form-control" type="date" formControlName="FromDate"/>
+          <input class="form-control" type="date" formControlName="FromDate" />
         </div>
         <div class="mb-3">
           <p class="mb-1">To date</p>
-          <input class="form-control" type="date" formControlName="ToDate"/>
+          <input class="form-control" type="date" formControlName="ToDate" />
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract type</p>
@@ -46,10 +46,11 @@
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract status</p>
-          <select class="form-select" name="contract-status" id="filter-contract-status" formControlName="ContractStatus">
+          <select class="form-select" name="contract-status" id="filter-contract-status"
+            formControlName="ContractStatus">
             <option value="0">--Select--</option>
             @for (key of statusKeys; track $index) {
-              <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
+            <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
             }
           </select>
         </div>
@@ -65,7 +66,7 @@
           <select class="form-select" name="loaction" id="filter-loction" formControlName="Location">
             <option value="">--Select--</option>
             @for (key of locationSelectKeys; track $index) {
-              <option value="{{getEnum(key)}}">{{key}}</option>
+            <option value="{{getEnum(key)}}">{{key}}</option>
             }
           </select>
         </div>
@@ -86,10 +87,6 @@
   </div>
   <table mat-table [dataSource]="dataSource" matSort
     class="table table-striped table-bordered align-middle mat-elevation-z8" id="contracts-table">
-    <ng-container matColumnDef="contractID">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract ID</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.contractID }}</td>
-    </ng-container>
     <ng-container matColumnDef="contractName">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Name</th>
       <td mat-cell *matCellDef="let cont">{{ cont.contractName }}</td>
@@ -116,7 +113,9 @@
     </ng-container>
     <ng-container matColumnDef="addendumDate">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Addendum Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.addendumDate.toString().split('T')[0] }}</td>
+      <td mat-cell *matCellDef="let cont">
+        {{ cont?.addendumDate?.toString().split('T')[0] || '-' }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="status">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
@@ -207,8 +206,10 @@
               Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.contractName }}
             </p>
           </div>
-        <app-progress-bar [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0" type="contract" [phases]="phases"></app-progress-bar>
-      </div>
+          <app-progress-bar
+            [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0"
+            type="contract" [phases]="phases"></app-progress-bar>
+        </div>
         <div class="mb-3">
           <p class="m-1">Contract Name</p>
           <div class="input-group">
@@ -454,8 +455,8 @@
         </div>
         <app-progress-bar [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0" type="contract" [phases]="phases"></app-progress-bar>
       </div> -->
+    </div>
   </div>
-</div>
 </div>
 
 <!-- Edit of Contract -->
@@ -800,32 +801,89 @@
                 <label for="validFrom">Valid from<span style="color: red;">*</span></label>
                 <span *ngIf="validFrom?.hasError('required') && (validFrom?.dirty || validFrom?.touched)"
                   style="color: red;">Required</span>
+                <span *ngIf="masterContractAddForm.get('validFrom')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                    Invalid date.
+                  </span>
+                  <span style="color: red;" *ngIf="errors['pastDate']">
+                    Date must not be in the past.
+                  </span>
+                </span>
                 <input class="form-control" type="date" id="validFrom" formControlName="validFrom">
               </div>
               <div class="m-3">
                 <label for="validTill">Valid till<span style="color: red;">*</span></label>
                 <span *ngIf="validTill?.hasError('required') && (validTill?.dirty || validTill?.touched)"
                   style="color: red;">Required</span>
+                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                    Invalid date.
+                  </span>
+                  <span style="color: red;" *ngIf="errors['pastDate']">
+                    Date must not be in the past.
+                  </span>
+                </span>
+                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDateRange']">
+                    Date must be grater than valid from date
+                  </span>
+                </span>
+                <span
+                  *ngIf="masterContractAddForm?.errors?.['invalidDateRange'] && (validTill?.dirty || validTill?.touched)"
+                  style="color: red">
+                  Valid till date must be greater than valid from date.
+                </span>
                 <input class="form-control" type="date" id="validTill" formControlName="validTill">
               </div>
               <div class="m-3">
                 <label for="renewalFrom">Renewal from<span style="color: red;">*</span></label>
                 <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
                   style="color: red;">Required</span>
+                <span *ngIf="masterContractAddForm.get('renewalFrom')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                    Invalid date.
+                  </span>
+                  <span style="color: red;" *ngIf="errors['pastDate']">
+                    Date must not be in the past.
+                  </span>
+                </span>
+                <span
+                  *ngIf="masterContractAddForm?.errors?.['invalidDateBetweenRange'] && (renewalFrom?.dirty || renewalFrom?.touched)"
+                  style="color: red">
+                  Renewal from date must be between valid from and till date.
+                </span>
                 <input class="form-control" type="date" id="renewalFrom" formControlName="renewalFrom">
               </div>
               <div class="m-3">
                 <label for="renewalTill">Renewal till<span style="color: red;">*</span></label>
                 <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
                   style="color: red;">Required</span>
+                <span *ngIf="renewalTill?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                    Invalid date.
+                  </span>
+                  <span style="color: red;" *ngIf="errors['pastDate']">
+                    Date must not be in the past.
+                  </span>
+                </span>
+                <span
+                  *ngIf="masterContractAddForm?.errors?.['invalidDateRange'] && (renewalTill?.dirty || renewalTill?.touched)"
+                  style="color: red">
+                  Renewal till date must be greater than renewal from date.
+                </span>
+                <span
+                  *ngIf="masterContractAddForm?.errors?.['invalidDateBetweenRange'] && (renewalTill?.dirty || renewalTill?.touched)"
+                  style="color: red">
+                  Renewal till date must be between valid from and till date.
+                </span>
                 <input class="form-control" type="date" id="renewalTill" formControlName="renewalTill">
               </div>
-              <div class="m-3">
+              <!-- <div class="m-3">
                 <label for="addendumDate">Addendum Date<span style="color: red;">*</span></label>
                 <span *ngIf="addendumDate?.hasError('required') && (addendumDate?.dirty || addendumDate?.touched)"
                   style="color: red;">Required</span>
                 <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
-              </div>
+              </div> -->
               <div class="m-3">
                 <label for="termsAndConditions">Employee Custodian Name<span style="color: red;">*</span></label>
                 <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
@@ -859,30 +917,6 @@
                   style="color: red;">Required</span>
                 <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
               </div>
-              <!-- <div class="m-3">
-                    <span *ngIf="approver1Status?.hasError('required') && (approver1Status?.dirty || approver1Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver1Status?.hasError('pattern') && (approver1Status?.dirty || approver1Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver1Status" placeholder="Enter Approver 1 Status"
-                      formControlName="approver1Status">
-                  </div>
-                  <div class="m-3">
-                    <span *ngIf="approver2Status?.hasError('required') && (approver2Status?.dirty || approver2Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver2Status?.hasError('pattern') && (approver2Status?.dirty || approver2Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver2Status" placeholder="Enter Approver 2 Status"
-                      formControlName="approver2Status">
-                  </div>
-                  <div class="m-3">
-                    <span *ngIf="approver3Status?.hasError('required') && (approver3Status?.dirty || approver3Status?.touched)"
-                      style="color: red;">Required</span>
-                    <span *ngIf="approver3Status?.hasError('pattern') && (approver3Status?.dirty || approver3Status?.touched)"
-                      style="color: red;">Invalid number</span>
-                    <input class="form-control" type="text" id="approver3Status" placeholder="Enter Approver 3 Status"
-                      formControlName="approver3Status">
-                  </div> -->
             </div>
           </div>
         </div>
@@ -926,9 +960,9 @@
             <p class="m-1">End date
               <!-- <span style="color: red;">*</span> -->
             </p>
-            
+
             <div class="input-group">
-              
+
               <input type="date" name="end_Date" class="form-control" id="end_Date" min="0" max="30"
                 placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date">
 
@@ -936,9 +970,9 @@
           </div>
           <!-- <div class="mb-3">
             <p class="m-1">Notice Duration -->
-              <!-- <span style="color: red;">*</span> -->
-            <!-- </p> -->
-            <!-- <div class="input-group">
+          <!-- <span style="color: red;">*</span> -->
+          <!-- </p> -->
+          <!-- <div class="input-group">
               <input type="number" name="notice_Duration" class="form-control" id="notice_Duration" min="0"
                 placeholder="Enter the end date" [(ngModel)]="postTerm.notice_Duration">
             </div>
