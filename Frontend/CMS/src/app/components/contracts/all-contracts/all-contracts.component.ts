@@ -682,7 +682,7 @@ export class AllContractsComponent implements OnInit {
 
   addaddendumForm = new FormGroup({
     addendumContractId: new FormControl('', [Validators.required]),
-    contractId: new FormControl('', [Validators.required]),
+    // contractId: new FormControl('', [Validators.required]),
     contractName: new FormControl('', [Validators.required]),
     departmentId: new FormControl('', [Validators.required]),
     contractWithCompanyId: new FormControl('', [Validators.required]),
@@ -705,7 +705,7 @@ export class AllContractsComponent implements OnInit {
       this.addAddendumContractsService.fetchContractData(contractID).subscribe({
         next: (response) => {
           this.addaddendumForm.patchValue({
-            contractId: String(response.contractId),
+            // contractId: String(response.contractId),
             contractName: String(response.contractName),
             departmentId: String(response.departmentId),
             contractWithCompanyId: String(response.contractWithCompanyId),
@@ -739,7 +739,7 @@ export class AllContractsComponent implements OnInit {
     this.addAddendumContractsService.fetchContractData(contractID).subscribe({
       next: (response) => {
         this.addaddendumForm.patchValue({
-          contractId: String(response.contractId),
+          // contractId: String(response.contractId),
           contractName: String(response.contractName),
           departmentId: String(response.departmentId),
           contractWithCompanyId: String(response.contractWithCompanyId),
@@ -854,7 +854,8 @@ export class AllContractsComponent implements OnInit {
     const addendum = new AddAddendumContract();
     let empCode = DecodeToken.ECode;
     // var todaysDate = new Date().toISOString().split('T')[0];
-    addendum.contractId = Number(this.addaddendumForm.value.contractId);
+    console.log(contractID);
+    addendum.contractId = contractID;
     addendum.contractName = String(this.addaddendumForm.value.contractName);
     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
     addendum.contractWithCompanyId = Number(this.addaddendumForm.value.contractWithCompanyId);
