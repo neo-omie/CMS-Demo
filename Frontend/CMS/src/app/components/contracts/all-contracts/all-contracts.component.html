@@ -958,14 +958,12 @@
               (click)="triggerFileInput()" -->
           <div class="mb-3">
             <p class="m-1">End date
-              <!-- <span style="color: red;">*</span> -->
+              <span style="color: red;">*</span>
             </p>
-
             <div class="input-group">
-
+              
               <input type="date" name="end_Date" class="form-control" id="end_Date" min="0" max="30"
                 placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date">
-
             </div>
           </div>
           <!-- <div class="mb-3">
@@ -980,7 +978,8 @@
           <div class="mb-3">
             <p class="m-1">
               Remark <span style="color: red;">*</span>
-              <span *ngIf="!postTerm.Remark || postTerm.Remark.length <= 0" style="color: red;">Required</span>
+              <span *ngIf="!postTerm.Remark || postTerm.Remark.length < 0" style="color: red;">Required</span>
+              
               <!-- <span *ngIf="(postTerm.Remark.touched && !postTerm.Remark) || (postTerm.Remark.touched && postTerm.Remark.length <= 0)"style="color: red;">Required</span> -->
             </p>
             <div class="input-group">

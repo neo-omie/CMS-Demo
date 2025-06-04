@@ -57,6 +57,7 @@ import { dateBetweenValidator, dateRangeValidator, dateValidator } from '../../.
 export class AllContractsComponent implements OnInit {
   contractStatus = ContractStatus
   locationSelect = Location
+    remarkTouched: boolean = false;
   statusKeys = Object.keys(this.contractStatus);
   locationSelectKeys = Object.keys(this.locationSelect);
   displayedColumns: string[] = ['contractName', 'contractType', 'departmentName', 'effectiveDate',
@@ -98,6 +99,7 @@ export class AllContractsComponent implements OnInit {
   Department: new FormControl(0),
   Location:new FormControl(''),
   HasAddendum: new FormControl(-1)
+
 })
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
@@ -1019,7 +1021,7 @@ export class AllContractsComponent implements OnInit {
   OnSavePostTermination(documentForm: NgForm) {
     console.log(documentForm.value);
     console.log(this.file);
-
+    
     if (!this.file || !documentForm.valid) {
       this.addFile.nativeElement.value = "";
       this.postTerm.file = null
@@ -1031,7 +1033,7 @@ export class AllContractsComponent implements OnInit {
     }
     const allowedExtensions = ['.pdf', '.doc', '.docx'];
     const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
-
+    
     if (!allowedExtensions.includes(fileExtension)) {
       this.addFile.nativeElement.value = "";
       this.postTerm.file = null;
@@ -1047,25 +1049,27 @@ export class AllContractsComponent implements OnInit {
       Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
       return;
     }
-
+    
     const formData = new FormData();
     formData.append('file', this.file)
     formData.append('contractId', String(this.contIdForPostTerm))
     formData.append('notice_Duration', String(this.postTerm.notice_Duration))
     formData.append('end_Date', String(this.postTerm.end_Date))
     formData.append('Remark', String(this.postTerm.Remark))
+    this.loading=true;
     this.postTermService.UploadDoc(formData).subscribe({
       next: (res) => {
         this.file = null;
         documentForm.reset();
         // this.addFile.nativeElement.value = "";
         //      this.postTerm.file=null;
-
-        Alert.bigToast(
-          'Success!',
-          'Posted Termination successfully.',
+          this.loading=false;
+        Alert.toast(
+          
           TYPE.SUCCESS,
-          'Ok'
+          true,
+
+          ' Notice added successfully'
         );
         this.GetPage(this.maxPage);
         const modalElement = document.getElementById('Termination-Notice-Detail');
@@ -1075,6 +1079,7 @@ export class AllContractsComponent implements OnInit {
         }
       },
       error: (error) => {
+        this.loading=false;
         console.error('Error in creating Notice:', error);
         Alert.bigToast(
           'Error!',
@@ -1096,6 +1101,8 @@ export class AllContractsComponent implements OnInit {
     // this.document.status = 1;
 
   }
+
+
 
   // Post Termination Notice
   postTermination: PostTermination = new PostTermination();
@@ -1368,3 +1375,4 @@ export class AllContractsComponent implements OnInit {
 //  get EndDate(){
 //       return this.masterCompanyAddForm.get('pocContactNumber');
 //     }
+

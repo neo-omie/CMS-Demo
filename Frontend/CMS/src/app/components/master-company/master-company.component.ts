@@ -242,28 +242,28 @@ export class MasterCompanyComponent implements OnInit{
   // }
 
     masterCompanyAddForm = new FormGroup({
-      companyName : new FormControl('',[Validators.required]),
-      pocName : new FormControl('',[Validators.required]),
+      companyName : new FormControl('',[Validators.required,Validators.maxLength(30),Validators.pattern('^[A-Za-z0-9 ]+$')]),
+      pocName : new FormControl('',[Validators.required,Validators.maxLength(40),Validators.pattern('^[A-Za-z ]+$')]),
       valueId : new FormControl(undefined),
-      pocContactNumber : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
+      pocContactNumber : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$'),Validators.maxLength(10)]),
       companyStatus : new FormControl('1',[Validators.required,Validators.pattern('^(0|1)$')]),
-      pocEmailId : new FormControl('',[Validators.required,Validators.email]),
-      companyAddressLine1 : new FormControl('',[Validators.required]),
-      companyAddressLine2 : new FormControl(''),
-      companyAddressLine3 : new FormControl(''),
+      pocEmailId : new FormControl('',[Validators.required,Validators.email,Validators.maxLength(70)]),
+      companyAddressLine1 : new FormControl('',[Validators.required,Validators.maxLength(70)]),
+      companyAddressLine2 : new FormControl('',[Validators.maxLength(50)]),
+      companyAddressLine3 : new FormControl('',[Validators.maxLength(50)]),
       countryId : new FormControl('',[Validators.required]),
       stateId : new FormControl('',[Validators.required]),
       cityId : new FormControl('',[Validators.required]),
-      zipcode : new FormControl('',[Validators.required]),
+      zipcode : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{5}$')]),
       companyContactNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
-      companyEmailId : new FormControl('',[Validators.required,Validators.email]),
-      companyWebsiteUrl : new FormControl('',[Validators.required]),
-      companyBankName : new FormControl('',[Validators.required]),
-      gSTno : new FormControl('',[Validators.required]),
-      bankAccNo : new FormControl('',[Validators.required]),
-      mSMERegistrationNo : new FormControl('',[Validators.required]),
-      iFSCCode : new FormControl('',[Validators.required]),
-      panNo : new FormControl('',[Validators.required])
+      companyEmailId : new FormControl('',[Validators.required,Validators.email,Validators.maxLength(50)]),
+      companyWebsiteUrl : new FormControl('',[Validators.required,Validators.pattern('^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$')]),
+      companyBankName : new FormControl('',[Validators.required,Validators.maxLength(40),Validators.pattern('^[A-Za-z]+$')]),
+      gSTno : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{15}$')]),
+      bankAccNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{12,16}$')]),
+      mSMERegistrationNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{16}$')]),
+      iFSCCode : new FormControl('',[Validators.required,Validators.pattern('^[A-Z]{4}0[A-Z0-9]{6}$')]),
+      panNo : new FormControl('',[Validators.required,Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]$')])
     })
     onAddFormSubmit(){
       let empCode =DecodeToken.ECode;
@@ -358,6 +358,12 @@ export class MasterCompanyComponent implements OnInit{
     }
     get companyAddressLine1(){
       return this.masterCompanyAddForm.get('companyAddressLine1');
+    }
+    get companyAddressLine2(){
+      return this.masterCompanyAddForm.get('companyAddressLine2')
+    }
+       get companyAddressLine3(){
+      return this.masterCompanyAddForm.get('companyAddressLine3')
     }
     get countryId(){
       return this.masterCompanyAddForm.get('countryId');
