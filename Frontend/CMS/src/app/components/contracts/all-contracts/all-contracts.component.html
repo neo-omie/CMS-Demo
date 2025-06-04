@@ -1122,16 +1122,16 @@
             class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="addaddendumForm" (ngSubmit)="onAddAddendumFormSubmit(contID)">
+        <form [formGroup]="addaddendumForm" (ngSubmit)="onAddAddendumFormSubmit( contractId != undefined  ? contractId.value : 0)">
           <div class="p-2">
             <div class="fields-container">
-              <div class="m-3">
+              <!-- <div class="m-3">
                 <label for="contractId">Contract Id</label>
                 <span *ngIf="contractId?.hasError('required') && (contractId?.dirty || contractId?.touched)"
                   style="color: red;">Required</span>
                 <input class="form-control" type="text" id="contractId" placeholder="Enter contract id"
                   formControlName="contractId">
-              </div>
+              </div> -->
               <div class="m-3">
                 <label for="termsAndConditions">Contract Name</label>
                 <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
