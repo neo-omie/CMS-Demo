@@ -89,6 +89,7 @@ export class AllContractsComponent implements OnInit {
   postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
   withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
   contIdForPostTerm?: number = 0;
+  
   filterForm: FormGroup= new FormGroup({
   SearchTerm:new FormControl(null),
   FromDate:new FormControl(null),

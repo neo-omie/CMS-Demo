@@ -474,7 +474,7 @@
           <div class="p-2">
             <div class="fields-container">
               <div class="m-3">
-                <label for="termsAndConditions">Contract Name</label>
+                <label for="termsAndConditions">Contract Name <span style="color: red;" >*</span> </label>
                 <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
                   style="color: red;">Required</span>
                 <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
