@@ -44,6 +44,7 @@ namespace CMS.Persistence.Repositories
             .Where(x => x.IsDeleted == false)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .OrderByDescending(x=>x.AddendumDate)
             .ToListAsync();
 
             return (data, totalCount);
