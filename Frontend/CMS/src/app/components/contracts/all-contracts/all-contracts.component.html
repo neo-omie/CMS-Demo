@@ -1122,7 +1122,7 @@
             class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="addaddendumForm" (ngSubmit)="onAddAddendumFormSubmit( contractId != undefined  ? contractId.value : 0)">
+        <form [formGroup]="addaddendumForm" (ngSubmit)="onAddAddendumFormSubmit((contractId != undefined && contractId.value != null)  ? +(contractId.value) : 0)">
           <div class="p-2">
             <div class="fields-container">
               <!-- <div class="m-3">

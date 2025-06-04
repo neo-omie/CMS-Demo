@@ -682,7 +682,7 @@ export class AllContractsComponent implements OnInit {
 
   addaddendumForm = new FormGroup({
     addendumContractId: new FormControl('', [Validators.required]),
-    // contractId: new FormControl('', [Validators.required]),
+    contractId: new FormControl('', [Validators.required]),
     contractName: new FormControl('', [Validators.required]),
     departmentId: new FormControl('', [Validators.required]),
     contractWithCompanyId: new FormControl('', [Validators.required]),
@@ -705,7 +705,7 @@ export class AllContractsComponent implements OnInit {
       this.addAddendumContractsService.fetchContractData(contractID).subscribe({
         next: (response) => {
           this.addaddendumForm.patchValue({
-            // contractId: String(response.contractId),
+            contractId: String(contractID),
             contractName: String(response.contractName),
             departmentId: String(response.departmentId),
             contractWithCompanyId: String(response.contractWithCompanyId),
