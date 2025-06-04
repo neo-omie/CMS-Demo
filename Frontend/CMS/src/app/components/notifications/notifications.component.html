@@ -1,35 +1,21 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3">All Notifications</h2>
 
-<div class="table-responsive p-md-5 p-3">
-  <table mat-table [dataSource]="dataSource" matSort
-    class="table table-striped table-bordered align-middle mat-elevation-z8">
 
-    <ng-container matColumnDef="notificationDate">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-      <td mat-cell *matCellDef="let notification">{{ notification.notificationDate.toString().split('T')[0] }}</td>
-    </ng-container>
-    <ng-container matColumnDef="notificationSubject">
-        <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Notification</th>
-        <td mat-cell *matCellDef="let notification">{{ notification.notficationSubject }}</td>
-      </ng-container>
-    
-    <ng-container matColumnDef="action">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
-      <td mat-cell *matCellDef="let notification">
-        <i [ngStyle]="notification.isRead ? null :{'color':'#5f5fee'}" class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#notification-detail"
-          (click)="SeeNotificationDetails(notification.valueId)"></i>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
-  </table>
-  
+<div *ngIf="!loading" class="table-responsive p-md-5 p-3">
+  <app-table [data]="notifications" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
   <p class="fs-5" *ngIf="notifications.length == 0" style="text-align: center;">No records</p>
   <app-pagination [maxPage]="maxPage" [records]="this.notifications.length" [pageNumbers]="pageNumbers"
   [GetPage]="GetPage.bind(this)"></app-pagination>
 </div>
+
+<ng-template #actionRef let-row>
+ <i [ngStyle]="row.isRead ? null :{'color':'#5f5fee'}" class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#notification-detail"
+          (click)="SeeNotificationDetails(row.valueId)"></i>
+</ng-template>
+<ng-template #notifDate let-row>
+    {{ row.notificationDate | date :'dd-MM-yyyy  hh:mm:ss a'}}
+</ng-template>
 <div class="modal fade" id="notification-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">

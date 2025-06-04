@@ -25,7 +25,7 @@
       </button>
       <button
         *ngIf="!isCreate"
-        type="reset"
+        type="button"
         class="btn close-btn"
         data-bs-dismiss="modal"
         aria-label="Close"
@@ -416,6 +416,14 @@
                   style="color: red"
                   >Required</span
                 >
+                <span *ngIf="masterContractAddForm.get('validFrom')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                    Invalid date.
+                  </span>
+                  <span style="color: red;" *ngIf="errors['pastDate']">
+                    Date must not be in the past.
+                  </span>
+                  </span>
                 <input
                   *ngIf="isCreate"
                   class="form-control"
@@ -448,6 +456,25 @@
                   style="color: red"
                   >Required</span
                 >
+                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                    Invalid date.
+                  </span>
+                  <span style="color: red;" *ngIf="errors['pastDate']">
+                    Date must not be in the past.
+                  </span>
+                </span>
+                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
+                  <span style="color: red;" *ngIf="errors['invalidDateRange']">
+                    Date must be grater than valid from date
+                  </span>
+                </span>
+                <span
+                  *ngIf="masterContractAddForm.errors?.['invalidDateRange'] && (formfield('validTill')?.dirty ||
+                      formfield('validTill')?.touched)"
+                  style="color: red">
+                  Valid till date must be greater than valid from date.
+                </span>
                 <input
                   *ngIf="isCreate"
                   class="form-control"
@@ -737,6 +764,7 @@
             Cancel
           </button>
           <button
+            type="button"
             class="btn btn-primary"
             *ngIf="!isCreate && withdrawCheck"
             data-bs-target="#withdrawal-mail"
@@ -746,6 +774,7 @@
             Approve Notice Withdrawal
           </button>
           <button
+            type="button"
             class="btn btn-danger"
             *ngIf="!isCreate && withdrawCheck"
             data-bs-target="#withdrawal-mail"
@@ -756,6 +785,7 @@
           </button>
 
           <button
+            type="button"
             class="btn btn-primary"
             *ngIf="!isCreate && terminationCheck"
             data-bs-target="#postTerm-mail"
@@ -765,6 +795,7 @@
             Approve Termination
           </button>
           <button
+            type="button"
             class="btn btn-danger"
             *ngIf="!isCreate && terminationCheck"
             data-bs-target="#postTerm-mail"
@@ -775,6 +806,7 @@
           </button>
 
           <button
+            type="button"
             class="btn btn-primary"
             data-bs-dismiss="modal"
             *ngIf="!isCreate && approverCheck"
@@ -785,6 +817,7 @@
             Approve
           </button>
           <button
+            type="button"
             class="btn btn-danger"
             data-bs-dismiss="modal"
             *ngIf="!isCreate && approverCheck"
@@ -796,6 +829,7 @@
           </button>
 
           <button
+            type="button"
             data-bs-dismiss="modal"
             class="btn btn-outline-danger"
             id="btncancel"
@@ -810,6 +844,7 @@
             Post Termination
           </button>
           <button
+            type="button"
             data-bs-dismiss="modal"
             class="btn btn-outline-success"
             id="btncancel"
@@ -825,7 +860,7 @@
           </button>
           <button
             *ngIf="!isCreate"
-            type="reset"
+            type="button"
             data-bs-dismiss="modal"
             class="btn btn-outline-danger"
             id="btncancel"
