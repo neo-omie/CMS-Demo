@@ -37,10 +37,21 @@
               class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
+        <div id="progress"  *ngIf="addAddendumContract?.contractId!==null">
+          <div class="d-flex justify-content-center">
+            <p style="color: #5f5fee;" class="fs-5 fw-bolder text-center">
+              Progress of {{ getProgressType(addAddendumContract?.approver3Status) }} {{ addAddendumContract?.contractName }}
+            </p>
+          </div>
+          <div class="progress-scroll-container">
+            <app-progress-bar [contractId]="addAddendumContract!= undefined && addAddendumContract.addendumContractId!= undefined?(+(addAddendumContract.addendumContractId)):0" type="addendum" [phases]="phases"></app-progress-bar>
+          </div>
+        </div>
+
           <div class="mb-3">
             <p class="m-1">Contract Name</p>
             <div class="input-group">
-              <span class="input-group-text"><b>{{addAddendumContract?.contractId}}</b></span>
+              <!-- <span class="input-group-text"><b>{{addAddendumContract?.contractId}}</b></span> -->
               <input type="text" name="contractName" class="form-control" id="contractName"
                 [value]="addAddendumContract?.contractName" disabled>
             </div>
@@ -49,7 +60,7 @@
           <div class="mb-3">
             <p class="m-1">Department Name</p>
             <div class="input-group">
-              <span class="input-group-text"><b>{{addAddendumContract?.departmentId}}</b></span>
+              <!-- <span class="input-group-text"><b>{{addAddendumContract?.departmentId}}</b></span> -->
               <input type="text" name="departmentName" class="form-control" id="departmentName"
                 [value]="addAddendumContract?.departmentName" disabled>
             </div>
@@ -58,7 +69,7 @@
           <div class="mb-3">
             <p class="m-1">Contract With Company Name</p>
             <div class="input-group">
-              <span class="input-group-text"><b>{{addAddendumContract?.contractWithCompanyId}}</b></span>
+              <!-- <span class="input-group-text"><b>{{addAddendumContract?.contractWithCompanyId}}</b></span> -->
               <input type="text" name="contractWithCompanyName" class="form-control" id="contractWithCompanyName"
                 [value]="addAddendumContract?.contractWithCompanyName" disabled>
             </div>
@@ -67,7 +78,7 @@
           <div class="mb-3">
             <p class="m-1">Contract Type Name</p>
             <div class="input-group">
-              <span class="input-group-text"><b>{{addAddendumContract?.contractTypeId}}</b></span>
+              <!-- <span class="input-group-text"><b>{{addAddendumContract?.contractTypeId}}</b></span> -->
               <input type="text" name="contractTypeName" class="form-control" id="contractTypeName"
                 [value]="addAddendumContract?.contractTypeName" disabled>
             </div>
@@ -76,7 +87,7 @@
           <div class="mb-3">
             <p class="m-1">Apostille Type Name</p>
             <div class="input-group">
-              <span class="input-group-text"><b>{{addAddendumContract?.apostilleTypeId}}</b></span>
+              <!-- <span class="input-group-text"><b>{{addAddendumContract?.apostilleTypeId}}</b></span> -->
               <input type="text" name="apostilleTypeName" class="form-control" id="apostilleTypeName"
                 [value]="addAddendumContract?.apostilleTypeName" disabled>
             </div>
@@ -85,7 +96,7 @@
           <div class="mb-3">
             <p class="m-1">Actual Document Reference No.</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-file-lines"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-file-lines"></i></span> -->
               <input type="text" name="actualDocRefNo" class="form-control" id="actualDocRefNo"
                 [value]="addAddendumContract?.actualDocRefNo" disabled>
             </div>
@@ -94,7 +105,7 @@
           <div class="mb-3">
             <p class="m-1">Retainer Contract Type</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span> -->
               <input type="text" *ngIf="addAddendumContract?.retainerContract == 1" name="retainerContract"
                 class="form-control" id="retainerContract" value="None" disabled>
               <input type="text" *ngIf="addAddendumContract?.retainerContract == 2" name="retainerContract"
@@ -111,7 +122,7 @@
           <div class="mb-3">
             <p class="m-1">Terms & Conditions</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-receipt"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-receipt"></i></span> -->
               <textarea name="termsAndConditions" class="form-control" id="termsAndConditions"
                 [value]="addAddendumContract?.termsAndConditions" disabled></textarea>
             </div>
@@ -120,7 +131,7 @@
           <div class="mb-3">
             <p class="m-1">Valid From</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span> -->
               <input type="datetime-local" name="validFrom" class="form-control" id="validFrom"
                 [value]="addAddendumContract?.validFrom" disabled>
             </div>
@@ -129,7 +140,7 @@
           <div class="mb-3">
             <p class="m-1">Valid Till</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span> -->
               <input type="datetime-local" name="validTill" class="form-control" id="validTill"
                 [value]="addAddendumContract?.validTill" disabled>
             </div>
@@ -138,7 +149,7 @@
           <div class="mb-3">
             <p class="m-1">Addendum Date</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-calendar-plus"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-calendar-plus"></i></span> -->
               <input type="datetime-local" name="addendumDate" class="form-control" id="addendumDate"
                 [value]="addAddendumContract?.addendumDate" disabled>
             </div>
@@ -147,7 +158,7 @@
           <div class="mb-3">
             <p class="m-1">Employee Custodian Name</p>
             <div class="input-group">
-              <span class="input-group-text"><b>{{addAddendumContract?.empCustodianId}}</b></span>
+              <!-- <span class="input-group-text"><b>{{addAddendumContract?.empCustodianId}}</b></span> -->
               <input type="text" name="empCustodianName" class="form-control" id="empCustodianName"
                 [value]="addAddendumContract?.empCustodianName" disabled>
             </div>
@@ -156,7 +167,7 @@
           <div class="mb-3">
             <p class="m-1">Location</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span> -->
               <input type="text" name="location" class="form-control" id="location" [value]="addAddendumContract?.location"
                 disabled>
             </div>
@@ -165,7 +176,7 @@
           <div class="mb-3">
             <p class="m-1">Approver L1 Status</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>1</b></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>1</b></span> -->
               <input *ngIf="addAddendumContract?.approver1Status == 1" type="text" name="approver1Status"
                 class="form-control" id="approver1Status" value="Pending Approval" style="background-color: #FFC107;"
                 disabled>
@@ -188,7 +199,7 @@
           <div class="mb-3">
             <p class="m-1">Approver L2 Status</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>2</b></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>2</b></span> -->
               <input *ngIf="addAddendumContract?.approver2Status == 1" type="text" name="approver2Status"
                 class="form-control" id="approver2Status" value="Pending Approval" style="background-color: #FFC107;"
                 disabled>
@@ -211,7 +222,7 @@
           <div class="mb-3">
             <p class="m-1">Approver L3 Status</p>
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span>
+              <!-- <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span> -->
               <input *ngIf="addAddendumContract?.approver3Status == 1" type="text" name="approver3Status"
                 class="form-control" id="approver3Status" value="Pending Approval" style="background-color: #FFC107;"
                 disabled>
@@ -236,11 +247,11 @@
             (click)="approveRejectContract(addAddendumContract?.contractId, addAddendumContract?.addendumContractId,2)">Approve</button>
           <button class="btn btn-danger" data-bs-dismiss="modal" *ngIf="approverCheck"
             (click)="approveRejectContract(addAddendumContract?.contractId, addAddendumContract?.addendumContractId,3)">Reject</button>
-          <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button>
+          <!-- <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button> -->
           <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
         </div>
         <!-- Progress bar horizontal -->
-        <div id="progress" class="collapse" *ngIf="addAddendumContract?.contractId!==null">
+        <!-- <div id="progress" class="collapse" *ngIf="addAddendumContract?.contractId!==null">
           <div class="d-flex justify-content-center">
             <p style="color: #5f5fee;" class="fs-5 fw-bolder text-center">
               Progress of {{ getProgressType(addAddendumContract?.approver3Status) }} {{ addAddendumContract?.contractName }}
@@ -249,7 +260,7 @@
           <div class="progress-scroll-container">
             <app-progress-bar [contractId]="addAddendumContract!= undefined && addAddendumContract.addendumContractId!= undefined?(+(addAddendumContract.addendumContractId)):0" type="addendum" [phases]="phases"></app-progress-bar>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

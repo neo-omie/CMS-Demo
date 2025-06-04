@@ -39,11 +39,12 @@ import {
   dateRangeValidator,
   dateValidator,
 } from '../../../utils/dateValidator';
+import { ProgressBarComponent } from "../../UtilComponents/progress-bar/progress-bar.component";
 
 @Component({
   selector: 'app-all-classified-contract-view-add-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ProgressBarComponent],
   templateUrl: './all-classified-contract-view-add-modal.component.html',
   styleUrl: './all-classified-contract-view-add-modal.component.css',
 })
@@ -205,6 +206,31 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
       error: (error) => this.error(error),
     });
   }
+
+   getProgressType(status:number|undefined):string{
+    if(status===undefined || status===null){
+      return '';
+    }
+
+    switch(status){
+      case 1: return 'Approval for'; 
+      case 2: return 'Active'; 
+      case 3: return 'Rejection for';
+      case 4: return 'Termination of';
+      case 5: return 'Expiration of';
+      case 6: return 'Termination in progress for';
+      case 7: return 'Termination approved for';
+      case 8: return 'Notice withdrawal pending for';
+      default: return 'Progress for ';
+    }
+  }
+  phases=[
+    'Contract Created',
+    'L1 Approver Approval',
+    'L2 Approver Approval',
+    'L3 Approver Approval',
+    'Contract Active',
+  ];
 
   textChangeEmployeeCustodian(departmentId: number, event: Event) {
     let input = event.target as HTMLInputElement;
