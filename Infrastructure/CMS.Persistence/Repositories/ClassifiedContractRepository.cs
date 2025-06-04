@@ -81,7 +81,7 @@ namespace CMS.Persistence.Repositories
                 cp.Approver3Status = ContractStatus.Active;
             }
             
-            cp.CreatedBy = "Admin@cms.com";
+            cp.CreatedBy = empName;
             // Add the contract to the context
           
             var addedContract =await  _context.ClassifiedContracts.AddAsync(cp);

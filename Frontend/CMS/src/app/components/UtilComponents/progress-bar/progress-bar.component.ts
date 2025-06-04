@@ -40,6 +40,9 @@ export class ProgressBarComponent implements OnInit, OnChanges{
     if(changes['contractId'] && changes['contractId'].currentValue){
       this.loadProgress();
     }
+    if(changes['classifiedContractId'] && changes['classifiedContractId'].currentValue){
+      this.loadProgress();
+    }
   }
 
   constructor(private contractsService: ContractsService, private addAddendumContractsService: AddAddendumContractsService, private classifiedContractsService: ClassifiedContractsService){}

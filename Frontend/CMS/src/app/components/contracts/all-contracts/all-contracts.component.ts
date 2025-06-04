@@ -90,6 +90,7 @@ export class AllContractsComponent implements OnInit {
   postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
   withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
   contIdForPostTerm?: number = 0;
+  
   filterForm: FormGroup= new FormGroup({
   SearchTerm:new FormControl(null),
   FromDate:new FormControl(null),
@@ -706,7 +707,7 @@ export class AllContractsComponent implements OnInit {
       this.addAddendumContractsService.fetchContractData(contractID).subscribe({
         next: (response) => {
           this.addaddendumForm.patchValue({
-            contractId: String(response.contractId),
+            contractId: String(contractID),
             contractName: String(response.contractName),
             departmentId: String(response.departmentId),
             contractWithCompanyId: String(response.contractWithCompanyId),
@@ -740,7 +741,7 @@ export class AllContractsComponent implements OnInit {
     this.addAddendumContractsService.fetchContractData(contractID).subscribe({
       next: (response) => {
         this.addaddendumForm.patchValue({
-          contractId: String(response.contractId),
+          // contractId: String(response.contractId),
           contractName: String(response.contractName),
           departmentId: String(response.departmentId),
           contractWithCompanyId: String(response.contractWithCompanyId),
@@ -855,7 +856,8 @@ export class AllContractsComponent implements OnInit {
     const addendum = new AddAddendumContract();
     let empCode = DecodeToken.ECode;
     // var todaysDate = new Date().toISOString().split('T')[0];
-    addendum.contractId = Number(this.addaddendumForm.value.contractId);
+    console.log(contractID);
+    addendum.contractId = contractID;
     addendum.contractName = String(this.addaddendumForm.value.contractName);
     addendum.departmentId = Number(this.addaddendumForm.value.departmentId);
     addendum.contractWithCompanyId = Number(this.addaddendumForm.value.contractWithCompanyId);

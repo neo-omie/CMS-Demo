@@ -44,6 +44,7 @@ namespace CMS.Persistence.Repositories
             .Where(x => x.IsDeleted == false)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .OrderByDescending(x=>x.AddendumDate)
             .ToListAsync();
 
             return (data, totalCount);
@@ -109,6 +110,8 @@ namespace CMS.Persistence.Repositories
 
             var newAddendumContract = new AddendumContract();
 
+            contractIdCheck.AddendumDate = addendumContract.AddendumDate;
+
             newAddendumContract.ContractId = id;
             newAddendumContract.ContractName = addendumContract.ContractName;
             newAddendumContract.DepartmentId = addendumContract.DepartmentId;
@@ -131,7 +134,7 @@ namespace CMS.Persistence.Repositories
             //contractIdCheck.AddendumContractId = addendumContract.AddendumContractId;
             //newAddendumContract.ContractId = addendumContract.ContractId;
             //contractIdCheck.IsDeleted = addendumContract.IsDeleted;
-
+            _dbContext.ContractsEntity.Update(contractIdCheck);
             await _dbContext.AddendumContracts.AddAsync(newAddendumContract);
 
             string sql = "EXEC SP_GetContractEntityByID @ID = {0}";

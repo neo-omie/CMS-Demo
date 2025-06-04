@@ -5,6 +5,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   Renderer2,
   ViewChild,
@@ -33,15 +34,21 @@ import {
 } from '../../../models/classified-contracts';
 import { firstValueFrom } from 'rxjs';
 import { DecodeToken } from '../../../utils/decodeToken';
+import {
+  dateBetweenValidator,
+  dateRangeValidator,
+  dateValidator,
+} from '../../../utils/dateValidator';
+import { ProgressBarComponent } from "../../UtilComponents/progress-bar/progress-bar.component";
 
 @Component({
   selector: 'app-all-classified-contract-view-add-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ProgressBarComponent],
   templateUrl: './all-classified-contract-view-add-modal.component.html',
   styleUrl: './all-classified-contract-view-add-modal.component.css',
 })
-export class AllClassifiedContractViewAddModalComponent {
+export class AllClassifiedContractViewAddModalComponent implements OnInit {
   @Output() loaderEmit = new EventEmitter<boolean>();
   @Input() approverCheck: boolean = false;
   @Input() terminationCheck: boolean = false;
@@ -51,7 +58,7 @@ export class AllClassifiedContractViewAddModalComponent {
   @Input() termStatus!: (status: number) => void;
   @Input() getContractIdforPostTerm!: (classifiedContractID?: string) => void;
   @Input() approveRejectContract!: (id?: string, status?: number) => void;
-  @Input() GetAllContracts!: (filter:any) => void;
+  @Input() GetAllContracts!: (filter: any) => void;
 
   approverStatusColor: string[] = [
     '',
@@ -83,37 +90,45 @@ export class AllClassifiedContractViewAddModalComponent {
 
   @ViewChild('addEmpCustodianCollapse') addEmpCustodianCollapse!: ElementRef;
 
-  masterContractAddForm = new FormGroup({
-    classifiedContractName: new FormControl('', [Validators.required]),
-    departmentId: new FormControl('', [Validators.required]),
-    contractWithCompanyId: new FormControl('', [Validators.required]),
-    contractTypeId: new FormControl('', [Validators.required]),
-    apostilleTypeId: new FormControl('', [Validators.required]),
-    actualDocRefNo: new FormControl('', [Validators.required]),
-    retainerContract: new FormControl('', [Validators.required]),
-    termsAndConditions: new FormControl('', [Validators.required]),
-    validFrom: new FormControl('', [Validators.required]),
-    validTill: new FormControl('', [Validators.required]),
-    renewalFrom: new FormControl(''),
-    renewalTill: new FormControl(''),
-    addendumDate: new FormControl(''),
-    empCustodianName: new FormControl('', [Validators.required]),
-    empCustodianId: new FormControl('', [Validators.required]),
-    location: new FormControl('', [Validators.required]),
-    approver1Status: new FormControl('1', [
-      Validators.required,
-      Validators.pattern('^[0-9]$'),
-    ]),
-    approver2Status: new FormControl('1', [
-      Validators.required,
-      Validators.pattern('^[0-9]$'),
-    ]),
-    approver3Status: new FormControl('1', [
-      Validators.required,
-      Validators.pattern('^[0-9]$'),
-    ]),
-    skipApproval: new FormControl(true, [Validators.required]),
-  });
+  dummyForm:FormGroup = new FormGroup({});
+  masterContractAddForm:FormGroup = new FormGroup(
+    {
+      classifiedContractName: new FormControl('', [Validators.required]),
+      departmentId: new FormControl('', [Validators.required]),
+      contractWithCompanyId: new FormControl('', [Validators.required]),
+      contractTypeId: new FormControl('', [Validators.required]),
+      apostilleTypeId: new FormControl('', [Validators.required]),
+      actualDocRefNo: new FormControl('', [Validators.required]),
+      retainerContract: new FormControl('', [Validators.required]),
+      termsAndConditions: new FormControl('', [Validators.required]),
+      validFrom: new FormControl('', [Validators.required, dateValidator()]),
+      validTill: new FormControl('', [Validators.required, dateValidator()]),
+      renewalFrom: new FormControl('', dateValidator()),
+      renewalTill: new FormControl('', dateValidator()),
+      addendumDate: new FormControl(''),
+      empCustodianName: new FormControl('', [Validators.required]),
+      empCustodianId: new FormControl('', [Validators.required]),
+      location: new FormControl('', [Validators.required]),
+      approver1Status: new FormControl('1', [
+        Validators.required,
+        Validators.pattern('^[0-9]$'),
+      ]),
+      approver2Status: new FormControl('1', [
+        Validators.required,
+        Validators.pattern('^[0-9]$'),
+      ]),
+      approver3Status: new FormControl('1', [
+        Validators.required,
+        Validators.pattern('^[0-9]$'),
+      ]),
+      skipApproval: new FormControl(true, [Validators.required]),
+    },
+    [
+      dateRangeValidator('validFrom', 'validTill'),
+      dateRangeValidator('renewalFrom', 'renewalTill'),
+      dateBetweenValidator('validFrom', 'renewalFrom', 'validTill'),
+    ]
+  );
 
   constructor(
     private contractsService: ClassifiedContractsService,
@@ -122,12 +137,14 @@ export class AllClassifiedContractViewAddModalComponent {
   ) {}
 
   ngOnInit(): void {
-    this.initialRequirementLoad();
+    if(this.isCreate){
+      this.initialRequirementLoad();
+    }
   }
-
+  
   formfield(name: string) {
     if (name === 'reset') {
-      this.masterContractAddForm.reset({
+      this.masterContractAddForm?.reset({
         skipApproval: true,
         departmentId: '',
         contractWithCompanyId: '',
@@ -141,7 +158,7 @@ export class AllClassifiedContractViewAddModalComponent {
       });
       return;
     } else {
-      return this.masterContractAddForm.get(name);
+      return this.masterContractAddForm?.get(name);
     }
   }
 
@@ -189,6 +206,31 @@ export class AllClassifiedContractViewAddModalComponent {
       error: (error) => this.error(error),
     });
   }
+
+   getProgressType(status:number|undefined):string{
+    if(status===undefined || status===null){
+      return '';
+    }
+
+    switch(status){
+      case 1: return 'Approval for'; 
+      case 2: return 'Active'; 
+      case 3: return 'Rejection for';
+      case 4: return 'Termination of';
+      case 5: return 'Expiration of';
+      case 6: return 'Termination in progress for';
+      case 7: return 'Termination approved for';
+      case 8: return 'Notice withdrawal pending for';
+      default: return 'Progress for ';
+    }
+  }
+  phases=[
+    'Contract Created',
+    'L1 Approver Approval',
+    'L2 Approver Approval',
+    'L3 Approver Approval',
+    'Contract Active',
+  ];
 
   textChangeEmployeeCustodian(departmentId: number, event: Event) {
     let input = event.target as HTMLInputElement;
@@ -296,8 +338,9 @@ export class AllClassifiedContractViewAddModalComponent {
             Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
             this.formfield('reset');
             this.GetAllContracts({
-        PageNumber : 1,
-        PageSize : 10,});
+              PageNumber: 1,
+              PageSize: 10,
+            });
             const modalElement = document.getElementById('contract-add');
             if (modalElement) {
               const modalInstance =
