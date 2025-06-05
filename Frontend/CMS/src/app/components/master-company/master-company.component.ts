@@ -212,7 +212,13 @@ export class MasterCompanyComponent implements OnInit {
     });
   }
 
-
+ResettingonCacelButton(){
+  this.masterCompanyAddForm.reset({
+      stateId: '',
+      countryId: '',
+      cityId: '',
+    });
+}
 
   deleteCompany(id: number) {
     let empCode = DecodeToken.ECode;
