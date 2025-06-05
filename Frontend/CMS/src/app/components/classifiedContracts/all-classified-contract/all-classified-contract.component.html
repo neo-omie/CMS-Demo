@@ -76,6 +76,7 @@
     </div>
   </div>
   <app-table [data]="allContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+  <p class="fs-4 text-center" *ngIf="allContracts.length == 0">No Records</p>
 </div>
 
 <ng-template #effectiveDateRef let-row>
@@ -121,7 +122,7 @@
   {{ row.status == 1 ? row.approvalPendingFrom : "-" }}
 </ng-template>
 <ng-template #renewalDueInRef let-row>
-  {{ row.renewalDueIn > 0 ? row.renewalDueIn : "-" }}
+  {{ row.status==2 && row.renewalDueIn > 0 ? row.renewalDueIn : "-" }}
 </ng-template>
 <ng-template #actionRef let-row>
   <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-add"

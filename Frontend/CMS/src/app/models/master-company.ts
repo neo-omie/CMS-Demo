@@ -29,7 +29,7 @@ export class CompanyMasterDto{
     companyName:string;
     companyLocation:string;
     status:boolean;
-    TotalRecords:number;
+    totalRecords:number;
 
     
     constructor(valueId:number,companyName:string,companyLocation:string,status:boolean,TotalRecords:number) {
@@ -37,7 +37,7 @@ export class CompanyMasterDto{
     this.companyName=companyName;
     this.companyLocation=companyLocation;
     this.status=status;
-    this.TotalRecords=TotalRecords;      
+    this.totalRecords=TotalRecords;      
     }
 }
 

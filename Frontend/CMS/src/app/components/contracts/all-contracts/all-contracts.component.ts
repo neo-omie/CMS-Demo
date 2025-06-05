@@ -61,8 +61,7 @@ export class AllContractsComponent implements OnInit {
   statusKeys = Object.keys(this.contractStatus);
   locationSelectKeys = Object.keys(this.locationSelect);
   displayedColumns: string[] = ['contractName', 'contractType', 'departmentName', 'effectiveDate',
-    'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'approvalPendingFrom',
-    'renewalContractPerson', 'renewalDueIn', 'location', 'action'];
+    'expiryDate', 'toBeRenewedOn', 'addendumDate', 'status', 'renewalDueIn', 'location', 'action'];
   dataSource = new MatTableDataSource<ContractsEntity>();
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit() {
@@ -89,7 +88,7 @@ export class AllContractsComponent implements OnInit {
   postTerm: PostTerminationNoticeUploadDTO = new PostTerminationNoticeUploadDTO(null, 0, new Date(), '');
   withdrawNotice: WithdrawNoticeUploadDTO = new WithdrawNoticeUploadDTO(null, '');
   contIdForPostTerm?: number = 0;
-  
+
   filterForm: FormGroup= new FormGroup({
   SearchTerm:new FormControl(null),
   FromDate:new FormControl(null),
@@ -600,6 +599,16 @@ export class AllContractsComponent implements OnInit {
 
     }
   }
+
+dateValidationForRenewalDueIn(cont:any):boolean{
+  const today = new Date();
+  const renewalTill = new Date(cont.toBeRenewedOn);
+  if (today.getTime() <= renewalTill.getTime()) {
+    return true
+  }
+  return false
+}
+
   get contractId() {
     return this.addaddendumForm.get('contractId');
   }

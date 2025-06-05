@@ -7,7 +7,7 @@
             </div>
         </div>
     </a>
-    <a routerLink="/contracts/activeContracts">
+    <a (click)="goToTable(contractStatu.Active)">
         <div class="card m-3" style="width: 18rem;">
             <div class="card-body">
                Contracts List - Active
@@ -15,7 +15,7 @@
             </div>
         </div>
     </a>
-    <a routerLink="/contracts/terminatedContracts">
+    <a (click)="goToTable(contractStatu.Terminated)">
         <div class="card m-3" style="width: 18rem;">
             <div class="card-body">
                Contracts List - Terminated
@@ -23,7 +23,7 @@
             </div>
         </div>
     </a>
-    <a routerLink="/contracts/pendingApprovalContracts">
+    <a (click)="goToTable(contractStatu.PendingApproval)">
         <div class="card m-3" style="width: 18rem;">
             <div class="card-body">
                Contracts List - Pending Approval
@@ -31,7 +31,7 @@
             </div>
         </div>
     </a>
-    <a routerLink="/contracts/expiredContracts">
+    <a (click)="goToTable(contractStatu.Expired)">
         <div class="card m-3" style="width: 18rem;">
             <div class="card-body">
                Contracts List - Expired

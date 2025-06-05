@@ -45,7 +45,7 @@ export class MasterCompanyComponent implements OnInit{
   pageNumber:number=1;
   pageSize:number=10;
   @ViewChild('editCompanyName') editCompanyName!: ElementRef;
-  
+  currentPage=1;
   countryList:Countriess[] = [];
   stateList:States[] = [];
   cityList:Cities[] = [];
@@ -60,7 +60,7 @@ export class MasterCompanyComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.getCompanies();
+    this.getCompanies(1);
     this.getCountryCascade();
   }
   getCountryCascade() {
@@ -102,8 +102,8 @@ export class MasterCompanyComponent implements OnInit{
   }
   
   
-  getCompanies(): void {
-    this.companyService.getCompany(this?.searchTerm, this.pageNumber, this.pageSize)
+  getCompanies(pageNumber:number): void {
+    this.companyService.getCompany(this?.searchTerm, pageNumber, this.pageSize)
     .subscribe({
       next:(res:CompanyMasterDto[]) => {
       this.loading = false;
@@ -112,9 +112,9 @@ export class MasterCompanyComponent implements OnInit{
             this.dataSource.sort = this.sort;
           }
       this.showCompanies = res;
-      console.log(res);
+      console.log("bula bula",res);
         if(this.showCompanies != undefined && this.showCompanies.length > 0){
-                      let result = Pagination.paginator(this.pageNumber,this.showCompanies[0].TotalRecords,this.pageSize)
+                      let result = Pagination.paginator(pageNumber,this.showCompanies[0].totalRecords,this.pageSize)
                       this.maxPage = result.maxPage;
                       this.pageNumbers = result.pageNumbers;
                     }
@@ -132,12 +132,13 @@ export class MasterCompanyComponent implements OnInit{
 
   onFilterChange(){
     this.pageNumber=1;
-    this.getCompanies();
+    this.getCompanies(1);
   }
 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
-      this.getCompanies();
+      this.currentPage = pgNumber;
+      this.getCompanies(pgNumber);
     }
   }
   countryName?:string;
@@ -224,7 +225,10 @@ export class MasterCompanyComponent implements OnInit{
                           next:(response:boolean)=>{
                             if(response){
                               // Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
-                              this.getCompanies();
+                              if(this.showCompanies.length == 1){
+                                this.currentPage = (this.currentPage - 1 > 0 ) ?  this.currentPage - 1 : 1
+                              }
+                              this.getCompanies(this.currentPage);
                             }
                     
                           },
@@ -321,7 +325,7 @@ export class MasterCompanyComponent implements OnInit{
               if(response != undefined || response != null){
                 Alert.toast(TYPE.SUCCESS,true,'Added successfully');
                 this.masterCompanyAddForm.reset();
-                this.getCompanies();
+                this.getCompanies(this.maxPage);
                 const modalElement = document.getElementById('company-add');
                 if (modalElement) {
                   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
@@ -499,7 +503,7 @@ export class MasterCompanyComponent implements OnInit{
               if(response != undefined || response != null){
                 Alert.toast(TYPE.SUCCESS,true,'Updated successfully');
                 this.masterCompanyAddForm.reset();
-                this.getCompanies();
+                this.getCompanies(this.currentPage);
                  const modalElement = document.getElementById('company-edit');
           if (modalElement) {
             const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);

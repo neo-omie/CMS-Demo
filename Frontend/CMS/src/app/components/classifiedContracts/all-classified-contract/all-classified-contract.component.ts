@@ -117,8 +117,8 @@ export class AllClassifiedContractComponent implements OnInit {
     'expiryDate',
     'toBeRenewedOn',
     'status',
-    'approvalPendingFrom',
-    'renewalContractPerson',
+    // 'approvalPendingFrom',
+    // 'renewalContractPerson',
     'renewalDueIn',
     'location',
     'action',
@@ -261,7 +261,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       renewalDueIn: {
         title: 'Renewal Due In',
-        isSort: true,
+        isSort: false,
         templateRef: this.renewalDueInRef,
       },
       location: {

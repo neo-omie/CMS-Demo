@@ -62,5 +62,7 @@ namespace CMS.Persistence.Repositories
             var allNotifs = await _context.ContractNotifications.Where(cn => cn.isRead == false && cn.EmployeeCode == employeeCode && cn.isDeleted == false).CountAsync();
             return allNotifs;
         }
+
+        
     }
 }

@@ -12,6 +12,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import Highcharts from 'highcharts';
 import { ContractStatus } from '../../utils/constants';
 import { Router } from '@angular/router';
+import { DecodeToken } from '../../utils/decodeToken';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   loading: boolean = false;
+  userRole: string | null = '';
   contractTotal : number = 0;
   contractActive : number = 0;
   contractTerminated : number = 0;
@@ -113,6 +115,14 @@ export class DashboardComponent implements OnInit {
   onResize() {
     this.viewportWidth = window.innerWidth;
   }
+
+  checkLogin(): boolean {
+      if (localStorage.getItem('token')) {
+        this.userRole = DecodeToken.ERole;
+        return true;
+      }
+      return false;
+    }
 
   GetContractCounts(){
     this.contractsService.getContracts({
