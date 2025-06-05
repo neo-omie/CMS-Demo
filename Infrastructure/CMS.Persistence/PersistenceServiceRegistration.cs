@@ -2,6 +2,7 @@
 using CMS.Application.Contracts.Persistence;
 using CMS.Application.DTOs;
 using CMS.Domain.Entities;
+using CMS.Persistence.AutoService;
 using CMS.Persistence.Context;
 using CMS.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +18,7 @@ namespace CMS.Persistence
     {
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHostedService<AutoUpdateService>();
             services.AddDbContext<CMSDbContext>(options =>
                    options.UseSqlServer(configuration.GetConnectionString("CMSConnectionString")));
             services.AddScoped<IDocumentRepository, DocumentRepository>();

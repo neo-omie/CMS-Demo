@@ -14,6 +14,10 @@
 <app-pagination [maxPage]="maxPage" [records]="this.addAddendumContracts.length" [pageNumbers]="pageNumbers"
     [GetPage]="GetPage.bind(this)"></app-pagination>
 
+<ng-template #AddendumDateRef let-row>
+    {{row?.addendumDate?.split('T')[0] || '-'}}
+</ng-template>
+
 <ng-template #statusTemplateRef let-row>
     @if(row.approver3Status == 1){ <button class="btn btn-warning" disabled><b>Pending Approval</b></button> }
     @if(row.approver3Status == 2){ <button class="btn btn-success" disabled><b>Active</b></button> }

@@ -45,6 +45,7 @@ export class AddendumContractsComponent {
 
   @ViewChild('actionTemplateRef', { static: true }) actionTemplateRef!: TemplateRef<any>;
   @ViewChild('statusTemplateRef', { static: true }) statusTemplateRef!: TemplateRef<any>;
+  @ViewChild('AddendumDateRef', { static: true }) AddendumDateRef!: TemplateRef<any>;
 
   constructor(private addAddendumContractsService: AddAddendumContractsService, private router:Router, private title: Title, private route:ActivatedRoute) {
     this.title.setTitle("Approval Matrix (Contract) - CMS");
@@ -76,7 +77,7 @@ export class AddendumContractsComponent {
       'addendumDate': {
         'title': 'Addendum Date',
         'isSort': true,
-        'templateRef': null
+        'templateRef': this.AddendumDateRef
       },
       'status':{
         'title': 'Status',
