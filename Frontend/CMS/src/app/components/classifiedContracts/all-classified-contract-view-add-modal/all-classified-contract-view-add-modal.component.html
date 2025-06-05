@@ -35,6 +35,16 @@
     </div>
     <div class="modal-body">
       <form [formGroup]="masterContractAddForm" (ngSubmit)="onAddFormSubmit()">
+        <div id="progress" class="mb-3" *ngIf="contractDetails?.classifiedContractId!==null">
+          <div class="d-flex justify-content-center ">
+            <p style="color: #5f5fee;" class="modal-title fs-5 fw-bolder text-center">
+              Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.classifiedContractName }}
+            </p>
+          </div>
+          <app-progress-bar
+            [contractId]="contractDetails != undefined && contractDetails.classifiedContractId != undefined?(+(contractDetails.classifiedContractId)):0"
+            type="classified" [phases]="phases"></app-progress-bar>
+        </div>
         <div class="p-2">
           <div class="card-body">
             <div class="fields-container">

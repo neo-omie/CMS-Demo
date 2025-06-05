@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { AddDepartmentDto, GetAllDepartmentsDto, MasterDepartment } from '../../models/master-department';
@@ -39,7 +40,15 @@ export class MasterDepartmentComponent {
     this.GetAllDepartments(1, 10);
   }
   closeEditApproverCollapses() {
-    this.renderer.removeClass(this.editDepartmentName.nativeElement, 'show');
+    // this.renderer.removeClass(this.editDepartmentName.nativeElement, 'show');
+    if (this.dept!=undefined) {
+      this.dept.departmentName="";
+    }
+
+  }
+
+  resetFrom(){
+    this.addDept.departmentName="";
   }
   GetAllDepartments(pageNumber: number, pageSize: number) {
     this.departmentService.getAllDepartments(pageNumber, pageSize).subscribe({
@@ -109,6 +118,8 @@ export class MasterDepartmentComponent {
     }
     this.closeEditApproverCollapses();
   }
+
+ 
   deleteDepartment(id: number) {
     let empCode = DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
@@ -133,9 +144,15 @@ export class MasterDepartmentComponent {
         });
       });
   }
+
+  
   addDept: AddDepartmentDto = new AddDepartmentDto('');
   addDepartment(departmentForm: NgForm) {
     let empCode = DecodeToken.ECode;
+    //form is invalid , then exiting early
+    if (departmentForm.invalid) {
+    return;
+  }
     this.addDept = departmentForm.value;
     console.log(departmentForm);
 
@@ -144,6 +161,11 @@ export class MasterDepartmentComponent {
         Alert.bigToast('Success!', 'Department added successfully.', TYPE.SUCCESS, 'Ok');
         departmentForm.resetForm();
         this.GetPage(this.maxPage);
+         const modalElement = document.getElementById('department-add');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
+        }
       },
       error: (error) => {
         console.error('Error adding Department:', error);

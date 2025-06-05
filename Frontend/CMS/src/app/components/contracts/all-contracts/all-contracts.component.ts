@@ -55,6 +55,7 @@ import { dateBetweenValidator, dateRangeValidator, dateValidator } from '../../.
   styleUrl: './all-contracts.component.css'
 })
 export class AllContractsComponent implements OnInit {
+  validDate=true;
   contractStatus = ContractStatus
   locationSelect = Location
     remarkTouched: boolean = false;
@@ -1051,6 +1052,15 @@ export class AllContractsComponent implements OnInit {
       Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
       return;
     }
+
+    if(!this.datecheck(this.postTerm.end_Date.toString())) {
+      return;
+    }
+
+    this.checkPosterminationTextarea(this.postTerm.Remark)
+    if(this.remarkTouched){
+      return;
+    }
     
     const formData = new FormData();
     formData.append('file', this.file)
@@ -1103,7 +1113,25 @@ export class AllContractsComponent implements OnInit {
     // this.document.status = 1;
 
   }
+//for date validation post termination
+datecheck(event:string){
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  return ! (event && new Date(event)<today)
+}
 
+remarkTouchedFalse(){
+  this.remarkTouched = false;
+}
+
+checkPosterminationTextarea(value: string){
+  if(value.length == 0){
+    this.remarkTouched = true;
+  }
+  else{
+    this.remarkTouched = false;
+  }
+}
 
 
   // Post Termination Notice
