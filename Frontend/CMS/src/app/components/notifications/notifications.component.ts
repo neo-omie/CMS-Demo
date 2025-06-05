@@ -80,7 +80,9 @@ export class NotificationsComponent implements OnInit {
 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
+      this.currentPage=pgNumber;
       this.GetAllNotifications(pgNumber, 10);
+
     }
   }
   GetAllNotifications(pageNumber: number, pageSize: number) {
@@ -154,5 +156,25 @@ export class NotificationsComponent implements OnInit {
       [hour, minute, seconds].join(':'),
       ampm,
     ].join(' ');
+  }
+
+  DeleteNotification(id:number ){
+    this.notificationService.deleteNotification(id).subscribe({
+      next:(res:boolean)=>{
+          if (res) {
+            Alert.toast(TYPE.SUCCESS,true,"message Deleted Successfully");
+          }
+          if (this.notifications.length == 1 ) {
+           this.currentPage = (this.currentPage-1 > 0  )? this.currentPage : 1;
+          }
+          this.GetPage(this.currentPage);
+        },
+        error:(error)=>{
+          this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.message : error.title
+        );
+          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+      }
+    })
   }
 }

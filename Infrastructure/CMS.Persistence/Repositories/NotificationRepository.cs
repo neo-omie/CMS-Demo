@@ -19,6 +19,19 @@ namespace CMS.Persistence.Repositories
         {
             _context = context;
         }
+
+        public async Task<bool> DeleteNotification(int id)
+        {
+            var notif =await _context.ContractNotifications.FindAsync(id);
+
+            if (notif == null) {
+                throw new Exception("Error occur in deleting notification");
+            }
+            _context.ContractNotifications.Remove(notif);
+            _context.SaveChanges();
+            return true;
+        }
+
         public async  Task<IEnumerable<GetAllNotificationsDto>> GetAllNotifications(int pageNumber,int pageSize ,string employeeCode)
         {
             //var allNotifs = await _context.ContractNotifications.Where(cn => cn.EmployeeCode == employeeCode && cn.isDeleted == false).OrderByDescending(cn => cn.NotificationDate).ToListAsync();

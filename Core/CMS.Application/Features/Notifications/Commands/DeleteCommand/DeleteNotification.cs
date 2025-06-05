@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MediatR;
+
+namespace CMS.Application.Features.Notifications.Commands.DeleteCommand
+{
+    public record DeleteNotification (int id):IRequest<bool>;
+    
+}

@@ -1,4 +1,5 @@
-﻿using CMS.Application.Features.Notifications.Queries.GetAllNotifications;
+﻿using CMS.Application.Features.Notifications.Commands.DeleteCommand;
+using CMS.Application.Features.Notifications.Queries.GetAllNotifications;
 using CMS.Application.Features.Notifications.Queries.GetNotificationDetails;
 using CMS.Application.Features.Notifications.Queries.UnreadNotificationsCount;
 using MediatR;
@@ -21,7 +22,7 @@ namespace CMS.API.Controllers
         [HttpGet("{pageNumber}/{pageSize}/{employeeCode}")]
         public async Task<IActionResult> GetAllNotifications([FromRoute] string employeeCode, [FromRoute] int pageNumber, [FromRoute] int pageSize)
         {
-            var allNotifs = await _mediator.Send(new GetAllNotificationsQuery(pageNumber,pageSize,employeeCode));
+            var allNotifs = await _mediator.Send(new GetAllNotificationsQuery(pageNumber, pageSize, employeeCode));
             return Ok(allNotifs);
         }
         [Route("{id}/{employeeCode}")]
@@ -36,6 +37,14 @@ namespace CMS.API.Controllers
         {
             var unreadNotifsCount = await _mediator.Send(new UnreadNotificationsCountQuery(employeeCode));
             return Ok(unreadNotifsCount);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> GetNotification([FromRoute] int id)
+        {
+            var notif = await _mediator.Send(new DeleteNotification(id));
+            return Ok(notif);
+
         }
 
     }

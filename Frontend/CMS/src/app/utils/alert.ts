@@ -8,7 +8,7 @@ export class Alert{
        showConfirmButton: false,
        icon: typeIcon,
        timerProgressBar,
-       timer: 5000,
+       timer: 4000,
        title: op
      })
    }
