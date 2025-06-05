@@ -6,6 +6,7 @@ using CMS.Application.Features.MasterEmployees.EmployeeDtos;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Context;
+using MailKit.Search;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
@@ -49,13 +50,58 @@ namespace CMS.Persistence.Repositories
             //.ToListAsync();
 
             //return (data, totalCount);
+
+            //main code 
+            //var query = _context.MasterEmployees.AsQueryable();
+            //int totalCount = await query.Where(a =>   a.IsDeleted == false &&(a.Unit == unit || unit == null || unit == "All") &&
+            //((searchTerm != null &&((int.TryParse(searchTerm, out var searchInt) && a.ValueId == searchInt)|| a.EmployeeName.Contains(searchTerm) )||
+            //searchTerm == null)).CountAsync();
+            //var data = await _context.MasterEmployees
+            //    .FromSqlRaw("EXEC sp_GetAllEmployees @PageNumber= {0}, @PageSize={1}, @unit= {2}, @searchTerm= {3}", pageNumber, pageSize, unit, searchTerm)
+            //    .ToListAsync();
+
+            //return(data, totalCount);
+
+            int? searchTermAsInt = null;
+            if (!string.IsNullOrEmpty(searchTerm) && int.TryParse(searchTerm, out int parsedInt))
+            {
+                searchTermAsInt = parsedInt;
+            }
+
             var query = _context.MasterEmployees.AsQueryable();
-            int totalCount = await query.Where(a => a.IsDeleted == false).CountAsync();
+
+            // Filter out deleted
+            query = query.Where(a => !a.IsDeleted);
+
+            // Filter by unit if applicable
+            if (!string.IsNullOrEmpty(unit) && unit != "All")
+            {
+                query = query.Where(a => a.Unit == unit);
+            }
+
+            // Filter by searchTerm
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                if (searchTermAsInt.HasValue)
+                {
+                    query = query.Where(a => a.ValueId == searchTermAsInt.Value || a.EmployeeName.Contains(searchTerm));
+                }
+                else
+                {
+                    query = query.Where(a => a.EmployeeName.Contains(searchTerm));
+                }
+            }
+
+            // Get total count with filters
+            int totalCount = await query.CountAsync();
+
+            // Fetch data from stored procedure with paging parameters
             var data = await _context.MasterEmployees
-                .FromSqlRaw("EXEC sp_GetAllEmployees @PageNumber= {0}, @PageSize={1}, @unit= {2}, @searchTerm= {3}", pageNumber, pageSize, unit, searchTerm)
+                .FromSqlRaw("EXEC sp_GetAllEmployees @PageNumber={0}, @PageSize={1}, @unit={2}, @searchTerm={3}", pageNumber, pageSize, unit, searchTerm)
                 .ToListAsync();
 
-            return(data, totalCount);
+            return (data, totalCount);
+
         }
 
         public async Task<MasterEmployee> GetEmployeeByIdAsync(int id)

@@ -81,3 +81,7 @@ h2 {
     color: whitesmoke;
     font-weight: 600;
 }
+
+.error{
+    color: red;
+}

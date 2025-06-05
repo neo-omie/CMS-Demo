@@ -71,10 +71,10 @@ resetForm() {
 }
 
 addEmployeeForm: FormGroup= new FormGroup({
-  employeeName:new FormControl('',[Validators.required]),
-  password:new FormControl("",Validators.required),
+  employeeName:new FormControl('',[Validators.required,Validators.maxLength(40),Validators.pattern('^[a-zA-Z ]+$')]),
+  password:new FormControl("",[Validators.required,Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$')]),
   role:new FormControl("",Validators.required),
-  employeeCode:new FormControl("",Validators.required),
+  employeeCode:new FormControl("",[Validators.required,Validators.pattern('^[A-Z0-9]+$'),Validators.maxLength(8)]),
   unit:new FormControl("",Validators.required),
   departmentId: new FormControl("", Validators.required),
   departmentName: new FormControl(""),

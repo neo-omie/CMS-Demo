@@ -1,7 +1,7 @@
 declare var bootstrap: any;
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
-import {  ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Alert } from '../../utils/alert';
 import { CompanyMasterService } from '../../services/company-master.service';
 import { AddCompanyDto, CompanyListResponse, CompanyMasterDto, MasterCompany } from '../../models/master-company';
@@ -22,28 +22,28 @@ import { DecodeToken } from '../../utils/decodeToken';
 @Component({
   selector: 'app-master-company',
   standalone: true,
-  imports: [CommonModule,LoaderComponent,FormsModule,RouterModule,ReactiveFormsModule,
-            MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule,
+    MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './master-company.component.html',
   styleUrl: './master-company.component.css'
 })
-export class MasterCompanyComponent implements OnInit{
+export class MasterCompanyComponent implements OnInit {
   loading: boolean = true;
   displayedColumns: string[] = ['companyName', 'companyLocation', 'status', 'action'];
-        dataSource = new MatTableDataSource<CompanyMasterDto>();
-        @ViewChild(MatSort) sort!: MatSort;
-        ngAfterViewInit() {
-          this.dataSource.sort = this.sort;
-        }
+  dataSource = new MatTableDataSource<CompanyMasterDto>();
+  @ViewChild(MatSort) sort!: MatSort;
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
-  masterCompany: CompanyListResponse[]=[];
-  showCompanies: CompanyMasterDto[]=[];
-  comp?:MasterCompany;
-  errorMsg:string = '';
+  masterCompany: CompanyListResponse[] = [];
+  showCompanies: CompanyMasterDto[] = [];
+  comp?: MasterCompany;
+  errorMsg: string = '';
   searchTerm: string = '';
-  pageNumber:number=1;
-  pageSize:number=10;
+  pageNumber: number = 1;
+  pageSize: number = 10;
   @ViewChild('editCompanyName') editCompanyName!: ElementRef;
   currentPage=1;
   countryList:Countriess[] = [];
@@ -52,12 +52,12 @@ export class MasterCompanyComponent implements OnInit{
   selectedCountryId:number = 0;
   selectedStateId:number = 0;
   company: AddCompanyDto = new AddCompanyDto();
-  mode:any
+  mode: any
   constructor(
     private companyService: CompanyMasterService,
     private router: Router,
     private companyCascadeService: CompanyCascadeService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getCompanies(1);
@@ -65,38 +65,38 @@ export class MasterCompanyComponent implements OnInit{
   }
   getCountryCascade() {
     this.companyCascadeService.getCountries().subscribe({
-      next: (response:Countriess[]) => {
+      next: (response: Countriess[]) => {
         this.countryList = response;
         console.log(this.countryList);
-        
+
       }, error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
       }
     });
   }
-  getStateCascade(event:Event) {
+  getStateCascade(event: Event) {
     let input = event.target as HTMLInputElement
     this.companyCascadeService.getStates(+input.value).subscribe({
       next: (response: States[]) => {
         this.stateList = response;
       }, error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
       }
     })
   }
-  getCityCascade(event:Event) {
+  getCityCascade(event: Event) {
     let input = event.target as HTMLInputElement
     this.companyCascadeService.getCities(+input.value).subscribe({
       next: (response: Cities[]) => {
         this.cityList = response;
       }, error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
       }
     })
   }
@@ -141,31 +141,32 @@ export class MasterCompanyComponent implements OnInit{
       this.getCompanies(pgNumber);
     }
   }
-  countryName?:string;
-  stateName?:string;
-  cityName?:string;
-  GetCompany(id:number){
-    console.log("ftech id",id);
+  countryName?: string;
+  stateName?: string;
+  cityName?: string;
+  GetCompany(id: number) {
+    console.log("ftech id", id);
     this.companyService.getCompanyById(id).subscribe({
-      next:(res:MasterCompany)=>{
-      this.comp=res;
-      this.companyCascadeService.getCountryById(res.countryId).subscribe((resp) => {
-        this.countryName = resp.countries;
-      });
-      this.companyCascadeService.getStateById(res.stateId).subscribe((resp) => {
-        this.stateName = resp.state;
-      });
-      this.companyCascadeService.getCityById(res.cityId).subscribe((resp) => {
-        this.cityName = resp.city;
-      });
+      next: (res: MasterCompany) => {
+        this.comp = res;
+        this.companyCascadeService.getCountryById(res.countryId).subscribe((resp) => {
+          this.countryName = resp.countries;
+        });
+        this.companyCascadeService.getStateById(res.stateId).subscribe((resp) => {
+          this.stateName = resp.state;
+        });
+        this.companyCascadeService.getCityById(res.cityId).subscribe((resp) => {
+          this.cityName = resp.city;
+        });
       },
-      error:(error)=>{
+      error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
       }
-        })
+    })
   }
+
 
   // editCompany(id:number){
   //   let compName=this.editCompanyName.nativeElement.value;
@@ -184,15 +185,15 @@ export class MasterCompanyComponent implements OnInit{
   //             Alert.toast(TYPE.ERROR,true,this.errorMsg);
   //       }
   //     })
-      
+
   //   }
   // }
 
   addCompany(companyForm: NgForm) {
     this.company = companyForm.value;
-      let empCode =DecodeToken.ECode;
+    let empCode = DecodeToken.ECode;
 
-    this.companyService.addCompany(this.company,empCode).subscribe({
+    this.companyService.addCompany(this.company, empCode).subscribe({
       next: (response) => {
         Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
         companyForm.resetForm();
@@ -203,7 +204,7 @@ export class MasterCompanyComponent implements OnInit{
           modalInstance.hide();
         }
       },
-        
+
       error: (error) => {
         console.error('Error adding Company:', error);
         Alert.bigToast('Error!', 'There was an error adding the Company.', TYPE.ERROR, 'Try Again');
@@ -213,8 +214,8 @@ export class MasterCompanyComponent implements OnInit{
 
 
 
-  deleteCompany(id:number){
-    let empCode =DecodeToken.ECode;
+  deleteCompany(id: number) {
+    let empCode = DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
     Alert.confirmToast("Are you sure you want to delete this Company?",
                        "You won't be able to revert this!", TYPE.WARNING,
