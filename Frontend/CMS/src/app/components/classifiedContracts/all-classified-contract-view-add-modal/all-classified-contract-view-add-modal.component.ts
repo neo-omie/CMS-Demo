@@ -93,7 +93,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
   dummyForm:FormGroup = new FormGroup({});
   masterContractAddForm:FormGroup = new FormGroup(
     {
-      classifiedContractName: new FormControl('', [Validators.required]),
+      classifiedContractName: new FormControl('', [Validators.required,Validators.maxLength(20)]),
       departmentId: new FormControl('', [Validators.required]),
       contractWithCompanyId: new FormControl('', [Validators.required]),
       contractTypeId: new FormControl('', [Validators.required]),
@@ -105,7 +105,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
       validTill: new FormControl('', [Validators.required, dateValidator()]),
       renewalFrom: new FormControl('', dateValidator()),
       renewalTill: new FormControl('', dateValidator()),
-      addendumDate: new FormControl(''),
+      // addendumDate: new FormControl(''),
       empCustodianName: new FormControl('', [Validators.required]),
       empCustodianId: new FormControl('', [Validators.required]),
       location: new FormControl('', [Validators.required]),
@@ -137,9 +137,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(this.isCreate){
-      this.initialRequirementLoad();
-    }
+    this.initialRequirementLoad(); 
   }
   
   formfield(name: string) {
@@ -153,7 +151,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
         retainerContract: '',
         renewalFrom: '',
         renewalTill: '',
-        addendumDate: '',
+        // addendumDate: '',
         empCustodianName: '',
       });
       return;
@@ -317,10 +315,10 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
           this.masterContractAddForm.value.renewalTill != ''
             ? String(this.masterContractAddForm.value.renewalTill)
             : null;
-        addFormValues.addendumDate =
-          this.masterContractAddForm.value.addendumDate != ''
-            ? String(this.masterContractAddForm.value.addendumDate)
-            : null;
+        // addFormValues.addendumDate =
+        //   this.masterContractAddForm.value.addendumDate != ''
+        //     ? String(this.masterContractAddForm.value.addendumDate)
+        //     : null;
         addFormValues.skipApproval =
           this.masterContractAddForm.value.skipApproval;
         addFormValues.empCustodianId = Number(empCustodianId);
