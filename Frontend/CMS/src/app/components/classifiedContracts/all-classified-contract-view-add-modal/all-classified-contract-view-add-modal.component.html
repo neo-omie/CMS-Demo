@@ -54,9 +54,11 @@
                     >*</span
                   ></label
                 >
+                <span *ngIf="isCreate && formfield('classifiedContractName')?.hasError('maxlength') && (formfield('classifiedContractName')?.dirty ||
+                      formfield('classifiedContractName')?.touched)" style="color: red">Not more than 20 characters!</span>
                 <span
                   *ngIf="
-                    isCreate &&
+                    isCreate && 
                     formfield('classifiedContractName')?.hasError('required') &&
                     (formfield('classifiedContractName')?.dirty ||
                       formfield('classifiedContractName')?.touched)

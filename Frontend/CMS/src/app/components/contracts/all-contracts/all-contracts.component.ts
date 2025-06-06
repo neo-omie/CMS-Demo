@@ -424,7 +424,7 @@ export class AllContractsComponent implements OnInit {
 
 
   masterContractAddForm = new FormGroup({
-    contractName: new FormControl('', [Validators.required]),
+    contractName: new FormControl('', [Validators.required,Validators.maxLength(20)]),
     departmentId: new FormControl('0', [Validators.required]),
     contractWithCompanyId: new FormControl('', [Validators.required]),
     contractTypeId: new FormControl('', [Validators.required]),
@@ -694,7 +694,7 @@ dateValidationForRenewalDueIn(cont:any):boolean{
   addaddendumForm = new FormGroup({
     addendumContractId: new FormControl('', [Validators.required]),
     contractId: new FormControl('', [Validators.required]),
-    contractName: new FormControl('', [Validators.required]),
+    contractName: new FormControl('', [Validators.required,Validators.maxLength(20)]),
     departmentId: new FormControl('', [Validators.required]),
     contractWithCompanyId: new FormControl('', [Validators.required]),
     contractTypeId: new FormControl('', [Validators.required]),

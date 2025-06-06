@@ -12,6 +12,7 @@
 <ng-template #actionRef let-row>
  <i [ngStyle]="row.isRead ? null :{'color':'#5f5fee'}" class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#notification-detail"
           (click)="SeeNotificationDetails(row.valueId)"></i>
+ <i  class="fa-solid fa-trash icon" (click)="DeleteNotification(row.valueId)"></i>
 </ng-template>
 <ng-template #notifDate let-row>
     {{ row.notificationDate | date :'dd-MM-yyyy  hh:mm:ss a'}}

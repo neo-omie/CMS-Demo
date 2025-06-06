@@ -2,7 +2,7 @@
 <h2 class="pt-3 fs-1">
   All Classified Contracts<img class="classifiedImg" src="ClassifiedContract.png" alt="CMS-logo" />
 </h2>
-<div *ngIf="!loading" class="table-responsive p-md-5 p-3">
+<div class="table-responsive p-md-5 p-3">
   <button data-bs-toggle="modal" data-bs-target="#contract-add"
     class="add-btn btn btn-outline-primary mb-2 margin-right" (click)="isCreate = true">
     <i class="fa-solid fa-file-circle-plus"></i> Add New Contract
@@ -75,7 +75,9 @@
       </form>
     </div>
   </div>
-  <app-table [data]="allContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+  <div *ngIf="!loading">
+    <app-table [data]="allContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
+  </div>
   <p class="fs-4 text-center" *ngIf="allContracts.length == 0">No Records</p>
 </div>
 

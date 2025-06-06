@@ -20,8 +20,4 @@
     <None Include="Contracts\Persistence\IMasterApostilleRepository.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Notifications\Commands\" />
-  </ItemGroup>
-
 </Project>

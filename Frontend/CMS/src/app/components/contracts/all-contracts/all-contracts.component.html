@@ -476,6 +476,8 @@
             <div class="fields-container">
               <div class="m-3">
                 <label for="termsAndConditions">Contract Name <span style="color: red;" >*</span> </label>
+                <span *ngIf="contractName?.hasError('maxlength') && (contractName?.dirty ||
+                      contractName?.touched)" style="color: red">Not more than 20 characters!</span>
                 <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
                   style="color: red;">Required</span>
                 <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"

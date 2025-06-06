@@ -16,5 +16,7 @@ namespace CMS.Application.Contracts.Persistence
         Task<Notification> GetNotificationDetails(int id, string employeeCode);
         Task<bool> NewNotification(Notification notification);
         Task<int> UnreadNotificationsCount(string employeeCode);
+
+        Task<bool> DeleteNotification(int id);
     }
 }
