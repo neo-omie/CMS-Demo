@@ -435,6 +435,6 @@ export class ActiveContractsComponent implements OnInit {
     }
   }
   printToPDF(tableID: string, fileName: string) {
-    PDFExport.printToPDF(tableID, fileName);
+    // PDFExport.printToPDF(tableID, fileName);
   }
 }

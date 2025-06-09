@@ -465,6 +465,6 @@ export class ExpiredContractsComponent {
       }
     }
     printToPDF(tableID: string, fileName: string) {
-      PDFExport.printToPDF(tableID, fileName);
+      // PDFExport.printToPDF(tableID, fileName);
     }
 }

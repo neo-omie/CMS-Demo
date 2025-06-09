@@ -18,6 +18,7 @@ import {
 } from '../../../models/classified-contracts';
 import { Pagination } from '../../../utils/pagination';
 import { Alert } from '../../../utils/alert';
+import { ExcelExport } from '../../../utils/excelExport';
 import { TYPE } from '../../auth/login/values.constants';
 import {
   dateBetweenValidator,
@@ -1103,10 +1104,32 @@ export class AllClassifiedContractComponent implements OnInit {
     this.loading = false;
   }
 
-  printToPDF(tableID: string, fileName: string) {
-    PDFExport.printToPDF(tableID, fileName);
+  // printToPDF(tableID: string, fileName: string) {
+  printToPDF() {
+    // PDFExport.printToPDF(tableID, fileName);
+const selectedColumns = ['Contract Name', 'Contract Type','Department Name','Effective Date','Expiry Date','To be renewed on','Status','Renewal Due In','Location']; // Put the exact header text here
+  PDFExport.printToPDF('table', 'CMS-ClassifiedContracts.pdf', selectedColumns);
   }
 
+  exportToExcel(): void {
+      const selectedColumns = [
+        'Contract Name',
+        'Contract Type',
+        'Department Name',
+        'Effective Date',
+        'Expiry Date',
+        'To Be Renewed On',
+        'Status',
+        'Renewal Due In',
+        'Location',
+      ];
+  
+      ExcelExport.printToExcel(
+        'table',
+        'CMS-ClassifeidContracts.xlsx',
+        selectedColumns
+      );
+    }
   setLoader(data: boolean) {
     this.loading = data;
   }

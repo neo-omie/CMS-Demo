@@ -80,11 +80,11 @@ namespace CMS.Persistence.Repositories
                 cp.Approver2Status = ContractStatus.Active;
                 cp.Approver3Status = ContractStatus.Active;
             }
-            
+
             cp.CreatedBy = empName;
             // Add the contract to the context
-          
-            var addedContract =await  _context.ClassifiedContracts.AddAsync(cp);
+
+            var addedContract = await _context.ClassifiedContracts.AddAsync(cp);
 
             if (await _context.SaveChangesAsync() <= 0)
             {
@@ -131,16 +131,23 @@ namespace CMS.Persistence.Repositories
                 await SendMail(
                     foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, cp.ClassifiedContractId, cp.ClassifiedContractName, subject, emailBody
                 );
-                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                 await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract ,$" New Classified Contract created by '{empCode}'", empName , LogStatus.Created);
+
             }
+            if (cp.SkipApproval)
+            {
+                string skipQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(skipQuery, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" New Classified Contract with Skipped Approval created  by '{empName}'", empName, LogStatus.Created);
+                return cp;
+            }
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" New Classified Contract created by '{empName}'", empName, LogStatus.Created);
             return cp;
         }
 
         public async Task<ClassifiedContract> ApproveRejectContract(int id, string empCode, ContractStatus status)
         {
             var contract = await _context.ClassifiedContracts.Where(c => c.ClassifiedContractId == id).FirstOrDefaultAsync();
-            var emp= await _context.MasterEmployees.Where(e=>e.Email ==  empCode).FirstOrDefaultAsync();
+            var emp = await _context.MasterEmployees.Where(e => e.Email == empCode).FirstOrDefaultAsync();
             if (contract == null)
             {
                 throw new NotFoundException("Classified Contract not found");
@@ -282,10 +289,10 @@ namespace CMS.Persistence.Repositories
                 return contract;
             }
 
-            
-                string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-                await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract Approved by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved)  ;
-            
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract Approved by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
+
             return contract;
         }
 
@@ -326,7 +333,7 @@ namespace CMS.Persistence.Repositories
             await _emailService.SendEmail(mailRequest);
         }
 
-       //for termination
+        //for termination
         private string GenerateEmailBody(string name, int contractID, string contractName)
         {
             string emailBody = string.Empty;
@@ -350,7 +357,7 @@ namespace CMS.Persistence.Repositories
             await _emailService.SendEmailWithAttachment(mailRequest);
         }
 
-        public async Task<bool> DeleteClassifiedContractAsync(int id,string empCode)
+        public async Task<bool> DeleteClassifiedContractAsync(int id, string empCode)
         {
             var foundContract = await _context.ClassifiedContracts.FirstOrDefaultAsync(ce => ce.ClassifiedContractId == id);
             if (foundContract == null)
@@ -562,7 +569,7 @@ namespace CMS.Persistence.Repositories
                     forNotif.Approver1Email, "Termination Notice Post Contract! 🚨", GenerateEmailBody(forNotif.Approver1EmployeeCode, forNotif.ClassifiedContractId, forNotif.ClassifiedContractName), forNotif.Approver1EmployeeCode, forNotif.ClassifiedContractId, forNotif.ClassifiedContractName, document.DocumentPath
                 );
 
-              
+
                 return true;
             }
             else
@@ -710,7 +717,7 @@ namespace CMS.Persistence.Repositories
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract {foundContract.ClassifiedContractName}', Approved for Termination by '{ emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Terminated);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract {foundContract.ClassifiedContractName}', Approved for Termination by '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Terminated);
 
             return contract;
 
@@ -856,7 +863,7 @@ namespace CMS.Persistence.Repositories
             }
 
             string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
-            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract '{ foundContract.ClassifiedContractName}', Approved for Withdrawal Notice by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ClassifiedContractId, TableList.ClassifiedContract, $" Classified Contract '{foundContract.ClassifiedContractName}', Approved for Withdrawal Notice by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
 
             return contract;
         }

@@ -434,6 +434,6 @@ export class TerminatedContractsComponent implements OnInit {
     }
   }
   printToPDF(tableID: string, fileName: string) {
-    PDFExport.printToPDF(tableID, fileName);
+    // PDFExport.printToPDF(tableID, fileName);
   }
 }
