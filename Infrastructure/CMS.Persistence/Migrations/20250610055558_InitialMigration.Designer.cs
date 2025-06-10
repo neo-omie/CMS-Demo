@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Persistence.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    [Migration("20250521120218_intitialMigration")]
-    partial class intitialMigration
+    [Migration("20250610055558_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -267,6 +267,31 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("GetAllApprovalMatrixMOUByIdDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.AuditTrails.Queries.GetAllAudits.GetAllAuditDto", b =>
+                {
+                    b.Property<string>("ActionDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ForTable")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LogTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoggedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("GetAllAudits");
                 });
 
             modelBuilder.Entity("CMS.Application.Features.ClassifiedContracts.Queries.GetAllClassifiedContracts.GetAllClassifiedContractsDto", b =>
@@ -767,6 +792,27 @@ namespace CMS.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("GetEscalationMatrixContractDtos");
+                });
+
+            modelBuilder.Entity("CMS.Application.Features.Notifications.Queries.GetAllNotifications.GetAllNotificationsDto", b =>
+                {
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NotficationSubject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NotificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ValueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalRecords")
+                        .HasColumnType("int");
+
+                    b.ToTable("ContractNotificationsDto");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.AddendumContract", b =>
@@ -1783,6 +1829,29 @@ namespace CMS.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CMS.Domain.Entities.ContractsCount", b =>
+                {
+                    b.Property<int>("ActiveContractsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllContractsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpiredContractsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PendingApprovalContractsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PendingTerminationContractsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TerminatedContractsCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("ContractsCounter");
+                });
+
             modelBuilder.Entity("CMS.Domain.Entities.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
@@ -1938,10 +2007,10 @@ namespace CMS.Persistence.Migrations
                             ApproverId2 = "NEO1",
                             ApproverId3 = "NEO1",
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4899),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(6036),
                             DepartmentId = 1,
                             NumberOfDays = 5,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4916),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(6053),
                             UpdatedBy = "NEO1"
                         },
                         new
@@ -1951,10 +2020,10 @@ namespace CMS.Persistence.Migrations
                             ApproverId2 = "NEO6",
                             ApproverId3 = "NEO2",
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4920),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(6057),
                             DepartmentId = 2,
                             NumberOfDays = 10,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4921),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(6059),
                             UpdatedBy = "NEO1"
                         },
                         new
@@ -1964,10 +2033,10 @@ namespace CMS.Persistence.Migrations
                             ApproverId2 = "NEO3",
                             ApproverId3 = "NEO3",
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4924),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(6061),
                             DepartmentId = 3,
                             NumberOfDays = 7,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4925),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(6062),
                             UpdatedBy = "NEO1"
                         });
                 });
@@ -2152,7 +2221,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Admin",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEIzT9ib1x86dUlb8lgmJtfh0plR0wR8P7fugBJz4I2LYnsItPnFngBnm9XKOdcu7Tw==",
+                            Password = "AQAAAAIAAYagAAAAEFLRhVeN6MVqbKUeT3tVg8vJBhMn1HkPTX+xOykgd079FVdBJBFYiQklTqW4wz8Faw==",
                             Role = "Admin",
                             Unit = "Thane"
                         },
@@ -2167,7 +2236,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sarthak Lembhe",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAELWeZ1GkuZoNS2DiJSS9Ao1JfDNaVBYv7Q3WOSRyGt9pNXCJ8jshowY3Sj0cLZKsfQ==",
+                            Password = "AQAAAAIAAYagAAAAECV9H+wF8Oh8UovetROxyQnAgtOtRkD1B05EzoORiUiZXK0dafqfnV/6F0CNWpK6aA==",
                             Role = "Contract_Approver",
                             Unit = "Thane"
                         },
@@ -2182,7 +2251,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Sakthish Nadar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAENcH6cRQ1SfW1VNUxXotrWLpeHSBD4/OS9MEQyXSqtGsFR22K9ECDPoLTgp64V4cYA==",
+                            Password = "AQAAAAIAAYagAAAAEMOThoFDhtQNYN2HlWnWjlX+2o6fvZLJxjP8A0heE0NsXN+QBoNlq5cLFNjjCRmIJQ==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -2197,7 +2266,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Shreekant Panigrahi",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEPQM5rTf03S4RcqfvCWLj1rjTGK+lDeE+mEqqO5cFJkfppsr09No0GcfDMYQrGp8sA==",
+                            Password = "AQAAAAIAAYagAAAAEEbmNrVlMbCOq1GoC7SG9mPA1ymSqE1gZA6L80j8ybc5yUJ4i8c6BO6zKlG0phjwdA==",
                             Role = "Contract_Approver",
                             Unit = "Pune"
                         },
@@ -2212,7 +2281,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Govind Lohar",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEB3vtdVBTJ1BtzNrQ8EDd9xPSsHCWMWXIF98IOu816Kb3FebhwJgYwUiRuuen4YZFA==",
+                            Password = "AQAAAAIAAYagAAAAEP3xa9WN1R2jquYEwPednfLZrTnipGI2/WGOlgWP64yC5AMg/jxF8gTuVCR3HJXrSw==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         },
@@ -2227,7 +2296,7 @@ namespace CMS.Persistence.Migrations
                             EmployeeName = "Om Auti",
                             IsDeleted = false,
                             LastPasswordChanged = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAIAAYagAAAAEEhbzOEY9058ePqpXdvAs/pjaED3dZ3pFcqysus3hAz6mF3YNSxt35pZJorJEkgWKg==",
+                            Password = "AQAAAAIAAYagAAAAEBah4TktV8RTIIphKTosE05A4BXvcn6dv6EY9RJFonV0yeyCRZ0c/2Qfe7GO8cglNQ==",
                             Role = "Contract_Approver",
                             Unit = "Indore"
                         });
@@ -2387,7 +2456,7 @@ namespace CMS.Persistence.Migrations
                         {
                             MatrixMouId = 1,
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4597),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5698),
                             DepartmentId = 1,
                             EscalationId1 = "NEO1",
                             EscalationId2 = "NEO1",
@@ -2395,14 +2464,14 @@ namespace CMS.Persistence.Migrations
                             TriggerDaysEscalation1 = 2,
                             TriggerDaysEscalation2 = 3,
                             TriggerDaysEscalation3 = 5,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4616),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5722),
                             UpdatedBy = "NEO1"
                         },
                         new
                         {
                             MatrixMouId = 2,
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4621),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5727),
                             DepartmentId = 2,
                             EscalationId1 = "NEO2",
                             EscalationId2 = "NEO2",
@@ -2410,14 +2479,14 @@ namespace CMS.Persistence.Migrations
                             TriggerDaysEscalation1 = 2,
                             TriggerDaysEscalation2 = 4,
                             TriggerDaysEscalation3 = 8,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4623),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5729),
                             UpdatedBy = "NEO1"
                         },
                         new
                         {
                             MatrixMouId = 3,
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4626),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5732),
                             DepartmentId = 3,
                             EscalationId1 = "NEO3",
                             EscalationId2 = "NEO3",
@@ -2425,14 +2494,14 @@ namespace CMS.Persistence.Migrations
                             TriggerDaysEscalation1 = 3,
                             TriggerDaysEscalation2 = 5,
                             TriggerDaysEscalation3 = 8,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4627),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5733),
                             UpdatedBy = "NEO1"
                         },
                         new
                         {
                             MatrixMouId = 4,
                             CreatedBy = "NEO1",
-                            CreatedOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4630),
+                            CreatedOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5737),
                             DepartmentId = 4,
                             EscalationId1 = "NEO4",
                             EscalationId2 = "NEO4",
@@ -2440,7 +2509,7 @@ namespace CMS.Persistence.Migrations
                             TriggerDaysEscalation1 = 2,
                             TriggerDaysEscalation2 = 3,
                             TriggerDaysEscalation3 = 6,
-                            UpdateOn = new DateTime(2025, 5, 21, 17, 32, 17, 705, DateTimeKind.Local).AddTicks(4631),
+                            UpdateOn = new DateTime(2025, 6, 10, 11, 25, 57, 788, DateTimeKind.Local).AddTicks(5738),
                             UpdatedBy = "NEO1"
                         });
                 });
@@ -2548,6 +2617,44 @@ namespace CMS.Persistence.Migrations
                     b.HasIndex("ContractId");
 
                     b.ToTable("PostTerminationNotices");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.Role", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.UserRoleMapping", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("EmployeeValueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "EmployeeCode");
+
+                    b.HasIndex("EmployeeValueId");
+
+                    b.ToTable("UserRoleMappings");
                 });
 
             modelBuilder.Entity("CMS.Domain.Entities.AddendumContract", b =>
@@ -2944,6 +3051,35 @@ namespace CMS.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.UserRoleMapping", b =>
+                {
+                    b.HasOne("CMS.Domain.Entities.MasterEmployee", "Employee")
+                        .WithMany("UserRoleMappings")
+                        .HasForeignKey("EmployeeValueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Domain.Entities.Role", "Role")
+                        .WithMany("UserRoleMappings")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.MasterEmployee", b =>
+                {
+                    b.Navigation("UserRoleMappings");
+                });
+
+            modelBuilder.Entity("CMS.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoleMappings");
                 });
 #pragma warning restore 612, 618
         }
