@@ -25,5 +25,6 @@ namespace CMS.Application.Contracts.Persistence
         Task<Contract> AddContractAsync(Contract cp, string empName);
         Task<bool> UpdateContractAsync(int id, Contract cp);
         Task<bool> DeleteContractAsync(int id, string empCode);
+        Task<Contract> RenewalRequestContractAsync(int id, string empCode);
     }
 }

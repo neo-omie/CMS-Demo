@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { Component,OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {  FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -65,14 +66,19 @@ ngOnInit(): void {
 }
 
 resetForm() {
-  this.addEmployeeForm.reset();
+  this.addEmployeeForm.reset({
+    role : "",
+    unit : "",
+    departmentId: ""
+  });
   console.log(this.mode);
   this.mode='';
+  
 }
 
 addEmployeeForm: FormGroup= new FormGroup({
   employeeName:new FormControl('',[Validators.required,Validators.maxLength(40),Validators.pattern('^[a-zA-Z ]+$')]),
-  password:new FormControl("",[Validators.required,Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$')]),
+  password:new FormControl("",[Validators.required]),
   role:new FormControl("",Validators.required),
   employeeCode:new FormControl("",[Validators.required,Validators.pattern('^[A-Z0-9]+$'),Validators.maxLength(8)]),
   unit:new FormControl("",Validators.required),
@@ -207,6 +213,7 @@ getDepartmentName(){
 onSubmit(){
   this.formsValue=this.addEmployeeForm.value;
   if(this.addEmployeeForm.invalid){
+     console.log('invalie emp form : ',this.formsValue);
         this.addEmployeeForm.markAllAsTouched();
         return;
   }
@@ -241,6 +248,12 @@ onSubmit(){
       this.employeeService.addEmployee(addFormValues,loggedInEmpCode).subscribe({
         next:(response:AddEmployeeDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Added successfully');
+            const modalElement = document.getElementById('employee-add');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
+            this.resetForm();
             this.router.navigate(['masters/employeeMasters']);
         }, 
         error:(error) => {

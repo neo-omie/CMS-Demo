@@ -1,3 +1,4 @@
+
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">List Of Apostille</h2>
 
@@ -126,19 +127,22 @@
                       <label for="apostilleName" class="form-label">Apostille Name<span style="color: red;">*</span></label>
                       <span *ngIf="apostilleName?.hasError('required') && (apostilleName?.dirty || apostilleName?.touched)" style="color: red;">Required</span>
                        <span *ngIf="apostilleName?.hasError('maxlength') && (apostilleName?.dirty || apostilleName?.touched)" style="color: red;">Only 30 characters are allowed</span>
+                        <span *ngIf="apostilleName?.hasError('pattern') " style="color: red;">Only Smallcase and uppercase alphabets are allowed</span>
+
                       <input class="form-control" type="text" id="apostilleName" placeholder="Enter apostille name" formControlName="apostilleName">
                     </div>
     
                     <div class="m-3">
                       <label for="unit" class="form-label">Status<span style="color: red;">*</span></label>
-                      <!-- <span *ngIf="status?.hasError('required') && (status?.dirty || status?.touched)" style="color: red;">Required</span> -->
+                      <span *ngIf="status?.hasError('required') && (status?.dirty || status?.touched)" style="color: red;">Required</span>
                       <select class="form-select" id="status" placeholder="Select status"  formControlName="status">
+                        <option value="" >--Select Status--</option>
                         <option value="1">Active</option>
                         <option value="0">InActive</option>
                       </select>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" [disabled]="addApostilleForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
+                      <button type="submit" class="btn btn-outline-primary add-btn" >{{mode==='add'? 'Save':'Update'}}</button>
                       <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
                     </div>
                   </div>

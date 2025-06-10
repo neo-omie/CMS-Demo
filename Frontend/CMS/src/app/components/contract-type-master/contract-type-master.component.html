@@ -77,7 +77,7 @@
                   style="color: red;">Required</span>
                 <span *ngIf="contractTypeName?.hasError('maxlength')" style="color:red;"> Enter value less than 20
                   alphabets</span>
-                <span *ngIf="contractTypeName?.hasError('pattern')" style="color:red;">Only smallcase/largecase
+                <span *ngIf="contractTypeName?.hasError('pattern')" style="color:red;">Only smallcase/capitalcase
                   alphabets from a to z are allowed </span>
                 <input class="form-control" type="text" id="contractTypeName" placeholder="Enter contract type name"
                   formControlName="contractTypeName">

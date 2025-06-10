@@ -254,7 +254,7 @@
                       <label for="role" class="form-label">Role<span style="color: red;">*</span></label>
                       <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">Required</span>
                       <select class="form-select" id="roleSelect" placeholder="Select role"  formControlName="role">
-                        <option value="" disabled selected>--Select Role--</option>
+                        <option value="" >--Select Role--</option>
                         <option value="Management User">Management User</option>
                         <option value="MOU_User">MOU_User</option>
                         <option value="MOU_Approver">MOU_Approver</option>
@@ -314,7 +314,7 @@
     
                 
                   <div class="modal-footer">
-                    <button type="submit" class="btn btn-outline-primary add-btn" data-bs-dismiss="modal" [disabled]="addEmployeeForm.invalid">{{mode==='add'? 'Save':'Update'}}</button>
+                    <button type="submit" class="btn btn-outline-primary add-btn"   >{{mode==='add'? 'Save':'Update'}}</button>
                     <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
                   </div>
                 </form>

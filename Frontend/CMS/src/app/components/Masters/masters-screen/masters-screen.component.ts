@@ -17,22 +17,22 @@ export class MastersScreenComponent {
   cardInfo = [
     {
       url:'/masters/employeeMasters',
-      title:'Employee Masters',
+      title:'Employee Master',
       iconClass:'fa-solid fa-users icon'
     },
     {
       url:'/masters/departmentMasters',
-      title:'Department Masters',
+      title:'Department Master',
       iconClass:'fa-solid fa-landmark icon'
     },
     {
       url:'/masters/companyMasters',
-      title:'Company Masters',
+      title:'Company Master',
       iconClass:'fa-solid fa-building icon'
     },
     {
       url:'/masters/documentMasters',
-      title:'Document Masters',
+      title:'Document Master',
       iconClass:'fa-solid fa-file-invoice icon'
     },{
       url:'/masters/apostilleMasters',

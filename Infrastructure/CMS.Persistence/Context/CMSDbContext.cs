@@ -74,6 +74,8 @@ namespace CMS.Persistence.Context
 
         public DbSet<GetAllAuditDto> GetAllAudits { get; set; }
         public DbSet<ContractsCount> ContractsCounter { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -118,6 +120,8 @@ namespace CMS.Persistence.Context
             modelBuilder.Entity<AuditTrail>().HasAlternateKey(at => at.ValueId);
             //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
             modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
+
+            modelBuilder.Entity<UserRoleMapping>().HasKey(urm => new { urm.RoleId, urm.EmployeeCode });
 
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
