@@ -59,6 +59,7 @@ export class GetContractByIdDto {
     actualDocRefNo?: number;
     retainerContract?: number;
     termsAndConditions?: string;
+    empCustodianCode?:string;
     validFrom?: Date;
     validTill?: Date;
     renewalFrom?: Date;

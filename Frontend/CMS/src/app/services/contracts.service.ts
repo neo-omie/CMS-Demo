@@ -17,6 +17,9 @@ export class ContractsService {
   private apiUrl = `${environment.apiUrl}/Contract`;
   constructor(private http:HttpClient) { }
 
+  requestRenewal(id:number,empCode:string):Observable<boolean>{
+    return this.http.post<boolean>(`${this.apiUrl}/${id}/renewalRequest/${empCode}`,{})
+  }
   getContracts(filters:any) : Observable<ContractsEntity[]> {
     return this.http.post<ContractsEntity[]>(`${this.apiUrl}/GetAllContracts`,filters);
   }

@@ -3,6 +3,7 @@ using CMS.Application.Features.Contracts.Commands.ApproveRejectContract;
 using CMS.Application.Features.Contracts.Commands.CreateNewContract;
 using CMS.Application.Features.Contracts.Commands.EditContract;
 using CMS.Application.Features.Contracts.Commands.RemoveContract;
+using CMS.Application.Features.Contracts.Commands.RenewalRequestContract;
 using CMS.Application.Features.Contracts.Queries.GetActiveContracts;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Application.Features.Contracts.Queries.GetContractByContractName;
@@ -14,6 +15,7 @@ using CMS.Application.Features.Contracts.Queries.GetTerminatedContracts;
 using CMS.Application.Features.ContractTypeMaster.Command.DeleteContract;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities;
+using CMS.Persistence.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -151,5 +153,15 @@ namespace CMS.API.Controllers
                 return Ok(true);
             return Ok(false);
         }
+
+        [Route("{id}/renewalRequest/{empCode}")]
+        [HttpPost]
+        public async Task<IActionResult> ContractRenewalRequest([FromRoute] int id, [FromRoute] string empCode)
+        {
+            Contract contract = await _mediator.Send(new RenewalRequestContractCommand(id, empCode));
+            if (contract != null)
+                return Ok(true);
+            return Ok(false);
+        } 
     }
 }

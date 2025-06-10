@@ -1,7 +1,7 @@
 declare var bootstrap: any;
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AddContractDto, ContractsEntity, GetContractByIdDto } from '../../../models/contracts';
 import { ContractsService } from '../../../services/contracts.service';
@@ -57,6 +57,7 @@ import { dateBetweenValidator, dateRangeValidator, dateValidator } from '../../.
 export class AllContractsComponent implements OnInit {
   validDate=true;
   contractStatus = ContractStatus
+  renewalCheck = false;
   locationSelect = Location
     remarkTouched: boolean = false;
   statusKeys = Object.keys(this.contractStatus);
@@ -146,7 +147,8 @@ export class AllContractsComponent implements OnInit {
     this.getAllCompanies();
   }
 
-  constructor(private contractsService: ContractsService, private router: Router,
+  constructor(private contractsService: ContractsService, 
+    private router: Router,
     private route: ActivatedRoute,
     private renderer: Renderer2, private title: Title,
     private masterApostilleService: MasterApostilleService,
@@ -294,6 +296,18 @@ export class AllContractsComponent implements OnInit {
           this.terminationCheck = true;
         } else {
           this.terminationCheck = false;
+        }
+        if(this.contractDetails.renewalFrom != undefined && 
+          this.contractDetails.renewalTill != undefined &&
+          (this.contractDetails.empCustodianCode == DecodeToken.ECode || 
+           DecodeToken.ECode == "NEO1"
+          ) && 
+          new Date(this.contractDetails.renewalFrom).getTime() <= new Date().getTime() &&
+          new Date(this.contractDetails.renewalTill).getTime() >= new Date().getTime())
+        {
+          this.renewalCheck = true;
+        } else {
+          this.renewalCheck = false;
         }
         if ((this.contractDetails.approver1Email == DecodeToken.email &&
           this.contractDetails.approver1Status == 8) ||
@@ -1382,6 +1396,39 @@ checkPosterminationTextarea(value: string){
   }
   exportToExcel(tableID:string, fileName: string): void {
     ExcelExport.printToExcel(tableID,fileName);
+  }
+
+  renewalRequest(id:number){
+    this.loading = true;
+    let empCode = DecodeToken.ECode;
+    if(empCode){
+      this.contractsService.requestRenewal(id,empCode).subscribe({
+        next:(res:boolean)=>{
+          if(res){
+            Alert.toast(TYPE.SUCCESS, true, 'Requested successfully');
+            const modalElement = document.getElementById('contract-detail');
+            if (modalElement) {
+              const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
+            this.loading = false;
+          }
+        },
+        error:(error)=>{
+           console.error('Error :(', error);
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.message : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          this.loading = false;
+        }
+      })
+    }
+    else{
+        localStorage.clear();
+        DecodeToken.clearUserCredentials();
+        this.router.navigate(["/"]);
+      }
   }
 
   getProgressType(status:number|undefined):string{
