@@ -170,7 +170,7 @@
                       style="color: red;">
                       Only 5  digits are allowed </span> -->
                     <span *ngIf="zipcode?.hasError('pattern') && (zipcode?.dirty || zipcode?.touched)"
-                      style="color: red;">Exact 5 digits are allowed</span>
+                      style="color: red;">Exact 6 digits are allowed</span>
 
                     <input class="form-control" type="text" id="zipcode" placeholder="Enter zip code"
                       formControlName="zipcode">
