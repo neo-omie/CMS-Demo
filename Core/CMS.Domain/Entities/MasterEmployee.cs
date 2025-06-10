@@ -18,6 +18,5 @@ namespace CMS.Domain.Entities
         public int EmployeeExtension { get; set; }
         public int DepartmentId { get; set; }
         public DateTime LastPasswordChanged { get; set; }
-        public IList<UserRoleMapping> UserRoleMappings { get; set; }
     }
 }
