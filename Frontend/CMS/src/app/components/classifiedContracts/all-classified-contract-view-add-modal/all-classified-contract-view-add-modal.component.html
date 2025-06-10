@@ -505,6 +505,26 @@
               </div>
               <div class="m-3">
                 <label for="renewalFrom">Renewal from</label>
+                <span
+                  *ngIf="
+                    isCreate &&
+                    formfield('renewalFrom')?.hasError('pastDate') &&
+                    (formfield('renewalFrom')?.dirty ||
+                      formfield('renewalFrom')?.touched)
+                  "
+                  style="color: red"
+                  >Date cannot be in the past</span>
+
+                   <span
+                  *ngIf="
+                    isCreate &&
+                    masterContractAddForm?.hasError('invalidDateBetweenRange') &&
+                    (masterContractAddForm?.dirty ||
+                      masterContractAddForm?.touched)
+                  "
+                  style="color: red"
+                  >Date Shoud be between Valid from and Valid till dates</span>
+                  
                 <input
                   *ngIf="isCreate"
                   class="form-control"
@@ -523,6 +543,15 @@
               </div>
               <div class="m-3">
                 <label for="renewalTill">Renewal till</label>
+                 <span
+                  *ngIf="
+                    isCreate &&
+                    formfield('renewalTill')?.hasError('pastDate') &&
+                    (formfield('renewalTill')?.dirty ||
+                      formfield('renewalTill')?.touched)
+                  "
+                  style="color: red"
+                  >Date cannot be in the past</span>
                 <input
                   *ngIf="isCreate"
                   class="form-control"

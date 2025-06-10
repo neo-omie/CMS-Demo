@@ -1,3 +1,4 @@
+declare var bootstrap: any;
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddApostilleDto, EditApostilleDto, MasterApostille, MasterApostilleDto } from '../../models/master-apostille';
@@ -36,8 +37,8 @@ mode?:string;
 formsValue:any;
 empId:number = 0;
 addApostilleForm: FormGroup= new FormGroup({
-  apostilleName:new FormControl('',[Validators.required,Validators.maxLength(30)]),
-  status:new FormControl('1',Validators.required)
+  apostilleName:new FormControl('',[Validators.required,Validators.maxLength(30),Validators.pattern('^[a-zA-Z ]+$')]),
+  status:new FormControl('',Validators.required)
 })
 
 constructor(private apostilleService: MasterApostilleService,private router: Router){}
@@ -51,7 +52,9 @@ get apostilleName(){
 }
 
 resetForm() {
-  this.addApostilleForm.reset();
+  this.addApostilleForm.reset({
+    status:''
+  });
   console.log(this.mode);
   this.mode='';
 }
@@ -201,7 +204,13 @@ onSubmit(){
       this.apostilleService.addApostille(addFormValues,empCode).subscribe({
         next:(response:AddApostilleDto) => {
             Alert.toast(TYPE.SUCCESS,true,'Added successfully');
+            this.resetForm()
             this.fetchApostille();
+            const modalElement = document.getElementById('apostille-add');
+                if (modalElement) {
+                  const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
             this.router.navigate(['masters/apostilleMasters']);
         }, 
         error:(error) => {
@@ -223,6 +232,12 @@ onSubmit(){
       this.apostilleService.updateApostille(this.apoID, addFormValues,empCode).subscribe({
         next: (res: EditApostilleDto) => {
           Alert.toast(TYPE.SUCCESS, true, 'Updated Successfully')
+          this.resetForm()
+           const modalElement = document.getElementById('apostille-add');
+                if (modalElement) {
+                  const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
           this.fetchApostille();
         }, error: (error) => {
           Alert.toast(TYPE.ERROR, true, error.error.message);
@@ -231,5 +246,9 @@ onSubmit(){
       })
   }
 }
+
+ get status(){
+      return this.addApostilleForm.get('status');
+    }
 
 }

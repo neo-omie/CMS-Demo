@@ -76,9 +76,8 @@ export class MasterCompanyComponent implements OnInit {
       }
     });
   }
-  getStateCascade(event: Event) {
-    let input = event.target as HTMLInputElement
-    this.companyCascadeService.getStates(+input.value).subscribe({
+  getStateCascade(input:string) {
+    this.companyCascadeService.getStates(+input).subscribe({
       next: (response: States[]) => {
         this.stateList = response;
       }, error: (error) => {
@@ -88,9 +87,8 @@ export class MasterCompanyComponent implements OnInit {
       }
     })
   }
-  getCityCascade(event: Event) {
-    let input = event.target as HTMLInputElement
-    this.companyCascadeService.getCities(+input.value).subscribe({
+  getCityCascade(input:string) {
+    this.companyCascadeService.getCities(+input).subscribe({
       next: (response: Cities[]) => {
         this.cityList = response;
       }, error: (error) => {
@@ -189,35 +187,41 @@ export class MasterCompanyComponent implements OnInit {
   //   }
   // }
 
-  addCompany(companyForm: NgForm) {
-    this.company = companyForm.value;
-    let empCode = DecodeToken.ECode;
+  // addCompany(companyForm: NgForm) {
+  //   this.company = companyForm.value;
+  //   let empCode = DecodeToken.ECode;
 
-    this.companyService.addCompany(this.company, empCode).subscribe({
-      next: (response) => {
-        Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
-        companyForm.resetForm();
-        this.GetPage(this.maxPage);
-        const modalElement = document.getElementById('company-add');
-        if (modalElement) {
-          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-          modalInstance.hide();
-        }
-      },
+  //   this.companyService.addCompany(this.company, empCode).subscribe({
+  //     next: (response) => {
+  //       Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
+        
+  //       companyForm.resetForm();
+  //       this.GetPage(this.maxPage);
+  //       const modalElement = document.getElementById('company-add');
+  //       if (modalElement) {
+  //         const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+  //         modalInstance.hide();
+  //       }
+  //     },
 
-      error: (error) => {
-        console.error('Error adding Company:', error);
-        Alert.bigToast('Error!', 'There was an error adding the Company.', TYPE.ERROR, 'Try Again');
-      }
-    });
-  }
+  //     error: (error) => {
+  //       console.error('Error adding Company:', error);
+  //       Alert.bigToast('Error!', 'There was an error adding the Company.', TYPE.ERROR, 'Try Again');
+  //     }
+  //   });
+  // }
 
 ResettingonCacelButton(){
   this.masterCompanyAddForm.reset({
       stateId: '',
       countryId: '',
       cityId: '',
+      
+
+      
     });
+    this.stateList.length=0;
+    this.cityList.length=0;
 }
 
   deleteCompany(id: number) {
@@ -265,7 +269,7 @@ ResettingonCacelButton(){
       countryId : new FormControl('',[Validators.required]),
       stateId : new FormControl('',[Validators.required]),
       cityId : new FormControl('',[Validators.required]),
-      zipcode : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{5}$')]),
+      zipcode : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{6}$')]),
       companyContactNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
       companyEmailId : new FormControl('',[Validators.required,Validators.email,Validators.maxLength(50)]),
       companyWebsiteUrl : new FormControl('',[Validators.required,Validators.pattern('^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$')]),
@@ -280,6 +284,8 @@ ResettingonCacelButton(){
       let empCode =DecodeToken.ECode;
       if(this.masterCompanyAddForm.invalid){
         this.masterCompanyAddForm.markAllAsTouched();
+        console.log("checking");
+        
         return;
       }
       else{
@@ -331,7 +337,7 @@ ResettingonCacelButton(){
             next:(response:MasterCompany) => {
               if(response != undefined || response != null){
                 Alert.toast(TYPE.SUCCESS,true,'Added successfully');
-                this.masterCompanyAddForm.reset();
+                this.ResettingonCacelButton()
                 this.getCompanies(this.maxPage);
                 const modalElement = document.getElementById('company-add');
                 if (modalElement) {
@@ -421,13 +427,15 @@ ResettingonCacelButton(){
   
     onClick(){
       // this.router.navigate(['masters/companyMasters']);
-      this.masterCompanyAddForm.reset();
+      this.ResettingonCacelButton()
     }
     compID:number = 0
     fetchCompanyData(companyID:number) {
       this.compID = companyID;
       this.companyService.getCompanyById(companyID).subscribe({
         next: (res:MasterCompany) => {
+          this.getStateCascade(res?.countryId+"")
+          this.getCityCascade(res?.stateId+"")
           this.masterCompanyAddForm.patchValue({
             companyName: res.companyName,
             companyStatus: String(Number(res.companyStatus)),
@@ -509,6 +517,7 @@ ResettingonCacelButton(){
             next:(response:MasterCompany) => {
               if(response != undefined || response != null){
                 Alert.toast(TYPE.SUCCESS,true,'Updated successfully');
+                this.ResettingonCacelButton()
                 this.masterCompanyAddForm.reset();
                 this.getCompanies(this.currentPage);
                  const modalElement = document.getElementById('company-edit');

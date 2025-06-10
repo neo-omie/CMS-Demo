@@ -170,7 +170,7 @@ let empCode =DecodeToken.ECode;
   }
 
   contractTypeMasterAddForm = new FormGroup({
-    contractTypeName: new FormControl('', [Validators.required,Validators.maxLength(20),Validators.pattern('^[a-zA-Z]+$')]),
+    contractTypeName: new FormControl('', [Validators.required,Validators.maxLength(20),Validators.pattern('^[a-zA-Z ]+$')]),
     status: new FormControl('', [Validators.required])
   })
   onAddFormSubmitContract() {

@@ -48,7 +48,7 @@
             <div class="form-group">
                 <label for="departmentName">Department Name</label>
                 <span class="error">*</span>
-                <span class="error" *ngIf="name.invalid && name.touched">  
+                <span class="error" *ngIf="name.invalid && (name.touched || name.dirty)">  
                   <span *ngIf="name.errors?.['required']">Department name is required.</span>
                   <span *ngIf="name.errors?.['pattern']">Only letters and spaces are allowed.</span>
                 </span>
@@ -80,7 +80,8 @@
       <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link" aria-label="LastPage">&raquo;</span></li>
     </ul>
   </nav>
-  <div class="modal fade" id="department-edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="department-edit" #departmentEditModal
+   data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <form class="modal-content">
         <div class="modal-header d-flex justify-content-between">
@@ -91,7 +92,8 @@
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-landmark"></i></span>
-              <input #editDepartmentName class="form-control" placeholder="Change department name" type="text" value="{{dept != undefined ? dept.departmentName : ''}}"/>
+              
+              <input #editDepartmentName class="form-control"   placeholder="Change department name"  type="text" value="{{dept != undefined ? dept.departmentName : ''}}"/>
           </div>
         </div>
         </div>

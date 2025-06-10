@@ -26,6 +26,7 @@ export class MasterDepartmentComponent {
   displayedColumns: string[] = ['departmentName', 'action'];
     dataSource = new MatTableDataSource<GetAllDepartmentsDto>();
     @ViewChild(MatSort) sort!: MatSort;
+    @ViewChild('departmentEditModal') departmentEditModal!: ElementRef;
     ngAfterViewInit() {
       this.dataSource.sort = this.sort;
     }
@@ -103,6 +104,9 @@ export class MasterDepartmentComponent {
           if (response) {
             Alert.toast(TYPE.SUCCESS, true, "Updated successfully");
             this.GetAllDepartments(1, 10);
+            const modalElement = this.departmentEditModal.nativeElement;
+          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modalInstance.hide();
           }
 
         },
@@ -158,7 +162,7 @@ export class MasterDepartmentComponent {
 
     this.departmentService.addDepartment(this.addDept.departmentName,empCode).subscribe({
       next: (response) => {
-        Alert.bigToast('Success!', 'Department added successfully.', TYPE.SUCCESS, 'Ok');
+        Alert.toast(TYPE.SUCCESS,true,'Added successfully');
         departmentForm.resetForm();
         this.GetPage(this.maxPage);
          const modalElement = document.getElementById('department-add');

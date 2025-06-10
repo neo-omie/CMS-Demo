@@ -8,7 +8,7 @@
       <div class="modal-header d-flex justify-content-between">
         <!--adding the company-->
         <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder"> Add New Company</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="ResettingonCacelButton()"><i
             class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
@@ -46,9 +46,9 @@
                     <input class="form-control" type="text" id="pocName" placeholder="Enter poc Name"
                       formControlName="pocName">
                   </div>
-                  <div class="m-3">
+                  <!-- <div class="m-3">
                     <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
-                  </div>
+                  </div> -->
                   <div class="m-3">
                     <label for="pocContactNumber" class="form-label">POC ContactNo<span
                         style="color: red;">*</span></label>
@@ -135,8 +135,8 @@
                     <span *ngIf="countryId?.hasError('required') && (countryId?.dirty || countryId?.touched)"
                       style="color: red;">Required</span>
                     <!-- <input class="form-control" type="text" id="countryId" formControlName="countryId"> -->
-                    <select class="form-select" name="countryId" id="countryId" formControlName="countryId"
-                      (change)="getStateCascade($event)">
+                    <select #contryId class="form-select" name="countryId" id="countryId" formControlName="countryId"
+                      (change)="getStateCascade(contryId.value)">
                       <option value="" disabled selected>--Select Country--</option>
                       <option *ngFor="let count of countryList" value="{{count.countryId}}">{{count.countries}}</option>
                     </select>
@@ -146,8 +146,8 @@
                     <span *ngIf="stateId?.hasError('required') && (stateId?.dirty || stateId?.touched)"
                       style="color: red;">Required</span>
                     <!-- <input class="form-control" type="text" id="stateId" formControlName="stateId"> -->
-                    <select class="form-select" name="stateId" id="stateId" formControlName="stateId"
-                      (change)="getCityCascade($event)">
+                    <select #stateCascadingId class="form-select" name="stateId" id="stateId" formControlName="stateId"
+                      (change)="getCityCascade(stateCascadingId.value)">
                       <option value="" disabled selected>--Select State--</option>
                       <option *ngFor="let state of stateList" value="{{state.stateId}}">{{state.state}}</option>
                     </select>
@@ -292,7 +292,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-outline-primary add-btn" id="btnadd" type="submit"
-              style="max-width: 300px;">Add</button>
+              style="max-width: 300px;" >Add</button>
             <button class="btn btn-outline-danger" id="btncancel" type="reset" data-bs-dismiss="modal"
               style="max-width: 300px;" (click)="ResettingonCacelButton()">Cancel</button>
           </div>
@@ -577,7 +577,7 @@
       <div class="modal-header d-flex justify-content-between">
         <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="companyDetailLabel">Edit Company Details
         </h5>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="onClick()"><i
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="ResettingonCacelButton()"><i
             class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
@@ -615,9 +615,9 @@
                     <input class="form-control" type="text" id="pocName" placeholder="Enter poc Name"
                       formControlName="pocName">
                   </div>
-                  <div class="m-3">
+                  <!-- <div class="m-3">
                     <input class="form-control" type="text" id="valueId" placeholder="valueId" disabled>
-                  </div>
+                  </div> -->
                   <div class="m-3">
                     <label for="pocContactNumber" class="form-label">POC ContactNo<span
                         style="color: red;">*</span></label>
@@ -704,8 +704,8 @@
                     <span *ngIf="countryId?.hasError('required') && (countryId?.dirty || countryId?.touched)"
                       style="color: red;">Required</span>
                     <!-- <input class="form-control" type="text" id="countryId" formControlName="countryId"> -->
-                    <select class="form-select" name="countryId" id="countryId" formControlName="countryId"
-                      (change)="getStateCascade($event)">
+                    <select #contryIdUpdate class="form-select" name="countryId" id="countryId" formControlName="countryId"
+                      (change)="getStateCascade(contryIdUpdate.value)">
                       <option value="" disabled selected>--Select Country--</option>
                       <option *ngFor="let count of countryList" value="{{count.countryId}}">{{count.countries}}</option>
                     </select>
@@ -715,8 +715,8 @@
                     <span *ngIf="stateId?.hasError('required') && (stateId?.dirty || stateId?.touched)"
                       style="color: red;">Required</span>
                     <!-- <input class="form-control" type="text" id="stateId" formControlName="stateId"> -->
-                    <select class="form-select" name="stateId" id="stateId" formControlName="stateId"
-                      (change)="getCityCascade($event)">
+                    <select #stateIdUpdate class="form-select" name="stateId" id="stateId" formControlName="stateId"
+                      (change)="getCityCascade(stateIdUpdate.value)">
                       <option value="" disabled selected>--Select State--</option>
                       <option *ngFor="let state of stateList" value="{{state.stateId}}">{{state.state}}</option>
                     </select>
