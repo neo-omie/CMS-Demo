@@ -8,9 +8,12 @@
     <i class="fa-solid fa-file-circle-plus"></i> Add New Contract
   </button>
   <button class="add-btn btn btn-outline-primary mb-2 printPdf" (click)="
-        printToPDF('#classifiedContracts-table', 'CMS-classifiedContracts.pdf')
-        ">
+        printToPDF()">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
+   <button class="add-btn btn btn-outline-primary mb-2 margin-right"
+    (click)="exportToExcel()">
+    <i class="fa-solid fa-file-excel"></i> Print to Excel
   </button>
   <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#filter-container">
     Filters<i class="fa-solid fa-angle-down"></i>

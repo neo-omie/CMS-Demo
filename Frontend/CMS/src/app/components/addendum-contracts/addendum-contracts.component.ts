@@ -15,101 +15,131 @@ import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
 import { PDFExport } from '../../utils/pdfExport';
+import { ExcelExport } from '../../utils/excelExport';
+
 import { ProgressBarComponent } from '../UtilComponents/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-addendum-contracts',
   standalone: true,
-  imports: [CommonModule,TableComponent,LoaderComponent,PaginationComponent, ProgressBarComponent],
+  imports: [
+    CommonModule,
+    TableComponent,
+    LoaderComponent,
+    PaginationComponent,
+    ProgressBarComponent,
+  ],
   templateUrl: './addendum-contracts.component.html',
-  styleUrl: './addendum-contracts.component.css'
+  styleUrl: './addendum-contracts.component.css',
 })
 export class AddendumContractsComponent {
   loading: boolean = true;
   //isEdit: boolean = false;
   maxPage: number = 1;
-  errorMsg: string = "";
+  errorMsg: string = '';
   addAddendumContract?: AddAddendumContract;
   approverCheck: boolean = true;
   pageNumbers: number[] = [];
   addAddendumContracts: AddAddendumContract[] = [];
-  displayedColumns: string[] = ['contractName', 'addendumDate', 'status', 'action'];
+  displayedColumns: string[] = [
+    'contractName',
+    'addendumDate',
+    'status',
+    'action',
+  ];
   // dataSource = new MatTableDataSource<AddAddendumContract>();
   columnsInfo: {
     [key: string]: {
-      'title'?: string,
-      'isSort'?: boolean,
-      'templateRef': TemplateRef<any> | null,
-    }
+      title?: string;
+      isSort?: boolean;
+      templateRef: TemplateRef<any> | null;
+    };
   } = {};
 
-  @ViewChild('actionTemplateRef', { static: true }) actionTemplateRef!: TemplateRef<any>;
-  @ViewChild('statusTemplateRef', { static: true }) statusTemplateRef!: TemplateRef<any>;
-  @ViewChild('AddendumDateRef', { static: true }) AddendumDateRef!: TemplateRef<any>;
+  @ViewChild('actionTemplateRef', { static: true })
+  actionTemplateRef!: TemplateRef<any>;
+  @ViewChild('statusTemplateRef', { static: true })
+  statusTemplateRef!: TemplateRef<any>;
+  @ViewChild('AddendumDateRef', { static: true })
+  AddendumDateRef!: TemplateRef<any>;
 
-  constructor(private addAddendumContractsService: AddAddendumContractsService, private router:Router, private title: Title, private route:ActivatedRoute) {
-    this.title.setTitle("Approval Matrix (Contract) - CMS");
+  constructor(
+    private addAddendumContractsService: AddAddendumContractsService,
+    private router: Router,
+    private title: Title,
+    private route: ActivatedRoute
+  ) {
+    this.title.setTitle('Approval Matrix (Contract) - CMS');
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params=>{
+    this.route.params.subscribe((params) => {
       console.log('Route Params:', params);
-      const paramValueId=params['contractId'];
-      if(paramValueId){
-        if(Number(paramValueId) && paramValueId > 0){
+      const paramValueId = params['contractId'];
+      if (paramValueId) {
+        if (Number(paramValueId) && paramValueId > 0) {
           this.GetAllAddendum(1, 10, paramValueId);
-        }
-        else{
+        } else {
           this.router.navigate(['page-not-found']);
         }
-      }
-      else{
+      } else {
         this.GetAllAddendum(1, 10);
       }
-  })
+    });
 
     this.columnsInfo = {
-      'contractName': {
-        'title': 'Contract Name',
-        'isSort': true,
-        'templateRef': null
+      contractName: {
+        title: 'Contract Name',
+        isSort: true,
+        templateRef: null,
       },
-      'addendumDate': {
-        'title': 'Addendum Date',
-        'isSort': true,
-        'templateRef': this.AddendumDateRef
+      addendumDate: {
+        title: 'Addendum Date',
+        isSort: true,
+        templateRef: this.AddendumDateRef,
       },
-      'status':{
-        'title': 'Status',
-        'isSort': true,
-        'templateRef': this.statusTemplateRef
+      status: {
+        title: 'Status',
+        isSort: true,
+        templateRef: this.statusTemplateRef,
       },
-      'action': {
-        'title': 'Action',
-        'templateRef': this.actionTemplateRef
-      }
+      action: {
+        title: 'Action',
+        templateRef: this.actionTemplateRef,
+      },
     };
   }
 
-  GetAllAddendum(pageNumber: number, pageSize: number, id:number = 0) {
-    this.addAddendumContractsService.GetAllAddendum(pageNumber, pageSize, id).subscribe({
-      next: (response: AddendumContract) => {
-        this.loading = false;
-        this.addAddendumContracts = response.data;
-        console.log(response.data)
-        if (this.addAddendumContracts != undefined && this.addAddendumContracts.length > 0) {
-          let result = Pagination.paginator(pageNumber, response.totalCount, pageSize)
-          this.maxPage = result.maxPage;
-          this.pageNumbers = result.pageNumbers;
-        }
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
-    });
+  GetAllAddendum(pageNumber: number, pageSize: number, id: number = 0) {
+    this.addAddendumContractsService
+      .GetAllAddendum(pageNumber, pageSize, id)
+      .subscribe({
+        next: (response: AddendumContract) => {
+          this.loading = false;
+          this.addAddendumContracts = response.data;
+          console.log(response.data);
+          if (
+            this.addAddendumContracts != undefined &&
+            this.addAddendumContracts.length > 0
+          ) {
+            let result = Pagination.paginator(
+              pageNumber,
+              response.totalCount,
+              pageSize
+            );
+            this.maxPage = result.maxPage;
+            this.pageNumbers = result.pageNumbers;
+          }
+        },
+        error: (error) => {
+          this.loading = false;
+          console.error('Error :(', error);
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        },
+      });
   }
 
   GetPage(pgNumber: number) {
@@ -118,80 +148,100 @@ export class AddendumContractsComponent {
     }
   }
 
-  async approveRejectContract(contractId?:number, id?: number, status?: number) {
-      this.loading = true;
-      console.log('came here')
-      let email = DecodeToken.email;
-      if (email) {
-        try {
-          const response = await firstValueFrom(this.addAddendumContractsService.approveRejectContract(contractId, id, email, status))
-          if (response !== false) {
-            Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-            this.GetAllAddendum(1, 10);
+  async approveRejectContract(
+    contractId?: number,
+    id?: number,
+    status?: number
+  ) {
+    this.loading = true;
+    console.log('came here');
+    let email = DecodeToken.email;
+    if (email) {
+      try {
+        const response = await firstValueFrom(
+          this.addAddendumContractsService.approveRejectContract(
+            contractId,
+            id,
+            email,
+            status
+          )
+        );
+        if (response !== false) {
+          Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+          this.GetAllAddendum(1, 10);
+        }
+      } catch (error) {
+        this.errorMsg = JSON.stringify(error);
+        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    } else {
+      this.router.navigate(['/']);
+    }
+    this.loading = false;
+  }
+
+  fetchAddedumData(addedumId: number) {
+    this.addAddendumContractsService
+      .GetAddenduByAddendumId(addedumId)
+      .subscribe({
+        next: (response) => {
+          this.addAddendumContract = response;
+          if (
+            (this.addAddendumContract.approver1Email == DecodeToken.email &&
+              this.addAddendumContract.approver1Status == 1) ||
+            (this.addAddendumContract.approver2Email == DecodeToken.email &&
+              this.addAddendumContract.approver1Status == 2 &&
+              this.addAddendumContract.approver2Status == 1) ||
+            (this.addAddendumContract.approver3Email == DecodeToken.email &&
+              this.addAddendumContract.approver1Status == 2 &&
+              this.addAddendumContract.approver2Status == 2 &&
+              this.addAddendumContract.approver3Status == 1)
+          ) {
+            this.approverCheck = true;
+          } else {
+            this.approverCheck = false;
           }
-        }
-        catch (error) {
-          this.errorMsg = JSON.stringify(error);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          console.error(error);
-        }
-        finally {
-          this.loading = false
-        }
-      }
-      else {
-        this.router.navigate(['/']);
-      }
-      this.loading = false;
-    }
+        },
+      });
+  }
 
-    fetchAddedumData(addedumId:number){
-      this.addAddendumContractsService.GetAddenduByAddendumId(addedumId).subscribe({
-        next:(response)=>{
-          this.addAddendumContract=response;
-          if ((this.addAddendumContract.approver1Email == DecodeToken.email &&
-          this.addAddendumContract.approver1Status == 1) ||
-          (this.addAddendumContract.approver2Email == DecodeToken.email &&
-            this.addAddendumContract.approver1Status == 2 &&
-            this.addAddendumContract.approver2Status == 1) ||
-          (this.addAddendumContract.approver3Email == DecodeToken.email &&
-            this.addAddendumContract.approver1Status == 2 &&
-            this.addAddendumContract.approver2Status == 2 &&
-            this.addAddendumContract.approver3Status == 1)
-        ) {
-          this.approverCheck = true;
-        } else {
-          this.approverCheck = false;
-        }
-        }
-      })
-    }
-
-    getProgressType(status:number|undefined):string{
-    if(status===undefined || status===null){
+  getProgressType(status: number | undefined): string {
+    if (status === undefined || status === null) {
       return '';
     }
 
-    switch(status){
-      case 1: return 'Approval for'; 
-      case 2: return 'Active'; 
-      case 3: return 'Rejection for';
-      case 4: return 'Termination of';
-      case 5: return 'Expiration of';
-      case 6: return 'Termination in progress for';
-      case 7: return 'Termination approved for';
-      case 8: return 'Notice withdrawal pending for';
-      default: return 'Progress for ';
+    switch (status) {
+      case 1:
+        return 'Approval for';
+      case 2:
+        return 'Active';
+      case 3:
+        return 'Rejection for';
+      case 4:
+        return 'Termination of';
+      case 5:
+        return 'Expiration of';
+      case 6:
+        return 'Termination in progress for';
+      case 7:
+        return 'Termination approved for';
+      case 8:
+        return 'Notice withdrawal pending for';
+      default:
+        return 'Progress for ';
     }
   }
 
-  phases=[
+  phases = [
     'Addendum Created',
     'L1 Approver Approval',
     'L2 Approver Approval',
     'L3 Approver Approval',
     'Addendum Active',
-  ]
+  ];
 
   // GetContract(id: number, isEdit: boolean) {
   //   this.isEdit = isEdit;
@@ -206,7 +256,22 @@ export class AddendumContractsComponent {
   //     }
   //   });
   // }
-    printToPDF(tableID: string, fileName: string) {
-    PDFExport.printToPDF(tableID, fileName);
+  printToPDF() {
+    // PDFExport.printToPDF(tableID, fileName);
+    const selectedColumns = ['Contract Name', 'Addendum Date', 'Status']; // Put the exact header text here
+    PDFExport.printToPDF(
+      'table',
+      'CMS-Addendum Contracts.pdf',
+      selectedColumns
+    );
+  }
+  exportToExcel(): void {
+    const selectedColumns = ['Contract Name', 'Addendum Date', 'Status'];
+
+    ExcelExport.printToExcel(
+      'table',
+      'CMS-ContractsAddendum.xlsx',
+      selectedColumns
+    );
   }
 }

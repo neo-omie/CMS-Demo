@@ -2,8 +2,12 @@
 <h2 class="pt-3 fs-1">Addendum - Contracts</h2>
 
 <div class="table-responsive p-md-5 p-3">
-  <button class="add-btn btn btn-outline-primary mb-2" (click)="printToPDF('#table','CMS-addendum-records.pdf')">
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right"  (click)="printToPDF()">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
+   <button class="add-btn btn btn-outline-primary mb-2 margin-left"
+    (click)="exportToExcel()">
+    <i class="fa-solid fa-file-excel"></i> Print to Excel
   </button>
   <app-table [data]="addAddendumContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
   </app-table>

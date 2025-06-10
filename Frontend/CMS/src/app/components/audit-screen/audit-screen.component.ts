@@ -16,6 +16,10 @@ import { Title } from '@angular/platform-browser';
 import { Pagination } from '../../utils/pagination';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
+import { ExcelExport } from '../../utils/excelExport';
+import { PDFExport } from '../../utils/pdfExport';
+
+
 
 @Component({
   selector: 'app-audit-screen',
@@ -77,6 +81,33 @@ export class AuditScreenComponent implements OnInit, AfterViewInit {
     }
   }
 
+ printToPDF() {
+    // PDFExport.printToPDF(tableID, fileName);
+const selectedColumns = [
+      'Table Name',
+      'Emp Code',
+      'Date and Time',
+      'Action Description',
+      'Action'
+    ];
+    PDFExport.printToPDF('table', 'CMS-ClassifiedContracts.pdf', selectedColumns);
+  }
+
+  exportToExcel(): void {
+    const selectedColumns = [
+      'Table Name',
+      'Emp Code',
+      'Date and Time',
+      'Action Description',
+      'Action'
+    ];
+
+    ExcelExport.printToExcel(
+      'table',
+      'CMS-Reports.xlsx',
+      selectedColumns
+    );
+  }
   getAllAudit(pageNumber: number, pageSize: number) {
     this.auditService.getAllAudits(pageNumber, pageSize).subscribe({
       next: (res: Audit[]) => {

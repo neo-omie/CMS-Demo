@@ -52,6 +52,7 @@ h2 {
     color: rgba(95, 95, 238);
     background-color: whitesmoke;
     border-color: #5f5fee;
+    margin: 3px;
 }
 .add-btn:hover{
     background-color: #5f5fee;
@@ -59,7 +60,6 @@ h2 {
     color: whitesmoke;
     border-radius: 5px;
 }
-
 .prog.step-label{
     display: flex;
     flex-direction: column;

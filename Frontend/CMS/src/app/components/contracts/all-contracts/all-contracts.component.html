@@ -6,11 +6,16 @@
       Contract</a>
   </button>
   <button class="add-btn btn btn-outline-primary mb-2 margin-right" routerLink="/contracts/addendumContract">
-    <a><i class="fa-solid fa-file-circle-plus"></i>Addendums</a>
+    <a><i class="fa-solid fa-file-circle-plus"></i>
+      Addendums</a>
   </button>
   <button class="add-btn btn btn-outline-primary mb-2 margin-right"
-    (click)="printToPDF('#contracts-table','CMS-contracts.pdf')">
+    (click)="printToPDF()">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right"
+    (click)="exportToExcel()">
+    <i class="fa-solid fa-file-excel"></i> Print to Excel
   </button>
   <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#filter-container">
     Filters<i class="fa-solid fa-angle-down"></i>
@@ -139,7 +144,7 @@
     </ng-container> -->
     <ng-container matColumnDef="renewalDueIn">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef>Renewal Due In</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.status==2 && cont.renewalDueIn + 1 >= 0 ? cont.renewalDueIn + 1  : "-" }}</td>
+      <td mat-cell *matCellDef="let cont">{{ cont.status==2 && cont.renewalDueIn > 0 ? cont.renewalDueIn : "-" }}</td>
     </ng-container>
     <ng-container matColumnDef="location">
       <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
@@ -358,8 +363,6 @@
               id="approver1Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
             <input *ngIf="contractDetails?.approver1Status == 8" type="text" name="approver1Status" class="form-control"
               id="approver1Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 9" type="text" name="approver1Status" class="form-control"
-            id="approver1Status" value="Pending Renewal" style="background-color: #FFC107;" disabled>
           </div>
         </div>
         <div class="mb-3">
@@ -382,50 +385,28 @@
               id="approver2Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
             <input *ngIf="contractDetails?.approver2Status == 8" type="text" name="approver2Status" class="form-control"
               id="approver2Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 9" type="text" name="approver1Status" class="form-control"
-            id="approver1Status" value="Pending Renewal" style="background-color: #FFC107;" disabled>
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Approver L3 Status</p>
           <div class="input-group">
             <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span>
-            @if(contractDetails?.approver2Status == 9){
-              <input type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 1){
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 2){
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Active" style="background-color: greenyellow;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 3){
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Rejected" style="background-color: orangered;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 4){
-              <input *ngIf="" type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Terminated" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 5){
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 6) {
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 7){
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
-            }
-            @else if(contractDetails?.approver3Status == 8) {
-              <input type="text" name="approver3Status" class="form-control"
-                id="approver3Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
-            }
+            <input *ngIf="contractDetails?.approver3Status == 1" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 2" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Active" style="background-color: greenyellow;" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 3" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Rejected" style="background-color: orangered;" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 4" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Terminated" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 6" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 7" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
+            <input *ngIf="contractDetails?.approver3Status == 8" type="text" name="approver3Status" class="form-control"
+              id="approver3Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
           </div>
         </div>
         <!-- <p class="m-1">Does exists or deleted?</p>
@@ -438,8 +419,6 @@
         </div> -->
       </div>
       <div class="modal-footer">
-        <button class="add-btn btn btn-outline-primary" *ngIf="renewalCheck"
-          (click)="renewalRequest((contractDetails != undefined && contractDetails.contractId != undefined)? +(contractDetails.contractId) : 0)">Request Renewal</button>
         <button class="btn btn-primary" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail" data-bs-toggle="modal"
           (click)="termStatus(2)">Approve Notice Withdrawal</button>
         <button class="btn btn-danger" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail" data-bs-toggle="modal"
@@ -464,7 +443,7 @@
           *ngIf="contractDetails?.approver3Status == 7"
           (click)="getContractIdforPostTerm(contractDetails?.contractId)">Withdraw Notice</button>
 
-        <button class="add-btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
           *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.contractId)">+ Add
           Addendum</button>
 
@@ -722,9 +701,11 @@
           <div class="card-body">
             <div class="fields-container">
               <div class="m-3">
-                <label for="termsAndConditions">Contract Name<span style="color: red;">*</span></label>
+                <label for="contractName">Contract Name<span style="color: red;">*</span></label>
                 <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
                   style="color: red;">Required</span>
+                <span *ngIf="contractName?.hasError('maxlength') && (contractName?.dirty || contractName?.touched)"
+                  style="color: red;">Maximum 20 characters</span>
                 <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
                   formControlName="contractName">
               </div>
@@ -791,7 +772,7 @@
                 <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
                   style="color: red;">Required</span>
                 <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
-                  style="color: red;">Invalid number</span>
+                  style="color: red;">Only numbers are allowed</span>
                 <input class="form-control" type="text" id="actualDocRefNo"
                   placeholder="Enter Actual Document Reference Number" formControlName="actualDocRefNo">
               </div>
@@ -943,7 +924,19 @@
                 <label for="termsAndConditions">Location<span style="color: red;">*</span></label>
                 <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
                   style="color: red;">Required</span>
-                <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location">
+                <span *ngIf="location?.hasError('pattern') && (location?.dirty || location?.touched)"
+                  style="color: red;">Invalid Location</span>
+                <!-- <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location"> -->
+                <select
+                  class="form-control"
+                  id="location"
+                  formControlName="location"
+                >
+                  <option value="" disabled>Select Location</option>
+                  <option *ngFor="let loc of locationOptions" [value]="loc">
+                    {{ loc }}
+                  </option>
+                </select>
               </div>
             </div>
           </div>
