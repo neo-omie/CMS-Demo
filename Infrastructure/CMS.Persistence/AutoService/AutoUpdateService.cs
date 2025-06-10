@@ -35,9 +35,6 @@ namespace CMS.Persistence.AutoService
         {
             await dbContext.Database.ExecuteSqlRawAsync("EXEC SP_AutoExpireContract", cancellationToken);
             await dbContext.Database.ExecuteSqlRawAsync("EXEC SP_AutoExpireClassifiedContract", cancellationToken);
-            //await dbContext.Database.ExecuteSqlRawAsync("EXEC SP_Three", cancellationToken);
-            //await dbContext.Database.ExecuteSqlRawAsync("EXEC SP_Four", cancellationToken);
-            //await dbContext.Database.ExecuteSqlRawAsync("EXEC SP_Five", cancellationToken);
         }
     }
 }

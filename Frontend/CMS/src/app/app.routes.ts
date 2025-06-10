@@ -16,24 +16,17 @@ import { ContractsScreenComponent } from './components/contracts/contracts-scree
 import { AllContractsComponent } from './components/contracts/all-contracts/all-contracts.component';
 import { AllClassifiedContractComponent } from './components/classifiedContracts/all-classified-contract/all-classified-contract.component';
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
-
-import { ActiveContractsComponent } from './components/contracts/active-contracts/active-contracts.component';
-import { PendingApprovalContractsComponent } from './components/contracts/pending-approval-contracts/pending-approval-contracts.component';
-import { TerminatedContractsComponent } from './components/contracts/terminated-contracts/terminated-contracts.component';
-
 import { EscalationMatrixMouScreenComponent } from './components/EscalationMatrixMou/escalation-matrix-mou-screen/escalation-matrix-mou-screen.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ApprovalMatrixMouScreenComponent } from './components/ApprovalMatrixMou/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
 import { EscalationMatrixContractScreenComponent } from './components/EscalationMarixContract/escalation-matrix-contract-screen/escalation-matrix-contract-screen.component';
 import { AddendumContractsComponent } from './components/addendum-contracts/addendum-contracts.component';
 import { roleGuard } from './role.guard';
-import { ExpiredContractsComponent } from './components/contracts/expired-contracts/expired-contracts.component';
 import { AuditScreenComponent } from './components/audit-screen/audit-screen.component';
 
 export const routes: Routes = [
     { path: '', component: LoginScreenComponent },
     { path: 'auth/renewPassword', component: RenewPasswordComponent },
-    // {path: 'dashboard', component: DashboardComponent, canActivate:[authGuard]},
     { path: 'dashboard', loadChildren: () => import('./dashboard.routes').then(m => m.routes), canActivate: [authGuard] },
     { path: 'masters', component: MastersScreenComponent, canActivate: [authGuard, roleGuard] },
 
@@ -55,14 +48,9 @@ export const routes: Routes = [
 
     { path: 'contracts', component: ContractsScreenComponent, canActivate: [authGuard] },
     { path: 'contracts/allContracts', component: AllContractsComponent, canActivate: [authGuard] },
-    { path: 'contracts/activeContracts', component: ActiveContractsComponent, canActivate: [authGuard] },
-    { path: 'contracts/pendingApprovalContracts', component: PendingApprovalContractsComponent, canActivate: [authGuard] },
-    { path: 'contracts/terminatedContracts', component: TerminatedContractsComponent, canActivate: [authGuard] },
-    { path: 'contracts/expiredContracts', component: ExpiredContractsComponent, canActivate: [authGuard] },
     
     {path: 'contracts/addendumContract', component: AddendumContractsComponent, canActivate:[authGuard]},
     {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
-    // {path: 'contracts/postTerminationNotice', component: PostTerminationNoticeComponent, canActivate:[authGuard]},
     { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard, roleGuard] },
     { path: 'reports', component: AuditScreenComponent, canActivate: [authGuard, roleGuard] },
 

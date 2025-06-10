@@ -391,5 +391,224 @@ namespace CMS.Persistence.Repositories
                 return true;
             return false;
         }
+
+        public async Task<Contract> RenewalRequestContractAsync(int id, string employeeCode)
+        {
+            Contract contract = await _context.ContractsEntity.Where(c => c.ContractId == id).FirstOrDefaultAsync();
+            if(contract == null)
+            {
+                throw new NotFoundException($"Contract with id {id} not found. Please enter correct id");
+            }
+            var employee = await _context.MasterEmployees.Where(e => e.ValueId == contract.EmpCustodianId).FirstOrDefaultAsync();
+            if (employee == null) 
+            {
+                throw new NotFoundException($"Employee not found.");
+            }
+            if(contract.RenewalFrom <= DateTime.Now && contract.RenewalTill >= DateTime.Now && (employee.EmployeeCode == employeeCode || employeeCode == "NEO1") &&
+                (contract.Approver1Status == ContractStatus.Active || contract.Approver1Status == ContractStatus.Expired) &&
+               (contract.Approver1Status == ContractStatus.Active || contract.Approver2Status == ContractStatus.Expired) &&
+              (contract.Approver3Status == ContractStatus.Active || contract.Approver3Status == ContractStatus.Expired))
+            {
+                contract.Approver1Status = ContractStatus.PendingRenewal;
+                contract.Approver2Status = ContractStatus.PendingRenewal;
+                _context.ContractsEntity.Update(contract);
+                if (await _context.SaveChangesAsync() <= 0)
+                    throw new Exception("For some reasons, renewal request not send.");
+                string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+                var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, contract.ContractId).AsNoTracking().ToListAsync();
+                var foundContract = findingContract.FirstOrDefault();
+                string empCode;
+                if (foundContract != null)
+                {
+                    empCode = foundContract.Approver1EmployeeCode;
+                    // To Approver L1
+                    await AddNewNotifications(empCode,
+                                              $"Renewal request for Contract called '{foundContract.ContractName}'",
+                                              $"Contract ({foundContract.ContractName}) has been requested for renewal under your department. You can access and change the approvals for this contract.");
+                    string subject = $"Renewal request for Contract called '{foundContract.ContractName}'";
+                    string emailBody = string.Empty;
+                    emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                    emailBody += $"<h1>Hello {foundContract.Approver1EmployeeCode},contract has been requested for renewal under your department.</h1>";
+                    emailBody += $"<h2>Contract ID: {contract.ContractId}<br>Contract Name: {contract.ContractName}</h2>";
+                    emailBody += "<h3>Please check your CMS portal.</h3>";
+                    emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                    emailBody += "</div>";
+                    await SendMail(
+                        foundContract.Approver1Email, foundContract.Approver1EmployeeCode, contract.ContractId, contract.ContractName, subject, emailBody
+                    );
+                    // To Employee Custodian
+                    await AddNewNotifications(foundContract.EmpCustodianCode,
+                                              $"You have requested to renew Contract called '{foundContract.ContractName}'!",
+                                              $"Contract ({foundContract.ContractName}) has been requested for renewal by you.");
+                    emailBody = string.Empty;
+                    emailBody = "<div style='width: 100%; background-color: #5f5fee; color: white;'>";
+                    emailBody += $"<h1>Hello {foundContract.EmpCustodianCode}, contract has been requested for renewal by you.</h1>";
+                    emailBody += $"<h2>Contract ID: {contract.ContractId}<br>Contract Name: {contract.ContractName}</h2>";
+                    emailBody += "<h3>Please check your CMS portal.</h3>";
+                    emailBody += "<p>Thank you,<br>Regards, Trailblazers.</p>";
+                    emailBody += "</div>";
+                    await SendMail(
+                        foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, contract.ContractId, contract.ContractName, subject, emailBody
+                    );
+
+                    string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                    await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, $"Contract({contract.ContractName}) renew request send by" + empCode, empCode, LogStatus.Updated);
+
+                    return contract;
+                }
+
+            }
+            throw new Exception("Unauthorize action");
+        }
+        public async Task<Contract> ApproveRejectRenewalRequestContract(int id, string empCode, ContractStatus status)
+        {
+            var contract = await _context.ContractsEntity.Where(c => c.ContractId == id).FirstOrDefaultAsync();
+            var emp = await _context.MasterEmployees.Where(e => e.Email == empCode).FirstOrDefaultAsync();
+            if (contract == null)
+            {
+                throw new NotFoundException("Contract not found");
+            }
+            string sql = "EXEC SP_GetContractEntityByID @ID = {0}";
+            var findingContract = await _context.GetContractByIdDtos.FromSqlRaw(sql, id).AsNoTracking().ToListAsync();
+            var foundContract = findingContract.FirstOrDefault();
+            if (foundContract == null)
+            {
+                throw new NotFoundException("Contract not found");
+            }
+            string approveOrReject = (status == ContractStatus.Active) ? "Renewal approved" : "Renewal rejected";
+            string notificationSubject = (status == ContractStatus.Active) ? "Contract renewal has been approved under your department. You can access and change the approvals for this contract." : "Contract renewal has been rejected under your department.";
+
+            if (foundContract.Approver1Email == empCode)
+            {
+
+                if (contract.Approver1Status != ContractStatus.PendingRenewal)
+                {
+                    throw new Exception("Invalid approval action");
+                }
+                string subject = $"Contract:{foundContract.ContractName}({id}),{approveOrReject} by Approver 1";
+                contract.Approver1Status = status;
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception("For some reasons, contract is not updated");
+                }
+
+                await AddNewNotifications(foundContract.Approver2EmployeeCode,
+                                          notificationSubject,
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
+                string emailBody = GenerateEmailBody(foundContract.Approver2EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver1EmployeeCode, 1);
+                await SendMail(
+                    foundContract.Approver2Email, foundContract.Approver2EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          notificationSubject.Split('.')[0] + ".",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver1EmployeeCode}'(Approver 1)!");
+                emailBody = GenerateEmailBody(foundContract.EmpCustodianCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver1EmployeeCode, 1);
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
+                );
+            }
+            else if (foundContract.Approver2Email == empCode)
+            {
+                if (contract.Approver1Status != ContractStatus.Active || contract.Approver2Status != ContractStatus.PendingRenewal)
+                {
+                    throw new Exception("Invalid approval action");
+                }
+                string subject = $"Contract:{foundContract.ContractName}({id}),{approveOrReject} by Approver 2";
+                contract.Approver2Status = status;
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception("For some reasons, contract is not approved");
+                }
+
+                await AddNewNotifications(foundContract.Approver3EmployeeCode,
+                                          notificationSubject,
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
+                string emailBody = GenerateEmailBody(foundContract.Approver3EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver2EmployeeCode, 2);
+                await SendMail(
+                    foundContract.Approver3Email, foundContract.Approver3EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                                          notificationSubject.Split('.')[0] + " by approver 2.",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
+                emailBody = GenerateEmailBody(foundContract.Approver1EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver2EmployeeCode, 2);
+                await SendMail(
+                    foundContract.Approver1Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          notificationSubject.Split('.')[0] + ".",
+                                            $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver2EmployeeCode}'(Approver 2)!");
+                emailBody = GenerateEmailBody(foundContract.EmpCustodianCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver2EmployeeCode, 2);
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
+                );
+            }
+            else if (foundContract.Approver3Email == empCode)
+            {
+                if (contract.Approver2Status != ContractStatus.Active || contract.Approver1Status != ContractStatus.Active || contract.Approver3Status != ContractStatus.Active || contract.Approver3Status != ContractStatus.Expired)
+                {
+                    throw new Exception("Invalid approval action");
+                }
+                string subject = $"Contract:{foundContract.ContractName}({id}),{approveOrReject} by Approver 3";
+                contract.Approver3Status = status;
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception("For some reasons, contract is not approved");
+                }
+                await AddNewNotifications(foundContract.Approver1EmployeeCode,
+                                          notificationSubject.Split('.')[0] + " by approver 3.",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
+                string emailBody = GenerateEmailBody(foundContract.Approver1EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver3EmployeeCode, 3);
+                await SendMail(
+                    foundContract.Approver1Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.Approver2EmployeeCode,
+                                          notificationSubject.Split('.')[0] + " by approver 3.",
+                                          $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
+                emailBody = GenerateEmailBody(foundContract.Approver2EmployeeCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver3EmployeeCode, 3);
+                await SendMail(
+                    foundContract.Approver2Email, foundContract.Approver1EmployeeCode, id, foundContract.ContractName, subject, emailBody
+                );
+
+                await AddNewNotifications(foundContract.EmpCustodianCode,
+                                          notificationSubject.Split('.')[0] + ".",
+                                            $"Contract called '{foundContract.ContractName}' {approveOrReject} by '{foundContract.Approver3EmployeeCode}'(Approver 3)!");
+                emailBody = GenerateEmailBody(foundContract.EmpCustodianCode, foundContract.ContractName, id, approveOrReject, foundContract.Approver3EmployeeCode, 3);
+                await SendMail(
+                    foundContract.EmpCustodianEmail, foundContract.EmpCustodianCode, id, foundContract.ContractName, subject, emailBody
+                );
+            }
+            else
+            {
+                throw new Exception("Unauthorized Action");
+            }
+            if (status == ContractStatus.Rejected)
+            {
+                contract.Approver1Status = status;
+                contract.Approver2Status = status;
+                contract.Approver3Status = status;
+
+                string rejectedQuery = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+                await _context.Database.ExecuteSqlRawAsync(rejectedQuery, foundContract.ContractId, TableList.Contract, "Contract Rejected by " + emp.EmployeeCode, emp.EmployeeCode, LogStatus.Rejected);
+
+                if (await _context.SaveChangesAsync() <= 0)
+                {
+                    throw new Exception($"For some reasons , contract status has not been changed to {status}");
+                }
+                return contract;
+            }
+
+            string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
+            await _context.Database.ExecuteSqlRawAsync(query, foundContract.ContractId, TableList.Contract, $"Contract Approved by  '{emp.EmployeeCode}'", emp.EmployeeCode, LogStatus.Approved);
+
+
+            return contract;
+        }
     }
 }

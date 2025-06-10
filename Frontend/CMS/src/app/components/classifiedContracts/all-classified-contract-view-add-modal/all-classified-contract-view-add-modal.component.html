@@ -35,15 +35,31 @@
     </div>
     <div class="modal-body">
       <form [formGroup]="masterContractAddForm" (ngSubmit)="onAddFormSubmit()">
-        <div id="progress" class="mb-3" *ngIf="contractDetails?.classifiedContractId!==null">
-          <div class="d-flex justify-content-center ">
-            <p style="color: #5f5fee;" class="modal-title fs-5 fw-bolder text-center">
-              Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.classifiedContractName }}
+        <div
+          id="progress"
+          class="mb-3"
+          *ngIf="contractDetails?.classifiedContractId !== null"
+        >
+          <div class="d-flex justify-content-center">
+            <p
+              style="color: #5f5fee"
+              class="modal-title fs-5 fw-bolder text-center"
+            >
+              Progress of
+              {{ getProgressType(contractDetails?.approver3Status) }}
+              {{ contractDetails?.classifiedContractName }}
             </p>
           </div>
           <app-progress-bar
-            [contractId]="contractDetails != undefined && contractDetails.classifiedContractId != undefined?(+(contractDetails.classifiedContractId)):0"
-            type="classified" [phases]="phases"></app-progress-bar>
+            [contractId]="
+              contractDetails != undefined &&
+              contractDetails.classifiedContractId != undefined
+                ? +contractDetails.classifiedContractId
+                : 0
+            "
+            type="classified"
+            [phases]="phases"
+          ></app-progress-bar>
         </div>
         <div class="p-2">
           <div class="card-body">
@@ -54,11 +70,21 @@
                     >*</span
                   ></label
                 >
-                <span *ngIf="isCreate && formfield('classifiedContractName')?.hasError('maxlength') && (formfield('classifiedContractName')?.dirty ||
-                      formfield('classifiedContractName')?.touched)" style="color: red">Not more than 20 characters!</span>
                 <span
                   *ngIf="
-                    isCreate && 
+                    isCreate &&
+                    formfield('classifiedContractName')?.hasError(
+                      'maxlength'
+                    ) &&
+                    (formfield('classifiedContractName')?.dirty ||
+                      formfield('classifiedContractName')?.touched)
+                  "
+                  style="color: red"
+                  >Not more than 20 characters!</span
+                >
+                <span
+                  *ngIf="
+                    isCreate &&
                     formfield('classifiedContractName')?.hasError('required') &&
                     (formfield('classifiedContractName')?.dirty ||
                       formfield('classifiedContractName')?.touched)
@@ -190,7 +216,7 @@
                 />
               </div>
               <div class="m-3">
-                <label for="actualDocRefNo"
+                <label for="contractTypeId"
                   >Contract Type<span *ngIf="isCreate" style="color: red"
                     >*</span
                   ></label
@@ -284,12 +310,22 @@
                 />
               </div>
               <div class="m-3">
-                <label for="termsAndConditions"
+                <label for="actualDocRefNo"
                   >Actual Document Reference Number<span
                     *ngIf="isCreate"
                     style="color: red"
                     >*</span
                   ></label
+                >
+                <span
+                  *ngIf="
+                    isCreate &&
+                    formfield('actualDocRefNo')?.hasError('pattern') &&
+                    (formfield('actualDocRefNo')?.dirty ||
+                      formfield('actualDocRefNo')?.touched)
+                  "
+                  style="color: red"
+                  >Only numbers are allowed</span
                 >
                 <span
                   *ngIf="
@@ -301,7 +337,7 @@
                   style="color: red"
                   >Required</span
                 >
-                <span
+                <!-- <span
                   *ngIf="
                     isCreate &&
                     formfield('actualDocRefNo')?.hasError('pattern') &&
@@ -310,7 +346,7 @@
                   "
                   style="color: red"
                   >Invalid number</span
-                >
+                > -->
                 <input
                   *ngIf="isCreate"
                   class="form-control"
@@ -428,14 +464,18 @@
                   style="color: red"
                   >Required</span
                 >
-                <span *ngIf="masterContractAddForm.get('validFrom')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('validFrom')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDate']">
                     Invalid date.
                   </span>
-                  <span style="color: red;" *ngIf="errors['pastDate']">
+                  <span style="color: red" *ngIf="errors['pastDate']">
                     Date must not be in the past.
                   </span>
-                  </span>
+                </span>
                 <input
                   *ngIf="isCreate"
                   class="form-control"
@@ -468,23 +508,32 @@
                   style="color: red"
                   >Required</span
                 >
-                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('validTill')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDate']">
                     Invalid date.
                   </span>
-                  <span style="color: red;" *ngIf="errors['pastDate']">
+                  <span style="color: red" *ngIf="errors['pastDate']">
                     Date must not be in the past.
                   </span>
                 </span>
-                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDateRange']">
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('validTill')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDateRange']">
                     Date must be grater than valid from date
                   </span>
                 </span>
                 <span
                   *ngIf="masterContractAddForm.errors?.['invalidDateRange'] && (formfield('validTill')?.dirty ||
                       formfield('validTill')?.touched)"
-                  style="color: red">
+                  style="color: red"
+                >
                   Valid till date must be greater than valid from date.
                 </span>
                 <input
@@ -537,7 +586,7 @@
                   class="form-control"
                   type="date"
                   id="renewalFrom"
-                  value="{{  contractDetails?.renewalFrom }}"
+                  value="{{ contractDetails?.renewalFrom }}"
                   disabled
                 />
               </div>
@@ -690,20 +739,34 @@
                   style="color: red"
                   >Required</span
                 >
-                <input
+                <!-- <span
+                  *ngIf="
+                    isCreate &&
+                    formfield('location')?.hasError('pattern') &&
+                    (formfield('location')?.dirty ||
+                      formfield('location')?.touched)
+                  "
+                  style="color: red"
+                  >Invalid Location</span
+                > -->
+                <select
                   *ngIf="isCreate"
                   class="form-control"
-                  type="text"
-                  placeholder="Location"
                   id="location"
                   formControlName="location"
-                />
+                >
+                  <option value="" disabled>Select Location</option>
+                  <option *ngFor="let loc of locationOptions" [value]="loc">
+                    {{ loc }}
+                  </option>
+                </select>
+
                 <input
                   *ngIf="!isCreate"
                   class="form-control"
                   type="text"
                   id="location"
-                  value="{{ contractDetails?.location }}"
+                  [value]="contractDetails?.location"
                   disabled
                 />
               </div>

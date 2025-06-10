@@ -1,10 +1,22 @@
 declare var bootstrap: any;
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Alert } from '../../utils/alert';
 import { CompanyMasterService } from '../../services/company-master.service';
-import { AddCompanyDto, CompanyListResponse, CompanyMasterDto, MasterCompany } from '../../models/master-company';
+import {
+  AddCompanyDto,
+  CompanyListResponse,
+  CompanyMasterDto,
+  MasterCompany,
+} from '../../models/master-company';
 import { Router, RouterModule } from '@angular/router';
 import { TYPE } from '../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
@@ -22,14 +34,28 @@ import { DecodeToken } from '../../utils/decodeToken';
 @Component({
   selector: 'app-master-company',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule,
-    MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    LoaderComponent,
+    FormsModule,
+    RouterModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './master-company.component.html',
-  styleUrl: './master-company.component.css'
+  styleUrl: './master-company.component.css',
 })
 export class MasterCompanyComponent implements OnInit {
   loading: boolean = true;
-  displayedColumns: string[] = ['companyName', 'companyLocation', 'status', 'action'];
+  displayedColumns: string[] = [
+    'companyName',
+    'companyLocation',
+    'status',
+    'action',
+  ];
   dataSource = new MatTableDataSource<CompanyMasterDto>();
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit() {
@@ -45,19 +71,19 @@ export class MasterCompanyComponent implements OnInit {
   pageNumber: number = 1;
   pageSize: number = 10;
   @ViewChild('editCompanyName') editCompanyName!: ElementRef;
-  currentPage=1;
-  countryList:Countriess[] = [];
-  stateList:States[] = [];
-  cityList:Cities[] = [];
-  selectedCountryId:number = 0;
-  selectedStateId:number = 0;
+  currentPage = 1;
+  countryList: Countriess[] = [];
+  stateList: States[] = [];
+  cityList: Cities[] = [];
+  selectedCountryId: number = 0;
+  selectedStateId: number = 0;
   company: AddCompanyDto = new AddCompanyDto();
-  mode: any
+  mode: any;
   constructor(
     private companyService: CompanyMasterService,
     private router: Router,
     private companyCascadeService: CompanyCascadeService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getCompanies(1);
@@ -68,21 +94,26 @@ export class MasterCompanyComponent implements OnInit {
       next: (response: Countriess[]) => {
         this.countryList = response;
         console.log(this.countryList);
-
-      }, error: (error) => {
+      },
+      error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
+      },
     });
   }
   getStateCascade(input:string) {
     this.companyCascadeService.getStates(+input).subscribe({
       next: (response: States[]) => {
         this.stateList = response;
-      }, error: (error) => {
+      },
+      error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
       }
     })
@@ -91,45 +122,55 @@ export class MasterCompanyComponent implements OnInit {
     this.companyCascadeService.getCities(+input).subscribe({
       next: (response: Cities[]) => {
         this.cityList = response;
-      }, error: (error) => {
+      },
+      error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
-    })
-  }
-  
-  
-  getCompanies(pageNumber:number): void {
-    this.companyService.getCompany(this?.searchTerm, pageNumber, this.pageSize)
-    .subscribe({
-      next:(res:CompanyMasterDto[]) => {
-      this.loading = false;
-      this.dataSource.data = res;
-          if (this.sort) {
-            this.dataSource.sort = this.sort;
-          }
-      this.showCompanies = res;
-      console.log("bula bula",res);
-        if(this.showCompanies != undefined && this.showCompanies.length > 0){
-                      let result = Pagination.paginator(pageNumber,this.showCompanies[0].totalRecords,this.pageSize)
-                      this.maxPage = result.maxPage;
-                      this.pageNumbers = result.pageNumbers;
-                    }
-      }, error:(error) => {
-        this.loading = false;
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
-      }
-      
-      
-    
+      },
     });
   }
 
-  onFilterChange(){
-    this.pageNumber=1;
+  getCompanies(pageNumber: number): void {
+    this.companyService
+      .getCompany(this?.searchTerm, pageNumber, this.pageSize)
+      .subscribe({
+        next: (res: CompanyMasterDto[]) => {
+          this.loading = false;
+          this.dataSource.data = res;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
+          this.showCompanies = res;
+          console.log('bula bula', res);
+          if (
+            this.showCompanies != undefined &&
+            this.showCompanies.length > 0
+          ) {
+            let result = Pagination.paginator(
+              pageNumber,
+              this.showCompanies[0].totalRecords,
+              this.pageSize
+            );
+            this.maxPage = result.maxPage;
+            this.pageNumbers = result.pageNumbers;
+          }
+        },
+        error: (error) => {
+          this.loading = false;
+          console.error('Error :(', error);
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        },
+      });
+  }
+
+  onFilterChange() {
+    this.pageNumber = 1;
     this.getCompanies(1);
   }
 
@@ -143,28 +184,33 @@ export class MasterCompanyComponent implements OnInit {
   stateName?: string;
   cityName?: string;
   GetCompany(id: number) {
-    console.log("ftech id", id);
+    console.log('ftech id', id);
     this.companyService.getCompanyById(id).subscribe({
       next: (res: MasterCompany) => {
         this.comp = res;
-        this.companyCascadeService.getCountryById(res.countryId).subscribe((resp) => {
-          this.countryName = resp.countries;
-        });
-        this.companyCascadeService.getStateById(res.stateId).subscribe((resp) => {
-          this.stateName = resp.state;
-        });
+        this.companyCascadeService
+          .getCountryById(res.countryId)
+          .subscribe((resp) => {
+            this.countryName = resp.countries;
+          });
+        this.companyCascadeService
+          .getStateById(res.stateId)
+          .subscribe((resp) => {
+            this.stateName = resp.state;
+          });
         this.companyCascadeService.getCityById(res.cityId).subscribe((resp) => {
           this.cityName = resp.city;
         });
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+        this.errorMsg = JSON.stringify(
+          error.message !== undefined ? error.error.title : error.message
+        );
         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
-    })
+      },
+    });
   }
-
 
   // editCompany(id:number){
   //   let compName=this.editCompanyName.nativeElement.value;
@@ -211,8 +257,8 @@ export class MasterCompanyComponent implements OnInit {
   //   });
   // }
 
-ResettingonCacelButton(){
-  this.masterCompanyAddForm.reset({
+  ResettingonCacelButton() {
+    this.masterCompanyAddForm.reset({
       stateId: '',
       countryId: '',
       cityId: '',
@@ -227,29 +273,36 @@ ResettingonCacelButton(){
   deleteCompany(id: number) {
     let empCode = DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this department?");
-    Alert.confirmToast("Are you sure you want to delete this Company?",
-                       "You won't be able to revert this!", TYPE.WARNING,
-                       "Yes, delete it!",
-                       "Deleted successfully!",
-                       "Company has been deleted.", TYPE.SUCCESS,() => {
-                        this.companyService.deleteCompany(id,empCode).subscribe({
-                          next:(response:boolean)=>{
-                            if(response){
-                              // Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
-                              if(this.showCompanies.length == 1){
-                                this.currentPage = (this.currentPage - 1 > 0 ) ?  this.currentPage - 1 : 1
-                              }
-                              this.getCompanies(this.currentPage);
-                            }
-                    
-                          },
-                          error:(error)=>{
-                            console.error('Error :(', error);
-                            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-                            Alert.toast(TYPE.ERROR,true,this.errorMsg);
-                          }
-                        });
-                       });
+    Alert.confirmToast(
+      'Are you sure you want to delete this Company?',
+      "You won't be able to revert this!",
+      TYPE.WARNING,
+      'Yes, delete it!',
+      'Deleted successfully!',
+      'Company has been deleted.',
+      TYPE.SUCCESS,
+      () => {
+        this.companyService.deleteCompany(id, empCode).subscribe({
+          next: (response: boolean) => {
+            if (response) {
+              // Alert.toast(TYPE.SUCCESS,true,"Deleted successfully");
+              if (this.showCompanies.length == 1) {
+                this.currentPage =
+                  this.currentPage - 1 > 0 ? this.currentPage - 1 : 1;
+              }
+              this.getCompanies(this.currentPage);
+            }
+          },
+          error: (error) => {
+            console.error('Error :(', error);
+            this.errorMsg = JSON.stringify(
+              error.message !== undefined ? error.error.title : error.message
+            );
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          },
+        });
+      }
+    );
   }
   // editCompany(comp:CompanyMasterDto){
   //   console.log('Navigating to editContract with valueId:', comp.valueId);
@@ -520,28 +573,34 @@ ResettingonCacelButton(){
                 this.ResettingonCacelButton()
                 this.masterCompanyAddForm.reset();
                 this.getCompanies(this.currentPage);
-                 const modalElement = document.getElementById('company-edit');
-          if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            modalInstance.hide();
-          }
-          this.masterCompanyAddForm.reset();
+                const modalElement = document.getElementById('company-edit');
+                if (modalElement) {
+                  const modalInstance =
+                    bootstrap.Modal.getInstance(modalElement) ||
+                    new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
+                this.masterCompanyAddForm.reset();
               }
-            }, 
-            error:(error) => {
+            },
+            error: (error) => {
               console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
-            }
+              this.errorMsg = JSON.stringify(
+                error.message !== undefined ? error.error.title : error.message
+              );
+              Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            },
           });
-        }
-        else{
-          console.log("should not come here ", this.masterCompanyAddForm.value)
-        }
+      } else {
+        console.log('should not come here ', this.masterCompanyAddForm.value);
       }
     }
-    printToPDF(tableID:string, fileName:string) {
-      PDFExport.printToPDF(tableID, fileName);
-    }
-}
+  }
+  printToPDF() {
+    console.log('dfghj');
 
+    // PDFExport.printToPDF(tableID, fileName);
+    const selectedColumns = ['Company Name', 'Company Location', 'Status']; // Put the exact header text here
+    PDFExport.printToPDF('companies-table', 'CMS-companies.pdf', selectedColumns);
+  }
+}

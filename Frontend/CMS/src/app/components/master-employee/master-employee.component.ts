@@ -78,7 +78,7 @@ resetForm() {
 
 addEmployeeForm: FormGroup= new FormGroup({
   employeeName:new FormControl('',[Validators.required,Validators.maxLength(40),Validators.pattern('^[a-zA-Z ]+$')]),
-  password:new FormControl("",[Validators.required,Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$')]),
+  password:new FormControl("",[Validators.required]),
   role:new FormControl("",Validators.required),
   employeeCode:new FormControl("",[Validators.required,Validators.pattern('^[A-Z0-9]+$'),Validators.maxLength(8)]),
   unit:new FormControl("",Validators.required),
@@ -213,6 +213,7 @@ getDepartmentName(){
 onSubmit(){
   this.formsValue=this.addEmployeeForm.value;
   if(this.addEmployeeForm.invalid){
+     console.log('invalie emp form : ',this.formsValue);
         this.addEmployeeForm.markAllAsTouched();
         return;
   }

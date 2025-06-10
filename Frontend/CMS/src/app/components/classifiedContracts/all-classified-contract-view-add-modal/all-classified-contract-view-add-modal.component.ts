@@ -40,6 +40,7 @@ import {
   dateValidator,
 } from '../../../utils/dateValidator';
 import { ProgressBarComponent } from "../../UtilComponents/progress-bar/progress-bar.component";
+import { Location } from '../../../utils/constants';
 
 @Component({
   selector: 'app-all-classified-contract-view-add-modal',
@@ -60,6 +61,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
   @Input() approveRejectContract!: (id?: string, status?: number) => void;
   @Input() GetAllContracts!: (filter: any) => void;
 
+  
   approverStatusColor: string[] = [
     '',
     '#ffc107',
@@ -98,7 +100,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
       contractWithCompanyId: new FormControl('', [Validators.required]),
       contractTypeId: new FormControl('', [Validators.required]),
       apostilleTypeId: new FormControl('', [Validators.required]),
-      actualDocRefNo: new FormControl('', [Validators.required]),
+      actualDocRefNo: new FormControl('', [Validators.required,Validators.pattern('^[0-9]{1,10}$')]),
       retainerContract: new FormControl('', [Validators.required]),
       termsAndConditions: new FormControl('', [Validators.required]),
       validFrom: new FormControl('', [Validators.required, dateValidator()]),
@@ -108,7 +110,8 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
       // addendumDate: new FormControl(''),
       empCustodianName: new FormControl('', [Validators.required]),
       empCustodianId: new FormControl('', [Validators.required]),
-      location: new FormControl('', [Validators.required]),
+      // location: new FormControl('', [Validators.required,Validators.pattern('^[A-Za-z]+$')]),
+      location: new FormControl(''),
       approver1Status: new FormControl('1', [
         Validators.required,
         Validators.pattern('^[0-9]$'),
@@ -129,12 +132,19 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
       dateBetweenValidator('validFrom', 'renewalFrom', 'validTill'),
     ]
   );
+  Location = Location; // Makes the enum accessible in template
+  locationOptions: string[];
+
 
   constructor(
     private contractsService: ClassifiedContractsService,
     private renderer: Renderer2,
     private masterApostilleService: MasterApostilleService
-  ) {}
+    
+  ) {
+        this.locationOptions = Object.values(Location);
+
+  }
 
   ngOnInit(): void {
     this.initialRequirementLoad(); 
