@@ -927,16 +927,22 @@
                 <span *ngIf="location?.hasError('pattern') && (location?.dirty || location?.touched)"
                   style="color: red;">Invalid Location</span>
                 <!-- <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location"> -->
+                 <div class="input-group">
+                   
+
                 <select
                   class="form-control"
                   id="location"
                   formControlName="location"
                 >
-                  <option value="" disabled>Select Location</option>
+                
+                  <option value="" disabled>--Select Location--</option>
                   <option *ngFor="let loc of locationOptions" [value]="loc">
                     {{ loc }}
                   </option>
                 </select>
+                <span><i class="fa-solid fa-angle-down"></i></span>
+              </div>
               </div>
             </div>
           </div>
