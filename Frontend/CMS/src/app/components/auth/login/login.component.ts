@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   errorMsg = '';
   loginPasswordEyeOpen = false;
   loginModel: Login = new Login('', '');
-  decodedToken: JwtClaims = new JwtClaims('','','','');
+  decodedToken: JwtClaims = new JwtClaims('','','',[]);
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{4,10}$')])

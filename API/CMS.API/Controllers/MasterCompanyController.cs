@@ -10,6 +10,7 @@ using CMS.Application.Features.MasterEmployees.Queries.GetAllEmployees;
 using CMS.Domain.Entities;
 using CMS.Domain.Entities.CompanyMaster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin , Management_User")]
     public class MasterCompanyController : ControllerBase
     {
         readonly IMediator _mediator;
@@ -33,6 +35,7 @@ namespace CMS.API.Controllers
 
 
         //Get all Companies
+        [AllowAnonymous]
         [HttpGet("{pageNumber}/{pageSize}")]
         public async Task<ActionResult<IEnumerable<GetMastersDTO>>> GetAllCompanies(
         [FromQuery] string? searchTerm, int pageNumber = 1, int pageSize = 10)

@@ -4,12 +4,14 @@ using CMS.Application.Features.MasterEscalationMatrixContracts.Command;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Queries.GetAllEscalationMatrixContracts;
 using CMS.Application.Features.MasterEscalationMatrixContracts.Queries.GetEscalationMatrixContractById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin , Management_User")]
     public class EscalationMatrixContractController : Controller
     {
         private readonly IMediator _mediator;

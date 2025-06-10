@@ -19,7 +19,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   notificationFlag = true;
   username: string | null = '';
-  userRole: string | null = '';
+  userRole: string[] | null = [];
   totalNotifications: number = 0;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
 
@@ -48,6 +48,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+  checkUserRole() : boolean{
+    if(this.userRole == null || this.userRole == undefined) return false;
+    return (this.userRole.includes("Admin") || this.userRole.includes("Management_User") || (this.userRole.includes("Super_Admin")));
+  }
   logoutUser() {
     if (localStorage.getItem('token') != null) {
       localStorage.clear();
@@ -64,9 +68,14 @@ export class SideBarComponent implements OnInit, OnDestroy {
           this.totalNotifications = response;
           console.log("Notification number", response);
         }, error: (error) => {
-          console.error(error.error);
+          if(error.status == 401){
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+        else{
           let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
           Alert.toast(TYPE.ERROR, true, errorMsg);
+        }
         }
       });
     }

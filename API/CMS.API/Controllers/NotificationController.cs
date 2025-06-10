@@ -3,6 +3,7 @@ using CMS.Application.Features.Notifications.Queries.GetAllNotifications;
 using CMS.Application.Features.Notifications.Queries.GetNotificationDetails;
 using CMS.Application.Features.Notifications.Queries.UnreadNotificationsCount;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class NotificationController : ControllerBase
     {
         readonly IMediator _mediator;

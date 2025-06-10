@@ -17,11 +17,13 @@ using CMS.Application.Features.ContractTypeMaster.Command.UpdateContract;
 using CMS.Application.Features.MasterCompanies.Query.GetCompanyById;
 using CMS.Application.Features.ContractTypeMaster.Query.GetContractById;
 using CMS.Application.Features.ContractTypeMaster.Query;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin , Management_User")]
     public class ContractTypeMasterController : ControllerBase
     {
         readonly IMediator _mediator;
@@ -36,6 +38,7 @@ namespace CMS.API.Controllers
         }
 
         //Get all Companies
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllContractTypesDTO>>> GetAllContracts(
         [FromQuery] int pageNumber = 1,

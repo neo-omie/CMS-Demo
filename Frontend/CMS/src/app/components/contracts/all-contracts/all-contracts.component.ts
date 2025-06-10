@@ -295,10 +295,16 @@ export class AllContractsComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if(error.status == 401){
+          let errmsg = error.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
       },
     });
   }
@@ -384,13 +390,19 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.message !== undefined) {
-          this.errorMsg = JSON.stringify(error.error.message);
-          console.log(this.errorMsg);
-        } else {
-          this.errorMsg = JSON.stringify(error.message);
-          console.log(this.errorMsg);
-        }
+        if(error.status == 401){
+                  let errmsg = error.error;
+                  Alert.toast(TYPE.ERROR, true, errmsg);
+                }
+                else{
+                  if (error.message !== undefined) {
+                    this.errorMsg = JSON.stringify(error.error.message);
+                    console.log(this.errorMsg);
+                  } else {
+                    this.errorMsg = JSON.stringify(error.message);
+                    console.log(this.errorMsg);
+                  }
+                }
       },
     });
   }
@@ -434,8 +446,14 @@ export class AllContractsComponent implements OnInit {
             },
             error: (error) => {
               console.error('Deletion Failed', error);
-              this.errorMsg = JSON.stringify(error.error.message);
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
+              if(error.status == 401){
+          let errmsg = error.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(error.error.message);
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
             },
           });
         }
@@ -458,10 +476,16 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if(error.status == 401){
+                  let errmsg = error.error;
+                  Alert.toast(TYPE.ERROR, true, errmsg);
+                }
+                else{
+                  this.errorMsg = JSON.stringify(
+                    error.message !== undefined ? error.error.title : error.message
+                  );
+                  Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                }
       },
     });
   }
@@ -472,10 +496,16 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if(error.status == 401){
+          let errmsg = error.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
       },
     });
   }
@@ -487,10 +517,16 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if(error.status == 401){
+          let errmsg = error.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
       },
     });
   }
@@ -501,10 +537,16 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if(error.status == 401){
+          let errmsg = error.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
       },
     });
   }
@@ -709,10 +751,16 @@ export class AllContractsComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          if(error.status == 401){
+                    let errmsg = error.error;
+                    Alert.toast(TYPE.ERROR, true, errmsg);
+                  }
+                  else{
+                    this.errorMsg = JSON.stringify(
+                      error.message !== undefined ? error.error.title : error.message
+                    );
+                    Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                  }
         },
       });
   }
@@ -890,10 +938,17 @@ export class AllContractsComponent implements OnInit {
         },
         error: (err) => {
           console.error('No Contract with this id exist', err);
-          this.errorMsg = JSON.stringify(
-            err.message !== undefined ? err.error.message : err.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          if(err.status == 401){
+                    let errmsg = err.error;
+                    Alert.toast(TYPE.ERROR, true, errmsg);
+                  }
+                  else{
+
+                    this.errorMsg = JSON.stringify(
+                      err.message !== undefined ? err.error.message : err.message
+                    );
+                    Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                  }
           return false;
         },
       });
@@ -928,10 +983,16 @@ export class AllContractsComponent implements OnInit {
       },
       error: (err) => {
         console.error('No Contract with this id exist', err);
-        this.errorMsg = JSON.stringify(
-          err.message !== undefined ? err.error.message : err.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if(err.status == 401){
+          let errmsg = err.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+          this.errorMsg = JSON.stringify(
+            err.message !== undefined ? err.error.message : err.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
         return false;
       },
     });
@@ -1086,10 +1147,17 @@ export class AllContractsComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error adding addendum:', err);
+          if(err.status == 401){
+          let errmsg = err.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        }
+        else{
+
           this.errorMsg = JSON.stringify(
             err.message !== undefined ? err.error.title : err.message
           );
           Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
           this.loading = false;
         },
       });
@@ -1306,13 +1374,19 @@ export class AllContractsComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Error in creating Notice:', error);
-        Alert.bigToast(
-          'Error!',
-          'There was an error posting termination notice. ' +
-            error.error.message,
-          TYPE.ERROR,
-          'Try Again'
-        );
+        if(error.status == 401){
+                  let errmsg = error.error;
+                  Alert.toast(TYPE.ERROR, true, errmsg);
+                }
+                else{
+                  Alert.bigToast(
+                    'Error!',
+                    'There was an error posting termination notice. ' +
+                      error.error.message,
+                    TYPE.ERROR,
+                    'Try Again'
+                  );
+                }
         // this.file = null;
         // documentForm.reset();
         // this.addFile.nativeElement.value = "";
@@ -1498,12 +1572,18 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error in adding notice withdrawal:', error);
-        Alert.bigToast(
-          'Error!',
-          'There was an error adding notice withdrawal.',
-          TYPE.ERROR,
-          'Try Again'
-        );
+        if(error.status == 401){
+                  let errmsg = error.error;
+                  Alert.toast(TYPE.ERROR, true, errmsg);
+                }
+                else{
+                  Alert.bigToast(
+                    'Error!',
+                    'There was an error adding notice withdrawal.',
+                    TYPE.ERROR,
+                    'Try Again'
+                  );
+                }
         // this.file = null;
         // documentForm.reset();
         // this.addFile.nativeElement.value = "";

@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using CMS.Application.Features.EscalationMatrixMouMaster.Queries.GetAllEscalationMatrixMou;
 using CMS.Application.Features.EscalationMatrixMouMaster.Queries.GetEscalationMatrixMoutById;
 using CMS.Application.Features.EscalationMatrixMouMaster.Commands.UpdateEscalationMatrixMou;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin , Management_User")]
     public class EscalationMatrixMouController : ControllerBase
     {
         private readonly IMediator _mediator;

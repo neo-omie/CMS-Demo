@@ -10,12 +10,14 @@ using CMS.Application.Features.Contracts.Commands.ApproveRejectContract;
 using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AddendumContractController : ControllerBase
     {
         private readonly IMediator _mediator;
