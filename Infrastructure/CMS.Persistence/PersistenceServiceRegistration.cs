@@ -65,6 +65,7 @@ namespace CMS.Persistence
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                 };
             });
+            services.AddAuthorization();
             return services;
         }
     }

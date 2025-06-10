@@ -7,10 +7,12 @@ using CMS.Application.Features.MasterEmployees.Queries.GetEmployeeById;
 using CMS.Application.Features.MasterEmployees.Queries.GetEmployeesByDepartmentIdAndEmployeeDetails;
 using CMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin , Super_Admin , Management_User")]
 public class EmployeeController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,6 +23,7 @@ public class EmployeeController : ControllerBase
     }
 
     
+    [AllowAnonymous]
     [HttpGet("{pageNumber}/{pageSize}")]
     public async Task<ActionResult<IEnumerable<MasterEmployee>>> GetAllEmployees(
         [FromRoute] int pageNumber,
@@ -68,6 +71,7 @@ public class EmployeeController : ControllerBase
         return NotFound();
     }
 
+    [AllowAnonymous]
     [HttpGet("search/{departmentId}/{inpQuery?}")]
     public async Task<IActionResult> GetEmployeesByDepartmentIdAndEmployeeDetails(int departmentId, string inpQuery = "")
     {

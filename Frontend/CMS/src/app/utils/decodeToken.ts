@@ -6,9 +6,9 @@ export class DecodeToken {
     static sub: string | null;
     static email: string | null;
     static ECode: string | null;
-    static ERole: string | null;
+    static ERole: string[] | null;
     static decodeJWTToken(token:string) {
-        let decodedToken: JwtClaims = new JwtClaims('','','','');
+        let decodedToken: JwtClaims = new JwtClaims('','','',[]);
         decodedToken = jwtDecode(token);
         DecodeToken.sub = decodedToken.sub;
         DecodeToken.email = decodedToken.email;

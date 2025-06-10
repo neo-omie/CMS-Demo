@@ -93,12 +93,13 @@ namespace CMS.API
             }
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseCors(x => x
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()); // For Angular Frontend joining
+            app.UseMiddleware<JwtExpiryMiddleware>();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication(); // For Auth
             app.UseAuthorization();
 

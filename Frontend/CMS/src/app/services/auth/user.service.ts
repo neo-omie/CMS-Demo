@@ -19,7 +19,7 @@ export class UserService {
   isLoggedIn():boolean {
     return !!localStorage.getItem('token');
   }
-  checkUserRole():string | null {
+  checkUserRole():string[] | null {
     return DecodeToken.ERole;
   }
 }

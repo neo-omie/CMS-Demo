@@ -3,6 +3,7 @@ using CMS.Application.Features.AuditTrails.Queries.GetAllAudits;
 using CMS.Application.Features.Contracts.Queries.GetAllContracts;
 using CMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin")]
     public class AuditTrailController : ControllerBase
     {
         private readonly IMediator _mediator;

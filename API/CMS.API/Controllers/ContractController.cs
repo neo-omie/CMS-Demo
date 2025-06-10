@@ -17,11 +17,13 @@ using CMS.Domain.Constants;
 using CMS.Domain.Entities;
 using CMS.Persistence.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ContractController : ControllerBase

@@ -4,12 +4,14 @@ using CMS.Application.Features.ApprovalMatrixContract.Queries.GetAllApprovalMatr
 using CMS.Application.Features.ApprovalMatrixContract.Queries.GetApprovalMatrixContractById;
 using CMS.Application.Features.ApprovalMatrixMOU.Commands.UpdateApprovalMatrixMOU;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin")]
     public class ApprovalMatrixContractController : ControllerBase
     {
         private readonly IMediator _mediator;

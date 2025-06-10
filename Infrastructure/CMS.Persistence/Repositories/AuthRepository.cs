@@ -57,16 +57,35 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<JwtSecurityToken> GenerateToken(MasterEmployee user)
         {
+            var userRole = await _context.UserRoleMappings.Where(urm => urm.EmployeeCode == user.EmployeeCode).ToListAsync();
+            if(userRole == null || userRole.Count() == 0)
+            {
+                throw new NotFoundException("No user with role found");
+            }
+            List<string> roles = new List<string>();
+            foreach (var ur in userRole)
+            {
+                var role = await _context.Roles.Where(r => r.RoleId == ur.RoleId).FirstOrDefaultAsync();
+                if (role == null) 
+                {
+                    throw new NotFoundException("No role found");
+                }
+                roles.Add(role.RoleName);
+            }
             // Create Claims
-            var claims = new[]
+            var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.EmployeeName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role),
                 new Claim("ECode", user.EmployeeCode),
-                new Claim("ERole", user.Role)
             };
+            foreach (var role in roles) // user.Roles is IEnumerable<string>
+            {
+                claims.Add(new Claim("ERole", role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256); // Generally used this type
             var jwtSecurityToken = new JwtSecurityToken(

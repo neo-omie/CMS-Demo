@@ -6,10 +6,12 @@ using CMS.Application.Features.MasterApostilles.Queries.GetAllApostille;
 using CMS.Application.Features.MasterApostilles.Queries.GetApostilleById;
 using CMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
 {
+    [Authorize(Roles = "Admin , Super_Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ApostilleController : ControllerBase
@@ -20,6 +22,7 @@ namespace CMS.API.Controllers
         {
             _mediator = mediator;
         }
+        [AllowAnonymous]
         [HttpGet("{pageNumber}/{pageSize}")]
         public async Task<ActionResult<IEnumerable<GetAllApostilleDto>>> GetAllApostilleAsync(
         [FromRoute] int pageNumber,

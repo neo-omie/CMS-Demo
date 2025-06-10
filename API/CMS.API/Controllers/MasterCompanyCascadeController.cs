@@ -6,6 +6,7 @@ using CMS.Application.Features.MasterCompanyCascade.Queries.GetStateById;
 using CMS.Application.Features.MasterCompanyCascade.Queries.GetStates;
 using CMS.Domain.Entities.CompanyMaster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin , Management_User")]
     public class MasterCompanyCascadeController : ControllerBase
     {
         readonly IMediator _mediator;

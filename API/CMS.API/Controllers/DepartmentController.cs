@@ -22,6 +22,7 @@ namespace CMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin , Super_Admin , Management_User")]
     public class DepartmentController : ControllerBase
     {
         readonly IMediator _mediator;
@@ -30,6 +31,7 @@ namespace CMS.API.Controllers
             _mediator = mediator;
         }
         //[Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllDepartments(int pageNumber, int pageSize)
         {
