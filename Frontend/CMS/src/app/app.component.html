@@ -1,5 +1,17 @@
-<app-side-bar #sidebar></app-side-bar>
-<div class="mainContainer" [style.minHeight]="mainContainerMinHeight + 'px'">
+@if(checkLogin()){
+    <nav #navbar class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand sidebar-toggle-btn btn btn-primary" data-bs-toggle="offcanvas" href="#sideBar"
+                role="button" aria-controls="offcanvasExample">
+                <i class="fa-solid fa-bars-staggered"></i> Menu
+            </a>
+            <h3 class="headingg fs-4 d-none d-sm-block" routerLink="/dashboard">Contract Management System</h3>
+            <a class="btn btn-outline-danger" (click)="logoutUser()"><i class="fa-solid fa-power-off"></i> Logout</a>
+        </div>
+    </nav>
+    <app-side-bar #sidebar></app-side-bar>
+}
+<div class="mainContainer" [style.minHeight.px]="mainContainerMinHeight()">
     <router-outlet />
 </div>
 @if(checkLogin()){

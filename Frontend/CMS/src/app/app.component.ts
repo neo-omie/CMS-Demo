@@ -1,7 +1,10 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit, effect, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { DecodeToken } from './utils/decodeToken';
+import { TYPE } from './components/auth/login/values.constants';
+import { Alert } from './utils/alert';
+import { RouterService } from './services/router.service';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +16,15 @@ import { DecodeToken } from './utils/decodeToken';
 export class AppComponent implements AfterViewInit {
   title = 'CMS';
   username: string | null = null;
-  mainContainerMinHeight: number = 0;
+  mainContainerMinHeight = signal(0);
   viewportHeight: number = window.innerHeight;
-
+ 
   @ViewChild('footer', { static: false }) footer!: ElementRef;
-  @ViewChild('sidebar', { static: false }) sidebar!: any;
-
-
-  constructor(private cdr: ChangeDetectorRef) { }
-
+  @ViewChild('navbar', { static: false }) navbar!: ElementRef;
+ 
+ 
+  constructor(private route: RouterService) { }
+ 
   ngAfterViewInit() {
     if (this.checkLogin()) {
       setTimeout(() => {
@@ -29,7 +32,7 @@ export class AppComponent implements AfterViewInit {
       },0);
     }
   }
-
+ 
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.viewportHeight = window.innerHeight;
@@ -37,20 +40,16 @@ export class AppComponent implements AfterViewInit {
       this.calculateMinHeight();
     }
   }
-
+ 
   calculateMinHeight() {
-    if (this.sidebar?.navbar && this.footer) {
-      const navbarHeight = this.sidebar.navbar.nativeElement.offsetHeight;
+    if (this.navbar && this.footer) {
+      const navbarHeight = this.navbar.nativeElement.offsetHeight;
       const footerHeight = this.footer.nativeElement.offsetHeight;
-
-      this.mainContainerMinHeight = this.viewportHeight - navbarHeight - footerHeight;
-
-      this.cdr.detectChanges();
-    } else {
-      console.log('Navbar or footer not available yet');
+ 
+      this.mainContainerMinHeight.set(this.viewportHeight - navbarHeight - footerHeight);
     }
   }
-
+ 
   checkLogin(): boolean {
     if (localStorage.getItem('token') != null) {
       DecodeToken.decodeJWTToken(String(localStorage.getItem('token')));
@@ -60,4 +59,12 @@ export class AppComponent implements AfterViewInit {
     return false;
   }
 
+  logoutUser() {
+    if (localStorage.getItem('token') != null) {
+      localStorage.clear();
+      DecodeToken.clearUserCredentials();
+      Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");
+      this.route.goToLogin();
+    }
+  }
 }
