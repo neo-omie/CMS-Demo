@@ -15,8 +15,6 @@ import {
   FormsModule,
   NgForm,
   ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -60,7 +58,6 @@ import { DecodeToken } from '../../../utils/decodeToken';
 import {
   ContractStatus,
   Location,
-  MY_DATE_FORMATS,
 } from '../../../utils/constants';
 import { ExcelExport } from '../../../utils/excelExport';
 import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
@@ -71,6 +68,7 @@ import {
   dateRangeValidator,
   dateValidator,
 } from '../../../utils/dateValidator';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-all-contracts',
@@ -294,15 +292,7 @@ export class AllContractsComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -388,18 +378,7 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          if (error.message !== undefined) {
-            this.errorMsg = JSON.stringify(error.error.message);
-            console.log(this.errorMsg);
-          } else {
-            this.errorMsg = JSON.stringify(error.message);
-            console.log(this.errorMsg);
-          }
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -443,13 +422,7 @@ export class AllContractsComponent implements OnInit {
             },
             error: (error) => {
               console.error('Deletion Failed', error);
-              if (error.status == 401) {
-                let errmsg = error.error;
-                Alert.toast(TYPE.ERROR, true, errmsg);
-              } else {
-                this.errorMsg = JSON.stringify(error.error.message);
-                Alert.toast(TYPE.ERROR, true, this.errorMsg);
-              }
+              ErrorHandler.handle(error);
             },
           });
         }
@@ -472,15 +445,7 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -491,15 +456,7 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -511,15 +468,7 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -530,15 +479,7 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -591,10 +532,9 @@ export class AllContractsComponent implements OnInit {
 
   async onAddFormSubmit() {
     let empName = DecodeToken.ECode;
-    this.loading = true;
     this.masterContractAddForm
       .get('empCustodianId')
-      ?.setValue(this.editEmpCustodianId.nativeElement.value);
+      ?.setValue(this.addEmpCustodianId.nativeElement.value);
     if (this.masterContractAddForm.invalid) {
       console.log('bhru Invalid form : ', this.masterContractAddForm.value);
       this.masterContractAddForm.markAllAsTouched();
@@ -660,6 +600,7 @@ export class AllContractsComponent implements OnInit {
         addFormValues.approver2Status = Number(approver2Status);
         addFormValues.approver3Status = Number(approver3Status);
         console.log(addFormValues);
+        this.loading = true;
         try {
           const response = await firstValueFrom(
             this.contractsService.addContract(addFormValues, empName)
@@ -698,9 +639,7 @@ export class AllContractsComponent implements OnInit {
             }
           }
         } catch (error) {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(error); //?.error?.title ?? error.message
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          ErrorHandler.handle(error);
         } finally {
           this.loading = false;
         }
@@ -726,31 +665,21 @@ export class AllContractsComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error :(', error);
-          if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else {
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.title : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          ErrorHandler.handle(error);
         },
       });
   }
   fillEmployeeCustodian(
     employeeId: number,
-    employeeName: string,
-    inputNumber: number
+    employeeName: string
   ) {
-    if (inputNumber == 1) {
       const input =
-        this.editEmpCustodianCollapse.nativeElement.querySelector('input');
+        this.addEmpCustodianCollapse.nativeElement.querySelector('input');
       input.value = '';
       console.log(input.value);
       this.employeeCustodians.length = 0;
       this.renderer.removeClass(
-        this.editEmpCustodianCollapse.nativeElement,
+        this.addEmpCustodianCollapse.nativeElement,
         'show'
       );
       this.renderer.removeClass(
@@ -761,15 +690,10 @@ export class AllContractsComponent implements OnInit {
         this.addAddendumEmpCustodianCollapse.nativeElement,
         'show'
       );
-      this.editEmpCustodianName.nativeElement.value = employeeName;
-      this.editEmpCustodianId.nativeElement.value = employeeId;
       this.addEmpCustodianName.nativeElement.value = employeeName;
       this.addEmpCustodianId.nativeElement.value = employeeId;
       this.addAddendumEmpCustodianName.nativeElement.value = employeeName;
       this.addAddendumEmpCustodianId.nativeElement.value = employeeId;
-      console.log(employeeId);
-      console.log(this.addEmpCustodianCollapse.nativeElement.value);
-    }
   }
 
   dateValidationForRenewalDueIn(cont: any): boolean {
@@ -912,15 +836,8 @@ export class AllContractsComponent implements OnInit {
         },
         error: (err) => {
           console.error('No Contract with this id exist', err);
-          if (err.status == 401) {
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else {
-            this.errorMsg = JSON.stringify(
-              err.message !== undefined ? err.error.message : err.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          ErrorHandler.handle(err);
+
           return false;
         },
       });
@@ -955,15 +872,8 @@ export class AllContractsComponent implements OnInit {
       },
       error: (err) => {
         console.error('No Contract with this id exist', err);
-        if (err.status == 401) {
-          let errmsg = err.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            err.message !== undefined ? err.error.message : err.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(err);
+
         return false;
       },
     });
@@ -979,78 +889,6 @@ export class AllContractsComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
-
-  onUpdateFormSubmit(contID: number) {
-    // this.masterContractAddForm.get('empCustodianId')?.setValue(this.editEmpCustodianId.nativeElement.value)
-    // if (this.masterContractAddForm.invalid) {
-    //   this.masterContractAddForm.markAllAsTouched();
-    //   return;
-    // }
-    // else {
-    //   const departmentId = this.masterContractAddForm.value.departmentId;
-    //   const contractWithCompanyId = this.masterContractAddForm.value.contractWithCompanyId;
-    //   const contractTypeId = this.masterContractAddForm.value.contractTypeId;
-    //   const apostilleTypeId = this.masterContractAddForm.value.apostilleTypeId;
-    //   const actualDocRefNo = this.masterContractAddForm.value.actualDocRefNo;
-    //   const retainerContract = this.masterContractAddForm.value.retainerContract;
-    //   const empCustodianId = this.masterContractAddForm.value.empCustodianId;
-    //   const approver1Status = this.masterContractAddForm.value.approver1Status;
-    //   const approver2Status = this.masterContractAddForm.value.approver2Status;
-    //   const approver3Status = this.masterContractAddForm.value.approver3Status;
-    //   if (departmentId && Number(departmentId) &&
-    //     contractWithCompanyId && Number(contractWithCompanyId) &&
-    //     contractTypeId && Number(contractTypeId) &&
-    //     apostilleTypeId && Number(apostilleTypeId) &&
-    //     actualDocRefNo && Number(actualDocRefNo) &&
-    //     retainerContract && Number(retainerContract) &&
-    //     empCustodianId && Number(empCustodianId) &&
-    //     approver1Status && Number(approver1Status) &&
-    //     approver2Status && Number(approver2Status) &&
-    //     approver3Status && Number(approver3Status)
-    //   ) {
-    //     const addFormValues: AddContractDto = new AddContractDto();
-    //     addFormValues.contractName = this.masterContractAddForm.value.contractName;
-    //     addFormValues.departmentId = Number(departmentId);
-    //     addFormValues.contractWithCompanyId = Number(contractWithCompanyId);
-    //     addFormValues.contractTypeId = Number(contractTypeId);
-    //     addFormValues.apostilleTypeId = Number(apostilleTypeId);
-    //     addFormValues.actualDocRefNo = Number(actualDocRefNo);
-    //     addFormValues.retainerContract = Number(retainerContract);
-    //     addFormValues.termsAndConditions = this.masterContractAddForm.value.termsAndConditions;
-    //     addFormValues.validFrom = this.masterContractAddForm.value.validFrom;
-    //     addFormValues.validTill = this.masterContractAddForm.value.validTill;
-    //     addFormValues.renewalFrom = this.masterContractAddForm.value.renewalFrom;
-    //     addFormValues.renewalTill = this.masterContractAddForm.value.renewalTill;
-    //     addFormValues.addendumDate = this.masterContractAddForm.value.renewalTill;
-    //     addFormValues.empCustodianId = Number(empCustodianId);
-    //     addFormValues.location = this.masterContractAddForm.value.location;
-    //     addFormValues.approver1Status = Number(approver1Status);
-    //     addFormValues.approver2Status = Number(approver2Status);
-    //     addFormValues.approver3Status = Number(approver3Status);
-    //     console.log(addFormValues);
-    //     this.contractsService.editContract(contractID, addFormValues).subscribe({
-    //       next: (response: boolean) => {
-    //         if (response !== false) {
-    //           Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-    //           // this.router.navigate(['contracts/allContracts'])
-    //           this.GetAllContracts(1, 10);
-    //           //this.renderer.removeClass(this.addContractModal.nativeElement, 'show');
-    //           this.masterContractAddForm.reset();
-    //         }
-    //       },
-    //       error: (error) => {
-    //         console.error('Error :(', error);
-    //         this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-    //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-    //       }
-    //     });
-    //   }
-    //   else {
-    //     console.log("should not come here ", this.masterContractAddForm.value)
-    //   }
-    // }
-  }
-
   onAddAddendumFormSubmit(contractID: number) {
     this.loading = true;
     const addendum = new AddAddendumContract();
@@ -1119,15 +957,7 @@ export class AllContractsComponent implements OnInit {
         error: (err) => {
           this.loading = false;
           console.error('Error adding addendum:', err);
-          if (err.status == 401) {
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else {
-            this.errorMsg = JSON.stringify(
-              err.message !== undefined ? err.error.title : err.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          ErrorHandler.handle(err);
         },
       });
   }
@@ -1247,8 +1077,8 @@ export class AllContractsComponent implements OnInit {
           });
         }
       } catch (error) {
-        this.errorMsg = JSON.stringify(error);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        this.loading=false;
+        ErrorHandler.handle(error);
       } finally {
         this.loading = false;
       }
@@ -1343,30 +1173,11 @@ export class AllContractsComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Error in creating Notice:', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          Alert.bigToast(
-            'Error!',
-            'There was an error posting termination notice. ' +
-              error.error.message,
-            TYPE.ERROR,
-            'Try Again'
-          );
-        }
-        // this.file = null;
-        // documentForm.reset();
-        // this.addFile.nativeElement.value = "";
-        // this.postTerm.file = null;
-        // this.document.status = 1;
+        ErrorHandler.handle(error);
+        
       },
     });
-    // this.file = null;
-    // documentForm.reset();
-    // this.addFile.nativeElement.value = "";
-    // this.document.file = null;
-    // this.document.status = 1;
+    
   }
   //for date validation post termination
   datecheck(event: string) {
@@ -1450,16 +1261,11 @@ export class AllContractsComponent implements OnInit {
               Location: location == 0 ? null : location,
               HasAddendum: hasAddendum == -1 ? null : hasAddendum,
             });
-            // const modalElement = document.getElementById('postTerm-mail');
-            // if (modalElement) {
-            //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            //   modalInstance.hide();
-            // }
+         
           }
         } catch (error) {
-          this.errorMsg = JSON.stringify(error);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          console.error(error);
+          this.loading=false;
+          ErrorHandler.handle(error);
         } finally {
           this.loading = false;
         }
@@ -1540,29 +1346,9 @@ export class AllContractsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error in adding notice withdrawal:', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          Alert.bigToast(
-            'Error!',
-            'There was an error adding notice withdrawal.',
-            TYPE.ERROR,
-            'Try Again'
-          );
-        }
-        // this.file = null;
-        // documentForm.reset();
-        // this.addFile.nativeElement.value = "";
-        // this.postTerm.file = null;
-        // this.document.status = 1;
+        ErrorHandler.handle(error);
       },
     });
-    // this.file = null;
-    // documentForm.reset();
-    // this.addFile.nativeElement.value = "";
-    // this.document.file = null;
-    // this.document.status = 1;
   }
 
   withdrawalNoticeEmailForm = new FormGroup({
@@ -1620,16 +1406,10 @@ export class AllContractsComponent implements OnInit {
               Location: location == 0 ? null : location,
               HasAddendum: hasAddendum == -1 ? null : hasAddendum,
             });
-            // const modalElement = document.getElementById('withdrawal-mail');
-            // if (modalElement) {
-            //   const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            //   modalInstance.hide();
-            // }
           }
         } catch (error) {
-          this.errorMsg = JSON.stringify(error);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          console.error(error);
+          this.loading=false;
+          ErrorHandler.handle(error);
         } finally {
           this.loading = false;
         }
@@ -1651,8 +1431,8 @@ export class AllContractsComponent implements OnInit {
       'Status',
       'Renewal Due In',
       'Location',
-    ]; // Put the exact header text here
-    // PDFExport.printToPDF(tableID, fileName);
+    ];
+
     PDFExport.printToPDF(
       'contracts-table',
       'CMS-Contracts.pdf',
@@ -1688,7 +1468,7 @@ export class AllContractsComponent implements OnInit {
       case 1:
         return 'Approval for';
       case 2:
-        return 'Active'; // optional � maybe don't show this
+        return 'Active';
       case 3:
         return 'Rejection for';
       case 4:
@@ -1713,8 +1493,3 @@ export class AllContractsComponent implements OnInit {
     'Contract Active',
   ];
 }
-
-//for required validations
-//  get EndDate(){
-//       return this.masterCompanyAddForm.get('pocContactNumber');
-//     }

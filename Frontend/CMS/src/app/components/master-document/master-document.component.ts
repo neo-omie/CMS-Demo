@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-master-document',
@@ -397,13 +398,7 @@ export class MasterDocumentComponent implements OnInit {
   deleteDocument(id?: number) {
     let empCode = DecodeToken.ECode;
     Alert.confirmToast(
-      // 'Are you sure you want to delete this document?',
-      // "You won't be able to revert this!!",
-      // TYPE.WARNING,
-      // 'Yes ,Delete it',
-      // 'Deleted Successfully',
-      // 'Document has been Deleted',
-      // TYPE.SUCCESS,
+  
       'Are you sure you want to delete this document?',
       "You won't be able to revert this!!",
       TYPE.WARNING,
@@ -415,12 +410,9 @@ export class MasterDocumentComponent implements OnInit {
         if (id !== undefined) {
           this.documentService.deleteDocument(id, empCode).subscribe({
             next: () => {
-              //Alert.toast(TYPE.SUCCESS, true, 'Document Deleted successfully');
               this.getDocuments(1, 10);
             },
-            error: (err) => {
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
-              console.error(err);
+            error: (err) => {ErrorHandler.handle(err);
             },
           });
         }
@@ -436,11 +428,8 @@ export class MasterDocumentComponent implements OnInit {
         // response.displayDocumentName
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
+        
       },
     });
   }

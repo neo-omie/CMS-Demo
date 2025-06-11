@@ -18,8 +18,7 @@ import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
 import { ExcelExport } from '../../utils/excelExport';
 import { PDFExport } from '../../utils/pdfExport';
-
-
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-audit-screen',
@@ -81,16 +80,20 @@ export class AuditScreenComponent implements OnInit, AfterViewInit {
     }
   }
 
- printToPDF() {
+  printToPDF() {
     // PDFExport.printToPDF(tableID, fileName);
-const selectedColumns = [
+    const selectedColumns = [
       'Table Name',
       'Emp Code',
       'Date and Time',
       'Action Description',
-      'Action'
+      'Action',
     ];
-    PDFExport.printToPDF('table', 'CMS-ClassifiedContracts.pdf', selectedColumns);
+    PDFExport.printToPDF(
+      'table',
+      'CMS-ClassifiedContracts.pdf',
+      selectedColumns
+    );
   }
 
   exportToExcel(): void {
@@ -99,14 +102,10 @@ const selectedColumns = [
       'Emp Code',
       'Date and Time',
       'Action Description',
-      'Action'
+      'Action',
     ];
 
-    ExcelExport.printToExcel(
-      'table',
-      'CMS-Reports.xlsx',
-      selectedColumns
-    );
+    ExcelExport.printToExcel('table', 'CMS-Reports.xlsx', selectedColumns);
   }
   getAllAudit(pageNumber: number, pageSize: number) {
     this.auditService.getAllAudits(pageNumber, pageSize).subscribe({
@@ -125,13 +124,8 @@ const selectedColumns = [
         }
       },
       error: (err) => {
-        console.log(err.error.message);
-        console.error('Error getting audits:', err);
-        this.errorMsg = JSON.stringify(
-          err.message !== undefined ? err.error.title : err.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
         this.loading = false;
+        ErrorHandler.handle(err);
       },
     });
   }

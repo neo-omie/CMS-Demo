@@ -11,6 +11,7 @@ import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
 import { ApprovalMatrixMouModalComponent } from '../approval-matrix-mou-modal/approval-matrix-mou-modal.component';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-approval-matrix-mou-screen',
@@ -90,9 +91,8 @@ export class ApprovalMatrixMouScreenComponent {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                   ErrorHandler.handle(error);
+
       }
     });
   }
@@ -110,9 +110,8 @@ export class ApprovalMatrixMouScreenComponent {
         this.approvalMatrixMOU = response;
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                   ErrorHandler.handle(error);
+
       }
     });
   }

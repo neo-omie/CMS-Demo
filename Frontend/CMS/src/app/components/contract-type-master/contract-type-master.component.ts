@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-contract-type-master',
@@ -95,16 +96,7 @@ export class ContractTypeMasterComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -125,16 +117,7 @@ export class ContractTypeMasterComponent implements OnInit {
         console.log(res);
       },
       error: (error) => {
-        console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -160,16 +143,7 @@ export class ContractTypeMasterComponent implements OnInit {
             }
           },
           error: (error) => {
-            console.error('Error :(', error);
-            if (error.status == 401) {
-              let errmsg = error.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            } else {
-              this.errorMsg = JSON.stringify(
-                error.message !== undefined ? error.error.title : error.message
-              );
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
-            }
+            ErrorHandler.handle(error);
           },
         });
       }
@@ -192,18 +166,7 @@ export class ContractTypeMasterComponent implements OnInit {
         this.GetPage(this.maxPage);
       },
       error: (error) => {
-        console.error('Error adding Contract:', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          Alert.bigToast(
-            'Error!',
-            'There was an error adding the Contract.',
-            TYPE.ERROR,
-            'Try Again'
-          );
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -249,16 +212,7 @@ export class ContractTypeMasterComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error :(', error);
-          if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else {
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.message : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          ErrorHandler.handle(error);
         },
       });
     }
@@ -317,13 +271,7 @@ export class ContractTypeMasterComponent implements OnInit {
             }
           },
           error: (error) => {
-            if (error.status == 401) {
-              let errmsg = error.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            } else {
-              Alert.toast(TYPE.ERROR, true, error.error.message);
-              console.error(error.error);
-            }
+            ErrorHandler.handle(error);
           },
         });
     }

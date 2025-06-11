@@ -41,6 +41,7 @@ import {
 } from '../../../utils/dateValidator';
 import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 import { Location } from '../../../utils/constants';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-all-classified-contract-view-add-modal',
@@ -181,15 +182,8 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
 
   error(error: any) {
     console.error('Error :(', error);
-    if (error.status == 401) {
-      let errmsg = error.error;
-      Alert.toast(TYPE.ERROR, true, errmsg);
-    } else {
-      let errorMsg = JSON.stringify(
-        error.message !== undefined ? error.error.title : error.message
-      );
-      Alert.toast(TYPE.ERROR, true, errorMsg);
-    }
+            ErrorHandler.handle(error);
+
   }
 
   initialRequirementLoad() {
@@ -264,7 +258,10 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
         next: (response: MasterEmployee[]) => {
           this.employeeCustodians = response;
         },
-        error: (error) => this.error(error),
+        error: (error) => {
+                  ErrorHandler.handle(error);
+
+        }
       });
   }
 
@@ -370,8 +367,10 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
             }
           }
         } catch (error) {
-          console.error('Error :(', error);
-          Alert.toast(TYPE.ERROR, true, JSON.stringify(error));
+          
+          this.loaderEmit.emit(false);
+                 ErrorHandler.handle(error);
+
         } finally {
           this.loaderEmit.emit(false);
         }

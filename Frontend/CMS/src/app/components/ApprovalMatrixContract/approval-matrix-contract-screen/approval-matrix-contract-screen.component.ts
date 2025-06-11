@@ -11,6 +11,7 @@ import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { TableComponent } from '../../UtilComponents/table/table.component';
 import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
 import { Pagination } from '../../../utils/pagination';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-approval-matrix-contract-screen',
@@ -88,9 +89,8 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                   ErrorHandler.handle(error);
+
       }
     });
   }
@@ -108,9 +108,8 @@ export class ApprovalMatrixContractScreenComponent implements OnInit {
         this.approvalMatrixContract = response;
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                   ErrorHandler.handle(error);
+
       }
     });
   }

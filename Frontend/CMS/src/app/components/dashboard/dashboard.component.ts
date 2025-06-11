@@ -13,6 +13,7 @@ import Highcharts from 'highcharts';
 import { ContractStatus } from '../../utils/constants';
 import { Router } from '@angular/router';
 import { DecodeToken } from '../../utils/decodeToken';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-dashboard',
@@ -153,12 +154,8 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.contractExpired = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                    ErrorHandler.handle(err);
+ }
     })
 
     this.contractsService.getContracts({
@@ -168,12 +165,9 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.contractTerminated = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                   ErrorHandler.handle(err);
+                                   
+ }
     })
 
     this.contractsService.getContracts({
@@ -183,12 +177,8 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.contractRenew0 = res.length; },
       error:(err) => { 
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                   ErrorHandler.handle(err);
+ }
     })
 
     this.contractsService.getContracts({
@@ -198,12 +188,8 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.contractRenew30 = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                    ErrorHandler.handle(err);
+ }
     })
 
     this.contractsService.getContracts({
@@ -213,12 +199,8 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.contractRenew60 = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                    ErrorHandler.handle(err);
+ }
     })
 
     this.contractsService.getContracts({
@@ -228,12 +210,8 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.contractRenew90 = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                    ErrorHandler.handle(err);
+ }
     })
   }
 
@@ -245,12 +223,8 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractActive = res.length; },
       error:(err) => { 
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
+                                    ErrorHandler.handle(err);
+ }
     })
 
     this.classifiedContractsService.getContracts({
@@ -260,12 +234,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractExpired = res.length; },
       error:(err) => { 
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
+        ErrorHandler.handle(err); }
     })
 
     this.classifiedContractsService.getContracts({
@@ -275,12 +244,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractTerminated = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+        ErrorHandler.handle(err);}
     })
 
     this.classifiedContractsService.getContracts({
@@ -290,12 +254,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractRenew0 = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
+        ErrorHandler.handle(err);}
     })
 
     this.classifiedContractsService.getContracts({
@@ -305,12 +264,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractRenew30 = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+        ErrorHandler.handle(err); }
     })
 
     this.classifiedContractsService.getContracts({
@@ -320,12 +274,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractRenew60 = res.length; },
       error:(err) => { 
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
+        ErrorHandler.handle(err); }
     })
 
     this.classifiedContractsService.getContracts({
@@ -335,12 +284,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe({
       next:(res) => { this.classifiedContractRenew90 = res.length; },
       error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
+        ErrorHandler.handle(err); }
     })
   }
 
@@ -374,13 +318,7 @@ export class DashboardComponent implements OnInit {
         this.updateFlag1 = true;
         setTimeout(() => this.updateFlag1 = false, 100);
       }, error: (error) => {
-        if(error.status == 401){
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        }
-        else{
-          Alert.toast(TYPE.ERROR, true, error.error.message);
-        }
+        ErrorHandler.handle(error);
       }
     });
   }
@@ -416,13 +354,7 @@ export class DashboardComponent implements OnInit {
         this.updateFlag2 = true;
         setTimeout(() => this.updateFlag2 = false, 100);
       }, error: (error) => {
-        if(error.status == 401){
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        }
-        else{
-          Alert.toast(TYPE.ERROR, true, error.error.message);
-        }
+        ErrorHandler.handle(error);
       }
     });
   }

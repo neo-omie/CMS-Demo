@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-master-department',
@@ -68,16 +69,7 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-         if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+        ErrorHandler.handle(error);
       }
     });
   }
@@ -96,15 +88,7 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         console.error('Error :(', error);
-         if (error.status == 401) {
-                    let errmsg = error.error;
-                    Alert.toast(TYPE.ERROR, true, errmsg);
-                  }
-                  else{
-
-                    this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-                    Alert.toast(TYPE.ERROR, true, this.errorMsg);
-                  }
+        ErrorHandler.handle(error);
       }
     });
   }
@@ -126,14 +110,7 @@ export class MasterDepartmentComponent {
         },
         error: (error) => {
           console.error('Error :(', error);
-           if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+           ErrorHandler.handle(error);
         }
       });
     }
@@ -162,15 +139,7 @@ export class MasterDepartmentComponent {
           },
           error: (error) => {
             console.error('Error :(', error);
-             if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+             ErrorHandler.handle(error);
           }
         });
       });
@@ -200,14 +169,8 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         console.error('Error adding Department:', error);
-         if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            Alert.bigToast('Error!', 'There was an error adding the Department.', TYPE.ERROR, 'Try Again.');
-          }
+        ErrorHandler.handle(error);
+        
       }
     });
   }

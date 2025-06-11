@@ -7,6 +7,7 @@ import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { DecodeToken } from '../../utils/decodeToken';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-side-bar',
@@ -60,14 +61,8 @@ export class SideBarComponent implements OnInit, OnDestroy {
           this.totalNotifications = response;
           console.log("Notification number", response);
         }, error: (error) => {
-          if(error.status == 401){
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-        else{
-          let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
-          Alert.toast(TYPE.ERROR, true, errorMsg);
-        }
+          ErrorHandler.handle(error);
+          
         }
       });
     }

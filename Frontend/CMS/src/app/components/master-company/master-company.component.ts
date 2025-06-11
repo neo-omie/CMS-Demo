@@ -30,6 +30,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { PDFExport } from '../../utils/pdfExport';
 import { DecodeToken } from '../../utils/decodeToken';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-master-company',
@@ -96,11 +97,7 @@ export class MasterCompanyComponent implements OnInit {
         console.log(this.countryList);
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+       ErrorHandler.handle(error);
       },
     });
   }
@@ -110,11 +107,7 @@ export class MasterCompanyComponent implements OnInit {
         this.stateList = response;
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -124,11 +117,7 @@ export class MasterCompanyComponent implements OnInit {
         this.cityList = response;
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -160,11 +149,7 @@ export class MasterCompanyComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+         ErrorHandler.handle(error);
         },
       });
   }
@@ -203,59 +188,11 @@ export class MasterCompanyComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
 
-  // editCompany(id:number){
-  //   let compName=this.editCompanyName.nativeElement.value;
-  //   if (compName !=="") {
-  //     console.log(compName);
-  //     this.companyService.updateCompany(id,compName).subscribe({
-  //       next:(res:boolean)=>{
-  //         if (res) {
-  //           Alert.toast(TYPE.SUCCESS,true,"Updated Successfully")
-  //           this.getCompanies();
-  //         }
-  //       },
-  //       error:(error)=>{
-  //         console.error('Error :(', error);
-  //             this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-  //             Alert.toast(TYPE.ERROR,true,this.errorMsg);
-  //       }
-  //     })
-
-  //   }
-  // }
-
-  // addCompany(companyForm: NgForm) {
-  //   this.company = companyForm.value;
-  //   let empCode = DecodeToken.ECode;
-
-  //   this.companyService.addCompany(this.company, empCode).subscribe({
-  //     next: (response) => {
-  //       Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
-
-  //       companyForm.resetForm();
-  //       this.GetPage(this.maxPage);
-  //       const modalElement = document.getElementById('company-add');
-  //       if (modalElement) {
-  //         const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-  //         modalInstance.hide();
-  //       }
-  //     },
-
-  //     error: (error) => {
-  //       console.error('Error adding Company:', error);
-  //       Alert.bigToast('Error!', 'There was an error adding the Company.', TYPE.ERROR, 'Try Again');
-  //     }
-  //   });
-  // }
 
   ResettingonCacelButton() {
     this.masterCompanyAddForm.reset({
@@ -290,21 +227,13 @@ export class MasterCompanyComponent implements OnInit {
               this.getCompanies(this.currentPage);
             }
           },
-          error: (error) => {
-            console.error('Error :(', error);
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.title : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          error: (error) => {ErrorHandler.handle(error);
           },
         });
       }
     );
   }
-  // editCompany(comp:CompanyMasterDto){
-  //   console.log('Navigating to editContract with valueId:', comp.valueId);
-  //   this.router.navigate(['masters/companyMasters/updateCompany', comp.valueId]);
-  // }
+  
 
   masterCompanyAddForm = new FormGroup({
     companyName: new FormControl('', [
@@ -471,11 +400,7 @@ export class MasterCompanyComponent implements OnInit {
             }
           },
           error: (error) => {
-            console.error('Error :(', error);
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.title : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            ErrorHandler.handle(error);
           },
         });
       } else {
@@ -675,17 +600,8 @@ export class MasterCompanyComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error :(', error);
-              if (error.status == 401) {
-                let errmsg = error.error;
-                Alert.toast(TYPE.ERROR, true, errmsg);
-              } else {
-                this.errorMsg = JSON.stringify(
-                  error.message !== undefined
-                    ? error.error.title
-                    : error.message
-                );
-                Alert.toast(TYPE.ERROR, true, this.errorMsg);
-              }
+             ErrorHandler.handle(error);
+             
             },
           });
       } else {

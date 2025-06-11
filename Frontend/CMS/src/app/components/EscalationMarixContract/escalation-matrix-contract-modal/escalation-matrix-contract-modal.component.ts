@@ -18,11 +18,12 @@ import { TYPE } from '../../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
 import { DecodeToken } from '../../../utils/decodeToken';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-escalation-matrix-contract-modal',
   standalone: true,
-  imports: [CommonModule,LoaderComponent],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './escalation-matrix-contract-modal.component.html',
   styleUrl: './escalation-matrix-contract-modal.component.css',
 })
@@ -30,7 +31,7 @@ export class EscalationMatrixContractModalComponent {
   @Input() getMatrixMous!: (pageSize: number, pageNumber: number) => void;
   @Input() matrixContract?: GetMasterEscalationMatrixContractByIdDto;
   @Input() isEdit: boolean = false;
-loading: boolean = true;
+  loading: boolean = true;
   errorMsg: string = '';
   approvers1: MasterEmployee[] = [];
   approvers2: MasterEmployee[] = [];
@@ -113,17 +114,8 @@ loading: boolean = true;
           }
         },
         error: (error) => {
-          this.loading =false;
-          console.error('Error :(', error);
-          if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else {
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.title : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          this.loading = false;
+          ErrorHandler.handle(error);
         },
       });
   }
@@ -216,18 +208,7 @@ loading: boolean = true;
             this.closeEditApproverCollapses();
           },
           error: (error) => {
-            console.error('Error :(', error);
-            if (error.status == 401) {
-              let errmsg = error.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            } else {
-              this.errorMsg = JSON.stringify(
-                error.message !== undefined
-                  ? error.error.message
-                  : error.error.title
-              );
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
-            }
+            ErrorHandler.handle(error);
           },
         });
     } else {

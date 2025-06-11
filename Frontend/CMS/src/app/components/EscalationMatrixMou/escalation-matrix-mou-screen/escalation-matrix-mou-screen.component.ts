@@ -10,6 +10,7 @@ import { EscalationMatrixMouModalComponent } from '../escalation-matrix-mou-moda
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { TableComponent } from '../../UtilComponents/table/table.component';
 import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-escalation-matrix-mou-screen',
@@ -120,15 +121,8 @@ export class EscalationMatrixMouScreenComponent {
       },
       error: (error) => {
         console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+       ErrorHandler.handle(error);
+       
       },
     });
   }

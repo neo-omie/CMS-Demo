@@ -10,6 +10,7 @@ import { EscalationMatrixMouService } from '../../../services/escalation-matrix-
 import { Router } from '@angular/router';
 import { DecodeToken } from '../../../utils/decodeToken';
 import { UserService } from '../../../services/auth/user.service';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-escalation-matrix-mou-modal',
@@ -93,15 +94,8 @@ export class EscalationMatrixMouModalComponent {
         },
         error: (error) => {
           console.error('Error :(', error);
-           if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          ErrorHandler.handle(error);
+          
         }
       }
     )
@@ -165,9 +159,7 @@ export class EscalationMatrixMouModalComponent {
             this.closeEditApproverCollapses();
           },
           error:(error)=>{
-            console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.message: error.error.title);
-            Alert.toast(TYPE.ERROR,true,this.errorMsg);
+            ErrorHandler.handle(error);
           }
         })
       }

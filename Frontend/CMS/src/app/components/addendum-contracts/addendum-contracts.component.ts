@@ -18,6 +18,7 @@ import { PDFExport } from '../../utils/pdfExport';
 import { ExcelExport } from '../../utils/excelExport';
 
 import { ProgressBarComponent } from '../UtilComponents/progress-bar/progress-bar.component';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-addendum-contracts',
@@ -133,11 +134,8 @@ export class AddendumContractsComponent {
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                      ErrorHandler.handle(error);
+
         },
       });
   }
@@ -171,9 +169,8 @@ export class AddendumContractsComponent {
           this.GetAllAddendum(1, 10);
         }
       } catch (error) {
-        this.errorMsg = JSON.stringify(error);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        console.error(error);
+                                   ErrorHandler.handle(error);
+
       } finally {
         this.loading = false;
       }
@@ -243,22 +240,9 @@ export class AddendumContractsComponent {
     'Addendum Active',
   ];
 
-  // GetContract(id: number, isEdit: boolean) {
-  //   this.isEdit = isEdit;
-  //   this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
-  //     next: (response: ApprovalMatrixContract) => {
-  //       this.approvalMatrixContract = response;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error :(', error);
-  //       this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-  //       Alert.toast(TYPE.ERROR, true, this.errorMsg);
-  //     }
-  //   });
-  // }
   printToPDF() {
-    // PDFExport.printToPDF(tableID, fileName);
-    const selectedColumns = ['Contract Name', 'Addendum Date', 'Status']; // Put the exact header text here
+   
+    const selectedColumns = ['Contract Name', 'Addendum Date', 'Status']; 
     PDFExport.printToPDF(
       'table',
       'CMS-Addendum Contracts.pdf',

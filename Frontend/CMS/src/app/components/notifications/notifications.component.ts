@@ -19,6 +19,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
 import { Pagination } from '../../utils/pagination';
 import { TableComponent } from '../UtilComponents/table/table.component';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-notifications',
@@ -108,18 +109,7 @@ export class NotificationsComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error(error.error);
-           if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.message : error.title
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+          ErrorHandler.handle(error);
         },
       });
   }
@@ -137,18 +127,7 @@ export class NotificationsComponent implements OnInit {
         console.log(this.notification);
       },
       error: (error) => {
-        console.error(error.error);
-         if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.message : error.title
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -183,17 +162,7 @@ export class NotificationsComponent implements OnInit {
           this.GetPage(this.currentPage);
         },
         error:(error)=>{
-           if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else{
-
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.message : error.title
-            );
-            Alert.toast(TYPE.ERROR,true,this.errorMsg);
-          }
+           ErrorHandler.handle(error);
       }
     })
   }
