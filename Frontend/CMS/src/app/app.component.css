@@ -11,3 +11,17 @@ p{
     padding: 0;
     margin: 0;
 }
+.navbar{
+    box-shadow: 0 1px 5px #5f5fee;
+}
+.sidebar-toggle-btn:hover{
+    background-color: #5f5fee;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+.sidebar-toggle-btn {
+    color: rgba(95, 95, 238);
+    background-color: whitesmoke;
+    border-color: #5f5fee;
+}

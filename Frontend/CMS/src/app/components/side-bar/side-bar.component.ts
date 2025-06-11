@@ -52,14 +52,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
     if(this.userRole == null || this.userRole == undefined) return false;
     return (this.userRole.includes("Admin") || this.userRole.includes("Management_User") || (this.userRole.includes("Super_Admin")));
   }
-  logoutUser() {
-    if (localStorage.getItem('token') != null) {
-      localStorage.clear();
-      DecodeToken.clearUserCredentials();
-      Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");
-      this.route.goToLogin();
-    }
-  }
   GetAllNotifications() {
     let empCode: string | null = DecodeToken.ECode;
     if (empCode) {
