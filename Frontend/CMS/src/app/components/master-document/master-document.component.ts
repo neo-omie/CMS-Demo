@@ -105,10 +105,15 @@ export class MasterDocumentComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        if (error.status == 401) {
+          let errmsg = error.error;
+          Alert.toast(TYPE.ERROR, true, errmsg);
+        } else {
+          this.errorMsg = JSON.stringify(
+            error.message !== undefined ? error.error.title : error.message
+          );
+          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        }
       },
     });
   }
@@ -117,80 +122,6 @@ export class MasterDocumentComponent implements OnInit {
       this.getDocuments(pgNumber, 10);
     }
   }
-
-  // addDocument(documentForm: NgForm) {
-  //   let empCode = DecodeToken.ECode;
-  //   if (!this.file || !documentForm.valid) {
-  //     this.addFile.nativeElement.value = "";
-  //     this.document.file = null;
-  //     this.document.status = 1;
-  //     Alert.toast(TYPE.WARNING, true, "Please select a file and fill the form correctly.");
-  //     return;
-  //   }
-
-  //   const allowedExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
-  //   const fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.')).toLowerCase();
-
-  //   if (!allowedExtensions.includes(fileExtension)) {
-  //     this.addFile.nativeElement.value = "";
-  //     this.document.file = null;
-  //     this.document.status = 1;
-  //     Alert.toast(TYPE.WARNING, true, "Unsupported file format. Allowed formats: .pdf, .doc, .docx, .jpg, .jpeg and .png.");
-  //     return;
-  //   }
-
-  //   if (this.file.size > 25 * 1048576) {
-  //     this.addFile.nativeElement.value = "";
-  //     this.document.file = null;
-  //     this.document.status = 1;
-  //     Alert.toast(TYPE.WARNING, true, "File too large. Max 25MB allowed.");
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append('File',this.file)
-  //   formData.append('Status',String(this.document.status))
-  //   this.documentService.addDocument(formData,empCode).subscribe({
-  //     next: (res) => {
-  //       this.file = null;
-  //       // documentForm.reset();
-  //       this.addFile.nativeElement.value = "";
-  //       this.document.file = null;
-  //       this.document.status = 1;
-  //       Alert.bigToast(
-  //         'Success!',
-  //         'Document added successfully.',
-  //         TYPE.SUCCESS,
-  //         'Ok'
-  //       );
-  //       this.GetPage(this.maxPage);
-  //       const closeModal = document.getElementById('document-add') ;
-  //       if (closeModal) {
-  //         const closeModalInstance = bootstrap.Modal.getInstance(closeModal) || new bootstrap.Modal(closeModal);
-  //         closeModalInstance.hide();
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Error adding Document:', error);
-  //       Alert.bigToast(
-  //         'Error!',
-  //         'There was an error adding the Document.',
-  //         TYPE.ERROR,
-  //         'Try Again'
-  //       );
-  //       this.file = null;
-  //       // documentForm.reset();
-  //       this.addFile.nativeElement.value = "";
-  //       this.document.file = null;
-  //       this.document.status = 1;
-  //     },
-  //   });
-  //   this.file = null;
-  //   // documentForm.reset();
-  //   this.addFile.nativeElement.value = "";
-  //   this.document.file = null;
-  //   this.document.status = 1;
-  // }
 
   addDocument(documentForm: NgForm) {
     let empCode = DecodeToken.ECode;
@@ -267,13 +198,14 @@ export class MasterDocumentComponent implements OnInit {
                     );
                     this.getDocuments(1, 10);
 
-const modalElement = document.getElementById('document-add');
-        if (modalElement) {
-          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-          modalInstance.hide();
-        }
-
-
+                    const modalElement =
+                      document.getElementById('document-add');
+                    if (modalElement) {
+                      const modalInstance =
+                        bootstrap.Modal.getInstance(modalElement) ||
+                        new bootstrap.Modal(modalElement);
+                      modalInstance.hide();
+                    }
                   }
                 },
                 error: (error) => {
@@ -305,13 +237,13 @@ const modalElement = document.getElementById('document-add');
                 Alert.toast(TYPE.SUCCESS, true, 'Document Added Successfully');
                 this.GetPage(this.maxPage);
 
-                
-const modalElement = document.getElementById('document-add');
-        if (modalElement) {
-          const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-          modalInstance.hide();
-        }
-
+                const modalElement = document.getElementById('document-add');
+                if (modalElement) {
+                  const modalInstance =
+                    bootstrap.Modal.getInstance(modalElement) ||
+                    new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
               }
             },
             error: (error) => {
@@ -472,13 +404,13 @@ const modalElement = document.getElementById('document-add');
       // 'Deleted Successfully',
       // 'Document has been Deleted',
       // TYPE.SUCCESS,
-         'Are you sure you want to delete this document?',
-            "You won't be able to revert this!!",
-            TYPE.WARNING,
-            'Yes ,Delete it',
-            'Deleted successfully',
-            'Document has been Deleted',
-            TYPE.SUCCESS,
+      'Are you sure you want to delete this document?',
+      "You won't be able to revert this!!",
+      TYPE.WARNING,
+      'Yes ,Delete it',
+      'Deleted successfully',
+      'Document has been Deleted',
+      TYPE.SUCCESS,
       () => {
         if (id !== undefined) {
           this.documentService.deleteDocument(id, empCode).subscribe({

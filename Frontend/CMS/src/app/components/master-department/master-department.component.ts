@@ -69,8 +69,15 @@ export class MasterDepartmentComponent {
       error: (error) => {
         this.loading = false;
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+         if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          }
       }
     });
   }
@@ -89,8 +96,15 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+         if (error.status == 401) {
+                    let errmsg = error.error;
+                    Alert.toast(TYPE.ERROR, true, errmsg);
+                  }
+                  else{
+
+                    this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+                    Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                  }
       }
     });
   }
@@ -112,8 +126,14 @@ export class MasterDepartmentComponent {
         },
         error: (error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+           if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          }
         }
       });
     }
@@ -142,8 +162,15 @@ export class MasterDepartmentComponent {
           },
           error: (error) => {
             console.error('Error :(', error);
+             if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
             this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
             Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          }
           }
         });
       });
@@ -173,7 +200,14 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         console.error('Error adding Department:', error);
-        Alert.bigToast('Error!', 'There was an error adding the Department.', TYPE.ERROR, 'Try Again.');
+         if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            Alert.bigToast('Error!', 'There was an error adding the Department.', TYPE.ERROR, 'Try Again.');
+          }
       }
     });
   }

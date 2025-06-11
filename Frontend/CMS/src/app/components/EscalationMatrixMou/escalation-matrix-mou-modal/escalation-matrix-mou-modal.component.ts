@@ -93,8 +93,15 @@ export class EscalationMatrixMouModalComponent {
         },
         error: (error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+           if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          }
         }
       }
     )

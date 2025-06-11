@@ -79,8 +79,15 @@ fetchApostille(){
     error:(error)=>{
       this.loading = false;
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-        Alert.toast(TYPE.ERROR,true,this.errorMsg);
+         if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+            Alert.toast(TYPE.ERROR,true,this.errorMsg);
+          }
     }
   });
 }
@@ -140,8 +147,15 @@ viewApostille(valueId:number){
       },
       error: (error) => {
         console.error('Error fetching apostille data:', error);
-        Alert.toast(TYPE.ERROR, true, 'Failed to load apostille data.');
-        this.router.navigate(['/masters/apostilleMasters']);
+         if (error.status == 401) {
+                    let errmsg = error.error;
+                    Alert.toast(TYPE.ERROR, true, errmsg);
+                  }
+                  else{
+
+                    Alert.toast(TYPE.ERROR, true, 'Failed to load apostille data.');
+                    this.router.navigate(['/masters/apostilleMasters']);
+                  }
       }
     });
   } else {
@@ -215,8 +229,15 @@ onSubmit(){
         }, 
         error:(error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+           if (error.status == 401) {
+                      let errmsg = error.error;
+                      Alert.toast(TYPE.ERROR, true, errmsg);
+                    }
+                    else{
+
+                      this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
+                      Alert.toast(TYPE.ERROR,true,this.errorMsg);
+                    }
         }
       });
   }
@@ -239,9 +260,15 @@ onSubmit(){
                   modalInstance.hide();
                 }
           this.fetchApostille();
-        }, error: (error) => {
-          Alert.toast(TYPE.ERROR, true, error.error.message);
-          console.error(error.error);
+        }, error: (error) => { if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            Alert.toast(TYPE.ERROR, true, error.error.message);
+            console.error(error.error);
+          }
         }
       })
   }

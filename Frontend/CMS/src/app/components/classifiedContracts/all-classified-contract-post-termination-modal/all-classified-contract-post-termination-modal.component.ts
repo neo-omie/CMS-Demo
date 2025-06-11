@@ -88,12 +88,18 @@ export class AllClassifiedContractPostTerminationModalComponent {
       },
       error: (error) => {
         console.error('Error in creating Notice:', error);
-        Alert.bigToast(
-          'Error!',
-          'There was an error posting termination notice. ' + error.error.message,
-          TYPE.ERROR,
-          'Try Again'
-        );
+         if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+            Alert.bigToast(
+              'Error!',
+              'There was an error posting termination notice. ' + error.error.message,
+              TYPE.ERROR,
+              'Try Again'
+            );
+          }
       },
     });
   }

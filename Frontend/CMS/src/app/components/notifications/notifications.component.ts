@@ -106,14 +106,20 @@ export class NotificationsComponent implements OnInit {
             this.maxPage = result.maxPage;
             this.pageNumbers = result.pageNumbers;
           }
-          // console.log(this.notifications);
         },
         error: (error) => {
           console.error(error.error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.message : error.title
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+           if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            this.errorMsg = JSON.stringify(
+              error.message !== undefined ? error.error.message : error.title
+            );
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          }
         },
       });
   }
@@ -132,10 +138,17 @@ export class NotificationsComponent implements OnInit {
       },
       error: (error) => {
         console.error(error.error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.message : error.title
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+         if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            this.errorMsg = JSON.stringify(
+              error.message !== undefined ? error.error.message : error.title
+            );
+            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          }
       },
     });
   }
@@ -170,10 +183,17 @@ export class NotificationsComponent implements OnInit {
           this.GetPage(this.currentPage);
         },
         error:(error)=>{
-          this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.message : error.title
-        );
-          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+           if (error.status == 401) {
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+          else{
+
+            this.errorMsg = JSON.stringify(
+              error.message !== undefined ? error.error.message : error.title
+            );
+            Alert.toast(TYPE.ERROR,true,this.errorMsg);
+          }
       }
     })
   }
