@@ -1,0 +1,39 @@
+<app-loader *ngIf="loading"></app-loader>
+<h2 class="pt-3 fs-1">Addendum - Contracts</h2>
+
+<div class="table-responsive p-md-5 p-3">
+  <button class="add-btn btn btn-outline-primary mb-2 margin-right"  (click)="printToPDF()">
+    <i class="fa-solid fa-file-pdf"></i> Print to PDF
+  </button>
+   <button class="add-btn btn btn-outline-primary mb-2 margin-left"
+    (click)="exportToExcel()">
+    <i class="fa-solid fa-file-excel"></i> Print to Excel
+  </button>
+  <app-table [data]="addAddendumContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
+  </app-table>
+</div>
+
+<p *ngIf="addAddendumContracts.length == 0" class="text-center">No records</p>
+
+<app-pagination [maxPage]="maxPage" [records]="this.addAddendumContracts.length" [pageNumbers]="pageNumbers"
+    [GetPage]="GetPage.bind(this)"></app-pagination>
+
+<ng-template #AddendumDateRef let-row>
+    {{row?.addendumDate?.split('T')[0] || '-'}}
+</ng-template>
+
+<ng-template #statusTemplateRef let-row>
+    @if(row.approver3Status == 1){ <button class="btn btn-warning" disabled><b>Pending Approval</b></button> }
+    @if(row.approver3Status == 2){ <button class="btn btn-success" disabled><b>Asctive</b></button> }
+    @if(row.approver3Status == 3){ <button class="btn btn-danger" disabled><b>Rejected</b></button> }
+    @if(row.approver3Status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
+    @if(row.approver3Status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }
+    @if(row.approver3Status == 6){ <button class="btn btn-warning" disabled><b>Pending Termination</b></button> }
+</ng-template>
+
+<ng-template #actionTemplateRef let-row>
+    <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#addendum-approve-reject" (click)="fetchAddedumData(row.addendumContractId)"></i>
+</ng-template>
+
+<app-addendum-contract-modal [GetAllAddendum]="GetAllAddendum.bind(this)" [addAddendumContract]="addAddendumContract"
+[approverCheck]="approverCheck" (loaderEmit)="setLoader2($event)"></app-addendum-contract-modal>
