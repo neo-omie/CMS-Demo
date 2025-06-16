@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginScreenComponent } from './components/auth/login-screen/login-screen.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MastersScreenComponent } from './components/Masters/masters-screen/masters-screen.component';
 import { ApprovalMatrixContractScreenComponent } from './components/ApprovalMatrixContract/approval-matrix-contract-screen/approval-matrix-contract-screen.component';
 import { MasterDocumentComponent } from './components/master-document/master-document.component';
@@ -12,7 +11,6 @@ import { authGuard } from './auth.guard';
 import { MasterEmployeeComponent } from './components/master-employee/master-employee.component';
 import { MasterCompanyComponent } from './components/master-company/master-company.component';
 import { ContractTypeMasterComponent } from './components/contract-type-master/contract-type-master.component';
-import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 import { AllContractsComponent } from './components/contracts/all-contracts/all-contracts.component';
 import { AllClassifiedContractComponent } from './components/classifiedContracts/all-classified-contract/all-classified-contract.component';
 import { MasterApostilleComponent } from './components/master-apostille/master-apostille.component';
@@ -20,9 +18,10 @@ import { EscalationMatrixMouScreenComponent } from './components/EscalationMatri
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ApprovalMatrixMouScreenComponent } from './components/ApprovalMatrixMou/approval-matrix-mou-screen/approval-matrix-mou-screen.component';
 import { EscalationMatrixContractScreenComponent } from './components/EscalationMarixContract/escalation-matrix-contract-screen/escalation-matrix-contract-screen.component';
-import { AddendumContractsComponent } from './components/addendum-contracts/addendum-contracts.component';
 import { roleGuard } from './role.guard';
 import { AuditScreenComponent } from './components/audit-screen/audit-screen.component';
+import { AddendumContractsScreenComponent } from './components/AddendumContract/addendum-contracts-screen/addendum-contracts-screen.component';
+import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
 
 export const routes: Routes = [
     { path: '', component: LoginScreenComponent },
@@ -49,8 +48,8 @@ export const routes: Routes = [
     { path: 'contracts', component: ContractsScreenComponent, canActivate: [authGuard] },
     { path: 'contracts/allContracts', component: AllContractsComponent, canActivate: [authGuard] },
     
-    {path: 'contracts/addendumContract', component: AddendumContractsComponent, canActivate:[authGuard]},
-    {path: 'contracts/addendumContract/:contractId', component: AddendumContractsComponent, canActivate:[authGuard]},
+    {path: 'contracts/addendumContract', component: AddendumContractsScreenComponent, canActivate:[authGuard]},
+    {path: 'contracts/addendumContract/:contractId', component: AddendumContractsScreenComponent, canActivate:[authGuard]},
     { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard, roleGuard] },
     { path: 'reports', component: AuditScreenComponent, canActivate: [authGuard, roleGuard] },
 
