@@ -22,6 +22,7 @@ import { roleGuard } from './role.guard';
 import { AuditScreenComponent } from './components/audit-screen/audit-screen.component';
 import { AddendumContractsScreenComponent } from './components/AddendumContract/addendum-contracts-screen/addendum-contracts-screen.component';
 import { ContractsScreenComponent } from './components/contracts/contracts-screen/contracts-screen.component';
+import { FilteredContractsComponent } from './components/contracts/filtered-contracts/filtered-contracts.component';
 
 export const routes: Routes = [
     { path: '', component: LoginScreenComponent },
@@ -46,10 +47,10 @@ export const routes: Routes = [
     { path: 'masters/contractTypeMasters', component: ContractTypeMasterComponent, canActivate: [authGuard, roleGuard] },
 
     { path: 'contracts', component: ContractsScreenComponent, canActivate: [authGuard] },
-    { path: 'contracts/allContracts', component: AllContractsComponent, canActivate: [authGuard] },
-    
-    {path: 'contracts/addendumContract', component: AddendumContractsScreenComponent, canActivate:[authGuard]},
-    {path: 'contracts/addendumContract/:contractId', component: AddendumContractsScreenComponent, canActivate:[authGuard]},
+    { path: 'contracts/allContracts', component: FilteredContractsComponent, canActivate: [authGuard] },
+
+    { path: 'contracts/addendumContract', component: AddendumContractsScreenComponent, canActivate: [authGuard] },
+    { path: 'contracts/addendumContract/:contractId', component: AddendumContractsScreenComponent, canActivate: [authGuard] },
     { path: 'classifiedContracts/allContracts', component: AllClassifiedContractComponent, canActivate: [authGuard, roleGuard] },
     { path: 'reports', component: AuditScreenComponent, canActivate: [authGuard, roleGuard] },
 

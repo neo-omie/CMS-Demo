@@ -20,8 +20,8 @@ export class ContractsService {
   requestRenewal(id:number,empCode:string):Observable<boolean>{
     return this.http.post<boolean>(`${this.apiUrl}/${id}/renewalRequest/${empCode}`,{})
   }
-  getContracts(filters:any) : Observable<ContractsEntity[]> {
-    return this.http.post<ContractsEntity[]>(`${this.apiUrl}/GetAllContracts`,filters);
+  getContracts(filters:any,eCode:string) : Observable<ContractsEntity[]> {
+    return this.http.post<ContractsEntity[]>(`${this.apiUrl}/GetAllContracts/${eCode}`,filters);
   }
   getActiveContracts(pageNumber: number, pageSize: number) : Observable<ContractsEntity[]> {
     return this.http.get<ContractsEntity[]>(`${this.apiUrl}/GetActiveContracts?pageNumber=${pageNumber}&pageSize=${pageSize}`);
@@ -63,8 +63,8 @@ export class ContractsService {
   GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
       return this.http.get<MasterEmployee[]>(`${environment.apiUrl}/Employee/search/${departmentId}/${inputText}`)
   }
-  GetDepartments():Observable<GetAllDepartmentsDto[]> {
-    return this.http.get<GetAllDepartmentsDto[]>(`${environment.apiUrl}/Department?pageNumber=1&pageSize=100`);
+  GetDepartments(eCode:string):Observable<GetAllDepartmentsDto[]> {
+    return this.http.get<GetAllDepartmentsDto[]>(`${environment.apiUrl}/Department?pageNumber=1&pageSize=100&eCode=${eCode}`);
   }
   GetContractTypes():Observable<ContractTypeMasterDTO[]> {
     return this.http.get<ContractTypeMasterDTO[]>(`${environment.apiUrl}/ContractTypeMaster?pageNumber=1&pageSize=100`);

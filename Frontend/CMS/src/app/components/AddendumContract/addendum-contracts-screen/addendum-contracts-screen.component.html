@@ -1,7 +1,7 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">Addendum - Contracts</h2>
 
-<div class="table-responsive p-md-5 p-3">
+<div class="px-md-5 px-3">
   <button class="add-btn btn btn-outline-primary mb-2 margin-right"  (click)="printToPDF()">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
@@ -9,9 +9,10 @@
     (click)="exportToExcel()">
     <i class="fa-solid fa-file-excel"></i> Print to Excel
   </button>
-  <app-table [data]="addAddendumContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
-  </app-table>
 </div>
+
+<app-table [data]="addAddendumContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
+</app-table>
 
 <p *ngIf="addAddendumContracts.length == 0" class="text-center">No records</p>
 

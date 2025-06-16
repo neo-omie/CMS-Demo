@@ -30,7 +30,7 @@ namespace CMS.Persistence.Repositories
             _context = context;
             _cacheService = cacheService;
         }
-        public async Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize)
+        public async Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize, string eCode)
         {
             if (pageNumber < 1)
             {
@@ -42,8 +42,8 @@ namespace CMS.Persistence.Repositories
                 throw new ArgumentOutOfRangeException("Page size must be greater than 0.");
             }
 
-            string sql = "EXEC SP_GetAllDepartments @PageNumber = {0}, @PageSize = {1}";
-            var allDepartments = await _context.GetDepartmentsDtos.FromSqlRaw(sql, pageNumber, pageSize).ToListAsync();
+            string sql = "EXEC SP_GetAllDepartments @PageNumber = {0}, @PageSize = {1},@Ecode={2}";
+            var allDepartments = await _context.GetDepartmentsDtos.FromSqlRaw(sql, pageNumber, pageSize,eCode).ToListAsync();
             return allDepartments;
         }
 

@@ -1,10 +1,10 @@
 .modal-header {
-    border-color: #5f5fee;
-    background-color: #5f5fee;
+    border: 2px solid var(--table-side-border-color);
+    background-color: var(----btn-theme-toggle-color);
 }
 
 .modal-title {
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
 }
 
 .close-btn {
@@ -14,7 +14,7 @@
 
 .close-btn:hover {
     background-color: whitesmoke;
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
 }
 
 .dropdown-input {
@@ -33,8 +33,8 @@
 }
 
 .dropdown-btn:hover {
-    color: #5f5fee;
-    border-color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
+    border-color: var(--btn-theme-toggle-color);
 }
 
 .form-control:focus {
@@ -43,13 +43,13 @@
 }
 
 .add-btn {
-    color: rgba(95, 95, 238);
+    color: var(--btn-theme-toggle-color);
     background-color: whitesmoke;
-    border-color: #5f5fee;
+    border-color: var(--btn-theme-toggle-color);
 }
 
 .add-btn:hover {
-    background-color: #5f5fee;
+    background-color: var(--btn-theme-toggle-color);
     border-color: whitesmoke;
     color: whitesmoke;
     border-radius: 5px;

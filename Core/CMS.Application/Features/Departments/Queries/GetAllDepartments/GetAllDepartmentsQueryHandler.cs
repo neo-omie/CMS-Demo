@@ -20,24 +20,9 @@ namespace CMS.Application.Features.Departments.Queries.GetAllDepartments
         }
         public async Task<IEnumerable<GetAllDepartmentsDto>> Handle(GetAllDepartmentsQuery request, CancellationToken cancellationToken)
         {
-            //string cacheKey = $"Department_{request.pageNumber}_{request.pageSize}";
+            
 
-            ////getting from cache
-            //var cachedDepartment = await _cacheService.GetAsync<IEnumerable<GetAllDepartmentsDto>>(cacheKey);
-            //if (cachedDepartment !=null)
-            //{
-            //    return cachedDepartment;
-            //}
-
-            ////not in cache then fetching from repo 
-            //var Departments = await _departmentRepository.GetAllDepartments(request.pageNumber, request.pageSize);
-
-            ////store in cache 
-            //await _cacheService.SetAsync(cacheKey, Departments, TimeSpan.FromMinutes(1));
-
-            //return Departments;
-
-            return await _departmentRepository.GetAllDepartments(request.pageNumber, request.pageSize);
+            return await _departmentRepository.GetAllDepartments(request.pageNumber, request.pageSize,request.eCode);
         }
     }
 }

@@ -36,15 +36,15 @@ namespace CMS.Persistence.Repositories
                 throw new NotFoundException("Contracts count not found for some reason");
             return allCounters;
         }
-        public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(FiltersContractDto filters)
+        public async Task<IEnumerable<GetAllContractsDto>> GetAllContractsAsync(FiltersContractDto filters, string eCode)
         {
             int totalRecords = await _context.ContractsEntity.Where(x => x.IsDeleted == false).CountAsync();
             string sql = "EXEC SP_GetAllContractsEntity @PageNumber = {0}, @PageSize = {1}, @SearchTerm = {2}, " +
                          "@FromDate = {3}, @ToDate = {4}, @ContractType = {5}, @RenewalDueIn = {6}, " +
-                         "@ContractStatus = {7}, @Department = {8}, @Location = {9}, @HasAddendum = {10}";
+                         "@ContractStatus = {7}, @Department = {8}, @Location = {9}, @HasAddendum = {10}, @Ecode = {11}";
             var allContracts = await _context.GetContractsDtos.FromSqlRaw(sql, filters.PageNumber, filters.PageSize,
                 filters.SearchTerm, filters.FromDate, filters.ToDate, filters.ContractType, filters.RenewalDueIn,
-                filters.ContractStatus, filters.Department, filters.Location, filters.HasAddendum).ToListAsync();
+                filters.ContractStatus, filters.Department, filters.Location, filters.HasAddendum, eCode).ToListAsync();
             return allContracts;
         }
         public async Task<IEnumerable<GetAllContractsDto>> GetActiveContractsAsync(int pageNumber, int pageSize)

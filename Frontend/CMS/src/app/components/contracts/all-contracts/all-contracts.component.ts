@@ -77,11 +77,9 @@ import { ErrorHandler } from '../../../utils/errorHandler';
     FormsModule,
     CommonModule,
     RouterModule,
-    LoaderComponent,
     ReactiveFormsModule,
     MatTableModule,
     MatSortModule,
-    ProgressBarComponent,
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
@@ -171,7 +169,6 @@ export class AllContractsComponent implements OnInit {
           Number(status) > 0 &&
           Number(status) < Object.keys(ContractStatus).length)
       ) {
-        console.log(Object.keys(ContractStatus).length);
         this.GetAllContracts({
           PageNumber: 1,
           PageSize: 10,
@@ -269,7 +266,7 @@ export class AllContractsComponent implements OnInit {
 
   GetAllContracts(filter: any) {
     console.log(filter);
-    this.contractsService.getContracts(filter).subscribe({
+    this.contractsService.getContracts(filter,'NEO1').subscribe({
       next: (res: ContractsEntity[]) => {
         this.loading = false;
         this.dataSource.data = res;
@@ -439,7 +436,7 @@ export class AllContractsComponent implements OnInit {
   }
 
   getAllDepartments() {
-    this.contractsService.GetDepartments().subscribe({
+    this.contractsService.GetDepartments('NEO1').subscribe({
       next: (response: GetAllDepartmentsDto[]) => {
         this.departments = response;
       },
@@ -690,10 +687,15 @@ export class AllContractsComponent implements OnInit {
         this.addAddendumEmpCustodianCollapse.nativeElement,
         'show'
       );
+      this.editEmpCustodianName.nativeElement.value = employeeName;
+      this.editEmpCustodianId.nativeElement.value = employeeId;
       this.addEmpCustodianName.nativeElement.value = employeeName;
       this.addEmpCustodianId.nativeElement.value = employeeId;
       this.addAddendumEmpCustodianName.nativeElement.value = employeeName;
       this.addAddendumEmpCustodianId.nativeElement.value = employeeId;
+      console.log(employeeId);
+      console.log(this.addEmpCustodianCollapse.nativeElement.value);
+    }
   }
 
   dateValidationForRenewalDueIn(cont: any): boolean {
@@ -703,64 +705,6 @@ export class AllContractsComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  get contractId() {
-    return this.addaddendumForm.get('contractId');
-  }
-  get contractName() {
-    return this.masterContractAddForm.get('contractName');
-  }
-  get departmentId() {
-    return this.masterContractAddForm.get('departmentId');
-  }
-  get contractWithCompanyId() {
-    return this.masterContractAddForm.get('contractWithCompanyId');
-  }
-  get contractTypeId() {
-    return this.masterContractAddForm.get('contractTypeId');
-  }
-  get apostilleTypeId() {
-    return this.masterContractAddForm.get('apostilleTypeId');
-  }
-  get actualDocRefNo() {
-    return this.masterContractAddForm.get('actualDocRefNo');
-  }
-  get retainerContract() {
-    return this.masterContractAddForm.get('retainerContract');
-  }
-  get termsAndConditions() {
-    return this.masterContractAddForm.get('termsAndConditions');
-  }
-  get validFrom() {
-    return this.masterContractAddForm.get('validFrom');
-  }
-  get validTill() {
-    return this.masterContractAddForm.get('validTill');
-  }
-  get renewalFrom() {
-    return this.masterContractAddForm.get('renewalFrom');
-  }
-  get renewalTill() {
-    return this.masterContractAddForm.get('renewalTill');
-  }
-  get addendumDate() {
-    return this.masterContractAddForm.get('addendumDate');
-  }
-  get empCustodianId() {
-    return this.masterContractAddForm.get('empCustodianId');
-  }
-  get location() {
-    return this.masterContractAddForm.get('location');
-  }
-  get approver1Status() {
-    return this.masterContractAddForm.get('approver1Status');
-  }
-  get approver2Status() {
-    return this.masterContractAddForm.get('approver2Status');
-  }
-  get approver3Status() {
-    return this.masterContractAddForm.get('approver3Status');
   }
 
   onClick() {
@@ -777,7 +721,6 @@ export class AllContractsComponent implements OnInit {
       validTill: '',
       renewalFrom: '',
       renewalTill: '',
-      // addendumDate: '',
       empCustodianId: '',
       location: '',
       approver1Status: '1',
@@ -968,7 +911,7 @@ export class AllContractsComponent implements OnInit {
 
   onSubmitCheck() {
     const enteredValue = this.checkContractId.value.contractId;
-    this.contractsService.getContracts({}).subscribe({
+    this.contractsService.getContracts({},'NEO1').subscribe({
       next: (res: ContractsEntity[]) => {
         this.dataSource.data = res;
         console.log(this.dataSource.data);
@@ -1431,8 +1374,7 @@ export class AllContractsComponent implements OnInit {
       'Status',
       'Renewal Due In',
       'Location',
-    ];
-
+    ]; 
     PDFExport.printToPDF(
       'contracts-table',
       'CMS-Contracts.pdf',

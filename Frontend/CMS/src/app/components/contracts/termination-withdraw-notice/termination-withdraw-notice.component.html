@@ -1,0 +1,41 @@
+<div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Withdraw Termination Notice</h1>
+        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="documentForm" (ngSubmit)="OnSaveWithdrawalNotice()">
+          <div class="mb-3">
+            <p class="m-1">File Upload<span style="color: red;">*</span>
+              <span *ngIf="documentForm.get('file')?.invalid && documentForm.get('file')?.touched"
+                style="color: red;">Required</span>
+            </p>
+            <div class="input-group">
+              <input formControlName="file" type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)">
+            </div>
+          </div>
+          <div class="mb-3">
+            <p class="m-1">
+              Remark <span style="color: red;">*</span>
+              <span *ngIf="documentForm.get('Remark')?.invalid && documentForm.get('Remark')?.touched"
+                style="color: red;">Required</span>
+            </p>
+            <div class="input-group">
+              <textarea formControlName="Remark" name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
+                ></textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-outline-primary" type="submit">Save</button>
+            <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

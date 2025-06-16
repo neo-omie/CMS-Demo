@@ -166,6 +166,7 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
         renewalTill: '',
         // addendumDate: '',
         empCustodianName: '',
+        location:''
       });
       return;
     } else {
@@ -187,33 +188,36 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
   }
 
   initialRequirementLoad() {
-    this.contractsService.GetDepartments().subscribe({
-      next: (response: GetAllDepartmentsDto[]) => {
-        this.departments = response;
-      },
-      error: (error) => this.error(error),
-    });
-
-    this.contractsService.GetContractTypes().subscribe({
-      next: (response: ContractTypeMasterDTO[]) => {
-        this.contractTypes = response;
-      },
-      error: (error) => this.error(error),
-    });
-
-    this.masterApostilleService.getApostilles(1, 100).subscribe({
-      next: (response: MasterApostilleDto) => {
-        this.apostilleTypes = response.data;
-      },
-      error: (error) => this.error(error),
-    });
-
-    this.contractsService.GetCompanies().subscribe({
-      next: (response: CompanyMasterDto[]) => {
-        this.companies = response;
-      },
-      error: (error) => this.error(error),
-    });
+    const eCode = DecodeToken.ECode;
+    if(eCode){
+      this.contractsService.GetDepartments(eCode).subscribe({
+        next: (response: GetAllDepartmentsDto[]) => {
+          this.departments = response;
+        },
+        error: (error) => this.error(error),
+      });
+  
+      this.contractsService.GetContractTypes().subscribe({
+        next: (response: ContractTypeMasterDTO[]) => {
+          this.contractTypes = response;
+        },
+        error: (error) => this.error(error),
+      });
+  
+      this.masterApostilleService.getApostilles(1, 100).subscribe({
+        next: (response: MasterApostilleDto) => {
+          this.apostilleTypes = response.data;
+        },
+        error: (error) => this.error(error),
+      });
+  
+      this.contractsService.GetCompanies().subscribe({
+        next: (response: CompanyMasterDto[]) => {
+          this.companies = response;
+        },
+        error: (error) => this.error(error),
+      });
+    }
   }
 
   getProgressType(status: number | undefined): string {

@@ -1,5 +1,5 @@
 h2 {
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
     font-weight: 600;
     text-align: center;
 }
@@ -19,7 +19,7 @@ hr {
     background-color: whitesmoke;
 }
 .card-hover:hover{
-    box-shadow: 0 0 5px #5f5fee;
+    box-shadow: 0 0 5px var(--btn-theme-toggle-color);
     scale: 1.03;
     transition-duration: 0.2s;
 }

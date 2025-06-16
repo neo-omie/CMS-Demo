@@ -62,6 +62,7 @@ export class AppComponent implements AfterViewInit {
   logoutUser() {
     if (localStorage.getItem('token') != null) {
       localStorage.clear();
+      sessionStorage.clear();
       DecodeToken.clearUserCredentials();
       Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");
       this.route.goToLogin();

@@ -3,14 +3,14 @@
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header d-flex justify-content-between">
-          <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Contract Addendum Details</h1>
+          <h1 class="modal-title fs-5 fw-bolder h1-color">Contract Addendum Details</h1>
           <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
               class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
         <div id="progress"  *ngIf="addAddendumContract?.contractId!==null">
           <div class="d-flex justify-content-center">
-            <p style="color: #5f5fee;" class="fs-5 fw-bolder text-center">
+            <p class="fs-5 fw-bolder text-center color">
               Progress of {{ getProgressType(addAddendumContract?.approver3Status) }} {{ addAddendumContract?.contractName }}
             </p>
           </div>

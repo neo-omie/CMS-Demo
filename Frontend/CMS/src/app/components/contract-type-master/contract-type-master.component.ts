@@ -1,14 +1,7 @@
 declare var bootstrap: any;
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  NgForm,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, ElementRef, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
   AddContractDTO,
@@ -27,33 +20,30 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
-import { ErrorHandler } from '../../utils/errorHandler';
+import { TableComponent } from "../UtilComponents/table/table.component";
+import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 
 @Component({
   selector: 'app-contract-type-master',
   standalone: true,
-  imports: [
-    CommonModule,
-    LoaderComponent,
-    FormsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    MatTableModule,
-    MatSortModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+  imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule,
+    MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, TableComponent, PaginationComponent],
   templateUrl: './contract-type-master.component.html',
   styleUrl: './contract-type-master.component.css',
 })
 export class ContractTypeMasterComponent implements OnInit {
   loading: boolean = true;
   displayedColumns: string[] = ['contractTypeName', 'status', 'action'];
-  dataSource = new MatTableDataSource<ContractTypeMasterDTO>();
-  @ViewChild(MatSort) sort!: MatSort;
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
+  columnsInfo:{[key:string]:{
+      'title' ?: string,
+      'isSort' ?: boolean,
+      'templateRef' : TemplateRef<any> | null,
+    }} = {};
+      dataSource = new MatTableDataSource<ContractTypeMasterDTO>();
+      @ViewChild(MatSort) sort!: MatSort;
+      ngAfterViewInit() {
+        this.dataSource.sort = this.sort;
+      }
   maxPage = 1;
   pageNumbers = [1, 1, 2, 3, 4, 5];
   masterContract: ContractListResponse[] = [];
@@ -61,6 +51,8 @@ export class ContractTypeMasterComponent implements OnInit {
   cont: AddContractDTO = new AddContractDTO();
   errorMsg: string = '';
   @ViewChild('editContractName') editContractName!: ElementRef;
+  @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
+  @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
 
   constructor(
     private contractService: ContractTypeMasterService,
@@ -71,6 +63,22 @@ export class ContractTypeMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.columnsInfo = {
+      'contractTypeName': {
+        'title': 'Contract Type Name',
+        'isSort': true,
+        'templateRef': null
+      },
+      'status': {
+        'title': 'Status',
+        'isSort': true,
+        'templateRef': this.statusRef
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionRef
+      }
+    };
     this.getContract(1, 10);
   }
 
@@ -122,7 +130,30 @@ export class ContractTypeMasterComponent implements OnInit {
     });
   }
 
-  //delete contract
+  //delete contract 
+  //edit contract 
+  // editContract(id: number) {
+  //   let compName = this.editContractName.nativeElement.value;
+  //   if (compName !== "") {
+  //     console.log(compName);
+  //     this.contractService.updateContract(id, compName).subscribe({
+  //       next: (res: boolean) => {
+  //         if (res) {
+  //           Alert.toast(TYPE.SUCCESS, true, "Updated Successfully")
+  //           this.getContract(1, 10);
+  //         }
+  //       },
+  //       error: (error) => {
+  //         console.error('Error :(', error);
+  //         this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
+  //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
+  //       }
+  //     })
+
+  //   }
+  // }
+
+  //delete contract 
   deleteContract(id: number) {
     let empCode = DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this Contract?");
@@ -241,21 +272,20 @@ export class ContractTypeMasterComponent implements OnInit {
     if (this.contractTypeMasterAddForm.invalid) {
       this.contractTypeMasterAddForm.markAllAsTouched();
       return;
-    } else {
-      const contractTypeName =
-        this.contractTypeMasterAddForm.value.contractTypeName;
-      const Status = this.contractTypeMasterAddForm.value.status;
-      const updatFormValues: AddContractDTO = new AddContractDTO();
-      updatFormValues.contractTypeName = contractTypeName;
-      updatFormValues.status = Number(Status) == 1 ? true : false;
-      console.log(updatFormValues);
-      this.contractService
-        .updateContract(this.contID, updatFormValues, empCode)
-        .subscribe({
-          next: (response: ContractTypeMaster) => {
-            if (response != undefined && response != null) {
-              Alert.toast(TYPE.SUCCESS, true, 'Updated Successfully');
-              this.contractTypeMasterAddForm.reset();
+               this.contractTypeMasterAddForm.reset({
+                contractTypeName : "",
+                status : ""
+              })
+            }
+          }, error: (error) => {
+            Alert.toast(TYPE.ERROR, true, error.error.message)
+            console.error(error.error);
+          }
+        })
+      }
+
+    }
+  }              this.contractTypeMasterAddForm.reset();
               this.getContract(1, 10);
               const modal = document.getElementById('contract-edit');
               if (modal) {
@@ -264,16 +294,21 @@ export class ContractTypeMasterComponent implements OnInit {
                   new bootstrap.Modal(modal);
                 modalInstance.hide();
               }
-              this.contractTypeMasterAddForm.reset({
-                contractTypeName: '',
-                status: '',
-              });
+               this.contractTypeMasterAddForm.reset({
+                contractTypeName : "",
+                status : ""
+              })
             }
-          },
-          error: (error) => {
-            ErrorHandler.handle(error);
-          },
-        });
+          }, error: (error) => {
+            Alert.toast(TYPE.ERROR, true, error.error.message)
+            console.error(error.error);
+          }
+        })
+      }
+
     }
   }
-}
+
+
+
+

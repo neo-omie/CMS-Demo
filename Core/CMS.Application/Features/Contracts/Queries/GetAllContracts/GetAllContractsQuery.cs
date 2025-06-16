@@ -8,5 +8,5 @@ using MediatR;
 
 namespace CMS.Application.Features.Contracts.Queries.GetAllContracts
 {
-    public record GetAllContractsQuery(FiltersContractDto filters) : IRequest<IEnumerable<GetAllContractsDto>>;
+    public record GetAllContractsQuery(FiltersContractDto filters,string eCode) : IRequest<IEnumerable<GetAllContractsDto>>;
 }

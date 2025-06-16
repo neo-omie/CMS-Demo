@@ -1,10 +1,8 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">Approval Matrix Master - MOUs</h2>
 
-<div class="table-responsive p-md-5 p-3">
-    <app-table [data]="approvalMatrixMOUs" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
-    </app-table>
-</div>
+<app-table [data]="approvalMatrixMOUs" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
+</app-table>
 
 <app-pagination [maxPage]="maxPage" [records]="this.approvalMatrixMOUs.length" [pageNumbers]="pageNumbers"
     [GetPage]="GetPage.bind(this)"></app-pagination>

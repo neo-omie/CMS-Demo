@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -112,7 +111,6 @@ export class AuditScreenComponent implements OnInit, AfterViewInit {
       next: (res: Audit[]) => {
         this.loading = false;
         this.allAudit = res;
-        console.log(res);
         if (this.allAudit != undefined && this.allAudit.length > 0) {
           let result = Pagination.paginator(
             pageNumber,

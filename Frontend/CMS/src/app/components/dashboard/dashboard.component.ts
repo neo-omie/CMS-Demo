@@ -18,11 +18,8 @@ import { ErrorHandler } from '../../utils/errorHandler';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    LoaderComponent,
-    CommonModule,
-    NgxChartsModule,
-    HighchartsChartModule,
+  imports: [LoaderComponent, CommonModule, NgxChartsModule,
+    HighchartsChartModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -47,9 +44,9 @@ export class DashboardComponent implements OnInit {
   classifiedContractRenew60: number = 0;
   classifiedContractRenew90: number = 0;
   contractStatu = ContractStatus;
-  viewportWidth: number = window.innerWidth;
-  updateFlag1: boolean = false;
-  updateFlag2: boolean = false;
+  viewportWidth:number = window.innerWidth
+  updateFlag1:boolean = false;
+  updateFlag2:boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
 
   contractchartOptions: Highcharts.Options = {
@@ -57,24 +54,21 @@ export class DashboardComponent implements OnInit {
     chart: { type: 'pie' },
     title: { text: '' },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
     plotOptions: {
       pie: {
         allowPointSelect: true,
         cursor: 'pointer',
         dataLabels: { enabled: false },
-        showInLegend: true,
-      },
+        showInLegend: true
+      }
     },
-   
-    series: [
-      {
-        name: 'Contracts',
-        type: 'pie',
-        data: [],
-      },
-    ],
+    series: [{
+      name: 'Contracts',
+      type: 'pie',
+      data: []
+    }]
   };
 
   classifiedcontractchartOptions: Highcharts.Options = {
@@ -82,37 +76,34 @@ export class DashboardComponent implements OnInit {
     chart: { type: 'pie' },
     title: { text: '' },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
     plotOptions: {
       pie: {
         allowPointSelect: true,
         cursor: 'pointer',
         dataLabels: { enabled: false },
-        showInLegend: true,
-      },
+        showInLegend: true
+      }
     },
-    series: [
-      {
-        name: 'Classified contracts',
-        type: 'pie',
-        data: [],
-      },
-    ],
+    series: [{
+      name: 'Classified contracts',
+      type: 'pie',
+      data: []
+    }]
   };
 
-  constructor(
-    private title: Title,
+  constructor(private title: Title,
     private router: Router,
     private contractsService: ContractsService,
-    private classifiedContractsService: ClassifiedContractsService
-  ) {
-    this.title.setTitle('Dashboard - CMS');
+    private classifiedContractsService: ClassifiedContractsService) {
+    this.title.setTitle("Dashboard - CMS");
   }
+
 
   ngOnInit() {
     this.GetContractsCount();
-    if (this.checkLogin() && this.checkUserRole()) {
+    if(this.checkLogin() && this.checkUserRole()){
       this.GetClassifiedContractsCount();
       this.GetClassifiedContractsCounts();
     }
@@ -129,128 +120,125 @@ export class DashboardComponent implements OnInit {
   }
 
   checkLogin(): boolean {
-    if (localStorage.getItem('token')) {
-      this.userRole = DecodeToken.ERole;
-      return true;
+      if (localStorage.getItem('token')) {
+        this.userRole = DecodeToken.ERole;
+        return true;
+      }
+      return false;
     }
-    return false;
+  checkUserRole() : boolean{
+    if(this.userRole == null || this.userRole == undefined) return false;
+    return (this.userRole.includes("Admin") || this.userRole.includes("Management_User") || (this.userRole.includes("Super_Admin")));
   }
-  checkUserRole(): boolean {
-    if (this.userRole == null || this.userRole == undefined) return false;
-    return (
-      this.userRole.includes('Admin') ||
-      this.userRole.includes('Management_User') ||
-      this.userRole.includes('Super_Admin')
-    );
-  }
-  GetContractCounts() {
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        ContractStatus: ContractStatus.Active,
+  GetContractCounts(){
+    const eCode = DecodeToken.ECode;
+    if(eCode){
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        ContractStatus : ContractStatus.Active,
+      },eCode).subscribe({
+        next:(res) => { this.contractActive = res.length; },
+        error:(err) => { 
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+          Alert.toast(TYPE.ERROR, true, err.error.message); 
+        }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractActive = res.length;
-        },
-        error: (err) => {
-          if (err.status == 401) {
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else Alert.toast(TYPE.ERROR, true, err.error.message);
-        },
-      });
-
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        ContractStatus: ContractStatus.Expired,
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        ContractStatus : ContractStatus.Expired,
+      },eCode).subscribe({
+        next:(res) => { this.contractExpired = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractExpired = res.length;
-        },
-        error: (err) => {
-          ErrorHandler.handle(err);
-        },
-      });
-
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        ContractStatus: ContractStatus.Terminated,
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        ContractStatus : ContractStatus.Terminated,
+      },eCode).subscribe({
+        next:(res) => { this.contractTerminated = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractTerminated = res.length;
-        },
-        error: (err) => {
-          ErrorHandler.handle(err);
-        },
-      });
-
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        RenewalDueIn: 0,
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 0,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew0 = res.length; },
+        error:(err) => { 
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+          Alert.toast(TYPE.ERROR, true, err.error.message); }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractRenew0 = res.length;
-        },
-        error: (err) => {
-          ErrorHandler.handle(err);
-        },
-      });
-
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        RenewalDueIn: 30,
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 30,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew30 = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+          Alert.toast(TYPE.ERROR, true, err.error.message); }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractRenew30 = res.length;
-        },
-        error: (err) => {
-          ErrorHandler.handle(err);
-        },
-      });
-
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        RenewalDueIn: 60,
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 60,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew60 = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractRenew60 = res.length;
-        },
-        error: (err) => {
-          ErrorHandler.handle(err);
-        },
-      });
-
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 1000,
-        RenewalDueIn: 90,
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 90,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew90 = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
       })
-      .subscribe({
-        next: (res) => {
-          this.contractRenew90 = res.length;
-        },
-        error: (err) => {
-          ErrorHandler.handle(err);
-        },
-      });
+    }
   }
 
   GetClassifiedContractsCounts() {

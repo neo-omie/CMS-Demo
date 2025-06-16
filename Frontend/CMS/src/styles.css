@@ -1,18 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
+:root {
+  --table-header-color: #5f5fee;
+  --table-side-border-color: #5f5fee;
+  --table-strip-odd-color: #ffffff;
+  --table-strip-even-color: #f2f2f2;
+  --table-font-color: #000000;
+  --bg-color: #e9e7e5;
+  --nav-footer-bg-color: #f8f9fa;
+  --btn-theme-toggle-color: #5f5fee;
+  --filter-theme-toggle-color: #ffffff;
+  --pagenation-hover: #8888f3;
+  --icon-color: #8888f3;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter';
     font-weight: 500;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+    display: none;
 }
 
 .swal2-timer-progress-bar {
-    background-color: rgba(95, 95, 238, 1);
+    background-color: #5f5fee;
 }
-
 
 html,
 body {
@@ -22,7 +40,7 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
-    background-color: #e9e7e5 !important;
+    background-color: var(--bg-color) !important;
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
