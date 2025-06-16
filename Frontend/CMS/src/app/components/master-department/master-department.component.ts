@@ -16,7 +16,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 import { ErrorHandler } from '../../utils/errorHandler';
-import { ErrorHandler } from '../../utils/errorHandler';
+
 
 @Component({
   selector: 'app-master-department',

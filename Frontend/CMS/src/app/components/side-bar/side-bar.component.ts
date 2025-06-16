@@ -7,8 +7,7 @@ import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { DecodeToken } from '../../utils/decodeToken';
-import { ErrorHandler } from '../../utils/errorHandler';
-
+ 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
@@ -24,9 +23,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
   userRole: string[] | null = [];
   totalNotifications: number = 0;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
-
+ 
   constructor(
-    private notificationService: NotificationService, 
+    private notificationService: NotificationService,
     private route: RouterService,
   ) { }
   ngOnDestroy(): void {
@@ -42,7 +41,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
       this.GetAllNotifications();
     });
   }
-
+ 
   toggleBulb = (mode:boolean) => {
     this.lightMode = mode;
     sessionStorage.setItem('lightMode',mode+'');
@@ -73,9 +72,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
       document.documentElement.style.setProperty('--bg-color', '#424242');
     }
   }
-
+ 
   checkLogin(): boolean {
-    if (localStorage.getItem('token')) {
+    if (sessionStorage.getItem('token')) {
       this.username = DecodeToken.sub;
       this.userRole = DecodeToken.ERole;
       if(this.notificationFlag){
@@ -97,13 +96,20 @@ export class SideBarComponent implements OnInit, OnDestroy {
         next: (response: number) => {
           this.totalNotifications = response;
         }, error: (error) => {
-          ErrorHandler.handle(error);
-          
+          if(error.status == 401){
+            let errmsg = error.error;
+            Alert.toast(TYPE.ERROR, true, errmsg);
+          }
+        else{
+          let errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.title);
+          Alert.toast(TYPE.ERROR, true, errorMsg);
+        }
         }
       });
     }
     else{
-      localStorage.clear();
+      
+      sessionStorage.clear();
       DecodeToken.clearUserCredentials();
       this.route.goToLogin();
     }

@@ -7,13 +7,12 @@ import {
 import { Title } from '@angular/platform-browser';
 import { EscalationMatrixContractService } from '../../../services/escalation-matrix-contract.service';
 import { Pagination } from '../../../utils/pagination';
-import { Alert } from '../../../utils/alert';
-import { TYPE } from '../../auth/login/values.constants';
 import { TableComponent } from '../../UtilComponents/table/table.component';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
 import { EscalationMatrixContractModalComponent } from '../escalation-matrix-contract-modal/escalation-matrix-contract-modal.component';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-escalation-matrix-contract-screen',
@@ -113,16 +112,8 @@ export class EscalationMatrixContractScreenComponent {
           }
         },
         error: (error) => {
-          this.loading = false;
-          if (error.status == 401) {
-            let errmsg = error.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          } else {
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.title : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          }
+         this.loading = false;
+         ErrorHandler.handle(error);
         },
       });
   }
@@ -141,16 +132,7 @@ export class EscalationMatrixContractScreenComponent {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }

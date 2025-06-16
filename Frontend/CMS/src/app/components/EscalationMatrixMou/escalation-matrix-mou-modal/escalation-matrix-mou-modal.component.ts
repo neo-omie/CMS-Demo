@@ -168,7 +168,7 @@ export class EscalationMatrixMouModalComponent {
       }
     }
     else{
-      localStorage.clear();
+      sessionStorage.clear();
       DecodeToken.clearUserCredentials();
       this.route.navigate(["/"]);
     }

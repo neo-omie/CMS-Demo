@@ -17,7 +17,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 import { ErrorHandler } from '../../utils/errorHandler';
-
+ 
 @Component({
   selector: 'app-master-apostille',
   standalone: true,
@@ -34,7 +34,7 @@ export class MasterApostilleComponent {
   totalPages: number = 0;
   currentPage: number = 1;
   pageSize: number = 2;
-  maxPage: number = 1; //used now 
+  maxPage: number = 1; //used now
   pageNumbers: number[] = []; //used now
   mode?: string;
   formsValue: any;
@@ -50,12 +50,12 @@ export class MasterApostilleComponent {
     apostilleName: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.pattern('^[a-zA-Z ]+$')]),
     status: new FormControl('', Validators.required)
   })
-
+ 
   @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
   @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
-
+ 
   constructor(private apostilleService: MasterApostilleService, private router: Router) { }
-
+ 
   ngOnInit(): void {
     this.columnsInfo = {
       'apostilleName': {
@@ -75,11 +75,11 @@ export class MasterApostilleComponent {
     };
     this.fetchApostille();
   }
-
+ 
   get apostilleName() {
     return this.addApostilleForm.get('apostilleName');
   }
-
+ 
   resetForm() {
     this.addApostilleForm.reset({
       status: ''
@@ -87,7 +87,7 @@ export class MasterApostilleComponent {
     console.log(this.mode);
     this.mode = '';
   }
-
+ 
   fetchApostille() {
     this.apostilleService.getApostilles(this.currentPage, this.pageSize, this.searchTerm)
       .subscribe({
@@ -108,19 +108,19 @@ export class MasterApostilleComponent {
         }
       });
   }
-
+ 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.currentPage = pgNumber;
       this.fetchApostille();
     }
   }
-
+ 
   onFilterChange() {
     this.currentPage = 1;
     this.fetchApostille();
   }
-
+ 
   deleteApostille(valueId: number) {
     let empCode = DecodeToken.ECode;
     Alert.confirmToast("Are you sure you want to delete this Apostille?",
@@ -141,20 +141,20 @@ export class MasterApostilleComponent {
         });
       });
   }
-
+ 
   addApostille() {
     this.mode = 'add';
   }
-
+ 
   apoID: number = 0;
   editApostille(valueId: number) {
     this.apoID = valueId;
-
+ 
     this.mode = 'edit';
     if (valueId) {
       this.apostilleService.getApostilleById(valueId).subscribe({
         next: (apostilleData) => {
-
+ 
           this.addApostilleForm.patchValue({
             status: String(Number(apostilleData.status)),
             apostilleName: apostilleData.apostilleName
@@ -162,8 +162,8 @@ export class MasterApostilleComponent {
           console.log('Fetched apostille for Edit:', apostilleData);
         },
         error: (error) => {
-          console.error('Error fetching apostille data:', error);
-          Alert.toast(TYPE.ERROR, true, 'Failed to load apostille data.');
+          this.loading = false;
+         ErrorHandler.handle(error);
           this.router.navigate(['/masters/apostilleMasters']);
         }
       });
@@ -172,17 +172,16 @@ export class MasterApostilleComponent {
       Alert.toast(TYPE.ERROR, true, 'Invalid employee ID.');
     }
   }
-
+ 
   displayedColumns: string[] = ['apostilleName', 'status', 'action'];
   onSubmit() {
-
+ 
     this.formsValue = this.addApostilleForm.value;
     if (this.addApostilleForm.invalid) {
       this.addApostilleForm.markAllAsTouched();
       return;
     }
-  }
-
+ 
     const formValues = this.addApostilleForm.value;
     if (this.mode === 'add') {
       let empCode = DecodeToken.ECode;
@@ -191,6 +190,7 @@ export class MasterApostilleComponent {
       const addFormValues: AddApostilleDto = new AddApostilleDto();
       addFormValues.apostilleName = this.addApostilleForm.value.apostilleName;
       addFormValues.status = Number(status) == 1 ? true : false;
+      console.log(addFormValues);
       this.apostilleService.addApostille(addFormValues, empCode).subscribe({
         next: (response: AddApostilleDto) => {
           Alert.toast(TYPE.SUCCESS, true, 'Added successfully');
@@ -204,11 +204,10 @@ export class MasterApostilleComponent {
           this.router.navigate(['masters/apostilleMasters']);
         },
         error: (error) => {
-        error:(error) => {
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          this.loading = false;
+         ErrorHandler.handle(error);
         }
-        }
+      });
     }
     else if (this.mode === 'edit') {
       let empCode = DecodeToken.ECode;
@@ -216,9 +215,9 @@ export class MasterApostilleComponent {
       const apostilleName = this.addApostilleForm.value.apostilleName;
       const status = this.addApostilleForm.value.status;
       const addFormValues: EditApostilleDto = new EditApostilleDto();
-      const addFormValues:EditApostilleDto = new EditApostilleDto();
       addFormValues.apostilleName = this.addApostilleForm.value.apostilleName;
       addFormValues.status = Number(status) == 1 ? true : false;
+      console.log(addFormValues);
       this.apostilleService.updateApostille(this.apoID, addFormValues, empCode).subscribe({
         next: (res: EditApostilleDto) => {
           Alert.toast(TYPE.SUCCESS, true, 'Updated Successfully')
@@ -230,16 +229,15 @@ export class MasterApostilleComponent {
           }
           this.fetchApostille();
         }, error: (error) => {
-          Alert.toast(TYPE.ERROR, true, error.error.message);
-          console.error(error.error);
+          this.loading = false;
+         ErrorHandler.handle(error);
         }
       })
     }
   }
-}
+ 
   get status() {
     return this.addApostilleForm.get('status');
   }
-
-
+ 
 }

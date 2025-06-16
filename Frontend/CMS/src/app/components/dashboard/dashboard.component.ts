@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
   }
 
   checkLogin(): boolean {
-      if (localStorage.getItem('token')) {
+      if (sessionStorage.getItem('token')) {
         this.userRole = DecodeToken.ERole;
         return true;
       }
@@ -140,12 +140,8 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractActive = res.length; },
         error:(err) => { 
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-          Alert.toast(TYPE.ERROR, true, err.error.message); 
+          this.loading = false;
+         ErrorHandler.handle(err);
         }
       })
   
@@ -156,12 +152,7 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractExpired = res.length; },
         error:(err) => {
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-           Alert.toast(TYPE.ERROR, true, err.error.message); }
+         ErrorHandler.handle(err) }
       })
   
       this.contractsService.getContracts({
@@ -171,12 +162,7 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractTerminated = res.length; },
         error:(err) => {
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-           Alert.toast(TYPE.ERROR, true, err.error.message); }
+          ErrorHandler.handle(err)  }
       })
   
       this.contractsService.getContracts({
@@ -186,12 +172,7 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractRenew0 = res.length; },
         error:(err) => { 
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-          Alert.toast(TYPE.ERROR, true, err.error.message); }
+         ErrorHandler.handle(err)  }
       })
   
       this.contractsService.getContracts({
@@ -201,12 +182,7 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractRenew30 = res.length; },
         error:(err) => {
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-          Alert.toast(TYPE.ERROR, true, err.error.message); }
+          ErrorHandler.handle(err)  }
       })
   
       this.contractsService.getContracts({
@@ -216,12 +192,7 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractRenew60 = res.length; },
         error:(err) => {
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-           Alert.toast(TYPE.ERROR, true, err.error.message); }
+         ErrorHandler.handle(err)  }
       })
   
       this.contractsService.getContracts({
@@ -231,12 +202,7 @@ export class DashboardComponent implements OnInit {
       },eCode).subscribe({
         next:(res) => { this.contractRenew90 = res.length; },
         error:(err) => {
-          if(err.status == 401){
-              let errmsg = err.error;
-              Alert.toast(TYPE.ERROR, true, errmsg);
-            }
-            else
-           Alert.toast(TYPE.ERROR, true, err.error.message); }
+          ErrorHandler.handle(err)  }
       })
     }
   }

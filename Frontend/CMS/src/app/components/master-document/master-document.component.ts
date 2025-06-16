@@ -135,16 +135,7 @@ export class MasterDocumentComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-        if (error.status == 401) {
-          let errmsg = error.error;
-          Alert.toast(TYPE.ERROR, true, errmsg);
-        } else {
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        }
+         ErrorHandler.handle(error);
       },
     });
   }

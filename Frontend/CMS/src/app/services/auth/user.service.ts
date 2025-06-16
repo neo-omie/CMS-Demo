@@ -17,7 +17,7 @@ export class UserService {
     return this.http.post<string>(`${this.apiUrl}/refreshPassword`, refPswd);
   }
   isLoggedIn():boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
   checkUserRole():string[] | null {
     return DecodeToken.ERole;

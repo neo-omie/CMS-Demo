@@ -364,9 +364,8 @@ export class MasterCompanyComponent implements OnInit {
               }
             }, 
             error:(error) => {
-              console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
+              this.loading = false;
+         ErrorHandler.handle(error);
             }
           });
         }

@@ -154,7 +154,7 @@ export class ApproverMatrixContractModalComponent {
       }
     }
     else{
-      localStorage.clear();
+      sessionStorage.clear();
       DecodeToken.clearUserCredentials();
       this.route.navigate(["/"]);
     }

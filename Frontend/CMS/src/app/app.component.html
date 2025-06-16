@@ -1,21 +1,30 @@
 @if(checkLogin()){
-    <nav #navbar class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand btn btn-primary sidebar-toggle-btn" data-bs-toggle="offcanvas" href="#sideBar"
-                role="button" aria-controls="offcanvasExample">
-                <i class="fa-solid fa-bars-staggered"></i> Menu
-            </a>
-            <!-- <h3 class="headingg fs-4 d-none d-sm-block" routerLink="/dashboard">Contract Management System</h3> -->
-            <a class="btn btn-outline-danger" (click)="logoutUser()"><i class="fa-solid fa-power-off"></i> Logout</a>
-        </div>
-    </nav>
-    <app-side-bar></app-side-bar>
+<nav #navbar class="navbar">
+  <div class="container-fluid">
+    <a
+      class="navbar-brand btn btn-primary sidebar-toggle-btn"
+      data-bs-toggle="offcanvas"
+      href="#sideBar"
+      role="button"
+      aria-controls="offcanvasExample"
+    >
+      <i class="fa-solid fa-bars-staggered"></i> Menu
+    </a>
+    <!-- <h3 class="headingg fs-4 d-none d-sm-block" routerLink="/dashboard">Contract Management System</h3> -->
+    <a class="btn btn-outline-danger" (click)="logoutUser()"
+      ><i class="fa-solid fa-power-off"></i> Logout</a
+    >
+  </div>
+</nav>
+<app-side-bar></app-side-bar>
 }
 <div class="mainContainer" [style.minHeight.px]="mainContainerMinHeight()">
-    <router-outlet />
+  <router-outlet />
 </div>
 @if(checkLogin()){
-    <footer #footer class="footer">
-        <p class="fs-6">All right are reserved by <span class="team-name">TrailBlazers</span> ©</p>
-    </footer>
+<footer #footer class="footer">
+  <p class="fs-6">
+    All right are reserved by <span class="team-name">TrailBlazers</span> ©
+  </p>
+</footer>
 }

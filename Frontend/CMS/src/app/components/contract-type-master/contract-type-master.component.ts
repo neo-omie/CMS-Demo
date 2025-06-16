@@ -1,14 +1,9 @@
-declare var bootstrap: any;
+declare var bootstrap : any;
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import {
-  AddContractDTO,
-  ContractListResponse,
-  ContractTypeMaster,
-  ContractTypeMasterDTO,
-} from '../../models/contract-type-master';
+import { AddContractDTO, ContractListResponse, ContractTypeMaster, ContractTypeMasterDTO } from '../../models/contract-type-master';
 import { ContractTypeMasterService } from '../../services/contract-type-master.service';
 import { Pagination } from '../../utils/pagination';
 import { Alert } from '../../utils/alert';
@@ -22,14 +17,15 @@ import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
-
+import { ErrorHandler } from '../../utils/errorHandler';
+ 
 @Component({
   selector: 'app-contract-type-master',
   standalone: true,
   imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule,
     MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, TableComponent, PaginationComponent],
   templateUrl: './contract-type-master.component.html',
-  styleUrl: './contract-type-master.component.css',
+  styleUrl: './contract-type-master.component.css'
 })
 export class ContractTypeMasterComponent implements OnInit {
   loading: boolean = true;
@@ -53,15 +49,15 @@ export class ContractTypeMasterComponent implements OnInit {
   @ViewChild('editContractName') editContractName!: ElementRef;
   @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
   @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
-
+ 
   constructor(
     private contractService: ContractTypeMasterService,
     private router: Router,
-    private title: Title
-  ) {
-    this.title.setTitle('Contract Type Master - CMS');
-  }
-
+    private title:Title
+    ) {
+      this.title.setTitle("Contract Type Master - CMS");
+    }
+ 
   ngOnInit(): void {
     this.columnsInfo = {
       'contractTypeName': {
@@ -81,217 +77,183 @@ export class ContractTypeMasterComponent implements OnInit {
     };
     this.getContract(1, 10);
   }
-
+ 
   getContract(pageNumber: number, pageSize: number): void {
-    this.contractService.getContract(pageNumber, pageSize).subscribe({
-      next: (res: ContractTypeMasterDTO[]) => {
-        this.loading = false;
-        this.dataSource.data = res;
-        if (this.sort) {
-          this.dataSource.sort = this.sort;
+    this.contractService.getContract(pageNumber, pageSize)
+      .subscribe({
+        next: (res: ContractTypeMasterDTO[]) => {
+          this.loading = false;
+          this.dataSource.data = res;
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
+          this.showContract = res;
+          console.log(res);
+          if (this.showContract != undefined && this.showContract.length > 0) {
+            let result = Pagination.paginator(pageNumber, this.showContract[0].totalRecords, pageSize)
+            this.maxPage = result.maxPage;
+            this.pageNumbers = result.pageNumbers
+          }
+ 
+        }, error: (error) => {
+          this.loading = false;
+         ErrorHandler.handle(error);
         }
-        this.showContract = res;
-        console.log(res);
-        if (this.showContract != undefined && this.showContract.length > 0) {
-          let result = Pagination.paginator(
-            pageNumber,
-            this.showContract[0].totalRecords,
-            pageSize
-          );
-          this.maxPage = result.maxPage;
-          this.pageNumbers = result.pageNumbers;
-        }
-      },
-      error: (error) => {
-        this.loading = false;
-        ErrorHandler.handle(error);
-      },
-    });
+      });
   }
-
+ 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.getContract(pgNumber, 10);
     }
   }
-
+ 
+ 
   //get contrat by id
   GetContract(id: number) {
-    console.log('fetch id', id);
-
+    console.log("fetch id", id);
+ 
     this.contractService.getContractById(id).subscribe({
       next: (res: ContractTypeMaster) => {
         this.cont = res;
         console.log(res);
+ 
       },
       error: (error) => {
-        ErrorHandler.handle(error);
-      },
-    });
+        this.loading = false;
+         ErrorHandler.handle(error);
+      }
+    })
   }
-
-  //delete contract 
-  //edit contract 
-  // editContract(id: number) {
-  //   let compName = this.editContractName.nativeElement.value;
-  //   if (compName !== "") {
-  //     console.log(compName);
-  //     this.contractService.updateContract(id, compName).subscribe({
-  //       next: (res: boolean) => {
-  //         if (res) {
-  //           Alert.toast(TYPE.SUCCESS, true, "Updated Successfully")
-  //           this.getContract(1, 10);
-  //         }
-  //       },
-  //       error: (error) => {
-  //         console.error('Error :(', error);
-  //         this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-  //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-  //       }
-  //     })
-
-  //   }
-  // }
-
-  //delete contract 
+ 
+  //delete contract
   deleteContract(id: number) {
-    let empCode = DecodeToken.ECode;
+    let empCode =DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this Contract?");
-    Alert.confirmToast(
-      'Are you sure you want to delete this Contract?',
-      "You won't be able to revert this!",
-      TYPE.WARNING,
-      'Yes, delete it!',
-      'Deleted successfully!',
-      'Contract has been deleted.',
-      TYPE.SUCCESS,
-      () => {
-        this.contractService.deleteContract(id, empCode).subscribe({
+    Alert.confirmToast("Are you sure you want to delete this Contract?",
+      "You won't be able to revert this!", TYPE.WARNING,
+      "Yes, delete it!",
+      "Deleted successfully!",
+      "Contract has been deleted.", TYPE.SUCCESS, () => {
+        this.contractService.deleteContract(id,empCode).subscribe({
           next: (response: boolean) => {
             if (response) {
               // Alert.toast(TYPE.SUCCESS, true, "Deleted successfully");
               this.getContract(1, 10);
             }
+ 
           },
           error: (error) => {
-            ErrorHandler.handle(error);
-          },
+            this.loading = false;
+         ErrorHandler.handle(error);
+          }
         });
-      }
-    );
+      });
   }
-
+ 
   //add contract
   addCompany(contractForm: NgForm) {
     this.cont = contractForm.value;
-    let empCode = DecodeToken.ECode;
-    this.contractService.addContract(this.cont, empCode).subscribe({
+let empCode =DecodeToken.ECode;
+    this.contractService.addContract(this.cont,empCode).subscribe({
       next: (response) => {
-        Alert.bigToast(
-          'Success!',
-          'Contract added successfully.',
-          TYPE.SUCCESS,
-          'Ok'
-        );
+        Alert.bigToast('Success!', 'Contract added successfully.', TYPE.SUCCESS, 'Ok');
         contractForm.resetForm();
         this.GetPage(this.maxPage);
       },
       error: (error) => {
-        ErrorHandler.handle(error);
-      },
+        console.error('Error adding Contract:', error);
+        // Alert.bigToast('Error!', 'There was an error adding the Contract.', TYPE.ERROR, 'Try Again');
+        this.loading = false;
+         ErrorHandler.handle(error);
+      }
     });
   }
-
+ 
   contractTypeMasterAddForm = new FormGroup({
-    contractTypeName: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(20),
-      Validators.pattern('^[a-zA-Z ]+$'),
-    ]),
-    status: new FormControl('', [Validators.required]),
-  });
+    contractTypeName: new FormControl('', [Validators.required,Validators.maxLength(20),Validators.pattern('^[a-zA-Z ]+$')]),
+    status: new FormControl('', [Validators.required])
+  })
   onAddFormSubmitContract() {
-    let empCode = DecodeToken.ECode;
+    let empCode =DecodeToken.ECode;
     console.log(this.contractTypeMasterAddForm.value);
-
+   
     if (this.contractTypeMasterAddForm.invalid) {
       this.contractTypeMasterAddForm.markAllAsTouched();
       return;
-    } else {
-      const status = this.contractTypeMasterAddForm.value.status;
-      const addFormValues: AddContractDTO = new AddContractDTO();
-      addFormValues.contractTypeName =
-        this.contractTypeMasterAddForm.value.contractTypeName;
-      addFormValues.status = Number(status) == 1 ? true : false;
-      console.log(this.contractTypeMasterAddForm);
-      this.contractService.addContract(addFormValues, empCode).subscribe({
-        next: (response: ContractTypeMaster) => {
-          if (response != undefined || response != null) {
-            Alert.toast(TYPE.SUCCESS, true, 'Added Successfully');
-            const modal = document.getElementById('contract-add');
-            if (modal) {
-              const modalInstance =
-                bootstrap.Modal.getInstance(modal) ||
-                new bootstrap.Modal(modal);
-              modalInstance.hide();
-            }
-            this.contractTypeMasterAddForm.reset({
-              contractTypeName: '',
-              status: '',
-            });
-            this.getContract(1, 10);
-          }
-        },
-        error: (error) => {
-          ErrorHandler.handle(error);
-        },
-      });
     }
-  }
-  get contractTypeName() {
-    return this.contractTypeMasterAddForm.get('contractTypeName');
-  }
-  get status() {
-    return this.contractTypeMasterAddForm.get('status');
-  }
-
-  contID: number = 0;
-  fetchContractData(contractID: number) {
-    this.contID = contractID;
-    this.contractService.getContractById(contractID).subscribe({
-      next: (res: ContractTypeMaster) => {
-        this.contractTypeMasterAddForm.patchValue({
-          contractTypeName: res.contractTypeName,
-          status: String(Number(res.status)),
-        });
-      },
-    });
-  }
-  onUpdateFormSubmit() {
-    let empCode = DecodeToken.ECode;
-    if (this.contractTypeMasterAddForm.invalid) {
-      this.contractTypeMasterAddForm.markAllAsTouched();
-      return;
-               this.contractTypeMasterAddForm.reset({
+    else {
+      const status = this.contractTypeMasterAddForm.value.status;
+        const addFormValues: AddContractDTO = new AddContractDTO();
+        addFormValues.contractTypeName = this.contractTypeMasterAddForm.value.contractTypeName;
+        addFormValues.status = Number(status) == 1 ? true : false;
+        console.log(this.contractTypeMasterAddForm);
+        this.contractService.addContract(addFormValues,empCode).subscribe({
+          next: (response: ContractTypeMaster) => {
+            if (response != undefined || response != null) {
+              Alert.toast(TYPE.SUCCESS, true, 'Added Successfully');
+              const modal = document.getElementById("contract-add");
+              if(modal){
+                const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+                modalInstance.hide();
+              }
+              this.contractTypeMasterAddForm.reset({
                 contractTypeName : "",
                 status : ""
               })
-            }
-          }, error: (error) => {
-            Alert.toast(TYPE.ERROR, true, error.error.message)
-            console.error(error.error);
-          }
-        })
-      }
-
-    }
-  }              this.contractTypeMasterAddForm.reset();
               this.getContract(1, 10);
-              const modal = document.getElementById('contract-edit');
-              if (modal) {
-                const modalInstance =
-                  bootstrap.Modal.getInstance(modal) ||
-                  new bootstrap.Modal(modal);
+            }
+          },
+          error: (error) => {
+            this.loading = false;
+         ErrorHandler.handle(error);
+          }
+        });
+    }
+  }
+  get contractTypeName(){
+    return this.contractTypeMasterAddForm.get('contractTypeName');
+  }
+  get status(){
+    return this.contractTypeMasterAddForm.get('status');
+  }
+ 
+  contID:number = 0
+    fetchContractData(contractID:number) {
+      this.contID = contractID;
+      this.contractService.getContractById(contractID).subscribe({
+        next: (res:ContractTypeMaster) => {
+          this.contractTypeMasterAddForm.patchValue({
+            contractTypeName: res.contractTypeName,
+            status: String(Number(res.status))
+           
+          });
+        }
+      })
+    }
+    onUpdateFormSubmit(){
+      let empCode =DecodeToken.ECode;
+      if(this.contractTypeMasterAddForm.invalid){
+        this.contractTypeMasterAddForm.markAllAsTouched();
+        return;
+      }
+      else{
+        const contractTypeName = this.contractTypeMasterAddForm.value.contractTypeName;
+        const Status = this.contractTypeMasterAddForm.value.status;
+        const updatFormValues:AddContractDTO = new AddContractDTO();
+        updatFormValues.contractTypeName=contractTypeName;
+        updatFormValues.status= Number(Status) == 1 ? true : false;
+        console.log(updatFormValues);
+        this.contractService.updateContract(this.contID, updatFormValues,empCode).subscribe({
+          next: (response: ContractTypeMaster) => {
+            if(response != undefined && response != null)
+            {
+              Alert.toast(TYPE.SUCCESS, true, 'Updated Successfully')
+              this.contractTypeMasterAddForm.reset();
+              this.getContract(1, 10);
+              const modal = document.getElementById("contract-edit");
+              if(modal){
+                const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
                 modalInstance.hide();
               }
                this.contractTypeMasterAddForm.reset({
@@ -300,15 +262,12 @@ export class ContractTypeMasterComponent implements OnInit {
               })
             }
           }, error: (error) => {
-            Alert.toast(TYPE.ERROR, true, error.error.message)
-            console.error(error.error);
+           this.loading = false;
+         ErrorHandler.handle(error);
           }
         })
       }
-
+ 
     }
   }
-
-
-
-
+ 

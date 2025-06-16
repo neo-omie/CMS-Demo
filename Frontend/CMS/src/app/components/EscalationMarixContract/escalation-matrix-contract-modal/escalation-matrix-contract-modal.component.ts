@@ -23,7 +23,7 @@ import { ErrorHandler } from '../../../utils/errorHandler';
 @Component({
   selector: 'app-escalation-matrix-contract-modal',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule],
   templateUrl: './escalation-matrix-contract-modal.component.html',
   styleUrl: './escalation-matrix-contract-modal.component.css',
 })

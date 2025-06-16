@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('token') != null) {
+    if(sessionStorage.getItem('token') != null) {
       this.route.goToDashboard();
     }
   }
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
             DecodeToken.decodeJWTToken(response.token);
             console.log(DecodeToken.ECode, DecodeToken.ERole, DecodeToken.email, DecodeToken.sub);
             
-            localStorage.setItem('token', response.token);
+            sessionStorage.setItem('token', response.token);
             // localStorage.setItem('email', this.decodedToken.email);
             // localStorage.setItem('name', this.decodedToken.sub);
             // localStorage.setItem('role', this.decodedToken.ERole);

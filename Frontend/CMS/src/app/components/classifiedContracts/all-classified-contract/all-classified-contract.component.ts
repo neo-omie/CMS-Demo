@@ -347,16 +347,18 @@ export class AllClassifiedContractComponent implements OnInit {
   }
 
   getAllDepartments() {
-    this.contractsService.GetDepartments().subscribe({
-      next: (response: GetAllDepartmentsDto[]) => {
-        this.departments = response;
-      },
-      error: (error) => {
-        console.error('Error :(', error);
-                ErrorHandler.handle(error);
-
-      },
-    });
+    const eCode = DecodeToken.ECode;
+    if (eCode) {
+      this.contractsService.GetDepartments(eCode).subscribe({
+        next: (response: GetAllDepartmentsDto[]) => {
+          this.departments = response;
+        },
+        error: (error) => {
+          console.error('Error :(', error);
+          ErrorHandler.handle(error);
+        },
+      });
+    }
   }
   getAllContractTypes() {
     this.contractsService.GetContractTypes().subscribe({
@@ -365,8 +367,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-                ErrorHandler.handle(error);
-
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -377,8 +378,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-                ErrorHandler.handle(error);
-
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -389,8 +389,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-                       ErrorHandler.handle(error);
-
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -469,8 +468,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-                        ErrorHandler.handle(error);
-
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -513,8 +511,7 @@ export class AllClassifiedContractComponent implements OnInit {
             },
             error: (error) => {
               console.error('Deletion Failed', error);
-                              ErrorHandler.handle(error);
-
+              ErrorHandler.handle(error);
             },
           });
         }
@@ -590,7 +587,6 @@ export class AllClassifiedContractComponent implements OnInit {
     contractId: new FormControl('', [Validators.required]),
   });
 
-  
   uploadFile(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -672,8 +668,7 @@ export class AllClassifiedContractComponent implements OnInit {
           });
         }
       } catch (error) {
-               ErrorHandler.handle(error);
-
+        ErrorHandler.handle(error);
       } finally {
         this.loading = false;
       }
@@ -683,7 +678,7 @@ export class AllClassifiedContractComponent implements OnInit {
     this.loading = false;
   }
   //uploading the Post Termination Notice
- 
+
   // Post Termination Notice
   postTermination: ClassifiedPostTermination = new ClassifiedPostTermination();
   statusTermOrReject?: number = 0;
