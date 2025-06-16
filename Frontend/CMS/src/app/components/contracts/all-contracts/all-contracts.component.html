@@ -6,8 +6,8 @@
       Contract</a>
   </button>
   <button class="add-btn btn btn-outline-primary mb-2 margin-right" routerLink="/contracts/addendumContract">
-    <a><i class="fa-solid fa-file-circle-plus"></i>
-      Addendums</a>
+    <a><i class="fa-solid fa-file-lines"></i>
+      All Addendums</a>
   </button>
   <button class="add-btn btn btn-outline-primary mb-2 margin-right"
     (click)="printToPDF()">
@@ -218,7 +218,8 @@
         <div class="mb-3">
           <p class="m-1">Contract Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.contractId}}</b></span>
+           <!-- <span class="input-group-text"><b>{{contractDetails?.contractId}}</b></span> -->
+            <span class="input-group-text"><i class="fa-solid fa-file-contract"></i></span>
             <input type="text" name="contractName" class="form-control" id="contractName"
               [value]="contractDetails?.contractName" disabled>
           </div>
@@ -226,7 +227,8 @@
         <div class="mb-3">
           <p class="m-1">Department Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.departmentId}}</b></span>
+            <!-- <span class="input-group-text"><b>{{contractDetails?.departmentId}}</b></span> -->
+             <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
             <input type="text" name="departmentName" class="form-control" id="departmentName"
               [value]="contractDetails?.departmentName" disabled>
           </div>
@@ -234,7 +236,8 @@
         <div class="mb-3">
           <p class="m-1">Contract With Company Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.contractWithCompanyId}}</b></span>
+            <!-- <span class="input-group-text"><b>{{contractDetails?.contractWithCompanyId}}</b></span> -->
+             <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
             <input type="text" name="contractWithCompanyName" class="form-control" id="contractWithCompanyName"
               [value]="contractDetails?.contractWithCompanyName" disabled>
           </div>
@@ -242,7 +245,8 @@
         <div class="mb-3">
           <p class="m-1">Contract Type Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.contractTypeId}}</b></span>
+            <!-- <span class="input-group-text"><b>{{contractDetails?.contractTypeId}}</b></span> -->
+              <span class="input-group-text"><i class="fa-solid fa-file-contract"></i></span>
             <input type="text" name="contractTypeName" class="form-control" id="contractTypeName"
               [value]="contractDetails?.contractTypeName" disabled>
           </div>
@@ -250,7 +254,8 @@
         <div class="mb-3">
           <p class="m-1">Apostille Type Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.apostilleTypeId}}</b></span>
+            <!-- <span class="input-group-text"><b>{{contractDetails?.apostilleTypeId}}</b></span> -->
+             <span class="input-group-text"><i class="fa-solid fa-certificate"></i></span>
             <input type="text" name="apostilleTypeName" class="form-control" id="apostilleTypeName"
               [value]="contractDetails?.apostilleTypeName" disabled>
           </div>
@@ -330,7 +335,7 @@
         <div class="mb-3">
           <p class="m-1">Employee Custodian Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.empCustodianId}}</b></span>
+            <!-- <span class="input-group-text"><b>{{contractDetails?.empCustodianId}}</b></span> -->
             <input type="text" name="empCustodianName" class="form-control" id="empCustodianName"
               [value]="contractDetails?.empCustodianName" disabled>
           </div>

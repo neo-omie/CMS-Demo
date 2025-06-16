@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-apostille',
@@ -41,7 +42,10 @@ addApostilleForm: FormGroup= new FormGroup({
   status:new FormControl('',Validators.required)
 })
 
-constructor(private apostilleService: MasterApostilleService,private router: Router){}
+constructor(private apostilleService: MasterApostilleService,
+  private router: Router,
+   private title:Title
+){this.title.setTitle("Apostille Type Master - CMS");}
 
 ngOnInit(): void {
   this.fetchApostille();

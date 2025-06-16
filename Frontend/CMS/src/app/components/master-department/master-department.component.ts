@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-department',
@@ -36,7 +37,10 @@ export class MasterDepartmentComponent {
   dept?: MasterDepartment;
   errorMsg?: string;
   @ViewChild('editDepartmentName') editDepartmentName!: ElementRef;
-  constructor(private departmentService: MasterDepartmentService, private renderer: Renderer2) { }
+  constructor(private departmentService: MasterDepartmentService,
+     private renderer: Renderer2 ,
+     private title:Title
+    ) { this.title.setTitle("Department Type Master - CMS");}
   ngOnInit() {
     this.GetAllDepartments(1, 10);
   }

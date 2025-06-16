@@ -157,7 +157,7 @@
                     <span *ngIf="cityId?.hasError('required') && (cityId?.dirty || cityId?.touched)"
                       style="color: red;">Required</span>
                     <!-- <input class="form-control" type="text" id="cityId" formControlName="cityId"> -->
-                    <select class="form-select" name="cityId" id="cityId" formControlName="cityId">
+                    <select class="form-select" name="cityId" id="cityId" formControlName="cityId" [disabled]="!stateId?.value">
                       <option value="" disabled selected>--Select City--</option>
                       <option *ngFor="let cit of cityList" value="{{cit.cityId}}">{{cit.city}}</option>
                     </select>

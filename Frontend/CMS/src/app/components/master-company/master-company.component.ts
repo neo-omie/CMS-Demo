@@ -30,6 +30,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { PDFExport } from '../../utils/pdfExport';
 import { DecodeToken } from '../../utils/decodeToken';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-company',
@@ -82,8 +83,9 @@ export class MasterCompanyComponent implements OnInit {
   constructor(
     private companyService: CompanyMasterService,
     private router: Router,
-    private companyCascadeService: CompanyCascadeService
-  ) {}
+    private companyCascadeService: CompanyCascadeService,
+    private title:Title
+  ) {this.title.setTitle("Company Type Master - CMS");}
 
   ngOnInit(): void {
     this.getCompanies(1);
@@ -105,6 +107,14 @@ export class MasterCompanyComponent implements OnInit {
     });
   }
   getStateCascade(input:string) {
+    this.stateList = [];
+  this.cityList = [];
+  
+  // Clear selected state and city in form
+  this.masterCompanyAddForm.patchValue({
+    stateId: '',
+    cityId: ''
+  });
     this.companyCascadeService.getStates(+input).subscribe({
       next: (response: States[]) => {
         this.stateList = response;
@@ -118,7 +128,14 @@ export class MasterCompanyComponent implements OnInit {
       }
     })
   }
+  
   getCityCascade(input:string) {
+
+  //   this.cityList = [];
+  
+  // this.masterCompanyAddForm.patchValue({
+  //   cityId: ''
+  // });
     this.companyCascadeService.getCities(+input).subscribe({
       next: (response: Cities[]) => {
         this.cityList = response;

@@ -16,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-employee',
@@ -48,8 +49,9 @@ constructor(
   private employeeService: MasterEmployeeService,
   private route:ActivatedRoute,
   private router:Router, 
-  private departmentService:MasterDepartmentService
-){}
+  private departmentService:MasterDepartmentService,
+  private title:Title
+){this.title.setTitle("Employee Type Master - CMS");}
 
 ngOnInit(): void {
   this.fetchEmployees();

@@ -51,8 +51,9 @@
                 <span class="error" *ngIf="name.invalid && (name.touched || name.dirty)">  
                   <span *ngIf="name.errors?.['required']">Department name is required.</span>
                   <span *ngIf="name.errors?.['pattern']">Only letters and spaces are allowed.</span>
+                  <span *ngIf="name.errors?.['maxlength']">Maximum 25 characters are allowed.</span>
                 </span>
-                <input type="text" #name="ngModel" class="form-control" id="departmentName" name="departmentName" [(ngModel)]="addDept.departmentName" required pattern="^[a-zA-Z ]+$" />
+                <input type="text" #name="ngModel" class="form-control" id="departmentName" name="departmentName" [(ngModel)]="addDept.departmentName" required pattern="^[a-zA-Z ]+$"  [maxlength]="25" />
                 
               </div>
               <br>

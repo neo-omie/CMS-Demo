@@ -45,6 +45,8 @@ namespace CMS.Persistence.Repositories
             {
                 throw new Exception("Cannot terminate the contract as the contract has not been active.");
             }
+
+           
             var allowedExtesnisons = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
             var fileExtension = Path.GetExtension(_terminationDocumentUploadDto.File.FileName).ToLowerInvariant();
 
