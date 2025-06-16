@@ -1,6 +1,6 @@
 declare var bootstrap : any;
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AddContractDTO, ContractListResponse, ContractTypeMaster, ContractTypeMasterDTO } from '../../models/contract-type-master';
@@ -15,18 +15,25 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { TableComponent } from "../UtilComponents/table/table.component";
+import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 
 @Component({
   selector: 'app-contract-type-master',
   standalone: true,
   imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule,
-            MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+    MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, TableComponent, PaginationComponent],
   templateUrl: './contract-type-master.component.html',
   styleUrl: './contract-type-master.component.css'
 })
 export class ContractTypeMasterComponent implements OnInit {
   loading: boolean = true;
   displayedColumns: string[] = ['contractTypeName', 'status', 'action'];
+  columnsInfo:{[key:string]:{
+      'title' ?: string,
+      'isSort' ?: boolean,
+      'templateRef' : TemplateRef<any> | null,
+    }} = {};
       dataSource = new MatTableDataSource<ContractTypeMasterDTO>();
       @ViewChild(MatSort) sort!: MatSort;
       ngAfterViewInit() {
@@ -39,6 +46,8 @@ export class ContractTypeMasterComponent implements OnInit {
   cont: AddContractDTO = new AddContractDTO();
   errorMsg: string = '';
   @ViewChild('editContractName') editContractName!: ElementRef;
+  @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
+  @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
 
   constructor(
     private contractService: ContractTypeMasterService,
@@ -49,6 +58,22 @@ export class ContractTypeMasterComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    this.columnsInfo = {
+      'contractTypeName': {
+        'title': 'Contract Type Name',
+        'isSort': true,
+        'templateRef': null
+      },
+      'status': {
+        'title': 'Status',
+        'isSort': true,
+        'templateRef': this.statusRef
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionRef
+      }
+    };
     this.getContract(1, 10);
   }
 
@@ -102,29 +127,6 @@ export class ContractTypeMasterComponent implements OnInit {
       }
     })
   }
-
-
-  //edit contract 
-  // editContract(id: number) {
-  //   let compName = this.editContractName.nativeElement.value;
-  //   if (compName !== "") {
-  //     console.log(compName);
-  //     this.contractService.updateContract(id, compName).subscribe({
-  //       next: (res: boolean) => {
-  //         if (res) {
-  //           Alert.toast(TYPE.SUCCESS, true, "Updated Successfully")
-  //           this.getContract(1, 10);
-  //         }
-  //       },
-  //       error: (error) => {
-  //         console.error('Error :(', error);
-  //         this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-  //         Alert.toast(TYPE.ERROR, true, this.errorMsg);
-  //       }
-  //     })
-
-  //   }
-  // }
 
   //delete contract 
   deleteContract(id: number) {
@@ -270,7 +272,3 @@ let empCode =DecodeToken.ECode;
 
     }
   }
-
-
-
-

@@ -1,0 +1,252 @@
+<div class="modal fade" id="contract-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Contract Details</h1>
+                <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="progress" class="mb-3" *ngIf="contractDetails?.contractId!==null">
+                    <div class="d-flex justify-content-center ">
+                        <p style="color: #5f5fee;" class="modal-title fs-5 fw-bolder text-center">
+                            Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{
+                            contractDetails?.contractName }}
+                        </p>
+                    </div>
+                    <app-progress-bar
+                        [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0"
+                        type="contract" [phases]="phases"></app-progress-bar>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Contract Name</p>
+                    <input type="text" name="contractName" class="form-control" id="contractName"
+                        [value]="contractDetails?.contractName" disabled>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Department Name</p>
+                    <input type="text" name="departmentName" class="form-control" id="departmentName"
+                        [value]="contractDetails?.departmentName" disabled>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Contract With Company Name</p>
+                    <input type="text" name="contractWithCompanyName" class="form-control" id="contractWithCompanyName"
+                        [value]="contractDetails?.contractWithCompanyName" disabled>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Contract Type Name</p>
+                    <input type="text" name="contractTypeName" class="form-control" id="contractTypeName"
+                        [value]="contractDetails?.contractTypeName" disabled>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Apostille Type Name</p>
+                    <input type="text" name="apostilleTypeName" class="form-control" id="apostilleTypeName"
+                        [value]="contractDetails?.apostilleTypeName" disabled>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Actual Document Reference No.</p>
+                    <input type="text" name="actualDocRefNo" class="form-control" id="actualDocRefNo"
+                        [value]="contractDetails?.actualDocRefNo" disabled>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Retainer Contract Type</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
+                        <input type="text" *ngIf="contractDetails?.retainerContract == 1" name="retainerContract"
+                            class="form-control" id="retainerContract" value="None" disabled>
+                        <input type="text" *ngIf="contractDetails?.retainerContract == 2" name="retainerContract"
+                            class="form-control" id="retainerContract" value="Weekly" disabled>
+                        <input type="text" *ngIf="contractDetails?.retainerContract == 3" name="retainerContract"
+                            class="form-control" id="retainerContract" value="Monthly" disabled>
+                        <input type="text" *ngIf="contractDetails?.retainerContract == 4" name="retainerContract"
+                            class="form-control" id="retainerContract" value="Quarterly" disabled>
+                        <input type="text" *ngIf="contractDetails?.retainerContract == 5" name="retainerContract"
+                            class="form-control" id="retainerContract" value="Yearly" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Terms & Conditions</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-receipt"></i></span>
+                        <textarea name="termsAndConditions" class="form-control" id="termsAndConditions"
+                            [value]="contractDetails?.termsAndConditions" disabled></textarea>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Valid From</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                        <input type="datetime-local" name="validFrom" class="form-control" id="validFrom"
+                            [value]="contractDetails?.validFrom" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Valid Till</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
+                        <input type="datetime-local" name="validTill" class="form-control" id="validTill"
+                            [value]="contractDetails?.validTill" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Renewal From</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                        <input type="datetime-local" name="renewalFrom" class="form-control" id="renewalFrom"
+                            [value]="contractDetails?.renewalFrom" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Renewal Till</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
+                        <input type="datetime-local" name="renewalTill" class="form-control" id="renewalTill"
+                            [value]="contractDetails?.renewalTill" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Addendum Date</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-calendar-plus"></i></span>
+                        <input type="datetime-local" name="addendumDate" class="form-control" id="addendumDate"
+                            [value]="contractDetails?.addendumDate" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Employee Custodian Name</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><b>{{contractDetails?.empCustodianId}}</b></span>
+                        <input type="text" name="empCustodianName" class="form-control" id="empCustodianName"
+                            [value]="contractDetails?.empCustodianName" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Location</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                        <input type="text" name="location" class="form-control" id="location"
+                            [value]="contractDetails?.location" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Approver L1 Status</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>1</b></span>
+                        <input *ngIf="contractDetails?.approver1Status == 1" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Pending Approval"
+                            style="background-color: #FFC107;" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 2" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Active"
+                            style="background-color: greenyellow;" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 3" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Rejected"
+                            style="background-color: orangered;" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 4" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Terminated" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 5" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Expired"
+                            style="background-color: darkgray;" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 6" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Pending Termination"
+                            style="background-color: #FFC107;" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 7" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Approved for Termination"
+                            style="background-color: #f08205;" disabled>
+                        <input *ngIf="contractDetails?.approver1Status == 8" type="text" name="approver1Status"
+                            class="form-control" id="approver1Status" value="Pending Notice  Withdrawal"
+                            style="background-color: #6a82c5;" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Approver L2 Status</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>2</b></span>
+                        <input *ngIf="contractDetails?.approver2Status == 1" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Pending Approval"
+                            style="background-color: #FFC107;" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 2" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Active"
+                            style="background-color: greenyellow;" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 3" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Rejected"
+                            style="background-color: orangered;" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 4" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Terminated" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 5" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Expired"
+                            style="background-color: darkgray;" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 6" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Pending Termination"
+                            style="background-color: #FFC107;" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 7" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Approved for Termination"
+                            style="background-color: #f08205;" disabled>
+                        <input *ngIf="contractDetails?.approver2Status == 8" type="text" name="approver2Status"
+                            class="form-control" id="approver2Status" value="Pending Notice  Withdrawal"
+                            style="background-color: #6a82c5;" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <p class="m-1">Approver L3 Status</p>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span>
+                        <input *ngIf="contractDetails?.approver3Status == 1" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Pending Approval"
+                            style="background-color: #FFC107;" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 2" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Active"
+                            style="background-color: greenyellow;" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 3" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Rejected"
+                            style="background-color: orangered;" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 4" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Terminated" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Expired"
+                            style="background-color: darkgray;" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 6" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Pending Termination"
+                            style="background-color: #FFC107;" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 7" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Approved for Termination"
+                            style="background-color: #f08205;" disabled>
+                        <input *ngIf="contractDetails?.approver3Status == 8" type="text" name="approver3Status"
+                            class="form-control" id="approver3Status" value="Pending Notice  Withdrawal"
+                            style="background-color: #6a82c5;" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail"
+                    data-bs-toggle="modal" (click)="termStatus(2,'withdrawal')">Approve Notice Withdrawal</button>
+                <button class="btn btn-danger" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail"
+                    data-bs-toggle="modal" (click)="termStatus(7,'withdrawal')">Reject Notice Withdrawal</button>
+    
+                <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+                    data-bs-toggle="modal" (click)="termStatus(7,'postTerm')">Approve Termination</button>
+                <button class="btn btn-danger" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
+                    data-bs-toggle="modal" (click)="termStatus(2,'postTerm')">Reject Termination</button>
+    
+                <button class="btn btn-primary" data-bs-dismiss="modal" *ngIf="approverCheck"
+                    (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
+                <button class="btn btn-danger" data-bs-dismiss="modal" *ngIf="approverCheck"
+                    (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
+    
+                <button data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;"
+                    data-bs-target="#Termination-Notice-Detail" data-bs-toggle="modal"
+                    *ngIf="contractDetails?.approver3Status == 2"
+                    (click)="getContractIdforPostTerm(contractDetails?.contractId)">Post Termination</button>
+                <button data-bs-dismiss="modal" class="btn btn-outline-success" id="btncancel" style="max-width: 300px;"
+                    data-bs-target="#Notice-Withdrawal-Detail" data-bs-toggle="modal"
+                    *ngIf="contractDetails?.approver3Status == 7"
+                    (click)="getContractIdforPostTerm(contractDetails?.contractId)">Withdraw Notice</button>
+    
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
+                    *ngIf="contractDetails?.approver3Status == 2">+ Add
+                    Addendum</button>
+                <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

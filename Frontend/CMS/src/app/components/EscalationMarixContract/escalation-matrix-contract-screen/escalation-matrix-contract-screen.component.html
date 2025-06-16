@@ -1,9 +1,7 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">Escalation Matrix Master - Contracts</h2>
 
-<div class="table-responsive p-md-5 p-3">
-  <app-table [data]="matrixContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
-</div>
+<app-table [data]="matrixContracts" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
 
 <app-pagination [maxPage]="maxPage" [records]="this.matrixContracts.length" [pageNumbers]="pageNumbers"
   [GetPage]="GetPage"></app-pagination>

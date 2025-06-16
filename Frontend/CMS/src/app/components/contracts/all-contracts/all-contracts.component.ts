@@ -79,11 +79,9 @@ import {
     FormsModule,
     CommonModule,
     RouterModule,
-    LoaderComponent,
     ReactiveFormsModule,
     MatTableModule,
     MatSortModule,
-    ProgressBarComponent,
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
@@ -173,7 +171,6 @@ export class AllContractsComponent implements OnInit {
           Number(status) > 0 &&
           Number(status) < Object.keys(ContractStatus).length)
       ) {
-        console.log(Object.keys(ContractStatus).length);
         this.GetAllContracts({
           PageNumber: 1,
           PageSize: 10,
@@ -272,7 +269,7 @@ export class AllContractsComponent implements OnInit {
 
   GetAllContracts(filter: any) {
     console.log(filter);
-    this.contractsService.getContracts(filter).subscribe({
+    this.contractsService.getContracts(filter,'NEO1').subscribe({
       next: (res: ContractsEntity[]) => {
         this.loading = false;
         this.dataSource.data = res;
@@ -470,7 +467,7 @@ export class AllContractsComponent implements OnInit {
   }
 
   getAllDepartments() {
-    this.contractsService.GetDepartments().subscribe({
+    this.contractsService.GetDepartments('NEO1').subscribe({
       next: (response: GetAllDepartmentsDto[]) => {
         this.departments = response;
       },
@@ -807,64 +804,6 @@ export class AllContractsComponent implements OnInit {
     return false;
   }
 
-  get contractId() {
-    return this.addaddendumForm.get('contractId');
-  }
-  get contractName() {
-    return this.masterContractAddForm.get('contractName');
-  }
-  get departmentId() {
-    return this.masterContractAddForm.get('departmentId');
-  }
-  get contractWithCompanyId() {
-    return this.masterContractAddForm.get('contractWithCompanyId');
-  }
-  get contractTypeId() {
-    return this.masterContractAddForm.get('contractTypeId');
-  }
-  get apostilleTypeId() {
-    return this.masterContractAddForm.get('apostilleTypeId');
-  }
-  get actualDocRefNo() {
-    return this.masterContractAddForm.get('actualDocRefNo');
-  }
-  get retainerContract() {
-    return this.masterContractAddForm.get('retainerContract');
-  }
-  get termsAndConditions() {
-    return this.masterContractAddForm.get('termsAndConditions');
-  }
-  get validFrom() {
-    return this.masterContractAddForm.get('validFrom');
-  }
-  get validTill() {
-    return this.masterContractAddForm.get('validTill');
-  }
-  get renewalFrom() {
-    return this.masterContractAddForm.get('renewalFrom');
-  }
-  get renewalTill() {
-    return this.masterContractAddForm.get('renewalTill');
-  }
-  get addendumDate() {
-    return this.masterContractAddForm.get('addendumDate');
-  }
-  get empCustodianId() {
-    return this.masterContractAddForm.get('empCustodianId');
-  }
-  get location() {
-    return this.masterContractAddForm.get('location');
-  }
-  get approver1Status() {
-    return this.masterContractAddForm.get('approver1Status');
-  }
-  get approver2Status() {
-    return this.masterContractAddForm.get('approver2Status');
-  }
-  get approver3Status() {
-    return this.masterContractAddForm.get('approver3Status');
-  }
-
   onClick() {
     this.masterContractAddForm.reset({
       contractName: '',
@@ -879,7 +818,6 @@ export class AllContractsComponent implements OnInit {
       validTill: '',
       renewalFrom: '',
       renewalTill: '',
-      // addendumDate: '',
       empCustodianId: '',
       location: '',
       approver1Status: '1',
@@ -1169,7 +1107,7 @@ export class AllContractsComponent implements OnInit {
 
   onSubmitCheck() {
     const enteredValue = this.checkContractId.value.contractId;
-    this.contractsService.getContracts({}).subscribe({
+    this.contractsService.getContracts({},'NEO1').subscribe({
       next: (res: ContractsEntity[]) => {
         this.dataSource.data = res;
         console.log(this.dataSource.data);
@@ -1684,8 +1622,7 @@ export class AllContractsComponent implements OnInit {
       'Status',
       'Renewal Due In',
       'Location',
-    ]; // Put the exact header text here
-    // PDFExport.printToPDF(tableID, fileName);
+    ]; 
     PDFExport.printToPDF(
       'contracts-table',
       'CMS-Contracts.pdf',
@@ -1721,7 +1658,7 @@ export class AllContractsComponent implements OnInit {
       case 1:
         return 'Approval for';
       case 2:
-        return 'Active'; // optional � maybe don't show this
+        return 'Active';
       case 3:
         return 'Rejection for';
       case 4:

@@ -1,5 +1,5 @@
 declare var bootstrap: any;
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -30,6 +30,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { PDFExport } from '../../utils/pdfExport';
 import { DecodeToken } from '../../utils/decodeToken';
+import { TableComponent } from "../UtilComponents/table/table.component";
+import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 
 @Component({
   selector: 'app-master-company',
@@ -44,12 +46,21 @@ import { DecodeToken } from '../../utils/decodeToken';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-  ],
+    TableComponent,
+    PaginationComponent
+],
   templateUrl: './master-company.component.html',
   styleUrl: './master-company.component.css',
 })
 export class MasterCompanyComponent implements OnInit {
   loading: boolean = true;
+  columnsInfo: {
+      [key: string]: {
+        'title'?: string,
+        'isSort'?: boolean,
+        'templateRef': TemplateRef<any> | null,
+      }
+    } = {};
   displayedColumns: string[] = [
     'companyName',
     'companyLocation',
@@ -79,6 +90,10 @@ export class MasterCompanyComponent implements OnInit {
   selectedStateId: number = 0;
   company: AddCompanyDto = new AddCompanyDto();
   mode: any;
+
+  @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
+  @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
+
   constructor(
     private companyService: CompanyMasterService,
     private router: Router,
@@ -86,6 +101,27 @@ export class MasterCompanyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.columnsInfo = {
+      'companyName': {
+        'title': 'Company Name',
+        'isSort': true,
+        'templateRef': null
+      },
+      'companyLocation': {
+        'title': 'Company Location',
+        'isSort': true,
+        'templateRef': null
+      },
+      'status': {
+        'title': 'Status',
+        'isSort': true,
+        'templateRef': this.statusRef
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionRef
+      }
+    };
     this.getCompanies(1);
     this.getCountryCascade();
   }
@@ -144,7 +180,6 @@ export class MasterCompanyComponent implements OnInit {
             this.dataSource.sort = this.sort;
           }
           this.showCompanies = res;
-          console.log('bula bula', res);
           if (
             this.showCompanies != undefined &&
             this.showCompanies.length > 0

@@ -36,11 +36,11 @@ namespace CMS.API.Controllers
             _logger = logger;
         }
         //Get all Contracts
-        [HttpPost("GetAllContracts")]
-        public async Task<IActionResult> GetAllContracts([FromBody]FiltersContractDto filters)
+        [HttpPost("GetAllContracts/{eCode}")]
+        public async Task<IActionResult> GetAllContracts([FromBody]FiltersContractDto filters, [FromRoute]string eCode)
         {
            _logger.LogInformation("GetAllContracts method initiated");
-            var allContracts = await _mediator.Send(new GetAllContractsQuery(filters));
+            var allContracts = await _mediator.Send(new GetAllContractsQuery(filters,eCode));
             _logger.LogInformation("GetAllContracts method performed");
             return Ok(allContracts);
         }

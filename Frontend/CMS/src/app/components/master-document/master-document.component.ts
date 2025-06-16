@@ -4,6 +4,7 @@ import {
   ElementRef,
   OnInit,
   Renderer2,
+  TemplateRef,
   Type,
   ViewChild,
 } from '@angular/core';
@@ -27,6 +28,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
+import { TableComponent } from "../UtilComponents/table/table.component";
+import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 
 @Component({
   selector: 'app-master-document',
@@ -40,12 +43,21 @@ import { DecodeToken } from '../../utils/decodeToken';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-  ],
+    TableComponent,
+    PaginationComponent
+],
   templateUrl: './master-document.component.html',
   styleUrl: './master-document.component.css',
 })
 export class MasterDocumentComponent implements OnInit {
   displayedColumns: string[] = ['displayDocumentName', 'status', 'action'];
+  columnsInfo: {
+          [key: string]: {
+            'title'?: string,
+            'isSort'?: boolean,
+            'templateRef': TemplateRef<any> | null,
+          }
+        } = {};
   dataSource = new MatTableDataSource<MasterDocument>();
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit() {
@@ -62,12 +74,30 @@ export class MasterDocumentComponent implements OnInit {
   getMasterDocumentById?: GetDocumentById;
   doc?: MasterDocument;
   existingFilePath: string | null = null;
+  @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
+  @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
   @ViewChild('editDocumentName') editDocumentName!: ElementRef;
   @ViewChild('editDocumentStatus') editDocumentStatus!: ElementRef;
   @ViewChild('addFile') addFile!: ElementRef;
   @ViewChild('editFile') editFile!: ElementRef;
 
   ngOnInit(): void {
+    this.columnsInfo = {
+      'displayDocumentName': {
+        'title': 'Document Name',
+        'isSort': true,
+        'templateRef': null
+      },
+      'status': {
+        'title': 'Status',
+        'isSort': true,
+        'templateRef': this.statusRef
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionRef
+      }
+    };
     this.getDocuments(1, 10);
   }
   constructor(

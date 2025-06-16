@@ -1,0 +1,41 @@
+h2 {
+    color: var(--btn-theme-toggle-color);
+    font-weight: 600;
+    text-align: center;
+}
+.icon{
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 1rem;
+}
+.icon:hover{
+    color: #5f5fee;
+}
+.margin-right{
+    margin-right: 1rem;
+}
+.filters{
+    display: flex;
+    justify-content: flex-start;
+    align-items: end;
+    flex-wrap: wrap;
+}
+.filters > div{
+    margin-right: 1rem;
+}
+.add-btn {
+    color: var(--btn-theme-toggle-color);
+    background-color: whitesmoke;
+    border-color: var(--btn-theme);;
+    margin: 2px;
+}
+.add-btn:hover{
+    background-color: var(--btn-theme-toggle-color);;
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+.card{
+    background-color: var(--filter-theme-toggle-color);
+    border-width: 0px;
+}

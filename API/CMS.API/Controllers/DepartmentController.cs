@@ -30,12 +30,11 @@ namespace CMS.API.Controllers
         {
             _mediator = mediator;
         }
-        //[Authorize(Roles = "Admin")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAllDepartments(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAllDepartments(int pageNumber, int pageSize,string eCode)
         {
-            var departments = await _mediator.Send(new GetAllDepartmentsQuery(pageNumber, pageSize));
+            var departments = await _mediator.Send(new GetAllDepartmentsQuery(pageNumber, pageSize,eCode));
             return Ok(departments);
         }
 
