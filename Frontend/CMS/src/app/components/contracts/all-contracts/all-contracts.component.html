@@ -2,27 +2,42 @@
 <h2 class="pt-3">Contracts List</h2>
 <div class="table-responsive p-md-5 p-3">
   <button class="add-btn btn btn-outline-primary mb-2 margin-right">
-    <a data-bs-toggle="modal" data-bs-target="#contract-add"><i class="fa-solid fa-file-circle-plus"></i> Add New
-      Contract</a>
+    <a data-bs-toggle="modal" data-bs-target="#contract-add"
+      ><i class="fa-solid fa-file-circle-plus"></i> Add New Contract</a
+    >
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-right" routerLink="/contracts/addendumContract">
-    <a><i class="fa-solid fa-file-circle-plus"></i>
-      Addendums</a>
+  <button
+    class="add-btn btn btn-outline-primary mb-2 margin-right"
+    routerLink="/contracts/addendumContract"
+  >
+    <a><i class="fa-solid fa-file-circle-plus"></i> Addendums</a>
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-right"
-    (click)="printToPDF()">
+  <button
+    class="add-btn btn btn-outline-primary mb-2 margin-right"
+    (click)="printToPDF()"
+  >
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2 margin-right"
-    (click)="exportToExcel()">
+  <button
+    class="add-btn btn btn-outline-primary mb-2 margin-right"
+    (click)="exportToExcel()"
+  >
     <i class="fa-solid fa-file-excel"></i> Print to Excel
   </button>
-  <button class="add-btn btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#filter-container">
+  <button
+    class="add-btn btn btn-outline-primary mb-2"
+    data-bs-toggle="collapse"
+    data-bs-target="#filter-container"
+  >
     Filters<i class="fa-solid fa-angle-down"></i>
   </button>
   <div class="card mb-2">
     <div class="card-body collapse" id="filter-container">
-      <form [formGroup]="filterForm" (ngSubmit)="onFilterSubmit()" class="filters">
+      <form
+        [formGroup]="filterForm"
+        (ngSubmit)="onFilterSubmit()"
+        class="filters"
+      >
         <div class="mb-3">
           <p class="mb-1">From date</p>
           <input class="form-control" type="date" formControlName="FromDate" />
@@ -33,14 +48,29 @@
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract type</p>
-          <select class="form-select" name="contract-type" id="filter-contract-type" formControlName="ContractType">
+          <select
+            class="form-select"
+            name="contract-type"
+            id="filter-contract-type"
+            formControlName="ContractType"
+          >
             <option value="0">--Select--</option>
-            <option *ngFor="let cont of contractTypes" value="{{cont.valueId}}">{{cont.contractTypeName}}</option>
+            <option
+              *ngFor="let cont of contractTypes"
+              value="{{ cont.valueId }}"
+            >
+              {{ cont.contractTypeName }}
+            </option>
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Renewal due in</p>
-          <select class="form-select" name="contract-renewal-in" id="filter-renewal-in" formControlName="RenewalDueIn">
+          <select
+            class="form-select"
+            name="contract-renewal-in"
+            id="filter-renewal-in"
+            formControlName="RenewalDueIn"
+          >
             <option value="-1">--Select--</option>
             <option value="0">Today</option>
             <option value="30">30</option>
@@ -50,88 +80,205 @@
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract status</p>
-          <select class="form-select" name="contract-status" id="filter-contract-status"
-            formControlName="ContractStatus">
+          <select
+            class="form-select"
+            name="contract-status"
+            id="filter-contract-status"
+            formControlName="ContractStatus"
+          >
             <option value="0">--Select--</option>
             @for (key of statusKeys; track $index) {
-            <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
+            <option *ngIf="checkNotNaN(key)" value="{{ key }}">
+              {{ contractStatus[+key] }}
+            </option>
             }
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract department</p>
-          <select class="form-select" name="department" id="filter-department" formControlName="Department">
+          <select
+            class="form-select"
+            name="department"
+            id="filter-department"
+            formControlName="Department"
+          >
             <option value="0">--Select--</option>
-            <option *ngFor="let dept of departments" value="{{dept.departmentId}}">{{dept.departmentName}}</option>
+            <option
+              *ngFor="let dept of departments"
+              value="{{ dept.departmentId }}"
+            >
+              {{ dept.departmentName }}
+            </option>
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Contract location</p>
-          <select class="form-select" name="loaction" id="filter-loction" formControlName="Location">
+          <select
+            class="form-select"
+            name="loaction"
+            id="filter-loction"
+            formControlName="Location"
+          >
             <option value="">--Select--</option>
             @for (key of locationSelectKeys; track $index) {
-            <option value="{{getEnum(key)}}">{{key}}</option>
+            <option value="{{ getEnum(key) }}">{{ key }}</option>
             }
           </select>
         </div>
         <div class="mb-3">
           <p class="mb-1">Has addendum</p>
-          <select class="form-select" name="contract-type" id="filter-contract-type" formControlName="HasAddendum">
+          <select
+            class="form-select"
+            name="contract-type"
+            id="filter-contract-type"
+            formControlName="HasAddendum"
+          >
             <option value="-1">--Select--</option>
             <option value="1">Yes</option>
             <option value="0">No</option>
           </select>
         </div>
         <div>
-          <button type="submit" class="add-btn btn btn-outline-primary mb-3">Filter</button>
-          <button type="reset" class="add-btn btn btn-outline-primary mb-3 margin-left">Reset</button>
+          <button type="submit" class="add-btn btn btn-outline-primary mb-3">
+            Filter
+          </button>
+          <button
+            type="reset"
+            class="add-btn btn btn-outline-primary mb-3 margin-left"
+          >
+            Reset
+          </button>
         </div>
       </form>
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort
-    class="table table-striped table-bordered align-middle mat-elevation-z8" id="contracts-table">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    class="table table-striped table-bordered align-middle mat-elevation-z8"
+    id="contracts-table"
+  >
     <ng-container matColumnDef="contractName">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Name</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Contract Name
+      </th>
       <td mat-cell *matCellDef="let cont">{{ cont.contractName }}</td>
     </ng-container>
     <ng-container matColumnDef="contractType">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Contract Type</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Contract Type
+      </th>
       <td mat-cell *matCellDef="let cont">{{ cont.contractType }}</td>
     </ng-container>
     <ng-container matColumnDef="departmentName">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Department Name</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Department Name
+      </th>
       <td mat-cell *matCellDef="let cont">{{ cont.departmentName }}</td>
     </ng-container>
     <ng-container matColumnDef="effectiveDate">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.effectiveDate.toString().split('T')[0] }}</td>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Effective Date
+      </th>
+      <td mat-cell *matCellDef="let cont">
+        {{ cont.effectiveDate.toString().split("T")[0] }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="expiryDate">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.expiryDate.toString().split('T')[0] }}</td>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Expiry Date
+      </th>
+      <td mat-cell *matCellDef="let cont">
+        {{ cont.expiryDate.toString().split("T")[0] }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="toBeRenewedOn">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>To Be Renewed On</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.toBeRenewedOn.toString().split('T')[0] }}</td>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        To Be Renewed On
+      </th>
+      <td mat-cell *matCellDef="let cont">
+        {{ cont.toBeRenewedOn.toString().split("T")[0] }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="addendumDate">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Addendum Date</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Addendum Date
+      </th>
       <td mat-cell *matCellDef="let cont">
-        {{ cont?.addendumDate?.toString().split('T')[0] || '-' }}
+        {{ cont?.addendumDate?.toString().split("T")[0] || "-" }}
       </td>
     </ng-container>
     <ng-container matColumnDef="status">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Status
+      </th>
       <td mat-cell *matCellDef="let cont">
-        @if(cont.status == 1){ <button class="btn btn-warning" disabled><b>Pending Approval</b></button> }
-        @if(cont.status == 2){ <button class="btn btn-success" disabled><b>Active</b></button> }
-        @if(cont.status == 3){ <button class="btn btn-danger" disabled><b>Rejected</b></button> }
-        @if(cont.status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
-        @if(cont.status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }
-        @if(cont.status == 6){ <button class="btn btn-warning" disabled><b>Pending Termination</b></button> }
-        @if(cont.status == 7){ <button class="btn btn-warning" disabled><b>Approved for Termination</b></button> }
-        @if(cont.status == 8){ <button class="btn btn-primary" disabled><b>Pending Notice Withdrawal</b></button> }
+        @if(cont.status == 1){
+        <button class="btn btn-warning" disabled>
+          <b>Pending Approval</b>
+        </button>
+        } @if(cont.status == 2){
+        <button class="btn btn-success" disabled><b>Active</b></button> }
+        @if(cont.status == 3){
+        <button class="btn btn-danger" disabled><b>Rejected</b></button> }
+        @if(cont.status == 4){
+        <button class="btn btn-dark" disabled><b>Terminated</b></button> }
+        @if(cont.status == 5){
+        <button class="btn btn-secondary" disabled><b>Expired</b></button> }
+        @if(cont.status == 6){
+        <button class="btn btn-warning" disabled>
+          <b>Pending Termination</b>
+        </button>
+        } @if(cont.status == 7){
+        <button class="btn btn-warning" disabled>
+          <b>Approved for Termination</b>
+        </button>
+        } @if(cont.status == 8){
+        <button class="btn btn-primary" disabled>
+          <b>Pending Notice Withdrawal</b>
+        </button>
+        }
       </td>
     </ng-container>
     <!-- <ng-container matColumnDef="approvalPendingFrom">
@@ -143,270 +290,741 @@
       <td mat-cell *matCellDef="let cont">{{ cont.renewalContractPerson }}</td>
     </ng-container> -->
     <ng-container matColumnDef="renewalDueIn">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef>Renewal Due In</th>
-      <td mat-cell *matCellDef="let cont">{{ cont.status==2 && cont.renewalDueIn > 0 ? cont.renewalDueIn : "-" }}</td>
+      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef>
+        Renewal Due In
+      </th>
+      <td mat-cell *matCellDef="let cont">
+        {{
+          cont.status == 2 && cont.renewalDueIn > 0 ? cont.renewalDueIn : "-"
+        }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="location">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        Location
+      </th>
       <td mat-cell *matCellDef="let cont">{{ cont.location }}</td>
     </ng-container>
     <ng-container matColumnDef="action">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
+      <th
+        class="mat-header-cell"
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-right-color: #5f5fee"
+      >
+        Action
+      </th>
       <td mat-cell *matCellDef="let cont">
-        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
-          (click)="GetContract(cont.contractID)"></i>
-        <i class="fa-solid fa-clock-rotate-left icon" routerLink="/contracts/addendumContract/{{cont.contractID}}"></i>
-        <i *ngIf="cont.status == 1" class="fa-solid fa-trash icon" data-bs-toggle="modal" data-bs-target="#contract-delete"
-          (click)="DeleteContract(cont.contractID)"></i>
+        <i
+          class="fa-regular fa-eye icon"
+          data-bs-toggle="modal"
+          data-bs-target="#contract-detail"
+          (click)="GetContract(cont.contractID)"
+        ></i>
+        <i
+          class="fa-solid fa-clock-rotate-left icon"
+          routerLink="/contracts/addendumContract/{{ cont.contractID }}"
+        ></i>
+        <i
+          *ngIf="cont.status == 1"
+          class="fa-solid fa-trash icon"
+          data-bs-toggle="modal"
+          data-bs-target="#contract-delete"
+          (click)="DeleteContract(cont.contractID)"
+        ></i>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      style="border-color: #dee2e6"
+    ></tr>
   </table>
   <p class="fs-4 text-center" *ngIf="allContracts.length == 0">No Records</p>
 </div>
 
 <!-- Pagination Logic and Implementation -->
 <div *ngIf="!loading" class="table-responsive p-3">
-  <nav class="d-flex justify-content-center" *ngIf="allContracts!=undefined && allContracts.length > 0"
-    aria-label="Page navigation example">
+  <nav
+    class="d-flex justify-content-center"
+    *ngIf="allContracts != undefined && allContracts.length > 0"
+    aria-label="Page navigation example"
+  >
     <ul *ngIf="maxPage > 1" class="pagination">
-      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link"
-          aria-label="FirstPage">&laquo;</span></li>
-      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link"
-          aria-label="Previous">&lsaquo;</span></li>
-      <li class="page-item" (click)="GetPage(pageNumbers[1])"><span
-          [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
-      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span
-          [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
-      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span
-          [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
-      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span
-          [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
-      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span
-          [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
-      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link"
-          aria-label="Next">&rsaquo;</span></li>
-      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link"
-          aria-label="LastPage">&raquo;</span></li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)">
+        <span class="page-link" aria-label="FirstPage">&laquo;</span>
+      </li>
+      <li
+        *ngIf="maxPage > 5"
+        class="page-item"
+        (click)="GetPage(pageNumbers[0] - 1)"
+      >
+        <span class="page-link" aria-label="Previous">&lsaquo;</span>
+      </li>
+      <li class="page-item" (click)="GetPage(pageNumbers[1])">
+        <span
+          [class]="
+            pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'
+          "
+          >{{ pageNumbers[1] }}</span
+        >
+      </li>
+      <li
+        *ngIf="maxPage > 1"
+        class="page-item"
+        (click)="GetPage(pageNumbers[2])"
+      >
+        <span
+          [class]="
+            pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'
+          "
+          >{{ pageNumbers[2] }}</span
+        >
+      </li>
+      <li
+        *ngIf="maxPage > 2"
+        class="page-item"
+        (click)="GetPage(pageNumbers[3])"
+      >
+        <span
+          [class]="
+            pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'
+          "
+          >{{ pageNumbers[3] }}</span
+        >
+      </li>
+      <li
+        *ngIf="maxPage > 3"
+        class="page-item"
+        (click)="GetPage(pageNumbers[4])"
+      >
+        <span
+          [class]="
+            pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'
+          "
+          >{{ pageNumbers[4] }}</span
+        >
+      </li>
+      <li
+        *ngIf="maxPage > 4"
+        class="page-item"
+        (click)="GetPage(pageNumbers[5])"
+      >
+        <span
+          [class]="
+            pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'
+          "
+          >{{ pageNumbers[5] }}</span
+        >
+      </li>
+      <li
+        *ngIf="maxPage > 5"
+        class="page-item"
+        (click)="GetPage(pageNumbers[0] + 1)"
+      >
+        <span class="page-link" aria-label="Next">&rsaquo;</span>
+      </li>
+      <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)">
+        <span class="page-link" aria-label="LastPage">&raquo;</span>
+      </li>
     </ul>
   </nav>
 </div>
 
 <!-- View of Contract -->
-<div class="modal fade" id="contract-detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="contract-detail"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Contract Details</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Contract Details
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="modal-body">
-        <div id="progress" class="mb-3" *ngIf="contractDetails?.contractId!==null">
-          <div class="d-flex justify-content-center ">
-            <p style="color: #5f5fee;" class="modal-title fs-5 fw-bolder text-center">
-              Progress of {{ getProgressType(contractDetails?.approver3Status) }} {{ contractDetails?.contractName }}
+        <div
+          id="progress"
+          class="mb-3"
+          *ngIf="contractDetails?.contractId !== null"
+        >
+          <div class="d-flex justify-content-center">
+            <p
+              style="color: #5f5fee"
+              class="modal-title fs-5 fw-bolder text-center"
+            >
+              Progress of
+              {{ getProgressType(contractDetails?.approver3Status) }}
+              {{ contractDetails?.contractName }}
             </p>
           </div>
           <app-progress-bar
-            [contractId]="contractDetails != undefined && contractDetails.contractId != undefined?(+(contractDetails.contractId)):0"
-            type="contract" [phases]="phases"></app-progress-bar>
+            [contractId]="
+              contractDetails != undefined &&
+              contractDetails.contractId != undefined
+                ? +contractDetails.contractId
+                : 0
+            "
+            type="contract"
+            [phases]="phases"
+          ></app-progress-bar>
         </div>
         <div class="mb-3">
           <p class="m-1">Contract Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.contractId}}</b></span>
-            <input type="text" name="contractName" class="form-control" id="contractName"
-              [value]="contractDetails?.contractName" disabled>
+            <span class="input-group-text"
+              ><b>{{ contractDetails?.contractId }}</b></span
+            >
+            <input
+              type="text"
+              name="contractName"
+              class="form-control"
+              id="contractName"
+              [value]="contractDetails?.contractName"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Department Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.departmentId}}</b></span>
-            <input type="text" name="departmentName" class="form-control" id="departmentName"
-              [value]="contractDetails?.departmentName" disabled>
+            <span class="input-group-text"
+              ><b>{{ contractDetails?.departmentId }}</b></span
+            >
+            <input
+              type="text"
+              name="departmentName"
+              class="form-control"
+              id="departmentName"
+              [value]="contractDetails?.departmentName"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Contract With Company Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.contractWithCompanyId}}</b></span>
-            <input type="text" name="contractWithCompanyName" class="form-control" id="contractWithCompanyName"
-              [value]="contractDetails?.contractWithCompanyName" disabled>
+            <span class="input-group-text"
+              ><b>{{ contractDetails?.contractWithCompanyId }}</b></span
+            >
+            <input
+              type="text"
+              name="contractWithCompanyName"
+              class="form-control"
+              id="contractWithCompanyName"
+              [value]="contractDetails?.contractWithCompanyName"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Contract Type Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.contractTypeId}}</b></span>
-            <input type="text" name="contractTypeName" class="form-control" id="contractTypeName"
-              [value]="contractDetails?.contractTypeName" disabled>
+            <span class="input-group-text"
+              ><b>{{ contractDetails?.contractTypeId }}</b></span
+            >
+            <input
+              type="text"
+              name="contractTypeName"
+              class="form-control"
+              id="contractTypeName"
+              [value]="contractDetails?.contractTypeName"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Apostille Type Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.apostilleTypeId}}</b></span>
-            <input type="text" name="apostilleTypeName" class="form-control" id="apostilleTypeName"
-              [value]="contractDetails?.apostilleTypeName" disabled>
+            <span class="input-group-text"
+              ><b>{{ contractDetails?.apostilleTypeId }}</b></span
+            >
+            <input
+              type="text"
+              name="apostilleTypeName"
+              class="form-control"
+              id="apostilleTypeName"
+              [value]="contractDetails?.apostilleTypeName"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Actual Document Reference No.</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-file-lines"></i></span>
-            <input type="text" name="actualDocRefNo" class="form-control" id="actualDocRefNo"
-              [value]="contractDetails?.actualDocRefNo" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-file-lines"></i
+            ></span>
+            <input
+              type="text"
+              name="actualDocRefNo"
+              class="form-control"
+              id="actualDocRefNo"
+              [value]="contractDetails?.actualDocRefNo"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Retainer Contract Type</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
-            <input type="text" *ngIf="contractDetails?.retainerContract == 1" name="retainerContract"
-              class="form-control" id="retainerContract" value="None" disabled>
-            <input type="text" *ngIf="contractDetails?.retainerContract == 2" name="retainerContract"
-              class="form-control" id="retainerContract" value="Weekly" disabled>
-            <input type="text" *ngIf="contractDetails?.retainerContract == 3" name="retainerContract"
-              class="form-control" id="retainerContract" value="Monthly" disabled>
-            <input type="text" *ngIf="contractDetails?.retainerContract == 4" name="retainerContract"
-              class="form-control" id="retainerContract" value="Quarterly" disabled>
-            <input type="text" *ngIf="contractDetails?.retainerContract == 5" name="retainerContract"
-              class="form-control" id="retainerContract" value="Yearly" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-file-invoice"></i
+            ></span>
+            <input
+              type="text"
+              *ngIf="contractDetails?.retainerContract == 1"
+              name="retainerContract"
+              class="form-control"
+              id="retainerContract"
+              value="None"
+              disabled
+            />
+            <input
+              type="text"
+              *ngIf="contractDetails?.retainerContract == 2"
+              name="retainerContract"
+              class="form-control"
+              id="retainerContract"
+              value="Weekly"
+              disabled
+            />
+            <input
+              type="text"
+              *ngIf="contractDetails?.retainerContract == 3"
+              name="retainerContract"
+              class="form-control"
+              id="retainerContract"
+              value="Monthly"
+              disabled
+            />
+            <input
+              type="text"
+              *ngIf="contractDetails?.retainerContract == 4"
+              name="retainerContract"
+              class="form-control"
+              id="retainerContract"
+              value="Quarterly"
+              disabled
+            />
+            <input
+              type="text"
+              *ngIf="contractDetails?.retainerContract == 5"
+              name="retainerContract"
+              class="form-control"
+              id="retainerContract"
+              value="Yearly"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Terms & Conditions</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-receipt"></i></span>
-            <textarea name="termsAndConditions" class="form-control" id="termsAndConditions"
-              [value]="contractDetails?.termsAndConditions" disabled></textarea>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-receipt"></i
+            ></span>
+            <textarea
+              name="termsAndConditions"
+              class="form-control"
+              id="termsAndConditions"
+              [value]="contractDetails?.termsAndConditions"
+              disabled
+            ></textarea>
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Valid From</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-            <input type="datetime-local" name="validFrom" class="form-control" id="validFrom"
-              [value]="contractDetails?.validFrom" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-calendar-days"></i
+            ></span>
+            <input
+              type="datetime-local"
+              name="validFrom"
+              class="form-control"
+              id="validFrom"
+              [value]="contractDetails?.validFrom"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Valid Till</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
-            <input type="datetime-local" name="validTill" class="form-control" id="validTill"
-              [value]="contractDetails?.validTill" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-calendar-xmark"></i
+            ></span>
+            <input
+              type="datetime-local"
+              name="validTill"
+              class="form-control"
+              id="validTill"
+              [value]="contractDetails?.validTill"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Renewal From</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-            <input type="datetime-local" name="renewalFrom" class="form-control" id="renewalFrom"
-              [value]="contractDetails?.renewalFrom" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-calendar-days"></i
+            ></span>
+            <input
+              type="datetime-local"
+              name="renewalFrom"
+              class="form-control"
+              id="renewalFrom"
+              [value]="contractDetails?.renewalFrom"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Renewal Till</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-xmark"></i></span>
-            <input type="datetime-local" name="renewalTill" class="form-control" id="renewalTill"
-              [value]="contractDetails?.renewalTill" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-calendar-xmark"></i
+            ></span>
+            <input
+              type="datetime-local"
+              name="renewalTill"
+              class="form-control"
+              id="renewalTill"
+              [value]="contractDetails?.renewalTill"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Addendum Date</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-plus"></i></span>
-            <input type="datetime-local" name="addendumDate" class="form-control" id="addendumDate"
-              [value]="contractDetails?.addendumDate" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-calendar-plus"></i
+            ></span>
+            <input
+              type="datetime-local"
+              name="addendumDate"
+              class="form-control"
+              id="addendumDate"
+              [value]="contractDetails?.addendumDate"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Employee Custodian Name</p>
           <div class="input-group">
-            <span class="input-group-text"><b>{{contractDetails?.empCustodianId}}</b></span>
-            <input type="text" name="empCustodianName" class="form-control" id="empCustodianName"
-              [value]="contractDetails?.empCustodianName" disabled>
+            <span class="input-group-text"
+              ><b>{{ contractDetails?.empCustodianId }}</b></span
+            >
+            <input
+              type="text"
+              name="empCustodianName"
+              class="form-control"
+              id="empCustodianName"
+              [value]="contractDetails?.empCustodianName"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Location</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
-            <input type="text" name="location" class="form-control" id="location" [value]="contractDetails?.location"
-              disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-location-dot"></i
+            ></span>
+            <input
+              type="text"
+              name="location"
+              class="form-control"
+              id="location"
+              [value]="contractDetails?.location"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Approver L1 Status</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>1</b></span>
-            <input *ngIf="contractDetails?.approver1Status == 1" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 2" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Active" style="background-color: greenyellow;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 3" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Rejected" style="background-color: orangered;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 4" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Terminated" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 5" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Expired" style="background-color: darkgray;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 6" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 7" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
-            <input *ngIf="contractDetails?.approver1Status == 8" type="text" name="approver1Status" class="form-control"
-              id="approver1Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-person-circle-check"></i><b>1</b></span
+            >
+            <input
+              *ngIf="contractDetails?.approver1Status == 1"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Pending Approval"
+              style="background-color: #ffc107"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 2"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Active"
+              style="background-color: greenyellow"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 3"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Rejected"
+              style="background-color: orangered"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 4"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Terminated"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 5"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Expired"
+              style="background-color: darkgray"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 6"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Pending Termination"
+              style="background-color: #ffc107"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 7"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Approved for Termination"
+              style="background-color: #f08205"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver1Status == 8"
+              type="text"
+              name="approver1Status"
+              class="form-control"
+              id="approver1Status"
+              value="Pending Notice  Withdrawal"
+              style="background-color: #6a82c5"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Approver L2 Status</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>2</b></span>
-            <input *ngIf="contractDetails?.approver2Status == 1" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 2" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Active" style="background-color: greenyellow;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 3" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Rejected" style="background-color: orangered;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 4" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Terminated" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 5" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Expired" style="background-color: darkgray;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 6" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 7" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
-            <input *ngIf="contractDetails?.approver2Status == 8" type="text" name="approver2Status" class="form-control"
-              id="approver2Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-person-circle-check"></i><b>2</b></span
+            >
+            <input
+              *ngIf="contractDetails?.approver2Status == 1"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Pending Approval"
+              style="background-color: #ffc107"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 2"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Active"
+              style="background-color: greenyellow"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 3"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Rejected"
+              style="background-color: orangered"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 4"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Terminated"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 5"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Expired"
+              style="background-color: darkgray"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 6"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Pending Termination"
+              style="background-color: #ffc107"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 7"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Approved for Termination"
+              style="background-color: #f08205"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver2Status == 8"
+              type="text"
+              name="approver2Status"
+              class="form-control"
+              id="approver2Status"
+              value="Pending Notice  Withdrawal"
+              style="background-color: #6a82c5"
+              disabled
+            />
           </div>
         </div>
         <div class="mb-3">
           <p class="m-1">Approver L3 Status</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-person-circle-check"></i><b>3</b></span>
-            <input *ngIf="contractDetails?.approver3Status == 1" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Pending Approval" style="background-color: #FFC107;" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 2" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Active" style="background-color: greenyellow;" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 3" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Rejected" style="background-color: orangered;" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 4" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Terminated" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 5" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Expired" style="background-color: darkgray;" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 6" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Pending Termination" style="background-color: #FFC107;" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 7" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Approved for Termination" style="background-color: #f08205;" disabled>
-            <input *ngIf="contractDetails?.approver3Status == 8" type="text" name="approver3Status" class="form-control"
-              id="approver3Status" value="Pending Notice  Withdrawal" style="background-color: #6a82c5;" disabled>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-person-circle-check"></i><b>3</b></span
+            >
+            <input
+              *ngIf="contractDetails?.approver3Status == 1"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Pending Approval"
+              style="background-color: #ffc107"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 2"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Active"
+              style="background-color: greenyellow"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 3"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Rejected"
+              style="background-color: orangered"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 4"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Terminated"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 5"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Expired"
+              style="background-color: darkgray"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 6"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Pending Termination"
+              style="background-color: #ffc107"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 7"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Approved for Termination"
+              style="background-color: #f08205"
+              disabled
+            />
+            <input
+              *ngIf="contractDetails?.approver3Status == 8"
+              type="text"
+              name="approver3Status"
+              class="form-control"
+              id="approver3Status"
+              value="Pending Notice  Withdrawal"
+              style="background-color: #6a82c5"
+              disabled
+            />
           </div>
         </div>
         <!-- <p class="m-1">Does exists or deleted?</p>
@@ -419,37 +1037,100 @@
         </div> -->
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail" data-bs-toggle="modal"
-          (click)="termStatus(2)">Approve Notice Withdrawal</button>
-        <button class="btn btn-danger" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail" data-bs-toggle="modal"
-          (click)="termStatus(7)">Reject Notice Withdrawal</button>
+        <button
+          class="btn btn-primary"
+          *ngIf="withdrawCheck"
+          data-bs-target="#withdrawal-mail"
+          data-bs-toggle="modal"
+          (click)="termStatus(2)"
+        >
+          Approve Notice Withdrawal
+        </button>
+        <button
+          class="btn btn-danger"
+          *ngIf="withdrawCheck"
+          data-bs-target="#withdrawal-mail"
+          data-bs-toggle="modal"
+          (click)="termStatus(7)"
+        >
+          Reject Notice Withdrawal
+        </button>
 
-        <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail" data-bs-toggle="modal"
-          (click)="termStatus(7)">Approve Termination</button>
-        <button class="btn btn-danger" *ngIf="terminationCheck" data-bs-target="#postTerm-mail" data-bs-toggle="modal"
-          (click)="termStatus(2)">Reject Termination</button>
+        <button
+          class="btn btn-primary"
+          *ngIf="terminationCheck"
+          data-bs-target="#postTerm-mail"
+          data-bs-toggle="modal"
+          (click)="termStatus(7)"
+        >
+          Approve Termination
+        </button>
+        <button
+          class="btn btn-danger"
+          *ngIf="terminationCheck"
+          data-bs-target="#postTerm-mail"
+          data-bs-toggle="modal"
+          (click)="termStatus(2)"
+        >
+          Reject Termination
+        </button>
 
-        <button class="btn btn-primary" data-bs-dismiss="modal" *ngIf="approverCheck"
-          (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
-        <button class="btn btn-danger" data-bs-dismiss="modal" *ngIf="approverCheck"
-          (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
+        <button
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          *ngIf="approverCheck"
+          (click)="approveRejectContract(contractDetails?.contractId, 2)"
+        >
+          Approve
+        </button>
+        <button
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          *ngIf="approverCheck"
+          (click)="approveRejectContract(contractDetails?.contractId, 3)"
+        >
+          Reject
+        </button>
 
-        <button data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;"
-          data-bs-target="#Termination-Notice-Detail" data-bs-toggle="modal"
+        <button
+          data-bs-dismiss="modal"
+          class="btn btn-outline-danger"
+          id="btncancel"
+          style="max-width: 300px"
+          data-bs-target="#Termination-Notice-Detail"
+          data-bs-toggle="modal"
           *ngIf="contractDetails?.approver3Status == 2"
-          (click)="getContractIdforPostTerm(contractDetails?.contractId)">Post Termination</button>
-        <button data-bs-dismiss="modal" class="btn btn-outline-success" id="btncancel" style="max-width: 300px;"
-          data-bs-target="#Notice-Withdrawal-Detail" data-bs-toggle="modal"
+          (click)="getContractIdforPostTerm(contractDetails?.contractId)"
+        >
+          Post Termination
+        </button>
+        <button
+          data-bs-dismiss="modal"
+          class="btn btn-outline-success"
+          id="btncancel"
+          style="max-width: 300px"
+          data-bs-target="#Notice-Withdrawal-Detail"
+          data-bs-toggle="modal"
           *ngIf="contractDetails?.approver3Status == 7"
-          (click)="getContractIdforPostTerm(contractDetails?.contractId)">Withdraw Notice</button>
+          (click)="getContractIdforPostTerm(contractDetails?.contractId)"
+        >
+          Withdraw Notice
+        </button>
 
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#contract-addendum"
-          *ngIf="contractDetails?.approver3Status == 2" (click)="fetchContractData(contractDetails?.contractId)">+ Add
-          Addendum</button>
+        <button
+          class="btn btn-outline-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#contract-addendum"
+          *ngIf="contractDetails?.approver3Status == 2"
+          (click)="fetchContractData(contractDetails?.contractId)"
+        >
+          + Add Addendum
+        </button>
 
         <!-- <button data-bs-dismiss="modal"  data-bs-toggle="collapse" data-bs-target="#progress" class="btn btn-outline-primary">Progress bar <i class="fa solid fa-angle-down"></i></button> -->
-        <button data-bs-dismiss="modal" class="btn btn-outline-danger">Close</button>
-
+        <button data-bs-dismiss="modal" class="btn btn-outline-danger">
+          Close
+        </button>
       </div>
       <!-- Progress bar horizontal -->
       <!-- <div id="progress" class="collapse" *ngIf="contractDetails?.contractId!==null">
@@ -464,16 +1145,31 @@
   </div>
 </div>
 
-
-
 <!-- Addition of Contract -->
-<div #addContractModal class="modal fade" id="contract-add" data-bs-backdrop="static" data-bs-keyboard="false"
-  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  #addContractModal
+  class="modal fade"
+  id="contract-add"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable modal-content">
     <div class="modal-header d-flex justify-content-between">
-      <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add New Contract</h1>
-      <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="onClick()"><i
-          class="fa-solid fa-xmark"></i></button>
+      <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+        Add New Contract
+      </h1>
+      <button
+        type="reset"
+        class="btn close-btn"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        (click)="onClick()"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
     <div class="modal-body">
       <form [formGroup]="masterContractAddForm" (ngSubmit)="onAddFormSubmit()">
@@ -481,93 +1177,242 @@
           <div class="card-body">
             <div class="fields-container">
               <div class="m-3">
-                <label for="contractName">Contract heee Name<span style="color: red;">*</span></label>
-                <span *ngIf="contractName?.hasError('required') && (contractName?.dirty || contractName?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="contractName?.hasError('maxlength') && (contractName?.dirty || contractName?.touched)"
-                  style="color: red;">Maximum 20 characters</span>
-                <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
-                  formControlName="contractName">
+                <label for="contractName"
+                  >Contract heee Name<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    contractName?.hasError('required') &&
+                    (contractName?.dirty || contractName?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    contractName?.hasError('maxlength') &&
+                    (contractName?.dirty || contractName?.touched)
+                  "
+                  style="color: red"
+                  >Maximum 20 characters</span
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  id="companyName"
+                  placeholder="Enter contract name"
+                  formControlName="contractName"
+                />
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Department<span style="color: red;">*</span></label>
-                <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="departmentId?.hasError('pattern') && (departmentId?.dirty || departmentId?.touched)"
-                  style="color: red;">Invalid number</span>
+                <label for="termsAndConditions"
+                  >Department<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    departmentId?.hasError('required') &&
+                    (departmentId?.dirty || departmentId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    departmentId?.hasError('pattern') &&
+                    (departmentId?.dirty || departmentId?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
                 <!-- <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID" formControlName="departmentId" [(ngModel)]="deptID"> -->
-                <select class="form-select" name="departmentId" id="departmentId" formControlName="departmentId"
-                  [(ngModel)]="deptID">
-                  <option value="0" disabled selected>--Select one Department--</option>
-                  <option *ngFor="let department of departments" value="{{department.departmentId}}">
-                    {{department.departmentName}}</option>
-                </select>
-              </div>
-              <div class="m-3">
-                <label for="termsAndConditions">Contract with Company<span style="color: red;">*</span></label>
-                <span
-                  *ngIf="contractWithCompanyId?.hasError('required') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
-                  style="color: red;">Required</span>
-                <span
-                  *ngIf="contractWithCompanyId?.hasError('pattern') && (contractWithCompanyId?.dirty || contractWithCompanyId?.touched)"
-                  style="color: red;">Invalid number</span>
-                <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
-                <select class="form-select" name="contractWithCompanyId" id="contractWithCompanyId"
-                  formControlName="contractWithCompanyId">
-                  <option value="" disabled selected>--Select one Company--</option>
-                  <option *ngFor="let company of companies" value="{{company.valueId}}">{{company.companyName}}
+                <select
+                  class="form-select"
+                  name="departmentId"
+                  id="departmentId"
+                  formControlName="departmentId"
+                  [(ngModel)]="deptID"
+                >
+                  <option value="0" disabled selected>
+                    --Select one Department--
+                  </option>
+                  <option
+                    *ngFor="let department of departments"
+                    value="{{ department.departmentId }}"
+                  >
+                    {{ department.departmentName }}
                   </option>
                 </select>
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Contract Type<span style="color: red;">*</span></label>
-                <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
-                  style="color: red;">Required</span>
+                <label for="termsAndConditions"
+                  >Contract with Company<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    contractWithCompanyId?.hasError('required') &&
+                    (contractWithCompanyId?.dirty ||
+                      contractWithCompanyId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    contractWithCompanyId?.hasError('pattern') &&
+                    (contractWithCompanyId?.dirty ||
+                      contractWithCompanyId?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
+                <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
+                <select
+                  class="form-select"
+                  name="contractWithCompanyId"
+                  id="contractWithCompanyId"
+                  formControlName="contractWithCompanyId"
+                >
+                  <option value="" disabled selected>
+                    --Select one Company--
+                  </option>
+                  <option
+                    *ngFor="let company of companies"
+                    value="{{ company.valueId }}"
+                  >
+                    {{ company.companyName }}
+                  </option>
+                </select>
+              </div>
+              <div class="m-3">
+                <label for="termsAndConditions"
+                  >Contract Type<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    contractTypeId?.hasError('required') &&
+                    (contractTypeId?.dirty || contractTypeId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <!-- <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID" formControlName="contractTypeId"> -->
-                <select class="form-select" name="contractTypeId" id="contractTypeId" formControlName="contractTypeId">
-                  <option value="" disabled selected>--Select one Contract Type--</option>
-                  <option *ngFor="let contractType of contractTypes" value="{{contractType.valueId}}">
-                    {{contractType.contractTypeName}}</option>
+                <select
+                  class="form-select"
+                  name="contractTypeId"
+                  id="contractTypeId"
+                  formControlName="contractTypeId"
+                >
+                  <option value="" disabled selected>
+                    --Select one Contract Type--
+                  </option>
+                  <option
+                    *ngFor="let contractType of contractTypes"
+                    value="{{ contractType.valueId }}"
+                  >
+                    {{ contractType.contractTypeName }}
+                  </option>
                 </select>
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Apostille Type<span style="color: red;">*</span></label>
+                <label for="termsAndConditions"
+                  >Apostille Type<span style="color: red">*</span></label
+                >
                 <span
-                  *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
-                  style="color: red;">Required</span>
+                  *ngIf="
+                    apostilleTypeId?.hasError('required') &&
+                    (apostilleTypeId?.dirty || apostilleTypeId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <span
-                  *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
-                  style="color: red;">Invalid number</span>
+                  *ngIf="
+                    apostilleTypeId?.hasError('pattern') &&
+                    (apostilleTypeId?.dirty || apostilleTypeId?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
                 <!-- <input class="form-control" type="text" id="apostilleTypeId" placeholder="Enter Apostille ID" formControlName="apostilleTypeId"> -->
-                <select class="form-select" name="apostilleTypeId" id="apostilleTypeId"
-                  formControlName="apostilleTypeId">
-                  <option value="" selected disabled>--Select one Apostille Type--</option>
-                  <option *ngFor="let apostille of apostilleTypes" value="{{apostille.valueId}}">
-                    {{apostille.apostilleName}}</option>
+                <select
+                  class="form-select"
+                  name="apostilleTypeId"
+                  id="apostilleTypeId"
+                  formControlName="apostilleTypeId"
+                >
+                  <option value="" selected disabled>
+                    --Select one Apostille Type--
+                  </option>
+                  <option
+                    *ngFor="let apostille of apostilleTypes"
+                    value="{{ apostille.valueId }}"
+                  >
+                    {{ apostille.apostilleName }}
+                  </option>
                 </select>
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Actual Document Reference Number<span
-                    style="color: red;">*</span></label>
-                <span *ngIf="actualDocRefNo?.hasError('required') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="actualDocRefNo?.hasError('pattern') && (actualDocRefNo?.dirty || actualDocRefNo?.touched)"
-                  style="color: red;">Only numbers are allowed</span>
-                <input class="form-control" type="text" id="actualDocRefNo"
-                  placeholder="Enter Actual Document Reference Number" formControlName="actualDocRefNo">
+                <label for="termsAndConditions"
+                  >Actual Document Reference Number<span style="color: red"
+                    >*</span
+                  ></label
+                >
+                <span
+                  *ngIf="
+                    actualDocRefNo?.hasError('required') &&
+                    (actualDocRefNo?.dirty || actualDocRefNo?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    actualDocRefNo?.hasError('pattern') &&
+                    (actualDocRefNo?.dirty || actualDocRefNo?.touched)
+                  "
+                  style="color: red"
+                  >Only numbers are allowed</span
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  id="actualDocRefNo"
+                  placeholder="Enter Actual Document Reference Number"
+                  formControlName="actualDocRefNo"
+                />
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Retainer Contract Type<span style="color: red;">*</span></label>
+                <label for="termsAndConditions"
+                  >Retainer Contract Type<span style="color: red"
+                    >*</span
+                  ></label
+                >
                 <span
-                  *ngIf="retainerContract?.hasError('required') && (retainerContract?.dirty || retainerContract?.touched)"
-                  style="color: red;">Required</span>
+                  *ngIf="
+                    retainerContract?.hasError('required') &&
+                    (retainerContract?.dirty || retainerContract?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <span
-                  *ngIf="retainerContract?.hasError('pattern') && (retainerContract?.dirty || retainerContract?.touched)"
-                  style="color: red;">Invalid number</span>
+                  *ngIf="
+                    retainerContract?.hasError('pattern') &&
+                    (retainerContract?.dirty || retainerContract?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
                 <!-- <input class="form-control" type="text" id="retainerContract" placeholder="Enter Retainer Contract" formControlName="retainerContract"> -->
-                <select class="form-select" name="retainerContract" id="retainerContract"
-                  formControlName="retainerContract">
-                  <option value="" selected disabled>--Select Retainer Type--</option>
+                <select
+                  class="form-select"
+                  name="retainerContract"
+                  id="retainerContract"
+                  formControlName="retainerContract"
+                >
+                  <option value="" selected disabled>
+                    --Select Retainer Type--
+                  </option>
                   <option value="1">None</option>
                   <option value="2">Weekly</option>
                   <option value="3">Monthly</option>
@@ -579,93 +1424,177 @@
                     <input class="form-control" type="text" id="valueId" placeholder="ValueId" disabled>
                   </div> -->
               <div class="m-3">
-                <label for="termsAndConditions">Terms and Conditions<span style="color: red;">*</span></label>
+                <label for="termsAndConditions"
+                  >Terms and Conditions<span style="color: red">*</span></label
+                >
                 <span
-                  *ngIf="termsAndConditions?.hasError('required') && (termsAndConditions?.dirty || termsAndConditions?.touched)"
-                  style="color: red;">Required</span>
-                <input class="form-control" type="text" placeholder="Terms and Conditions" id="termsAndConditions"
-                  formControlName="termsAndConditions">
+                  *ngIf="
+                    termsAndConditions?.hasError('required') &&
+                    (termsAndConditions?.dirty || termsAndConditions?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Terms and Conditions"
+                  id="termsAndConditions"
+                  formControlName="termsAndConditions"
+                />
               </div>
               <div class="m-3">
-                <label for="validFrom">Valid from<span style="color: red;">*</span></label>
-                <span *ngIf="validFrom?.hasError('required') && (validFrom?.dirty || validFrom?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="masterContractAddForm.get('validFrom')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                <label for="validFrom"
+                  >Valid from<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    validFrom?.hasError('required') &&
+                    (validFrom?.dirty || validFrom?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('validFrom')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDate']">
                     Invalid date.
                   </span>
-                  <span style="color: red;" *ngIf="errors['pastDate']">
+                  <span style="color: red" *ngIf="errors['pastDate']">
                     Date must not be in the past.
                   </span>
                 </span>
-                <input class="form-control" type="date" id="validFrom" formControlName="validFrom">
+                <input
+                  class="form-control"
+                  type="date"
+                  id="validFrom"
+                  formControlName="validFrom"
+                />
               </div>
               <div class="m-3">
-                <label for="validTill">Valid till<span style="color: red;">*</span></label>
-                <span *ngIf="validTill?.hasError('required') && (validTill?.dirty || validTill?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                <label for="validTill"
+                  >Valid till<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    validTill?.hasError('required') &&
+                    (validTill?.dirty || validTill?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('validTill')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDate']">
                     Invalid date.
                   </span>
-                  <span style="color: red;" *ngIf="errors['pastDate']">
+                  <span style="color: red" *ngIf="errors['pastDate']">
                     Date must not be in the past.
                   </span>
                 </span>
-                <span *ngIf="masterContractAddForm.get('validTill')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDateRange']">
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('validTill')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDateRange']">
                     Date must be grater than valid from date
                   </span>
                 </span>
                 <span
                   *ngIf="masterContractAddForm?.errors?.['invalidDateRange'] && (validTill?.dirty || validTill?.touched)"
-                  style="color: red">
+                  style="color: red"
+                >
                   Valid till date must be greater than valid from date.
                 </span>
-                <input class="form-control" type="date" id="validTill" formControlName="validTill">
+                <input
+                  class="form-control"
+                  type="date"
+                  id="validTill"
+                  formControlName="validTill"
+                />
               </div>
               <div class="m-3">
-                <label for="renewalFrom">Renewal from<span style="color: red;">*</span></label>
-                <span *ngIf="renewalFrom?.hasError('required') && (renewalFrom?.dirty || renewalFrom?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="masterContractAddForm.get('renewalFrom')?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                <label for="renewalFrom"
+                  >Renewal from<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    renewalFrom?.hasError('required') &&
+                    (renewalFrom?.dirty || renewalFrom?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    masterContractAddForm.get('renewalFrom')?.errors as errors
+                  "
+                >
+                  <span style="color: red" *ngIf="errors['invalidDate']">
                     Invalid date.
                   </span>
-                  <span style="color: red;" *ngIf="errors['pastDate']">
+                  <span style="color: red" *ngIf="errors['pastDate']">
                     Date must not be in the past.
                   </span>
                 </span>
                 <span
                   *ngIf="masterContractAddForm?.errors?.['invalidDateBetweenRange'] && (renewalFrom?.dirty || renewalFrom?.touched)"
-                  style="color: red">
+                  style="color: red"
+                >
                   Renewal from date must be between valid from and till date.
                 </span>
-                <input class="form-control" type="date" id="renewalFrom" formControlName="renewalFrom">
+                <input
+                  class="form-control"
+                  type="date"
+                  id="renewalFrom"
+                  formControlName="renewalFrom"
+                />
               </div>
               <div class="m-3">
-                <label for="renewalTill">Renewal till<span style="color: red;">*</span></label>
-                <span *ngIf="renewalTill?.hasError('required') && (renewalTill?.dirty || renewalTill?.touched)"
-                  style="color: red;">Required</span>
+                <label for="renewalTill"
+                  >Renewal till<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    renewalTill?.hasError('required') &&
+                    (renewalTill?.dirty || renewalTill?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <span *ngIf="renewalTill?.errors as errors">
-                  <span style="color: red;" *ngIf="errors['invalidDate']">
+                  <span style="color: red" *ngIf="errors['invalidDate']">
                     Invalid date.
                   </span>
-                  <span style="color: red;" *ngIf="errors['pastDate']">
+                  <span style="color: red" *ngIf="errors['pastDate']">
                     Date must not be in the past.
                   </span>
                 </span>
                 <span
                   *ngIf="masterContractAddForm?.errors?.['invalidDateRange'] && (renewalTill?.dirty || renewalTill?.touched)"
-                  style="color: red">
+                  style="color: red"
+                >
                   Renewal till date must be greater than renewal from date.
                 </span>
                 <span
                   *ngIf="masterContractAddForm?.errors?.['invalidDateBetweenRange'] && (renewalTill?.dirty || renewalTill?.touched)"
-                  style="color: red">
+                  style="color: red"
+                >
                   Renewal till date must be between valid from and till date.
                 </span>
-                <input class="form-control" type="date" id="renewalTill" formControlName="renewalTill">
+                <input
+                  class="form-control"
+                  type="date"
+                  id="renewalTill"
+                  formControlName="renewalTill"
+                />
               </div>
               <!-- <div class="m-3">
                 <label for="addendumDate">Addendum Date<span style="color: red;">*</span></label>
@@ -674,63 +1603,143 @@
                 <input class="form-control" type="date" id="addendumDate" formControlName="addendumDate">
               </div> -->
               <div class="m-3">
-                <label for="termsAndConditions">Employee Custodian Name<span style="color: red;">*</span></label>
-                <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
-                  style="color: red;">Invalid Employee</span>
+                <label for="termsAndConditions"
+                  >Employee Custodian Name<span style="color: red"
+                    >*</span
+                  ></label
+                >
+                <span
+                  *ngIf="
+                    empCustodianId?.hasError('required') &&
+                    (empCustodianId?.dirty || empCustodianId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    empCustodianId?.hasError('pattern') &&
+                    (empCustodianId?.dirty || empCustodianId?.touched)
+                  "
+                  style="color: red"
+                  >Invalid Employee</span
+                >
                 <div class="mb-3">
                   <div class="input-group">
-                    <input #addEmpCustodianName class="form-control edit-input dropdown-input"
-                      placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown"
-                      aria-expanded="false" readonly />
-                    <span class="input-group-text dropdown-icon" data-bs-toggle="collapse"
-                      data-bs-target="#empCustodian-dropdown"><i class="fa-solid fa-angle-down"></i></span>
+                    <input
+                      #addEmpCustodianName
+                      class="form-control edit-input dropdown-input"
+                      placeholder="Employee Custodian"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#empCustodian-dropdown"
+                      aria-expanded="false"
+                      readonly
+                    />
+                    <span
+                      class="input-group-text dropdown-icon"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#empCustodian-dropdown"
+                      ><i class="fa-solid fa-angle-down"></i
+                    ></span>
                   </div>
-                  <div #addEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
+                  <div
+                    #addEmpCustodianCollapse
+                    id="empCustodian-dropdown"
+                    class="collapse"
+                  >
                     <div class="card card-body">
-                      <input type="text" class="form-control" placeholder="Search.."
-                        (input)="textChangeEmployeeCustodian(deptID != undefined ? deptID : 0,$event,1)">
-                      <button type="button" *ngFor="let emp of employeeCustodians" class="dropdown-btn btn"
-                        (click)="fillEmployeeCustodian(emp.valueId,emp.employeeName)">({{emp.employeeCode}})
-                        {{emp.employeeName}}</button>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Search.."
+                        (input)="
+                          textChangeEmployeeCustodian(
+                            deptID != undefined ? deptID : 0,
+                            $event,
+                            1
+                          )
+                        "
+                      />
+                      <button
+                        type="button"
+                        *ngFor="let emp of employeeCustodians"
+                        class="dropdown-btn btn"
+                        (click)="
+                          fillEmployeeCustodian(emp.valueId, emp.employeeName)
+                        "
+                      >
+                        ({{ emp.employeeCode }}) {{ emp.employeeName }}
+                      </button>
                     </div>
                   </div>
                 </div>
-                <input #addEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId"
-                  formControlName="empCustodianId">
+                <input
+                  #addEmpCustodianId
+                  type="hidden"
+                  class="hiddenFields"
+                  id="empCustodianId"
+                  formControlName="empCustodianId"
+                />
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Location<span style="color: red;">*</span></label>
-                <span *ngIf="location?.hasError('required') && (location?.dirty || location?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="location?.hasError('pattern') && (location?.dirty || location?.touched)"
-                  style="color: red;">Invalid Location</span>
-                <!-- <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location"> -->
-                 <div class="input-group">
-                   
-
-                <select
-                  class="form-control"
-                  id="location"
-                  formControlName="location"
+                <label for="termsAndConditions"
+                  >Location<span style="color: red">*</span></label
                 >
+                <span
+                  *ngIf="
+                    location?.hasError('required') &&
+                    (location?.dirty || location?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    location?.hasError('pattern') &&
+                    (location?.dirty || location?.touched)
+                  "
+                  style="color: red"
+                  >Invalid Location</span
+                >
+                <!-- <input class="form-control" type="text" placeholder="Location" id="location" formControlName="location"> -->
+                <div class="input-group dropdown-container">
+                  <select
+                    class="form-control custom-select"
+                    id="location"
+                    formControlName="location"
+                  >
+                    <option value="" disabled>--Select Location--</option>
+                    <option *ngFor="let loc of locationOptions" [value]="loc">
+                      {{ loc }}
+                    </option>
+                  </select>
+                  <i class="fa-solid fa-angle-down dropdown-icon"></i>
+                </div>
+
                 
-                  <option value="" disabled>--Select Location--</option>
-                  <option *ngFor="let loc of locationOptions" [value]="loc">
-                    {{ loc }}
-                  </option>
-                </select>
-                <span><i class="fa-solid fa-angle-down"></i></span>
-              </div>
               </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn add-btn add-modal-btn" id="btnadd" type="submit" style="max-width: 300px;">Add</button>
-          <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
-            style="max-width: 300px;" (click)="onClick()">Cancel</button>
+          <button
+            class="btn add-btn add-modal-btn"
+            id="btnadd"
+            type="submit"
+            style="max-width: 300px"
+          >
+            Add
+          </button>
+          <button
+            type="reset"
+            data-bs-dismiss="modal"
+            class="btn btn-outline-danger"
+            id="btncancel"
+            style="max-width: 300px"
+            (click)="onClick()"
+          >
+            Cancel
+          </button>
 
           <!-- <button type="button" class="btn add-btn add-modal-btn" data-bs-dismiss="modal"
           (click)="editApproverMatrixMOUSubmit(approvalMatrixMou != undefined ? approvalMatrixMou.masterApprovalMatrixMOUId : 0)">Save</button>
@@ -743,34 +1752,73 @@
 </div>
 
 <!-- Post-termination-Notice-Form -->
-<div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="Termination-Notice-Detail"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Post Termination Notice</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Post Termination Notice
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="modal-body">
-        <form #documentForm="ngForm" (ngSubmit)="OnSavePostTermination(documentForm)">
+        <form
+          #documentForm="ngForm"
+          (ngSubmit)="OnSavePostTermination(documentForm)"
+        >
           <div class="mb-3">
-            <p class="m-1">Upload Termination Notice<span style="color: red;">*</span></p>
+            <p class="m-1">
+              Upload Termination Notice<span style="color: red">*</span>
+            </p>
             <div class="input-group">
-              <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
-                accept=".pdf">
+              <input
+                #addFile
+                type="file"
+                name="file"
+                class="form-control"
+                id="file"
+                (change)="uploadFile($event)"
+                accept=".pdf"
+              />
             </div>
           </div>
           <!-- (change)="onFileSelected($event)"
               (click)="triggerFileInput()" -->
           <div class="mb-3">
-            <p class="m-1">End date
-              <span style="color: red;">*</span>
-              <span *ngIf="!datecheck(endDate.value)">Date cannot be in the past</span>
+            <p class="m-1">
+              End date
+              <span style="color: red">*</span>
+              <span *ngIf="!datecheck(endDate.value)"
+                >Date cannot be in the past</span
+              >
             </p>
-            <div class="input-group">  
-              <input #endDate type="date" name="end_Date" class="form-control" id="end_Date" min="0" max="30"
-                placeholder="Enter number of days" [(ngModel)]="postTerm.end_Date">
+            <div class="input-group">
+              <input
+                #endDate
+                type="date"
+                name="end_Date"
+                class="form-control"
+                id="end_Date"
+                min="0"
+                max="30"
+                placeholder="Enter number of days"
+                [(ngModel)]="postTerm.end_Date"
+              />
             </div>
           </div>
           <!-- <div class="mb-3">
@@ -784,20 +1832,37 @@
           </div> -->
           <div class="mb-3">
             <p class="m-1">
-              Remark <span style="color: red;">*</span>
-              <span *ngIf="remarkTouched" style="color: red;">Required</span>
-              
+              Remark <span style="color: red">*</span>
+              <span *ngIf="remarkTouched" style="color: red">Required</span>
+
               <!-- <span *ngIf="(postTerm.Remark.touched && !postTerm.Remark) || (postTerm.Remark.touched && postTerm.Remark.length <= 0)"style="color: red;">Required</span> -->
             </p>
             <div class="input-group">
-              <textarea #posterminationTextarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
-                [(ngModel)]="postTerm.Remark" (focus)="remarkTouchedFalse()" (blur)="checkPosterminationTextarea(posterminationTextarea.value)"></textarea>
+              <textarea
+                #posterminationTextarea
+                name="Remark"
+                class="form-control"
+                id="Remark"
+                rows="4"
+                placeholder="Enter remarks"
+                [(ngModel)]="postTerm.Remark"
+                (focus)="remarkTouchedFalse()"
+                (blur)="
+                  checkPosterminationTextarea(posterminationTextarea.value)
+                "
+              ></textarea>
             </div>
           </div>
 
           <div class="modal-footer">
             <button class="btn btn-outline-primary" type="submit">Save</button>
-            <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
+            <button
+              class="btn btn-outline-danger"
+              type="reset"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
@@ -806,39 +1871,81 @@
 </div>
 
 <!-- Post-termination-Notice-Form -->
-<div class="modal fade" id="Notice-Withdrawal-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="Notice-Withdrawal-Detail"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Withdraw Termination Notice</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Withdraw Termination Notice
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="modal-body">
-        <form #documentForm="ngForm" (ngSubmit)="OnSaveWithdrawalNotice(documentForm)">
+        <form
+          #documentForm="ngForm"
+          (ngSubmit)="OnSaveWithdrawalNotice(documentForm)"
+        >
           <div class="mb-3">
-            <p class="m-1">File Upload<span style="color: red;">*</span></p>
+            <p class="m-1">File Upload<span style="color: red">*</span></p>
             <div class="input-group">
-              <input #addFile type="file" name="file" class="form-control" id="file" (change)="uploadFile($event)"
-                accept=".pdf">
+              <input
+                #addFile
+                type="file"
+                name="file"
+                class="form-control"
+                id="file"
+                (change)="uploadFile($event)"
+                accept=".pdf"
+              />
             </div>
           </div>
           <div class="mb-3">
             <p class="m-1">
-              Remark <span style="color: red;">*</span>
-              <span *ngIf="!withdrawNotice.Remark || withdrawNotice.Remark.length <= 0"
-                style="color: red;">Required</span>
+              Remark <span style="color: red">*</span>
+              <span
+                *ngIf="
+                  !withdrawNotice.Remark || withdrawNotice.Remark.length <= 0
+                "
+                style="color: red"
+                >Required</span
+              >
             </p>
             <div class="input-group">
-              <textarea name="Remark" class="form-control" id="Remark" rows="4" placeholder="Enter remarks"
-                [(ngModel)]="withdrawNotice.Remark"></textarea>
+              <textarea
+                name="Remark"
+                class="form-control"
+                id="Remark"
+                rows="4"
+                placeholder="Enter remarks"
+                [(ngModel)]="withdrawNotice.Remark"
+              ></textarea>
             </div>
           </div>
 
           <div class="modal-footer">
             <button class="btn btn-outline-primary" type="submit">Save</button>
-            <button class="btn btn-outline-danger" type="reset" data-bs-dismiss="modal">Cancel</button>
+            <button
+              class="btn btn-outline-danger"
+              type="reset"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
@@ -847,38 +1954,82 @@
 </div>
 
 <!-- Withdrawal-mail body  -->
-<div class="modal fade" id="withdrawal-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="withdrawal-mail"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Mail Box
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="withdrawalNoticeEmailForm" (ngSubmit)="approveWithdrawalNotice(contractDetails?.contractId)">
+        <form
+          [formGroup]="withdrawalNoticeEmailForm"
+          (ngSubmit)="approveWithdrawalNotice(contractDetails?.contractId)"
+        >
           <div class="mb-3">
-            <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+            <p class="m-1">Add Subject<span style="color: red">*</span></p>
             <div class="input-group">
-              <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject"
-                placeholder="Enter The Subject For Mail">
+              <input
+                formControlName="emailSubject"
+                class="form-control"
+                id="emailSubject"
+                name="emailSubject"
+                placeholder="Enter The Subject For Mail"
+              />
             </div>
           </div>
           <div class="mb-3">
-            <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+            <p class="m-1">
+              Email Body(Compose Mail)<span style="color: red">*</span>
+            </p>
             <div class="input-group">
-              <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody"
-                placeholder="Compose Mail"></textarea>
+              <textarea
+                formControlName="emailBody"
+                class="form-control"
+                id="emailBody"
+                name="emailBody"
+                placeholder="Compose Mail"
+              ></textarea>
             </div>
           </div>
-
 
           <div class="modal-footer">
-            <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
-              style="max-width: 300px;">Send</button>
-            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
-              style="max-width: 300px;" (click)="onClick()">Close</button>
+            <button
+              data-bs-dismiss="modal"
+              class="btn add-btn add-modal-btn"
+              id="btnadd"
+              type="submit"
+              style="max-width: 300px"
+            >
+              Send
+            </button>
+            <button
+              type="reset"
+              data-bs-dismiss="modal"
+              class="btn btn-outline-danger"
+              id="btncancel"
+              style="max-width: 300px"
+              (click)="onClick()"
+            >
+              Close
+            </button>
           </div>
         </form>
       </div>
@@ -886,31 +2037,76 @@
   </div>
 </div>
 
-<div class="modal fade" id="contract-add-addendum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="contract-add-addendum"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add Addendum</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Add Addendum
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="verification-contractId">
         <form [formGroup]="checkContractId" (ngSubmit)="onSubmitCheck()">
           <div class="m-3">
-            <label for="contractId">Contract Name or Id<span style="color: red;">*</span></label>
+            <label for="contractId"
+              >Contract Name or Id<span style="color: red">*</span></label
+            >
             <span
-              *ngIf="checkContractId.get('contractId')?.hasError('required') && (checkContractId.get('contractId')?.dirty || checkContractId.get('contractId')?.touched)"
-              style="color: red;">Required</span>
-            <input #varifyContractId class="form-control" type="text" id="contractId"
-              placeholder="Search by contract name or contract id" formControlName="contractId">
+              *ngIf="
+                checkContractId.get('contractId')?.hasError('required') &&
+                (checkContractId.get('contractId')?.dirty ||
+                  checkContractId.get('contractId')?.touched)
+              "
+              style="color: red"
+              >Required</span
+            >
+            <input
+              #varifyContractId
+              class="form-control"
+              type="text"
+              id="contractId"
+              placeholder="Search by contract name or contract id"
+              formControlName="contractId"
+            />
           </div>
           <div class="modal-footer">
-            <button data-bs-toggle="modal" data-bs-target="#contract-addendum" class="btn add-btn add-modal-btn"
-              id="btnadd" type="submit" style="max-width: 300px;"
-              (click)="fetchContractData(varifyContractId.value)">Verify</button>
-            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
-              style="max-width: 300px;" (click)="onClick()">Cancel</button>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#contract-addendum"
+              class="btn add-btn add-modal-btn"
+              id="btnadd"
+              type="submit"
+              style="max-width: 300px"
+              (click)="fetchContractData(varifyContractId.value)"
+            >
+              Verify
+            </button>
+            <button
+              type="reset"
+              data-bs-dismiss="modal"
+              class="btn btn-outline-danger"
+              id="btncancel"
+              style="max-width: 300px"
+              (click)="onClick()"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
@@ -919,17 +2115,41 @@
 </div>
 
 <!-- global addendum -->
-<div class="modal fade" id="contract-addendum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="contract-addendum"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Add Addendum</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Add Addendum
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="addaddendumForm" (ngSubmit)="onAddAddendumFormSubmit((contractId != undefined && contractId.value != null)  ? +(contractId.value) : 0)">
+        <form
+          [formGroup]="addaddendumForm"
+          (ngSubmit)="
+            onAddAddendumFormSubmit(
+              contractId != undefined && contractId.value != null
+                ? +contractId.value
+                : 0
+            )
+          "
+        >
           <div class="p-2">
             <div class="fields-container">
               <!-- <div class="m-3">
@@ -940,89 +2160,254 @@
                   formControlName="contractId">
               </div> -->
               <div class="m-3">
-                <label for="termsAndConditions">Contract Name<span style="color: red;">*</span></label>
-                <span *ngIf="addaddendumForm?.get('contractName')?.hasError('required') && (addaddendumForm?.get('contractName')?.dirty || addaddendumForm?.get('contractName')?.touched)"
-                  style="color: red;">Required</span>
-                <input class="form-control" type="text" id="companyName" placeholder="Enter contract name"
-                  formControlName="contractName">
+                <label for="termsAndConditions"
+                  >Contract Name<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('contractName')
+                      ?.hasError('required') &&
+                    (addaddendumForm?.get('contractName')?.dirty ||
+                      addaddendumForm?.get('contractName')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  id="companyName"
+                  placeholder="Enter contract name"
+                  formControlName="contractName"
+                />
               </div>
               <div class="m-3">
-                <label for="department">Department<span style="color: red;">*</span></label>
-                <span *ngIf="addaddendumForm?.get('departmentId')?.hasError('required') && (addaddendumForm?.get('departmentId')?.dirty || addaddendumForm?.get('departmentId')?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="addaddendumForm?.get('departmentId')?.hasError('pattern') && (addaddendumForm?.get('departmentId')?.dirty || addaddendumForm?.get('departmentId')?.touched)"
-                  style="color: red;">Invalid number</span>
+                <label for="department"
+                  >Department<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('departmentId')
+                      ?.hasError('required') &&
+                    (addaddendumForm?.get('departmentId')?.dirty ||
+                      addaddendumForm?.get('departmentId')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm?.get('departmentId')?.hasError('pattern') &&
+                    (addaddendumForm?.get('departmentId')?.dirty ||
+                      addaddendumForm?.get('departmentId')?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
                 <!-- <input class="form-control" type="text" id="departmentId" placeholder="Enter department ID" formControlName="departmentId" [(ngModel)]="deptID"> -->
-                <select class="form-select" name="departmentId" id="departmentId" formControlName="departmentId"
-                  [(ngModel)]="deptID">
-                  <option value="" disabled selected>--Select one Department--</option>
-                  <option *ngFor="let department of departments" value="{{department.departmentId}}">
-                    {{department.departmentName}}</option>
-                </select>
-              </div>
-              <div class="m-3">
-                <label for="termsAndConditions">Contract with Company<span style="color: red;">*</span></label>
-                <span
-                  *ngIf="addaddendumForm?.get('contractWithCompanyId')?.hasError('required') && (addaddendumForm?.get('contractWithCompanyId')?.dirty || addaddendumForm?.get('contractWithCompanyId')?.touched)"
-                  style="color: red;">Required</span>
-                <span
-                  *ngIf="addaddendumForm?.get('contractWithCompanyId')?.hasError('pattern') && (addaddendumForm?.get('contractWithCompanyId')?.dirty || addaddendumForm?.get('contractWithCompanyId')?.touched)"
-                  style="color: red;">Invalid number</span>
-                <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
-                <select class="form-select" name="contractWithCompanyId" id="contractWithCompanyId"
-                  formControlName="contractWithCompanyId">
-                  <option value="" disabled selected>--Select one Company--</option>
-                  <option *ngFor="let company of companies" value="{{company.valueId}}">{{company.companyName}}
+                <select
+                  class="form-select"
+                  name="departmentId"
+                  id="departmentId"
+                  formControlName="departmentId"
+                  [(ngModel)]="deptID"
+                >
+                  <option value="" disabled selected>
+                    --Select one Department--
+                  </option>
+                  <option
+                    *ngFor="let department of departments"
+                    value="{{ department.departmentId }}"
+                  >
+                    {{ department.departmentName }}
                   </option>
                 </select>
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Contract Type<span style="color: red;">*</span></label>
-                <span *ngIf="contractTypeId?.hasError('required') && (contractTypeId?.dirty || contractTypeId?.touched)"
-                  style="color: red;">Required</span>
+                <label for="termsAndConditions"
+                  >Contract with Company<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('contractWithCompanyId')
+                      ?.hasError('required') &&
+                    (addaddendumForm?.get('contractWithCompanyId')?.dirty ||
+                      addaddendumForm?.get('contractWithCompanyId')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('contractWithCompanyId')
+                      ?.hasError('pattern') &&
+                    (addaddendumForm?.get('contractWithCompanyId')?.dirty ||
+                      addaddendumForm?.get('contractWithCompanyId')?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
+                <!-- <input class="form-control" type="text" id="contractWithCompanyId" placeholder="Contract with Company ID" formControlName="contractWithCompanyId"> -->
+                <select
+                  class="form-select"
+                  name="contractWithCompanyId"
+                  id="contractWithCompanyId"
+                  formControlName="contractWithCompanyId"
+                >
+                  <option value="" disabled selected>
+                    --Select one Company--
+                  </option>
+                  <option
+                    *ngFor="let company of companies"
+                    value="{{ company.valueId }}"
+                  >
+                    {{ company.companyName }}
+                  </option>
+                </select>
+              </div>
+              <div class="m-3">
+                <label for="termsAndConditions"
+                  >Contract Type<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    contractTypeId?.hasError('required') &&
+                    (contractTypeId?.dirty || contractTypeId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <!-- <input class="form-control" type="text" id="contractTypeId" placeholder="Enter Contract Type ID" formControlName="contractTypeId"> -->
-                <select class="form-select" name="contractTypeId" id="contractTypeId" formControlName="contractTypeId">
-                  <option value="" disabled selected>--Select one Contract Type--</option>
-                  <option *ngFor="let contractType of contractTypes" value="{{contractType.valueId}}">
-                    {{contractType.contractTypeName}}</option>
+                <select
+                  class="form-select"
+                  name="contractTypeId"
+                  id="contractTypeId"
+                  formControlName="contractTypeId"
+                >
+                  <option value="" disabled selected>
+                    --Select one Contract Type--
+                  </option>
+                  <option
+                    *ngFor="let contractType of contractTypes"
+                    value="{{ contractType.valueId }}"
+                  >
+                    {{ contractType.contractTypeName }}
+                  </option>
                 </select>
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Apostille Type<span style="color: red;">*</span></label>
+                <label for="termsAndConditions"
+                  >Apostille Type<span style="color: red">*</span></label
+                >
                 <span
-                  *ngIf="apostilleTypeId?.hasError('required') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
-                  style="color: red;">Required</span>
+                  *ngIf="
+                    apostilleTypeId?.hasError('required') &&
+                    (apostilleTypeId?.dirty || apostilleTypeId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <span
-                  *ngIf="apostilleTypeId?.hasError('pattern') && (apostilleTypeId?.dirty || apostilleTypeId?.touched)"
-                  style="color: red;">Invalid number</span>
+                  *ngIf="
+                    apostilleTypeId?.hasError('pattern') &&
+                    (apostilleTypeId?.dirty || apostilleTypeId?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
                 <!-- <input class="form-control" type="text" id="apostilleTypeId" placeholder="Enter Apostille ID" formControlName="apostilleTypeId"> -->
-                <select class="form-select" name="apostilleTypeId" id="apostilleTypeId"
-                  formControlName="apostilleTypeId">
-                  <option value="" selected disabled>--Select one Apostille Type--</option>
-                  <option *ngFor="let apostille of apostilleTypes" value="{{apostille.valueId}}">
-                    {{apostille.apostilleName}}</option>
+                <select
+                  class="form-select"
+                  name="apostilleTypeId"
+                  id="apostilleTypeId"
+                  formControlName="apostilleTypeId"
+                >
+                  <option value="" selected disabled>
+                    --Select one Apostille Type--
+                  </option>
+                  <option
+                    *ngFor="let apostille of apostilleTypes"
+                    value="{{ apostille.valueId }}"
+                  >
+                    {{ apostille.apostilleName }}
+                  </option>
                 </select>
               </div>
               <div class="m-3">
-                <label for="termsAndConditions">Actual Document Reference Number<span style="color: red;">*</span></label>
-                <span *ngIf="addaddendumForm?.get('actualDocRefNo')?.hasError('required') && (addaddendumForm?.get('actualDocRefNo')?.dirty || addaddendumForm?.get('actualDocRefNo')?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="addaddendumForm?.get('actualDocRefNo')?.hasError('pattern') && (addaddendumForm?.get('actualDocRefNo')?.dirty || addaddendumForm?.get('actualDocRefNo')?.touched)"
-                  style="color: red;">Invalid number</span>
-                <input class="form-control" type="text" id="actualDocRefNo"
-                  placeholder="Enter Actual Document Reference Number" formControlName="actualDocRefNo">
+                <label for="termsAndConditions"
+                  >Actual Document Reference Number<span style="color: red"
+                    >*</span
+                  ></label
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('actualDocRefNo')
+                      ?.hasError('required') &&
+                    (addaddendumForm?.get('actualDocRefNo')?.dirty ||
+                      addaddendumForm?.get('actualDocRefNo')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('actualDocRefNo')
+                      ?.hasError('pattern') &&
+                    (addaddendumForm?.get('actualDocRefNo')?.dirty ||
+                      addaddendumForm?.get('actualDocRefNo')?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  id="actualDocRefNo"
+                  placeholder="Enter Actual Document Reference Number"
+                  formControlName="actualDocRefNo"
+                />
               </div>
 
               <div class="m-3">
-                <label for="termsAndConditions">Retainer Contract Type<span style="color: red;">*</span></label>
+                <label for="termsAndConditions"
+                  >Retainer Contract Type<span style="color: red"
+                    >*</span
+                  ></label
+                >
                 <span
-                  *ngIf="addaddendumForm?.get('retainerContract')?.hasError('required') && (addaddendumForm?.get('retainerContract')?.dirty || addaddendumForm?.get('retainerContract')?.touched)"
-                  style="color: red;">Required</span>
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('retainerContract')
+                      ?.hasError('required') &&
+                    (addaddendumForm?.get('retainerContract')?.dirty ||
+                      addaddendumForm?.get('retainerContract')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
                 <span
-                  *ngIf="addaddendumForm?.get('retainerContract')?.hasError('pattern') && (addaddendumForm?.get('retainerContract')?.dirty || retainerContract?.touched)"
-                  style="color: red;">Invalid number</span>
-                <select class="form-select" name="retainerContract" id="retainerContract"
-                  formControlName="retainerContract">
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('retainerContract')
+                      ?.hasError('pattern') &&
+                    (addaddendumForm?.get('retainerContract')?.dirty ||
+                      retainerContract?.touched)
+                  "
+                  style="color: red"
+                  >Invalid number</span
+                >
+                <select
+                  class="form-select"
+                  name="retainerContract"
+                  id="retainerContract"
+                  formControlName="retainerContract"
+                >
                   <option value="1">None</option>
                   <option value="2">Weekly</option>
                   <option value="3">Monthly</option>
@@ -1032,62 +2417,172 @@
               </div>
 
               <div class="m-3">
-                <label for="termsAndConditions">Terms and Conditions<span style="color: red;">*</span></label>
+                <label for="termsAndConditions"
+                  >Terms and Conditions<span style="color: red">*</span></label
+                >
                 <span
-                  *ngIf="addaddendumForm?.get('termsAndConditions')?.hasError('required') && (addaddendumForm?.get('termsAndConditions')?.dirty || addaddendumForm?.get('termsAndConditions')?.touched)"
-                  style="color: red;">Required</span>
-                <input class="form-control" type="text" placeholder="Terms and Conditions" id="termsAndConditions"
-                  formControlName="termsAndConditions">
+                  *ngIf="
+                    addaddendumForm
+                      ?.get('termsAndConditions')
+                      ?.hasError('required') &&
+                    (addaddendumForm?.get('termsAndConditions')?.dirty ||
+                      addaddendumForm?.get('termsAndConditions')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Terms and Conditions"
+                  id="termsAndConditions"
+                  formControlName="termsAndConditions"
+                />
               </div>
 
               <div class="m-3">
-                <label for="validFrom">Valid from<span style="color: red;">*</span></label>
-                <span *ngIf="addaddendumForm?.get('validFrom')?.hasError('required') && (addaddendumForm?.get('validFrom')?.dirty || addaddendumForm?.get('validFrom')?.touched)"
-                  style="color: red;">Required</span>
-                <input class="form-control" type="date" id="validFrom" formControlName="validFrom">
+                <label for="validFrom"
+                  >Valid from<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm?.get('validFrom')?.hasError('required') &&
+                    (addaddendumForm?.get('validFrom')?.dirty ||
+                      addaddendumForm?.get('validFrom')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <input
+                  class="form-control"
+                  type="date"
+                  id="validFrom"
+                  formControlName="validFrom"
+                />
               </div>
 
               <div class="m-3">
-                <label for="validTill">Valid till<span style="color: red;">*</span></label>
-                <span *ngIf="addaddendumForm?.get('validTill')?.hasError('required') && (addaddendumForm?.get('validTill')?.dirty || addaddendumForm?.get('validTill')?.touched)"
-                  style="color: red;">Required</span>
-                <input class="form-control" type="date" id="validTill" formControlName="validTill">
+                <label for="validTill"
+                  >Valid till<span style="color: red">*</span></label
+                >
+                <span
+                  *ngIf="
+                    addaddendumForm?.get('validTill')?.hasError('required') &&
+                    (addaddendumForm?.get('validTill')?.dirty ||
+                      addaddendumForm?.get('validTill')?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <input
+                  class="form-control"
+                  type="date"
+                  id="validTill"
+                  formControlName="validTill"
+                />
               </div>
 
               <div class="m-3">
-                <label for="termsAndConditions">Employee Custodian Name<span style="color: red;">*</span></label>
-                <span *ngIf="empCustodianId?.hasError('required') && (empCustodianId?.dirty || empCustodianId?.touched)"
-                  style="color: red;">Required</span>
-                <span *ngIf="empCustodianId?.hasError('pattern') && (empCustodianId?.dirty || empCustodianId?.touched)"
-                  style="color: red;">Invalid Employee</span>
+                <label for="termsAndConditions"
+                  >Employee Custodian Name<span style="color: red"
+                    >*</span
+                  ></label
+                >
+                <span
+                  *ngIf="
+                    empCustodianId?.hasError('required') &&
+                    (empCustodianId?.dirty || empCustodianId?.touched)
+                  "
+                  style="color: red"
+                  >Required</span
+                >
+                <span
+                  *ngIf="
+                    empCustodianId?.hasError('pattern') &&
+                    (empCustodianId?.dirty || empCustodianId?.touched)
+                  "
+                  style="color: red"
+                  >Invalid Employee</span
+                >
                 <div class="mb-3">
                   <div class="input-group">
-                    <input #addAddendumEmpCustodianName class="form-control edit-input dropdown-input"
-                      placeholder="Employee Custodian" data-bs-toggle="collapse" data-bs-target="#empCustodian-dropdown"
-                      aria-expanded="false" readonly />
-                    <span class="input-group-text dropdown-icon" data-bs-toggle="collapse"
-                      data-bs-target="#empCustodian-dropdown"><i class="fa-solid fa-angle-down"></i></span>
+                    <input
+                      #addAddendumEmpCustodianName
+                      class="form-control edit-input dropdown-input"
+                      placeholder="Employee Custodian"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#empCustodian-dropdown"
+                      aria-expanded="false"
+                      readonly
+                    />
+                    <span
+                      class="input-group-text dropdown-icon"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#empCustodian-dropdown"
+                      ><i class="fa-solid fa-angle-down"></i
+                    ></span>
                   </div>
-                  <div #addAddendumEmpCustodianCollapse id="empCustodian-dropdown" class="collapse">
+                  <div
+                    #addAddendumEmpCustodianCollapse
+                    id="empCustodian-dropdown"
+                    class="collapse"
+                  >
                     <div class="card card-body">
-                      <input type="text" class="form-control" placeholder="Search.."
-                        (input)="textChangeEmployeeCustodian(deptID != undefined ? deptID : 0,$event,1)">
-                      <button type="button" *ngFor="let emp of employeeCustodians" class="dropdown-btn btn"
-                        (click)="fillEmployeeCustodian(emp.valueId,emp.employeeName)">({{emp.employeeCode}})
-                        {{emp.employeeName}}</button>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Search.."
+                        (input)="
+                          textChangeEmployeeCustodian(
+                            deptID != undefined ? deptID : 0,
+                            $event,
+                            1
+                          )
+                        "
+                      />
+                      <button
+                        type="button"
+                        *ngFor="let emp of employeeCustodians"
+                        class="dropdown-btn btn"
+                        (click)="
+                          fillEmployeeCustodian(emp.valueId, emp.employeeName)
+                        "
+                      >
+                        ({{ emp.employeeCode }}) {{ emp.employeeName }}
+                      </button>
                     </div>
                   </div>
                 </div>
-                <input #addAddendumEmpCustodianId type="hidden" class="hiddenFields" id="empCustodianId"
-                  formControlName="empCustodianId">
+                <input
+                  #addAddendumEmpCustodianId
+                  type="hidden"
+                  class="hiddenFields"
+                  id="empCustodianId"
+                  formControlName="empCustodianId"
+                />
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button data-bs-dismiss="modal" class="btn add-btn btn-outline-primary" id="btnadd" type="submit"
-              style="max-width: 300px;">Add</button>
-            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
-              style="max-width: 300px;" (click)="onClick()">Cancel</button>
+            <button
+              data-bs-dismiss="modal"
+              class="btn add-btn btn-outline-primary"
+              id="btnadd"
+              type="submit"
+              style="max-width: 300px"
+            >
+              Add
+            </button>
+            <button
+              type="reset"
+              data-bs-dismiss="modal"
+              class="btn btn-outline-danger"
+              id="btncancel"
+              style="max-width: 300px"
+              (click)="onClick()"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
@@ -1096,38 +2591,82 @@
 </div>
 
 <!-- contract-mail body  -->
-<div class="modal fade" id="postTerm-mail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="postTerm-mail"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Mail Box</h1>
-        <button type="button" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close"><i
-            class="fa-solid fa-xmark"></i></button>
+        <h1 style="color: whitesmoke" class="modal-title fs-5 fw-bolder">
+          Mail Box
+        </h1>
+        <button
+          type="button"
+          class="btn close-btn"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="postTerminationEmailForm" (ngSubmit)="approveTerminateContract(contractDetails?.contractId)">
+        <form
+          [formGroup]="postTerminationEmailForm"
+          (ngSubmit)="approveTerminateContract(contractDetails?.contractId)"
+        >
           <div class="mb-3">
-            <p class="m-1">Add Subject<span style="color: red;">*</span></p>
+            <p class="m-1">Add Subject<span style="color: red">*</span></p>
             <div class="input-group">
-              <input formControlName="emailSubject" class="form-control" id="emailSubject" name="emailSubject"
-                placeholder="Enter The Subject For Mail">
+              <input
+                formControlName="emailSubject"
+                class="form-control"
+                id="emailSubject"
+                name="emailSubject"
+                placeholder="Enter The Subject For Mail"
+              />
             </div>
           </div>
           <div class="mb-3">
-            <p class="m-1">Email Body(Compose Mail)<span style="color: red;">*</span></p>
+            <p class="m-1">
+              Email Body(Compose Mail)<span style="color: red">*</span>
+            </p>
             <div class="input-group">
-              <textarea formControlName="emailBody" class="form-control" id="emailBody" name="emailBody"
-                placeholder="Compose Mail"></textarea>
+              <textarea
+                formControlName="emailBody"
+                class="form-control"
+                id="emailBody"
+                name="emailBody"
+                placeholder="Compose Mail"
+              ></textarea>
             </div>
           </div>
-
 
           <div class="modal-footer">
-            <button data-bs-dismiss="modal" class="btn add-btn add-modal-btn" id="btnadd" type="submit"
-              style="max-width: 300px;">Send</button>
-            <button type="reset" data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel"
-              style="max-width: 300px;" (click)="onClick()">Close</button>
+            <button
+              data-bs-dismiss="modal"
+              class="btn add-btn add-modal-btn"
+              id="btnadd"
+              type="submit"
+              style="max-width: 300px"
+            >
+              Send
+            </button>
+            <button
+              type="reset"
+              data-bs-dismiss="modal"
+              class="btn btn-outline-danger"
+              id="btncancel"
+              style="max-width: 300px"
+              (click)="onClick()"
+            >
+              Close
+            </button>
           </div>
         </form>
       </div>

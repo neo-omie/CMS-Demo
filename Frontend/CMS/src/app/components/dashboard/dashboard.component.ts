@@ -18,35 +18,38 @@ import { ErrorHandler } from '../../utils/errorHandler';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [LoaderComponent, CommonModule, NgxChartsModule,
-    HighchartsChartModule
+  imports: [
+    LoaderComponent,
+    CommonModule,
+    NgxChartsModule,
+    HighchartsChartModule,
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
   loading: boolean = false;
   userRole: string[] | null = [];
-  contractTotal : number = 0;
-  contractActive : number = 0;
-  contractTerminated : number = 0;
-  contractExpired : number = 0;
-  contractRenew0 : number = 0;
-  contractRenew30 : number = 0;
-  contractRenew60 : number = 0;
-  contractRenew90 : number = 0;
-  classifiedContractTotal : number = 0;
-  classifiedContractActive : number = 0;
-  classifiedContractTerminated : number = 0;
-  classifiedContractExpired : number = 0;
-  classifiedContractRenew0 : number = 0;
-  classifiedContractRenew30 : number = 0;
-  classifiedContractRenew60 : number = 0;
-  classifiedContractRenew90 : number = 0;
+  contractTotal: number = 0;
+  contractActive: number = 0;
+  contractTerminated: number = 0;
+  contractExpired: number = 0;
+  contractRenew0: number = 0;
+  contractRenew30: number = 0;
+  contractRenew60: number = 0;
+  contractRenew90: number = 0;
+  classifiedContractTotal: number = 0;
+  classifiedContractActive: number = 0;
+  classifiedContractTerminated: number = 0;
+  classifiedContractExpired: number = 0;
+  classifiedContractRenew0: number = 0;
+  classifiedContractRenew30: number = 0;
+  classifiedContractRenew60: number = 0;
+  classifiedContractRenew90: number = 0;
   contractStatu = ContractStatus;
-  viewportWidth:number = window.innerWidth
-  updateFlag1:boolean = false;
-  updateFlag2:boolean = false;
+  viewportWidth: number = window.innerWidth;
+  updateFlag1: boolean = false;
+  updateFlag2: boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
 
   contractchartOptions: Highcharts.Options = {
@@ -54,21 +57,24 @@ export class DashboardComponent implements OnInit {
     chart: { type: 'pie' },
     title: { text: '' },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
     },
     plotOptions: {
       pie: {
         allowPointSelect: true,
         cursor: 'pointer',
         dataLabels: { enabled: false },
-        showInLegend: true
-      }
+        showInLegend: true,
+      },
     },
-    series: [{
-      name: 'Contracts',
-      type: 'pie',
-      data: []
-    }]
+   
+    series: [
+      {
+        name: 'Contracts',
+        type: 'pie',
+        data: [],
+      },
+    ],
   };
 
   classifiedcontractchartOptions: Highcharts.Options = {
@@ -76,34 +82,37 @@ export class DashboardComponent implements OnInit {
     chart: { type: 'pie' },
     title: { text: '' },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
     },
     plotOptions: {
       pie: {
         allowPointSelect: true,
         cursor: 'pointer',
         dataLabels: { enabled: false },
-        showInLegend: true
-      }
+        showInLegend: true,
+      },
     },
-    series: [{
-      name: 'Classified contracts',
-      type: 'pie',
-      data: []
-    }]
+    series: [
+      {
+        name: 'Classified contracts',
+        type: 'pie',
+        data: [],
+      },
+    ],
   };
 
-  constructor(private title: Title,
+  constructor(
+    private title: Title,
     private router: Router,
     private contractsService: ContractsService,
-    private classifiedContractsService: ClassifiedContractsService) {
-    this.title.setTitle("Dashboard - CMS");
+    private classifiedContractsService: ClassifiedContractsService
+  ) {
+    this.title.setTitle('Dashboard - CMS');
   }
-
 
   ngOnInit() {
     this.GetContractsCount();
-    if(this.checkLogin() && this.checkUserRole()){
+    if (this.checkLogin() && this.checkUserRole()) {
       this.GetClassifiedContractsCount();
       this.GetClassifiedContractsCounts();
     }
@@ -120,273 +129,342 @@ export class DashboardComponent implements OnInit {
   }
 
   checkLogin(): boolean {
-      if (localStorage.getItem('token')) {
-        this.userRole = DecodeToken.ERole;
-        return true;
-      }
-      return false;
+    if (localStorage.getItem('token')) {
+      this.userRole = DecodeToken.ERole;
+      return true;
     }
-  checkUserRole() : boolean{
-    if(this.userRole == null || this.userRole == undefined) return false;
-    return (this.userRole.includes("Admin") || this.userRole.includes("Management_User") || (this.userRole.includes("Super_Admin")));
+    return false;
   }
-  GetContractCounts(){
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Active,
-    }).subscribe({
-      next:(res) => { this.contractActive = res.length; },
-      error:(err) => { 
-        if(err.status == 401){
+  checkUserRole(): boolean {
+    if (this.userRole == null || this.userRole == undefined) return false;
+    return (
+      this.userRole.includes('Admin') ||
+      this.userRole.includes('Management_User') ||
+      this.userRole.includes('Super_Admin')
+    );
+  }
+  GetContractCounts() {
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        ContractStatus: ContractStatus.Active,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractActive = res.length;
+        },
+        error: (err) => {
+          if (err.status == 401) {
             let errmsg = err.error;
             Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); 
-      }
-    })
+          } else Alert.toast(TYPE.ERROR, true, err.error.message);
+        },
+      });
 
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Expired,
-    }).subscribe({
-      next:(res) => { this.contractExpired = res.length; },
-      error:(err) => {
-                                    ErrorHandler.handle(err);
- }
-    })
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        ContractStatus: ContractStatus.Expired,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractExpired = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Terminated,
-    }).subscribe({
-      next:(res) => { this.contractTerminated = res.length; },
-      error:(err) => {
-                                   ErrorHandler.handle(err);
-                                   
- }
-    })
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        ContractStatus: ContractStatus.Terminated,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractTerminated = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 0,
-    }).subscribe({
-      next:(res) => { this.contractRenew0 = res.length; },
-      error:(err) => { 
-                                   ErrorHandler.handle(err);
- }
-    })
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 0,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractRenew0 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 30,
-    }).subscribe({
-      next:(res) => { this.contractRenew30 = res.length; },
-      error:(err) => {
-                                    ErrorHandler.handle(err);
- }
-    })
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 30,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractRenew30 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 60,
-    }).subscribe({
-      next:(res) => { this.contractRenew60 = res.length; },
-      error:(err) => {
-                                    ErrorHandler.handle(err);
- }
-    })
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 60,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractRenew60 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 90,
-    }).subscribe({
-      next:(res) => { this.contractRenew90 = res.length; },
-      error:(err) => {
-                                    ErrorHandler.handle(err);
- }
-    })
+    this.contractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 90,
+      })
+      .subscribe({
+        next: (res) => {
+          this.contractRenew90 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
   }
 
-  GetClassifiedContractsCounts(){
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Active,
-    }).subscribe({
-      next:(res) => { this.classifiedContractActive = res.length; },
-      error:(err) => { 
-                                    ErrorHandler.handle(err);
- }
-    })
+  GetClassifiedContractsCounts() {
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        ContractStatus: ContractStatus.Active,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractActive = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Expired,
-    }).subscribe({
-      next:(res) => { this.classifiedContractExpired = res.length; },
-      error:(err) => { 
-        ErrorHandler.handle(err); }
-    })
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        ContractStatus: ContractStatus.Expired,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractExpired = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Terminated,
-    }).subscribe({
-      next:(res) => { this.classifiedContractTerminated = res.length; },
-      error:(err) => {
-        ErrorHandler.handle(err);}
-    })
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        ContractStatus: ContractStatus.Terminated,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractTerminated = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 0,
-    }).subscribe({
-      next:(res) => { this.classifiedContractRenew0 = res.length; },
-      error:(err) => {
-        ErrorHandler.handle(err);}
-    })
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 0,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractRenew0 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 30,
-    }).subscribe({
-      next:(res) => { this.classifiedContractRenew30 = res.length; },
-      error:(err) => {
-        ErrorHandler.handle(err); }
-    })
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 30,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractRenew30 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 60,
-    }).subscribe({
-      next:(res) => { this.classifiedContractRenew60 = res.length; },
-      error:(err) => { 
-        ErrorHandler.handle(err); }
-    })
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 60,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractRenew60 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
 
-    this.classifiedContractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 90,
-    }).subscribe({
-      next:(res) => { this.classifiedContractRenew90 = res.length; },
-      error:(err) => {
-        ErrorHandler.handle(err); }
-    })
+    this.classifiedContractsService
+      .getContracts({
+        PageNumber: 1,
+        PageSize: 1000,
+        RenewalDueIn: 90,
+      })
+      .subscribe({
+        next: (res) => {
+          this.classifiedContractRenew90 = res.length;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
+      });
   }
 
   GetContractsCount() {
     this.contractsService.getContractCounts().subscribe({
       next: (response: ContractsCount) => {
-        const formatted = []
+        const formatted = [];
         const keys = Object.keys(response);
         const values = Object.values(response);
         this.contractTotal = response.allContractsCount;
         let sum = 0;
         for (let index = 0; index < keys.length; index++) {
-          if (keys[index] != 'allContractsCount'){
+          if (keys[index] != 'allContractsCount') {
             sum += values[index];
             formatted.push({
               name: keys[index],
               y: values[index],
-            })
+            });
           }
         }
         formatted.push({
-          name: "Others",
-          y: response.allContractsCount - sum
+          name: 'Others',
+          y: response.allContractsCount - sum,
         });
         // Set the series data dynamically
-        (this.contractchartOptions.series as Highcharts.SeriesOptionsType[])[0] = {
+        (
+          this.contractchartOptions.series as Highcharts.SeriesOptionsType[]
+        )[0] = {
           type: 'pie',
           name: 'Contracts',
-          data: formatted
+          data: formatted,
         };
         this.updateFlag1 = true;
-        setTimeout(() => this.updateFlag1 = false, 100);
-      }, error: (error) => {
+        setTimeout(() => (this.updateFlag1 = false), 100);
+      },
+      error: (error) => {
         ErrorHandler.handle(error);
-      }
+      },
     });
   }
 
   GetClassifiedContractsCount() {
     this.classifiedContractsService.getClassifiedContractCounts().subscribe({
       next: (response: ContractsCount) => {
-        const formatted = []
+        const formatted = [];
         const keys = Object.keys(response);
         const values = Object.values(response);
         let sum = 0;
-        this.classifiedContractTotal = response.allContractsCount
+        this.classifiedContractTotal = response.allContractsCount;
         for (let index = 0; index < keys.length; index++) {
-          if (keys[index] != 'allContractsCount'){
+          if (keys[index] != 'allContractsCount') {
             sum += values[index];
             formatted.push({
               name: keys[index],
               y: values[index],
-            })
+            });
           }
-
         }
         formatted.push({
-          name: "Others",
-          y: response.allContractsCount - sum
+          name: 'Others',
+          y: response.allContractsCount - sum,
         });
         // Set the series data dynamically
-        (this.classifiedcontractchartOptions.series as Highcharts.SeriesOptionsType[])[0] = {
+        (
+          this.classifiedcontractchartOptions
+            .series as Highcharts.SeriesOptionsType[]
+        )[0] = {
           type: 'pie',
           name: 'Classified contracts',
-          data: formatted
+          data: formatted,
         };
         this.updateFlag2 = true;
-        setTimeout(() => this.updateFlag2 = false, 100);
-      }, error: (error) => {
+        setTimeout(() => (this.updateFlag2 = false), 100);
+      },
+      error: (error) => {
         ErrorHandler.handle(error);
-      }
+      },
     });
   }
 
-  goToTable(status:ContractStatus) {
+  goToTable(status: ContractStatus) {
     this.router.navigate(['/contracts/allContracts'], {
-      queryParams: { status }
+      queryParams: { status },
     });
   }
 
-  goToTableClassified(status:ContractStatus) {
+  goToTableClassified(status: ContractStatus) {
     this.router.navigate(['/classifiedContracts/allContracts'], {
-      queryParams: { status }
+      queryParams: { status },
     });
   }
 
-  goToTableRenewalIn(renewalIn:string) {
+  goToTableRenewalIn(renewalIn: string) {
     this.router.navigate(['/contracts/allContracts'], {
-      queryParams: { renewalIn }
+      queryParams: { renewalIn },
     });
   }
 
-  goToTableClassifiedRenewalIn(renewalIn:string) {
+  goToTableClassifiedRenewalIn(renewalIn: string) {
     this.router.navigate(['/classifiedContracts/allContracts'], {
-      queryParams: { renewalIn }
+      queryParams: { renewalIn },
     });
   }
 
-  go(){
+  go() {
     this.router.navigate(['/contracts/allContracts']);
   }
-  goClassified(){
+  goClassified() {
     this.router.navigate(['/classifiedContracts/allContracts']);
   }
 }

@@ -2,7 +2,7 @@
 <h2 class="pt-3 fs-1">
   Audit Logs
 </h2>
-<div *ngIf="!loading" class="table-responsive p-md-5 p-3">
+<div  *ngIf="!loading" class="table-responsive p-md-5 p-3">
 <button class="add-btn btn btn-outline-primary mb-2 printPdf" (click)="
         printToPDF()">
     <i class="fa-solid fa-file-pdf"></i> Print to PDF
@@ -12,7 +12,7 @@
     <i class="fa-solid fa-file-excel"></i> Print to Excel
   </button>    <app-table [columnsInfo]="columnsInfo" [data]="allAudit" [displayedColumns]="displayedColumns"></app-table>
 </div>
-<p *ngIf="allAudit.length == 0" class="fs-5">No records</p>
+<p *ngIf="allAudit.length == 0" class="fs-5 text-center">No records</p>
 <ng-template #logTime let-row>
   <!-- {{row.logTime.split('T')[0] + " " + row.logTime.split('T')[1]}} -->
   {{row.logTime | date :'dd-MM-yyyy  hh:mm:ss a'}}

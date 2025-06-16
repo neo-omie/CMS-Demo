@@ -92,7 +92,7 @@ namespace CMS.Persistence.Repositories
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(10),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: signingCredentials
             );
             return jwtSecurityToken;
