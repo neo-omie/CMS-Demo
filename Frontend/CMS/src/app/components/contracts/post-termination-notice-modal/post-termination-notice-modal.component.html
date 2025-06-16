@@ -1,0 +1,51 @@
+<div class="modal fade" id="Termination-Notice-Detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h1 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder">Post Termination Notice</h1>
+        <button type="button" class="btn close-btn" (click)="resetForm()" data-bs-dismiss="modal" aria-label="Close"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="documentForm" (ngSubmit)="onSavePostTermination()">
+          <div class="mb-3">
+            <p class="m-1">Upload Termination Notice <span style="color: red;">*</span>
+              <span *ngIf="documentForm.get('file')?.invalid && documentForm.get('file')?.touched"
+                style="color: red;">Required</span>
+            </p>
+            <input type="file" class="form-control" formControlName="file" (change)="uploadFile($event)" />
+          </div>
+
+          <div class="mb-3">
+            <p class="m-1">End date <span style="color: red;">*</span>
+              <span *ngIf="documentForm.get('end_Date')?.errors as errors">
+                <span style="color: red" *ngIf="errors['invalidDate']">Invalid date.</span>
+                <span style="color: red" *ngIf="errors['pastDate']">Date must not be in the past.</span>
+              </span>
+              <span *ngIf="documentForm.get('end_Date')?.hasError('required') && 
+              (documentForm.get('end_Date')?.touched || documentForm.get('end_Date')?.dirty)"
+                style="color: red;">Required</span>
+            </p>
+            <input type="date" class="form-control" formControlName="end_Date" />
+          </div>
+
+          <div class="mb-3">
+            <p class="m-1">Remark <span style="color: red;">*</span>
+              <span *ngIf="documentForm.get('Remark')?.hasError('required') && 
+              (documentForm.get('Remark')?.touched || documentForm.get('Remark')?.dirty)"
+                style="color: red;">Required</span>
+            </p>
+            <textarea formControlName="Remark" class="form-control" rows="4" placeholder="Enter remarks"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-outline-primary" type="submit">Save</button>
+            <button class="btn btn-outline-danger" (click)="resetForm()" type="reset"
+              data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

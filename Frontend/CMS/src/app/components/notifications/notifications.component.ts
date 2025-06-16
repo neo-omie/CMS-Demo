@@ -5,9 +5,9 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { Notification } from '../../models/notification';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { NotificationService } from '../../services/notification.service';
 import { Alert } from '../../utils/alert';
 import { TYPE } from '../auth/login/values.constants';
@@ -19,6 +19,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
 import { Pagination } from '../../utils/pagination';
 import { TableComponent } from '../UtilComponents/table/table.component';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-notifications',
@@ -106,36 +107,24 @@ export class NotificationsComponent implements OnInit {
             this.maxPage = result.maxPage;
             this.pageNumbers = result.pageNumbers;
           }
-          // console.log(this.notifications);
         },
-        error: (error) => {
-          console.error(error.error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.message : error.title
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        error: (err) => {
+          this.loading = false;
+          ErrorHandler.handle(err);
         },
       });
   }
   SeeNotificationDetails(id: number) {
-    // console.log(this.notifications);
     let empCode = DecodeToken.ECode;
-    console.log(id, empCode);
     this.notificationService.getNotificationDetails(id, empCode).subscribe({
       next: (response: Notification) => {
-        console.log(id, empCode);
         this.notification = response;
         this.notification.notificationDate = this.formatDate(
           String(this.notification.notificationDate)
         );
-        console.log(this.notification);
       },
-      error: (error) => {
-        console.error(error.error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.message : error.title
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+      error: (err) => {
+        ErrorHandler.handle(err);
       },
     });
   }

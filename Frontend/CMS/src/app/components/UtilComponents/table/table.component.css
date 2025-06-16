@@ -1,8 +1,28 @@
 .thead{
-    background-color: #5f5fee;
-    border-top-color: #5f5fee;
-    border-bottom-color: #5f5fee;
+    background-color: var(--table-header-color);
+    border-top-color: var(--table-side-border-color);
+    border-bottom-color: var(--table-side-border-color);
+}
+.trow{
+    border-color: #dee2e6;
+}
+.border-left-color{
+    border-left-color:var(--table-side-border-color);
+}
+.border-right-color{
+    border-right-color:var(--table-side-border-color);
 }
 .mat-header-cell {
     color: white;
+}
+.table {
+    text-wrap: nowrap;
+}
+table tr.odd-row td {
+   background-color: var(--table-strip-odd-color);
+   color: var(--table-font-color);
+}
+table tr.even-row td {
+  background-color: var(--table-strip-even-color);
+  color: var(--table-font-color);
 }

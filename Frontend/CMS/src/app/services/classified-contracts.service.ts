@@ -48,8 +48,8 @@ export class ClassifiedContractsService {
       GetEmployeeForInputText(departmentId: number, inputText:string):Observable<MasterEmployee[]>{
           return this.http.get<MasterEmployee[]>(`${environment.apiUrl}/Employee/search/${departmentId}/${inputText}`)
       }
-      GetDepartments():Observable<GetAllDepartmentsDto[]> {
-        return this.http.get<GetAllDepartmentsDto[]>(`${environment.apiUrl}/Department?pageNumber=1&pageSize=100`);
+      GetDepartments(eCode:string):Observable<GetAllDepartmentsDto[]> {
+        return this.http.get<GetAllDepartmentsDto[]>(`${environment.apiUrl}/Department?pageNumber=1&pageSize=100&eCode=${eCode}`);
       }
       GetContractTypes():Observable<ContractTypeMasterDTO[]> {
         return this.http.get<ContractTypeMasterDTO[]>(`${environment.apiUrl}/ContractTypeMaster?pageNumber=1&pageSize=100`);
@@ -57,8 +57,8 @@ export class ClassifiedContractsService {
       GetCompanies():Observable<CompanyMasterDto[]> {
         return this.http.get<CompanyMasterDto[]>(`${environment.apiUrl}/MasterCompany/1/100`);
       }
-       GetApostilleTypes() : Observable<MasterApostilleDto> {
-          return this.http.get<MasterApostilleDto>(`https://localhost:7041/api/Apostille/1/100`);
-        }
+      GetApostilleTypes() : Observable<MasterApostilleDto> {
+        return this.http.get<MasterApostilleDto>(`https://localhost:7041/api/Apostille/1/100`);
+      }
 
 }

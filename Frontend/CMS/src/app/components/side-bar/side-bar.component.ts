@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { RouterService } from '../../services/router.service';
 import { Alert } from '../../utils/alert';
@@ -16,6 +16,7 @@ import { DecodeToken } from '../../utils/decodeToken';
   styleUrl: './side-bar.component.css'
 })
 export class SideBarComponent implements OnInit, OnDestroy {
+  lightMode: boolean = true;
   private subscription: Subscription = new Subscription();
   notificationFlag = true;
   username: string | null = '';
@@ -31,9 +32,45 @@ export class SideBarComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
   ngOnInit(): void {
+    let mode = sessionStorage.getItem('lightMode');
+    if(mode !== null){
+      this.lightMode = (mode == 'true') ? true : false;
+      this.toggleBulb(this.lightMode);
+    }
     this.subscription = this.notificationService.trigger$.subscribe(() => {
       this.GetAllNotifications();
     });
+  }
+
+  toggleBulb = (mode:boolean) => {
+    this.lightMode = mode;
+    sessionStorage.setItem('lightMode',mode+'');
+    if(mode){
+      document.documentElement.style.setProperty('--icon-color', '#8888f3');
+      document.documentElement.style.setProperty('--pagenation-hover', '#8888f3');
+      document.documentElement.style.setProperty('--filter-theme-toggle-color', 'white');
+      document.documentElement.style.setProperty('--btn-theme-toggle-color', '#5f5fee');
+      document.documentElement.style.setProperty('--table-header-color', '#5f5fee');
+      document.documentElement.style.setProperty('--table-side-border-color', '#5f5fee');
+      document.documentElement.style.setProperty('--table-strip-odd-color', '#ffffff');
+      document.documentElement.style.setProperty('--table-strip-even-color', '#f2f2f2');
+      document.documentElement.style.setProperty('--table-font-color', '#000000');
+      document.documentElement.style.setProperty('--nav-footer-bg-color', '#f8f9fa');
+      document.documentElement.style.setProperty('--bg-color', '#e9e7e5');
+    }
+    else{
+      document.documentElement.style.setProperty('--icon-color', '#969494');
+      document.documentElement.style.setProperty('--pagenation-hover', '#222024');
+      document.documentElement.style.setProperty('--filter-theme-toggle-color', '#f5f5f5');
+      document.documentElement.style.setProperty('--btn-theme-toggle-color', '#000000');//120321
+      document.documentElement.style.setProperty('--table-header-color', '#000000');
+      document.documentElement.style.setProperty('--table-side-border-color', '#ffffff');
+      document.documentElement.style.setProperty('--table-strip-odd-color', '#3d3c3a');
+      document.documentElement.style.setProperty('--table-strip-even-color', '#222024');
+      document.documentElement.style.setProperty('--table-font-color', '#ffffff');
+      document.documentElement.style.setProperty('--nav-footer-bg-color', '#222024');//010127
+      document.documentElement.style.setProperty('--bg-color', '#424242');
+    }
   }
 
   checkLogin(): boolean {
@@ -52,21 +89,12 @@ export class SideBarComponent implements OnInit, OnDestroy {
     if(this.userRole == null || this.userRole == undefined) return false;
     return (this.userRole.includes("Admin") || this.userRole.includes("Management_User") || (this.userRole.includes("Super_Admin")));
   }
-  logoutUser() {
-    if (localStorage.getItem('token') != null) {
-      localStorage.clear();
-      DecodeToken.clearUserCredentials();
-      Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");
-      this.route.goToLogin();
-    }
-  }
   GetAllNotifications() {
     let empCode: string | null = DecodeToken.ECode;
     if (empCode) {
       this.notificationService.getUnreadNotificationCount(empCode).subscribe({
         next: (response: number) => {
           this.totalNotifications = response;
-          console.log("Notification number", response);
         }, error: (error) => {
           if(error.status == 401){
             let errmsg = error.error;

@@ -14,7 +14,7 @@ namespace CMS.Application.Contracts.Persistence
 {
     public interface IDepartmentRepository
     {
-        public Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize);
+        public Task<IEnumerable<GetAllDepartmentsDto>> GetAllDepartments(int pageNumber, int pageSize, string eCode);
         public Task<Department> GetDepartmentById(int id);
         public Task<IEnumerable<Department>> SearchDepartment(string searchQuery);
         public Task<Department> AddNewDepartment(string departmentName,string empCode);

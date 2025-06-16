@@ -1,16 +1,16 @@
 h2 {
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
     font-weight: 600;
     text-align: center;
 }
 .add-btn {
-    color: rgba(95, 95, 238);
+    color: var(--btn-theme-toggle-color);
     background-color: whitesmoke;
-    border-color: #5f5fee;
+    border-color: var(--btn-theme-toggle-color);
     margin: 2px;
 }
 .add-btn:hover{
-    background-color: #5f5fee;
+    background-color: var(--btn-theme-toggle-color);
     border-color: whitesmoke;
     color: whitesmoke;
     border-radius: 5px;

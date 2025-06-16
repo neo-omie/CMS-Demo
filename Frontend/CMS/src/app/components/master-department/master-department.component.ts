@@ -1,6 +1,6 @@
 declare var bootstrap: any;
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { AddDepartmentDto, GetAllDepartmentsDto, MasterDepartment } from '../../models/master-department';
 import { MasterDepartmentService } from '../../services/master-department.service';
 import { Pagination } from '../../utils/pagination';
@@ -13,19 +13,29 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
-import { Title } from '@angular/platform-browser';
+import { TableComponent } from "../UtilComponents/table/table.component";
+import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-master-department',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, LoaderComponent, FormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, TableComponent, PaginationComponent],
   templateUrl: './master-department.component.html',
   styleUrl: './master-department.component.css'
 })
 export class MasterDepartmentComponent {
   loading: boolean = true
+  columnsInfo: {
+        [key: string]: {
+          'title'?: string,
+          'isSort'?: boolean,
+          'templateRef': TemplateRef<any> | null,
+        }
+      } = {};
   displayedColumns: string[] = ['departmentName', 'action'];
     dataSource = new MatTableDataSource<GetAllDepartmentsDto>();
+    @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
     @ViewChild(MatSort) sort!: MatSort;
     @ViewChild('departmentEditModal') departmentEditModal!: ElementRef;
     ngAfterViewInit() {
@@ -37,11 +47,19 @@ export class MasterDepartmentComponent {
   dept?: MasterDepartment;
   errorMsg?: string;
   @ViewChild('editDepartmentName') editDepartmentName!: ElementRef;
-  constructor(private departmentService: MasterDepartmentService,
-     private renderer: Renderer2 ,
-     private title:Title
-    ) { this.title.setTitle("Department Type Master - CMS");}
+  constructor(private departmentService: MasterDepartmentService, private renderer: Renderer2) { }
   ngOnInit() {
+    this.columnsInfo = {
+      'departmentName': {
+        'title': 'Department Name',
+        'isSort': true,
+        'templateRef': null
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionRef
+      }
+    };
     this.GetAllDepartments(1, 10);
   }
   closeEditApproverCollapses() {
@@ -56,27 +74,28 @@ export class MasterDepartmentComponent {
     this.addDept.departmentName="";
   }
   GetAllDepartments(pageNumber: number, pageSize: number) {
-    this.departmentService.getAllDepartments(pageNumber, pageSize).subscribe({
-      next: (response: GetAllDepartmentsDto[]) => {
-        this.loading = false;
-        this.dataSource.data = response;
-          if (this.sort) {
-            this.dataSource.sort = this.sort;
+    const eCode = DecodeToken.ECode;
+    if(eCode){
+      this.departmentService.getAllDepartments(pageNumber, pageSize, eCode).subscribe({
+        next: (response: GetAllDepartmentsDto[]) => {
+          this.loading = false;
+          this.dataSource.data = response;
+            if (this.sort) {
+              this.dataSource.sort = this.sort;
+            }
+          this.departments = response;
+          if (this.departments != undefined && this.departments.length > 0) {
+            let result = Pagination.paginator(pageNumber, this.departments[0].totalRecords, pageSize)
+            this.maxPage = result.maxPage;
+            this.pageNumbers = result.pageNumbers;
           }
-        this.departments = response;
-        if (this.departments != undefined && this.departments.length > 0) {
-          let result = Pagination.paginator(pageNumber, this.departments[0].totalRecords, pageSize)
-          this.maxPage = result.maxPage;
-          this.pageNumbers = result.pageNumbers;
+        },
+        error: (err) => {
+          this.loading = false;
+          ErrorHandler.handle(err);
         }
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
-    });
+      });
+    }
   }
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {

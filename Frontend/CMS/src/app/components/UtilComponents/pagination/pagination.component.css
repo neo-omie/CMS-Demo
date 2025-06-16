@@ -1,12 +1,12 @@
 .page-link{
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
     cursor: pointer;
 }
 .page-link:hover, .active{
-    background-color: rgb(136, 136, 243);
+    background-color: var(--pagenation-hover);
     color: whitesmoke;
 }
 .active{
-    background-color: #5f5fee;
+    background-color: var(--btn-theme-toggle-color);
     color: whitesmoke;
 }

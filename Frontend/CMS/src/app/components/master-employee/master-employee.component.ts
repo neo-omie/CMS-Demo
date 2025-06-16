@@ -1,5 +1,5 @@
 declare var bootstrap: any;
-import { Component,OnInit, ViewChild } from '@angular/core';
+import { Component,OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {  FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddEmployeeDto, EditEmployeeDto, MasterEmployee, MasterEmployeeDto } from '../../models/master-employee';
@@ -16,23 +16,31 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
-import { Title } from '@angular/platform-browser';
+import { TableComponent } from "../UtilComponents/table/table.component";
+import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 
 @Component({
   selector: 'app-master-employee',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule,RouterModule,ReactiveFormsModule,MatTableModule,MatSortModule,MatFormFieldModule,MatInputModule],
+  imports: [CommonModule, LoaderComponent, FormsModule, RouterModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatFormFieldModule, MatInputModule, TableComponent, PaginationComponent],
   templateUrl: './master-employee.component.html',
   styleUrl: './master-employee.component.css'
 })
 
 export class MasterEmployeeComponent implements OnInit{
 loading=true;
+columnsInfo: {
+          [key: string]: {
+            'title'?: string,
+            'isSort'?: boolean,
+            'templateRef': TemplateRef<any> | null,
+          }
+        } = {};
 employees: MasterEmployee[]=[];
 totalEmployees:number=0;
 totalPages:number=0;
 currentPage:number=1;
-pageSize:number=2;
+pageSize:number=10;
 maxPage:number=1; //used now 
 pageNumbers:number[] = []; //used now 
 selectedUnit: string = 'All';
@@ -43,6 +51,7 @@ departments:MasterDepartment[] = [];
 mode?:string;
 valueId?:number;
 
+@ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
 // constructor(private router: Router){}
 
 constructor(
@@ -54,6 +63,27 @@ constructor(
 ){this.title.setTitle("Employee Type Master - CMS");}
 
 ngOnInit(): void {
+  this.columnsInfo = {
+    'employeeCode': {
+        'title': 'Employee Code',
+        'isSort': true,
+        'templateRef': null
+      },
+      'employeeName': {
+        'title': 'Employee Name',
+        'isSort': true,
+        'templateRef': null
+      },
+      'unit': {
+        'title': 'Employee Location',
+        'isSort': true,
+        'templateRef': null
+      },
+      'action': {
+        'title': 'Action',
+        'templateRef': this.actionRef
+      }
+    };
   this.fetchEmployees();
   this.getDepartmentName();
     this.route.params.subscribe(params=>{
@@ -206,10 +236,13 @@ editEmployee(employee:MasterEmployee){
 }
 
 getDepartmentName(){
-  this.departmentService.getAllDepartments(1, 100).subscribe((res)=>{
-    this.departments = res;
-    console.log(this.departments);
-  });
+  const eCode = DecodeToken.ECode;
+  if(eCode){
+    this.departmentService.getAllDepartments(1, 100, eCode).subscribe((res)=>{
+      this.departments = res;
+      console.log(this.departments);
+    });
+  }
 }
 
 onSubmit(){
@@ -359,7 +392,7 @@ get employeeExtension(){
 
 // sakthish table ts
 
-displayedColumns: string[] = ['employeeName', 'unit', 'role', 'action'];
+displayedColumns: string[] = ['employeeCode', 'employeeName', 'unit', 'action'];
   dataSource = new MatTableDataSource<MasterEmployee>();
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit() {

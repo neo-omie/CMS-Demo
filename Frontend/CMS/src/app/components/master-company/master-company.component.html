@@ -303,7 +303,7 @@
   </div>
 </div>
 
-<div class="table-responsive p-md-5 p-3">
+<div class="px-md-5 px-3">
   <div class="searchheader row mb-2">
     <div class="col-12 col-sm-3 col-md-3 col-lg-2 mb-2 mb-sm-0 mr-4">
       <button class="add-btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#company-add"><i
@@ -320,62 +320,25 @@
         (keyup)="onFilterChange()" />
     </div>
   </div>
-  <table id="companies-table" mat-table [dataSource]="dataSource" matSort
-    class="table table-striped table-bordered align-middle mat-elevation-z8">
-
-    <ng-container matColumnDef="companyName">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Company Name</th>
-      <td mat-cell *matCellDef="let company">{{ company.companyName }}</td>
-    </ng-container>
-    <ng-container matColumnDef="companyLocation">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Company Location</th>
-      <td mat-cell *matCellDef="let company">{{ company.companyLocation }}</td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-      <td mat-cell *matCellDef="let company">{{ company.status == true ? 'Active' : 'Inactive' }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="action">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
-      <td mat-cell *matCellDef="let company">
-        <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#company-edit"
-          (click)="fetchCompanyData(company.valueId)"></i>
-        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#company-detail"
-          (click)="GetCompany(company.valueId)"></i>
-        <i class="fa-solid fa-trash icon" (click)="deleteCompany(company.valueId)"></i>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
-  </table>
-  <p class="fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
 </div>
-<nav class="d-flex justify-content-center" *ngIf="showCompanies.length > 0" aria-label="Page navigation example">
-  <ul *ngIf="maxPage > 1" class="pagination">
-    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(1)"><span class="page-link"
-        aria-label="FirstPage">&laquo;</span></li>
-    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] - 1)"><span class="page-link"
-        aria-label="Previous">&lsaquo;</span></li>
-    <li class="page-item" (click)="GetPage(pageNumbers[1])"><span
-        [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{pageNumbers[1]}}</span></li>
-    <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])"><span
-        [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{pageNumbers[2]}}</span></li>
-    <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])"><span
-        [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{pageNumbers[3]}}</span></li>
-    <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])"><span
-        [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{pageNumbers[4]}}</span></li>
-    <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])"><span
-        [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{pageNumbers[5]}}</span></li>
-    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(pageNumbers[0] + 1)"><span class="page-link"
-        aria-label="Next">&rsaquo;</span></li>
-    <li *ngIf="maxPage > 5" class="page-item" (click)="GetPage(maxPage)"><span class="page-link"
-        aria-label="LastPage">&raquo;</span></li>
-  </ul>
-</nav>
 
+<app-table [data]="showCompanies" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
+</app-table>
 
+<p class="fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
+
+<app-pagination [maxPage]="maxPage" [records]="showCompanies.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage.bind(this)"></app-pagination>
+
+<ng-template #statusRef let-row>{{ row.status == true ? 'Active' : 'Inactive' }}</ng-template>
+
+<ng-template #actionRef let-row>
+  <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" data-bs-target="#company-edit"
+    (click)="fetchCompanyData(row.valueId)"></i>
+  <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#company-detail"
+    (click)="GetCompany(row.valueId)"></i>
+  <i class="fa-solid fa-trash icon" (click)="deleteCompany(row.valueId)"></i>
+</ng-template>
 
 <!-- Modal for Viewing Company  Details -->
 <div class="modal fade" id="company-detail" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">

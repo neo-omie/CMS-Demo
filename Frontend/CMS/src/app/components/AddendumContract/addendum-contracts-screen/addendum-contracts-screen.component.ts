@@ -1,42 +1,30 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { AddAddendumContract } from '../../models/add-addendum-contract';
-import { Title } from '@angular/platform-browser';
-import { Alert } from '../../utils/alert';
-import { TYPE } from '../auth/login/values.constants';
-import { Pagination } from '../../utils/pagination';
-import { AddAddendumContractsService } from '../../services/add-addendum-contracts.service';
-import { AddendumContract } from '../../models/addendum-contract';
-import { CommonModule } from '@angular/common';
-import { TableComponent } from '../UtilComponents/table/table.component';
-
-import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
+import { AddAddendumContract } from '../../../models/add-addendum-contract';
+import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
-import { LoaderComponent } from '../UtilComponents/loader/loader.component';
-import { DecodeToken } from '../../utils/decodeToken';
-import { PDFExport } from '../../utils/pdfExport';
-import { ExcelExport } from '../../utils/excelExport';
-
-import { ProgressBarComponent } from '../UtilComponents/progress-bar/progress-bar.component';
+import { Title } from '@angular/platform-browser';
+import { AddendumContract } from '../../../models/addendum-contract';
+import { Pagination } from '../../../utils/pagination';
+import { ErrorHandler } from '../../../utils/errorHandler';
+import { TableComponent } from "../../UtilComponents/table/table.component";
+import { PaginationComponent } from "../../UtilComponents/pagination/pagination.component";
+import { LoaderComponent } from "../../UtilComponents/loader/loader.component";
+import { PDFExport } from '../../../utils/pdfExport';
+import { ExcelExport } from '../../../utils/excelExport';
+import { CommonModule } from '@angular/common';
+import { DecodeToken } from '../../../utils/decodeToken';
+import { AddendumContractModalComponent } from "../addendum-contract-modal/addendum-contract-modal.component";
 
 @Component({
-  selector: 'app-addendum-contracts',
+  selector: 'app-addendum-contracts-screen',
   standalone: true,
-  imports: [
-    CommonModule,
-    TableComponent,
-    LoaderComponent,
-    PaginationComponent,
-    ProgressBarComponent,
-  ],
-  templateUrl: './addendum-contracts.component.html',
-  styleUrl: './addendum-contracts.component.css',
+  imports: [TableComponent, PaginationComponent, LoaderComponent, CommonModule, AddendumContractModalComponent],
+  templateUrl: './addendum-contracts-screen.component.html',
+  styleUrl: './addendum-contracts-screen.component.css'
 })
-export class AddendumContractsComponent {
+export class AddendumContractsScreenComponent {
   loading: boolean = true;
-  //isEdit: boolean = false;
   maxPage: number = 1;
-  errorMsg: string = '';
   addAddendumContract?: AddAddendumContract;
   approverCheck: boolean = true;
   pageNumbers: number[] = [];
@@ -47,7 +35,6 @@ export class AddendumContractsComponent {
     'status',
     'action',
   ];
-  // dataSource = new MatTableDataSource<AddAddendumContract>();
   columnsInfo: {
     [key: string]: {
       title?: string;
@@ -74,7 +61,6 @@ export class AddendumContractsComponent {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      console.log('Route Params:', params);
       const paramValueId = params['contractId'];
       if (paramValueId) {
         if (Number(paramValueId) && paramValueId > 0) {
@@ -111,13 +97,13 @@ export class AddendumContractsComponent {
   }
 
   GetAllAddendum(pageNumber: number, pageSize: number, id: number = 0) {
+    this.loading = true;
     this.addAddendumContractsService
       .GetAllAddendum(pageNumber, pageSize, id)
       .subscribe({
         next: (response: AddendumContract) => {
           this.loading = false;
           this.addAddendumContracts = response.data;
-          console.log(response.data);
           if (
             this.addAddendumContracts != undefined &&
             this.addAddendumContracts.length > 0
@@ -133,12 +119,8 @@ export class AddendumContractsComponent {
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        },
+          ErrorHandler.handle(error);
+        }
       });
   }
 
@@ -146,41 +128,6 @@ export class AddendumContractsComponent {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.GetAllAddendum(pgNumber, 10);
     }
-  }
-
-  async approveRejectContract(
-    contractId?: number,
-    id?: number,
-    status?: number
-  ) {
-    this.loading = true;
-    console.log('came here');
-    let email = DecodeToken.email;
-    if (email) {
-      try {
-        const response = await firstValueFrom(
-          this.addAddendumContractsService.approveRejectContract(
-            contractId,
-            id,
-            email,
-            status
-          )
-        );
-        if (response !== false) {
-          Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-          this.GetAllAddendum(1, 10);
-        }
-      } catch (error) {
-        this.errorMsg = JSON.stringify(error);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        console.error(error);
-      } finally {
-        this.loading = false;
-      }
-    } else {
-      this.router.navigate(['/']);
-    }
-    this.loading = false;
   }
 
   fetchAddedumData(addedumId: number) {
@@ -205,66 +152,22 @@ export class AddendumContractsComponent {
             this.approverCheck = false;
           }
         },
+        error: (error) => {
+          this.loading = false;
+          ErrorHandler.handle(error);
+        },
       });
   }
 
-  getProgressType(status: number | undefined): string {
-    if (status === undefined || status === null) {
-      return '';
-    }
-
-    switch (status) {
-      case 1:
-        return 'Approval for';
-      case 2:
-        return 'Active';
-      case 3:
-        return 'Rejection for';
-      case 4:
-        return 'Termination of';
-      case 5:
-        return 'Expiration of';
-      case 6:
-        return 'Termination in progress for';
-      case 7:
-        return 'Termination approved for';
-      case 8:
-        return 'Notice withdrawal pending for';
-      default:
-        return 'Progress for ';
-    }
-  }
-
-  phases = [
-    'Addendum Created',
-    'L1 Approver Approval',
-    'L2 Approver Approval',
-    'L3 Approver Approval',
-    'Addendum Active',
-  ];
-
-  // GetContract(id: number, isEdit: boolean) {
-  //   this.isEdit = isEdit;
-  //   this.approverMatrixContractService.GetApprovalMatrixContractById(id).subscribe({
-  //     next: (response: ApprovalMatrixContract) => {
-  //       this.approvalMatrixContract = response;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error :(', error);
-  //       this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-  //       Alert.toast(TYPE.ERROR, true, this.errorMsg);
-  //     }
-  //   });
-  // }
   printToPDF() {
-    // PDFExport.printToPDF(tableID, fileName);
-    const selectedColumns = ['Contract Name', 'Addendum Date', 'Status']; // Put the exact header text here
+    const selectedColumns = ['Contract Name', 'Addendum Date', 'Status'];
     PDFExport.printToPDF(
       'table',
       'CMS-Addendum Contracts.pdf',
       selectedColumns
     );
   }
+
   exportToExcel(): void {
     const selectedColumns = ['Contract Name', 'Addendum Date', 'Status'];
 
@@ -273,5 +176,9 @@ export class AddendumContractsComponent {
       'CMS-ContractsAddendum.xlsx',
       selectedColumns
     );
+  }
+
+  setLoader2(event:boolean){
+    this.loading = event
   }
 }

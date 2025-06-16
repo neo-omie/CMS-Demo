@@ -1,15 +1,7 @@
 h2 {
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
     font-weight: 600;
     text-align: center;
-}
-.thead{
-    background-color: #5f5fee;
-    border-top-color: #5f5fee;
-    border-bottom-color: #5f5fee;
-}
-.mat-header-cell {
-    color: white;
 }
 .icon{
     cursor: pointer;
@@ -19,24 +11,15 @@ h2 {
 .icon:hover{
     color: #5f5fee;
 }
-.page-link{
-    color: #5f5fee;
-    cursor: pointer;
-}
-.page-link:hover, .active{
-    background-color: rgb(136, 136, 243);
-    color: whitesmoke;
-}
-.active{
-    background-color: #5f5fee;
-    color: whitesmoke;
-}
 .modal-header{
-    border-color: #5f5fee;
-    background-color: #5f5fee;
+    border:2px solid var(--table-side-border-color);
+    background-color: var(--btn-theme-toggle-color);
 }
 .modal-title{
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
+}
+.modal-body{
+    background-color: var(--filter-theme-toggle-color);
 }
 .close-btn{
     border-color: whitesmoke;
@@ -44,51 +27,9 @@ h2 {
 }
 .close-btn:hover{
     background-color: whitesmoke;
-    color: #5f5fee;
-}
-.dropdown-input{
-    background-color: white;
-    border-right: 0;
-}
-.dropdown-icon{
-    background-color: white;
-    border-left: 0;
-}
-.dropdown-btn{
-    text-align: start;
-    border-color: #dee2e6;
-}
-.dropdown-btn:hover{
-    color: #5f5fee;
-    border-color: #5f5fee ;
+    color: var(--btn-theme-toggle-color);
 }
 .form-control:focus{
     box-shadow: none;
     border-color: #dee2e6;
-}
-.add-btn {
-    color: rgba(95, 95, 238);
-    background-color: whitesmoke;
-    border-color: #5f5fee;
-}
-.add-btn:hover{
-    background-color: #5f5fee;
-    border-color: whitesmoke;
-    color: whitesmoke;
-    border-radius: 5px;
-}
-.add-header {
-    color: whitesmoke;
-    font-weight: 600;
-}
-sup {
-    cursor: default;
-    font-size: 10px;
-    border-radius: 16px;
-    background-color: #5f5fee;
-    /* color: whitesmoke; */
-    border: none;
-}
-sup:hover {
-    background-color: #5f5fee;
 }

@@ -11,8 +11,8 @@ export class MasterDepartmentService {
   private apiUrl = `${environment.apiUrl}/Department`;
   constructor(private http:HttpClient) { }
 
-  getAllDepartments(pageNumber:number, pageSize:number):Observable<GetAllDepartmentsDto[]>{
-    return this.http.get<GetAllDepartmentsDto[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  getAllDepartments(pageNumber:number, pageSize:number, eCode:string):Observable<GetAllDepartmentsDto[]>{
+    return this.http.get<GetAllDepartmentsDto[]>(`${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}&eCode=${eCode}`);
   }
   getDepartmentById(departmentId:number):Observable<MasterDepartment>{
     return this.http.get<MasterDepartment>(`${this.apiUrl}/${departmentId}`);

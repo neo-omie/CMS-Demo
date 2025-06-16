@@ -130,111 +130,114 @@ export class DashboardComponent implements OnInit {
     return (this.userRole.includes("Admin") || this.userRole.includes("Management_User") || (this.userRole.includes("Super_Admin")));
   }
   GetContractCounts(){
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Active,
-    }).subscribe({
-      next:(res) => { this.contractActive = res.length; },
-      error:(err) => { 
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); 
-      }
-    })
-
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Expired,
-    }).subscribe({
-      next:(res) => { this.contractExpired = res.length; },
-      error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
-    })
-
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      ContractStatus : ContractStatus.Terminated,
-    }).subscribe({
-      next:(res) => { this.contractTerminated = res.length; },
-      error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
-    })
-
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 0,
-    }).subscribe({
-      next:(res) => { this.contractRenew0 = res.length; },
-      error:(err) => { 
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
-    })
-
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 30,
-    }).subscribe({
-      next:(res) => { this.contractRenew30 = res.length; },
-      error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-        Alert.toast(TYPE.ERROR, true, err.error.message); }
-    })
-
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 60,
-    }).subscribe({
-      next:(res) => { this.contractRenew60 = res.length; },
-      error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
-    })
-
-    this.contractsService.getContracts({
-      PageNumber : 1,
-      PageSize : 1000,
-      RenewalDueIn : 90,
-    }).subscribe({
-      next:(res) => { this.contractRenew90 = res.length; },
-      error:(err) => {
-        if(err.status == 401){
-            let errmsg = err.error;
-            Alert.toast(TYPE.ERROR, true, errmsg);
-          }
-          else
-         Alert.toast(TYPE.ERROR, true, err.error.message); }
-    })
+    const eCode = DecodeToken.ECode;
+    if(eCode){
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        ContractStatus : ContractStatus.Active,
+      },eCode).subscribe({
+        next:(res) => { this.contractActive = res.length; },
+        error:(err) => { 
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+          Alert.toast(TYPE.ERROR, true, err.error.message); 
+        }
+      })
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        ContractStatus : ContractStatus.Expired,
+      },eCode).subscribe({
+        next:(res) => { this.contractExpired = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
+      })
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        ContractStatus : ContractStatus.Terminated,
+      },eCode).subscribe({
+        next:(res) => { this.contractTerminated = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
+      })
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 0,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew0 = res.length; },
+        error:(err) => { 
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+          Alert.toast(TYPE.ERROR, true, err.error.message); }
+      })
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 30,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew30 = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+          Alert.toast(TYPE.ERROR, true, err.error.message); }
+      })
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 60,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew60 = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
+      })
+  
+      this.contractsService.getContracts({
+        PageNumber : 1,
+        PageSize : 1000,
+        RenewalDueIn : 90,
+      },eCode).subscribe({
+        next:(res) => { this.contractRenew90 = res.length; },
+        error:(err) => {
+          if(err.status == 401){
+              let errmsg = err.error;
+              Alert.toast(TYPE.ERROR, true, errmsg);
+            }
+            else
+           Alert.toast(TYPE.ERROR, true, err.error.message); }
+      })
+    }
   }
 
   GetClassifiedContractsCounts(){

@@ -1,18 +1,3 @@
-h2 {
-    color: #5f5fee;
-    font-weight: 600;
-    text-align: center;
-}
-
-.icon{
-    cursor: pointer;
-    display: inline-block;
-    margin-left: 1rem;
-}
-.icon:hover{
-    color: #5f5fee;
-}
-
 .modal-header{
     border-color: #5f5fee;
     background-color: #5f5fee;
@@ -52,7 +37,7 @@ h2 {
     color: rgba(95, 95, 238);
     background-color: whitesmoke;
     border-color: #5f5fee;
-    margin: 3px;
+    margin: 2px;
 }
 .add-btn:hover{
     background-color: #5f5fee;
@@ -60,20 +45,7 @@ h2 {
     color: whitesmoke;
     border-radius: 5px;
 }
-.prog.step-label{
-    display: flex;
-    flex-direction: column;
-}
-
-.step-label {
-    font-size: 12px;
-    text-align: center;
-    color: #5f5fee;
-    margin-bottom: 4px;
-}
-
-.progress-scroll-container {
-  max-height: 30vh;
-  overflow-y: auto;
-  padding: 1rem;
+.add-header {
+    color: whitesmoke;
+    font-weight: 600;
 }

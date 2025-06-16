@@ -1,25 +1,11 @@
 <app-loader *ngIf="loading"></app-loader>
 <h2 class="pt-3 fs-1">List Of Employees</h2>
-<!-- <div class="containerfirst">
-  <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-primary" (click)="addEmployee()">
-    <a><i class="fa-solid fa-file-circle-plus"></i> Add Employee</a>
-  </button>
-  <div class="input-group">
-    <span class="input-group-text">Unit</span>
-    <select class="form-select" id="unitFilter" [(ngModel)]="selectedUnit" (change)="onFilterChange()">
-      <option value="All">All</option>
-      <option value="Thane">Thane</option>
-      <option value="Pune">Pune</option>
-      <option value="Indore">Indore</option>
-    </select>
-  </div>
-  <input class="form-control" type="text" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
-</div> -->
 
-<div class="table-responsive p-md-5 p-3">
+<div class="px-md-5 px-3">
   <div class="searchheader row mb-2">
     <div class="col-12 col-sm-2 col-md-3 col-lg-2 mb-2 mb-sm-0">
-      <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-outline-primary" (click)="addEmployee()">
+      <button data-bs-toggle="modal" data-bs-target="#employee-add" class="add-btn btn btn-outline-primary"
+        (click)="addEmployee()">
         <i class="fa-solid fa-file-circle-plus"></i> Add Employee
       </button>
     </div>
@@ -35,127 +21,56 @@
       </div>
     </div>
     <div class="col-12 col-sm-6 col-md-6">
-      <input type="text" class="form-control" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm" (keyup)="onFilterChange()"/>
+      <input type="text" class="form-control" placeholder="Search by Employee Id or Name" [(ngModel)]="searchTerm"
+        (keyup)="onFilterChange()" />
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort class="table table-striped table-bordered align-middle mat-elevation-z8">
-  
-    <ng-container matColumnDef="employeeName">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header style="border-left-color: #5f5fee;">Employee Name</th>
-      <td mat-cell *matCellDef="let employee">{{ employee.employeeName }}</td>
-    </ng-container>
+</div>
 
-    <ng-container matColumnDef="unit">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Employee Location</th>
-      <td mat-cell *matCellDef="let employee">{{ employee.unit }}</td>
-    </ng-container>
-  
-    <ng-container matColumnDef="role">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>Roles</th>
-      <td mat-cell *matCellDef="let employee">{{ employee.role }}</td>
-    </ng-container>
+<app-table [data]="employees" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
+</app-table>
 
-    <ng-container matColumnDef="action">
-      <th class="mat-header-cell" mat-header-cell *matHeaderCellDef style="border-right-color: #5f5fee;">Action</th>
-      <td mat-cell *matCellDef="let employee">
-        <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" aria-label="Edit Employee" data-bs-target="#employee-add"  (click)="editEmployee(employee)"></i>
-        <i class="fa-regular fa-eye icon" data-bs-toggle="modal" aria-label="View Employee" data-bs-target="#employee-detail" (click)="viewEmployee(employee.valueId)"></i>
-        <i class="fa-regular fa-trash-can icon me-4" aria-label="Delete Employee"  title="Delete" (click)="deleteEmployee(employee)"></i>
-      </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #dee2e6;"></tr>
-  </table>
+<p class="fs-5" *ngIf="employees.length == 0" style="text-align: center;">No records</p>
 
-  <!-- Pagination -->
-  <nav class="d-flex justify-content-center align-items-center" *ngIf="employees.length > 0" aria-label="Page navigation example">
-    <ul *ngIf="maxPage >= 1" class="pagination">
-      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(1)">
-        <span class="page-link" aria-label="FirstPage">&laquo;</span>
-      </li>
-      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[0] - 1)">
-        <span class="page-link" aria-label="Previous">&lsaquo;</span>
-      </li>
-      <li class="page-item" (click)="GetPage(pageNumbers[1])">
-        <span [class]="pageNumbers[0] == pageNumbers[1] ? 'page-link active' : 'page-link'">{{ pageNumbers[1] }}</span>
-      </li>
-      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[2])">
-        <span [class]="pageNumbers[0] == pageNumbers[2] ? 'page-link active' : 'page-link'">{{ pageNumbers[2] }}</span>
-      </li> 
-      <li *ngIf="maxPage > 2" class="page-item" (click)="GetPage(pageNumbers[3])">
-        <span [class]="pageNumbers[0] == pageNumbers[3] ? 'page-link active' : 'page-link'">{{ pageNumbers[3] }}</span>
-      </li>
-      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(pageNumbers[4])">
-        <span [class]="pageNumbers[0] == pageNumbers[4] ? 'page-link active' : 'page-link'">{{ pageNumbers[4] }}</span>
-      </li>
-      <li *ngIf="maxPage > 4" class="page-item" (click)="GetPage(pageNumbers[5])">
-        <span [class]="pageNumbers[0] == pageNumbers[5] ? 'page-link active' : 'page-link'">{{ pageNumbers[5] }}</span>
-      </li>
-      <li *ngIf="maxPage > 1" class="page-item" (click)="GetPage(pageNumbers[0] + 1)">
-        <span class="page-link" aria-label="Next">&rsaquo;</span>
-      </li>
-      <li *ngIf="maxPage > 3" class="page-item" (click)="GetPage(maxPage)">
-        <span class="page-link" aria-label="LastPage">&raquo;</span>
-      </li>
-    </ul>
-  </nav>
-</div> 
+<app-pagination [maxPage]="maxPage" [records]="employees.length" [pageNumbers]="pageNumbers"
+  [GetPage]="GetPage.bind(this)"></app-pagination>
 
-<!-- Table  -->
-<!-- <div *ngIf="!loading" class="table-responsive p-3">
-    <table class="table align-middle table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Employee Name</th>
-                <th>Employee Location</th>
-                <th>Roles</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let employee of employees"> 
-                <td>{{employee.employeeName}}</td>
-                <td>{{employee.unit}}</td>
-                <td>{{employee.role}}</td>
-                <td>
-                    <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" aria-label="Edit Employee" data-bs-target="#employee-add"  (click)="editEmployee(employee)"></i>
-                    <i class="fa-regular fa-eye icon" data-bs-toggle="modal" aria-label="View Employee" data-bs-target="#employee-detail" (click)="viewEmployee(employee.valueId)"></i>
-                    <i class="fa-regular fa-trash-can icon me-4" aria-label="Delete Employee"  title="Delete" (click)="deleteEmployee(employee)"></i>
-                </td>
-            </tr> 
-        </tbody>
-    </table>
-    
-
-</div>   -->
+<ng-template #actionRef let-row>
+  <i class="fa-regular fa-pen-to-square icon" data-bs-toggle="modal" aria-label="Edit Employee"
+    data-bs-target="#employee-add" (click)="editEmployee(row)"></i>
+  <i class="fa-regular fa-eye icon" data-bs-toggle="modal" aria-label="View Employee" data-bs-target="#employee-detail"
+    (click)="viewEmployee(row.valueId)"></i>
+  <i class="fa-regular fa-trash-can icon me-4" aria-label="Delete Employee" title="Delete"
+    (click)="deleteEmployee(row)"></i>
+</ng-template>
 
 <!-- View Employee Modal -->
 <div class="modal fade" id="employee-detail" tabindex="-1" aria-labelledby="companyDetailLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="employeeDetailLabel"  >Employee Details</h5>
+        <h5 style="color: whitesmoke;" class="modal-title fs-5 fw-bolder" id="employeeDetailLabel">Employee Details</h5>
         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button> -->
-        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
+        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i
+            class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="modal-body">
         <div class="mb-3">
           <p class="m-1">Employee Name</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
             <input type="text" name="employeeName" class="form-control" id="employeeName"
-            [value]="addEmployeeForm.get('employeeName')?.value" disabled>
+              [value]="addEmployeeForm.get('employeeName')?.value" disabled>
           </div>
         </div>
 
         <div class="mb-3">
           <p class="m-1">Role</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
             <input type="text" name="pocName" class="form-control" id="pocName"
-            [value]="addEmployeeForm.get('role')?.value" disabled>
+              [value]="addEmployeeForm.get('role')?.value" disabled>
           </div>
         </div>
 
@@ -164,55 +79,55 @@
           <div class="input-group">
             <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
             <input type="text" name="companyStatus" class="form-control" id="companyStatus"
-            [value]="addEmployeeForm.get('employeeCode')?.value" disabled>
+              [value]="addEmployeeForm.get('employeeCode')?.value" disabled>
           </div>
         </div>
 
         <div class="mb-3">
           <p class="m-1">Unit</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
             <input type="text" name="pocContactNumber" class="form-control" id="pocContactNumber"
-            [value]="addEmployeeForm.get('unit')?.value" disabled>
+              [value]="addEmployeeForm.get('unit')?.value" disabled>
           </div>
         </div>
 
         <div class="mb-3">
           <p class="m-1">Department</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i></span>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i></span>
             <input type="text" name="pocEmailId" class="form-control" id="pocEmailId"
-            [value]="addEmployeeForm.get('departmentName')?.value" disabled>
+              [value]="addEmployeeForm.get('departmentName')?.value" disabled>
           </div>
         </div>
 
         <div class="mb-3">
           <p class="m-1">Employee Mobile</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i>
             </span>
             <input type="text" name="companyAddressLine1" class="form-control" id="companyAddressLine1"
-            [value]="addEmployeeForm.get('employeeMobile')?.value" disabled>
+              [value]="addEmployeeForm.get('employeeMobile')?.value" disabled>
           </div>
         </div>
 
         <div class="mb-3">
           <p class="m-1">Employee Email</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i>
             </span>
             <input type="text" name="companyAddressLine2" class="form-control" id="companyAddressLine2"
-            [value]="addEmployeeForm.get('email')?.value" disabled>
+              [value]="addEmployeeForm.get('email')?.value" disabled>
           </div>
         </div>
 
         <div class="mb-3">
           <p class="m-1">Employee Ext</p>
           <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-circle-check" ></i>
+            <span class="input-group-text"><i class="fa-solid fa-circle-check"></i>
             </span>
             <input type="text" name="companyAddressLine3" class="form-control" id="companyAddressLine3"
-            [value]="addEmployeeForm.get('employeeExtension')?.value" disabled>
+              [value]="addEmployeeForm.get('employeeExtension')?.value" disabled>
           </div>
         </div>
       </div>
@@ -224,100 +139,130 @@
 </div>
 
 <!-- Add and Edit Employee Modal -->
-<div class="modal fade" id="employee-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="employee-add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between">
-        <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Employee' : mode==='edit' ? 'Edit Employee' :'View Employee'}}</h1>
-        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i class="fa-solid fa-xmark"></i></button>
+        <h1 class="modal-title fs-5 add-header">{{ mode==='add'? 'Add Employee' : mode==='edit' ? 'Edit Employee' :'View
+          Employee'}}</h1>
+        <button type="reset" class="btn close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"><i
+            class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
         <div class="row justify-content-center">
-                <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()" *ngIf="mode!=='view'">
-                  <div class="fields-container">
-                    <div class="m-3">
-                      <label for="employeeName" class="form-label">Employee Name<span style="color: red;">*</span></label>
-                      <span *ngIf="employeeName?.hasError('required') && (employeeName?.dirty || employeeName?.touched)" style="color: red;">Required</span>
-                       <span *ngIf="employeeName?.hasError('maxlength') && (employeeName?.dirty || employeeName?.touched)" style="color: red;">Name must be 40 characters or fewer </span>
-                       <span *ngIf="employeeName?.hasError('pattern') && (employeeName?.dirty || employeeName?.touched)" style="color: red;">Only smallcase and uppercase alphabets are allowed </span>
-                      <input class="form-control" type="text" id="employeeName" placeholder="Enter employee name" formControlName="employeeName">
-                    </div>
-      
-                    <div class="m-3" *ngIf="mode!=='edit'">
-                      <label for="password" class="form-label">Password<span style="color: red;">*</span></label>
-                      <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)" style="color: red;">Required</span>
-                      <span *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)" style="color: red;">Should contain atleast 1 capital letter, 1 numeric, 1 small letter, and 1 alphanumeric character (Between 4-10 digits) </span>
-                      <input class="form-control" type="text" id="password" placeholder="Enter employee password" formControlName="password" autocomplete="off">
-                    </div>
-      
-                    <div class="m-3">
-                      <label for="role" class="form-label">Role<span style="color: red;">*</span></label>
-                      <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)" style="color: red;">Required</span>
-                      <select class="form-select" id="roleSelect" placeholder="Select role"  formControlName="role">
-                        <option value="" >--Select Role--</option>
-                        <option value="Management User">Management User</option>
-                        <option value="MOU_User">MOU_User</option>
-                        <option value="MOU_Approver">MOU_Approver</option>
-                        <option value="Contract_User">Contract_User</option>
-                        <option value="Contract_Approver">Contract_Approver</option>
-                      </select>
-                    </div>
-      
-                    <div class="m-3">
-                      <label for="employeeCode" class="form-label">Employee Code<span style="color: red;">*</span></label>
-                      <span *ngIf="employeeCode?.hasError('required') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">Required</span>
-                      <span *ngIf="employeeCode?.hasError('pattern') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">Only capital case alphabets and digits are allowed</span>
-                      <span *ngIf="employeeCode?.hasError('maxlength') && (employeeCode?.dirty || employeeCode?.touched)" style="color: red;">Code must be 8 characters or fewer</span>
-                      <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee code" formControlName="employeeCode">
-                    </div>
-    
-                    <div class="m-3">
-                      <label for="unit" class="form-label">Unit<span style="color: red;">*</span></label>
-                      <span *ngIf="unit?.hasError('required') && (unit?.dirty || unit?.touched)" style="color: red;">Required</span>
-                      <select class="form-select" id="unit" placeholder="Select Unit"  formControlName="unit">
-                        <option value="" disabled selected>--Select Unit--</option>
-                        <option value="Thane">Thane</option>
-                        <option value="Indore">Indore</option>
-                        <option value="Pune">Pune</option>  
-                      </select>
-                    </div>
-      
-                    <div class="m-3">
-                      <label for="departmentId" class="form-label">Department<span style="color: red;">*</span></label>
-                      <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)" style="color: red;">Required</span>
-                      <select class="form-select" id="departmentId" placeholder="Select department name" formControlName="departmentId">
-                        <option value="" disabled selected>--Select Department--</option>
-                        <option *ngFor="let department of departments" [value]="department.departmentId">{{department.departmentName}}</option>
-                      </select>
-                    </div>
-      
-                    <div class="m-3">
-                      <label for="employeeMobile" class="form-label">Employee Mobile<span style="color: red;">*</span></label>
-                      <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">Required</span>
-                       <span *ngIf="employeeMobile?.hasError('pattern') && (employeeMobile?.dirty || employeeMobile?.touched)" style="color: red;">Enter 10 digits phone no</span>
-                      <input class="form-control" type="text" id="employeeMobile" placeholder="Enter employee mobile" formControlName="employeeMobile">
-                    </div>
-      
-                    <div class="m-3">
-                      <label for="email" class="form-label">Email<span style="color: red;">*</span></label>
-                      <span *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)" style="color: red;">Required</span>
-                      <span *ngIf="email?.hasError('email') && (email?.dirty || email?.touched)" style="color: red;">*Invalid Email</span>
-                      <input class="form-control" type="email" id="email" placeholder="Enter your email" formControlName="email">
-                    </div>
-      
-                    <div class="m-3">
-                      <label for="employeeExtension" class="form-label">Employee Ext<span style="color: red;">*</span></label>
-                      <span *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)" style="color: red;">Required</span>
-                      <input class="form-control" type="text" id="employeeExtension" placeholder="Enter employee extension" formControlName="employeeExtension">
-                    </div>
-                  </div>
-    
-                
-                  <div class="modal-footer">
-                    <button type="submit" class="btn btn-outline-primary add-btn"   >{{mode==='add'? 'Save':'Update'}}</button>
-                    <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
-                  </div>
-                </form>
+          <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmit()" *ngIf="mode!=='view'">
+            <div class="fields-container">
+              <div class="m-3">
+                <label for="employeeName" class="form-label">Employee Name<span style="color: red;">*</span></label>
+                <span *ngIf="employeeName?.hasError('required') && (employeeName?.dirty || employeeName?.touched)"
+                  style="color: red;">Required</span>
+                <span *ngIf="employeeName?.hasError('maxlength') && (employeeName?.dirty || employeeName?.touched)"
+                  style="color: red;">Name must be 40 characters or fewer </span>
+                <span *ngIf="employeeName?.hasError('pattern') && (employeeName?.dirty || employeeName?.touched)"
+                  style="color: red;">Only smallcase and uppercase alphabets are allowed </span>
+                <input class="form-control" type="text" id="employeeName" placeholder="Enter employee name"
+                  formControlName="employeeName">
+              </div>
+
+              <div class="m-3" *ngIf="mode!=='edit'">
+                <label for="password" class="form-label">Password<span style="color: red;">*</span></label>
+                <span *ngIf="password?.hasError('required') && (password?.dirty || password?.touched)"
+                  style="color: red;">Required</span>
+                <span *ngIf="password?.hasError('pattern') && (password?.dirty || password?.touched)"
+                  style="color: red;">Should contain atleast 1 capital letter, 1 numeric, 1 small letter, and 1
+                  alphanumeric character (Between 4-10 digits) </span>
+                <input class="form-control" type="text" id="password" placeholder="Enter employee password"
+                  formControlName="password" autocomplete="off">
+              </div>
+
+              <div class="m-3">
+                <label for="role" class="form-label">Role<span style="color: red;">*</span></label>
+                <span *ngIf="role?.hasError('required') && (role?.dirty || role?.touched)"
+                  style="color: red;">Required</span>
+                <select class="form-select" id="roleSelect" placeholder="Select role" formControlName="role">
+                  <option value="">--Select Role--</option>
+                  <option value="Management User">Management User</option>
+                  <option value="MOU_User">MOU_User</option>
+                  <option value="MOU_Approver">MOU_Approver</option>
+                  <option value="Contract_User">Contract_User</option>
+                  <option value="Contract_Approver">Contract_Approver</option>
+                </select>
+              </div>
+
+              <div class="m-3">
+                <label for="employeeCode" class="form-label">Employee Code<span style="color: red;">*</span></label>
+                <span *ngIf="employeeCode?.hasError('required') && (employeeCode?.dirty || employeeCode?.touched)"
+                  style="color: red;">Required</span>
+                <span *ngIf="employeeCode?.hasError('pattern') && (employeeCode?.dirty || employeeCode?.touched)"
+                  style="color: red;">Only capital case alphabets and digits are allowed</span>
+                <span *ngIf="employeeCode?.hasError('maxlength') && (employeeCode?.dirty || employeeCode?.touched)"
+                  style="color: red;">Code must be 8 characters or fewer</span>
+                <input class="form-control" type="text" id="employeeCode" placeholder="Enter employee code"
+                  formControlName="employeeCode">
+              </div>
+
+              <div class="m-3">
+                <label for="unit" class="form-label">Unit<span style="color: red;">*</span></label>
+                <span *ngIf="unit?.hasError('required') && (unit?.dirty || unit?.touched)"
+                  style="color: red;">Required</span>
+                <select class="form-select" id="unit" placeholder="Select Unit" formControlName="unit">
+                  <option value="" disabled selected>--Select Unit--</option>
+                  <option value="Thane">Thane</option>
+                  <option value="Indore">Indore</option>
+                  <option value="Pune">Pune</option>
+                </select>
+              </div>
+
+              <div class="m-3">
+                <label for="departmentId" class="form-label">Department<span style="color: red;">*</span></label>
+                <span *ngIf="departmentId?.hasError('required') && (departmentId?.dirty || departmentId?.touched)"
+                  style="color: red;">Required</span>
+                <select class="form-select" id="departmentId" placeholder="Select department name"
+                  formControlName="departmentId">
+                  <option value="" disabled selected>--Select Department--</option>
+                  <option *ngFor="let department of departments" [value]="department.departmentId">
+                    {{department.departmentName}}</option>
+                </select>
+              </div>
+
+              <div class="m-3">
+                <label for="employeeMobile" class="form-label">Employee Mobile<span style="color: red;">*</span></label>
+                <span *ngIf="employeeMobile?.hasError('required') && (employeeMobile?.dirty || employeeMobile?.touched)"
+                  style="color: red;">Required</span>
+                <span *ngIf="employeeMobile?.hasError('pattern') && (employeeMobile?.dirty || employeeMobile?.touched)"
+                  style="color: red;">Enter 10 digits phone no</span>
+                <input class="form-control" type="text" id="employeeMobile" placeholder="Enter employee mobile"
+                  formControlName="employeeMobile">
+              </div>
+
+              <div class="m-3">
+                <label for="email" class="form-label">Email<span style="color: red;">*</span></label>
+                <span *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)"
+                  style="color: red;">Required</span>
+                <span *ngIf="email?.hasError('email') && (email?.dirty || email?.touched)" style="color: red;">*Invalid
+                  Email</span>
+                <input class="form-control" type="email" id="email" placeholder="Enter your email"
+                  formControlName="email">
+              </div>
+
+              <div class="m-3">
+                <label for="employeeExtension" class="form-label">Employee Ext<span style="color: red;">*</span></label>
+                <span
+                  *ngIf="employeeExtension?.hasError('required') && (employeeExtension?.dirty || employeeExtension?.touched)"
+                  style="color: red;">Required</span>
+                <input class="form-control" type="text" id="employeeExtension" placeholder="Enter employee extension"
+                  formControlName="employeeExtension">
+              </div>
+            </div>
+
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-outline-primary add-btn">{{mode==='add'? 'Save':'Update'}}</button>
+              <button type="reset" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                (click)="resetForm()">Cancel</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

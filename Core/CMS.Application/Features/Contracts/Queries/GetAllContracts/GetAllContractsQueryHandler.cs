@@ -18,7 +18,7 @@ namespace CMS.Application.Features.Contracts.Queries.GetAllContracts
         }
         public async Task<IEnumerable<GetAllContractsDto>> Handle(GetAllContractsQuery request, CancellationToken cancellationToken)
         {
-            return await _contractRepository.GetAllContractsAsync(request.filters);
+            return await _contractRepository.GetAllContractsAsync(request.filters,request.eCode);
         }
     }
 }

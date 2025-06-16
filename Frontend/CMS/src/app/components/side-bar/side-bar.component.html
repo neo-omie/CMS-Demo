@@ -1,24 +1,18 @@
 @if(checkLogin()) {
-<nav #navbar class="navbar bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand sidebar-toggle-btn btn btn-primary" data-bs-toggle="offcanvas" href="#sideBar"
-            role="button" aria-controls="offcanvasExample">
-            <i class="fa-solid fa-bars-staggered"></i> Menu
-        </a>
-        <h3 class="headingg fs-4 d-none d-sm-block" routerLink="/dashboard">Contract Management System</h3>
-        <a class="btn btn-outline-danger" (click)="logoutUser()"><i class="fa-solid fa-power-off"></i> Logout</a>
-    </div>
-</nav>
-
 <aside class="offcanvas offcanvas-start offcanvas-width" tabindex="-1" id="sideBar" aria-labelledby="sideBarLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="sideBarLabel">Hello, {{username}}!</h5>
-        <div class="d-flex align-items-center">
+        <div class="d-flex">
             <button type="button" class="btn n-btn" data-bs-dismiss="offcanvas" routerLink="/notifications">
                 <span *ngIf="totalNotifications > 0" class="n-num"></span>
-                <i class="fa-solid fa-bell"></i>
+                <i class="fa-solid fa-bell fs-5"></i>
             </button>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn bulb" data-bs-dismiss="offcanvas" aria-label="Close" (click)="toggleBulb(!this.lightMode)">
+                <i class="fa-solid fa-lightbulb fs-5"></i>
+            </button>
+            <button type="button" class="btn" data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="fa-solid fa-xmark fs-5"></i>
+            </button>
         </div>
     </div>
     <div class="offcanvas-body">

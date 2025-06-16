@@ -7,10 +7,10 @@ a{
     text-decoration: none;
 }
 .card:hover .icon{
-    color: #5f5fee;
+    color: var(--btn-theme-toggle-color);
 }
 .card:hover{
-    box-shadow: 0 0 5px #5f5fee;
+    box-shadow: 0 0 5px var(--btn-theme-toggle-color);
     scale: 1.03;
     transition-duration: 0.2s;
 }
@@ -24,7 +24,7 @@ a{
     position: absolute;
     bottom: 0;
     right: 0;
-    color: rgb(136, 136, 243);
+    color: var(--icon-color);
     font-size: 3rem;
     z-index: -1;
 }
