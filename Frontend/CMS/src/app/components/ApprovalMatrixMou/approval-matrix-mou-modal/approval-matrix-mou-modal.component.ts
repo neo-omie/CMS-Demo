@@ -7,6 +7,7 @@ import { TYPE } from '../../auth/login/values.constants';
 import { ApprovalMatrixMou, EditApprovalMatrixMOUDto } from '../../../models/approval-matrix-mou';
 import { CommonModule } from '@angular/common';
 import { DecodeToken } from '../../../utils/decodeToken';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-approval-matrix-mou-modal',
@@ -79,9 +80,8 @@ export class ApprovalMatrixMouModalComponent {
           }
         },
         error: (error) => {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                      ErrorHandler.handle(error);
+
         }
       }
     )
@@ -136,9 +136,8 @@ export class ApprovalMatrixMouModalComponent {
           this.closeEditApproverCollapses();
         },
         error: (error) => {
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.error.title);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+                                      ErrorHandler.handle(error);
+
         }
       })
     }

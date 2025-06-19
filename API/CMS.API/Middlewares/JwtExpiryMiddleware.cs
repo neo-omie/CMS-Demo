@@ -24,6 +24,7 @@ namespace CMS.API.Middlewares
 
                     if (jwtToken.ValidTo < DateTime.UtcNow)
                     {
+                        //Console.WriteLine(jwtToken);
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         await context.Response.WriteAsync("Token has expired. LogIn again");
                         return;

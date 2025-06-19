@@ -4,20 +4,24 @@ import { Alert } from "./alert";
 export class ErrorHandler {
     static handle(error: any) {
         let errorMessage;
+        console.error('Error :(', error);
         if (error.status == 401) {
-            errorMessage = error.error;
+            errorMessage = JSON.stringify(error.error);
         }
          else if (error.error !== undefined && error.error.message !== undefined) {
             errorMessage = error.error.message;
         }
         else if (error.title !== undefined) {
-            errorMessage = error.title;
+            errorMessage = JSON.stringify(error.title);
         }
         else if (error.error !== undefined && error.error.title !== undefined) {
-            errorMessage = error.error.title
+            errorMessage = JSON.stringify(error.error.title);
         }
         else if (error.message !== undefined) {
             errorMessage = error.message;
+        }
+        else if (error.error !== undefined && error.error.message !== undefined) {
+            errorMessage = JSON.stringify(error.error.message);
         }
         else {
             errorMessage = "Something went wrong."

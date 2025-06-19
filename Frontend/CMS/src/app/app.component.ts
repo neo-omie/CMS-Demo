@@ -5,7 +5,7 @@ import { DecodeToken } from './utils/decodeToken';
 import { TYPE } from './components/auth/login/values.constants';
 import { Alert } from './utils/alert';
 import { RouterService } from './services/router.service';
-
+ 
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -51,17 +51,17 @@ export class AppComponent implements AfterViewInit {
   }
  
   checkLogin(): boolean {
-    if (localStorage.getItem('token') != null) {
-      DecodeToken.decodeJWTToken(String(localStorage.getItem('token')));
+    if (sessionStorage.getItem('token') != null) {
+      DecodeToken.decodeJWTToken(String(sessionStorage.getItem('token')));
       this.username = DecodeToken.sub;
       return true;
     }
     return false;
   }
-
+ 
   logoutUser() {
-    if (localStorage.getItem('token') != null) {
-      localStorage.clear();
+    if (sessionStorage.getItem('token') != null) {
+      sessionStorage.clear();
       sessionStorage.clear();
       DecodeToken.clearUserCredentials();
       Alert.toast(TYPE.SUCCESS, true, "You've been logged out successfully!");

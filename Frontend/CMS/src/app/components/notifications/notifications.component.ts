@@ -159,10 +159,7 @@ export class NotificationsComponent implements OnInit {
           this.GetPage(this.currentPage);
         },
         error:(error)=>{
-          this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.message : error.title
-        );
-          Alert.toast(TYPE.ERROR,true,this.errorMsg);
+           ErrorHandler.handle(error);
       }
     })
   }

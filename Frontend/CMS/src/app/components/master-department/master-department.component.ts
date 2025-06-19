@@ -17,6 +17,7 @@ import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 import { ErrorHandler } from '../../utils/errorHandler';
 
+
 @Component({
   selector: 'app-master-department',
   standalone: true,
@@ -112,8 +113,7 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       }
     });
   }
@@ -135,8 +135,7 @@ export class MasterDepartmentComponent {
         },
         error: (error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+           ErrorHandler.handle(error);
         }
       });
     }
@@ -165,8 +164,7 @@ export class MasterDepartmentComponent {
           },
           error: (error) => {
             console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+             ErrorHandler.handle(error);
           }
         });
       });
@@ -196,7 +194,8 @@ export class MasterDepartmentComponent {
       },
       error: (error) => {
         console.error('Error adding Department:', error);
-        Alert.bigToast('Error!', 'There was an error adding the Department.', TYPE.ERROR, 'Try Again.');
+        ErrorHandler.handle(error);
+        
       }
     });
   }

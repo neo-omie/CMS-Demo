@@ -17,7 +17,8 @@ import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
-
+import { ErrorHandler } from '../../utils/errorHandler';
+ 
 @Component({
   selector: 'app-contract-type-master',
   standalone: true,
@@ -48,7 +49,7 @@ export class ContractTypeMasterComponent implements OnInit {
   @ViewChild('editContractName') editContractName!: ElementRef;
   @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
   @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
-
+ 
   constructor(
     private contractService: ContractTypeMasterService,
     private router: Router,
@@ -56,7 +57,7 @@ export class ContractTypeMasterComponent implements OnInit {
     ) {
       this.title.setTitle("Contract Type Master - CMS");
     }
-
+ 
   ngOnInit(): void {
     this.columnsInfo = {
       'contractTypeName': {
@@ -76,7 +77,7 @@ export class ContractTypeMasterComponent implements OnInit {
     };
     this.getContract(1, 10);
   }
-
+ 
   getContract(pageNumber: number, pageSize: number): void {
     this.contractService.getContract(pageNumber, pageSize)
       .subscribe({
@@ -93,42 +94,39 @@ export class ContractTypeMasterComponent implements OnInit {
             this.maxPage = result.maxPage;
             this.pageNumbers = result.pageNumbers
           }
-
+ 
         }, error: (error) => {
           this.loading = false;
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+         ErrorHandler.handle(error);
         }
       });
   }
-
+ 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
       this.getContract(pgNumber, 10);
     }
   }
-
-
-  //get contrat by id 
+ 
+ 
+  //get contrat by id
   GetContract(id: number) {
     console.log("fetch id", id);
-
+ 
     this.contractService.getContractById(id).subscribe({
       next: (res: ContractTypeMaster) => {
         this.cont = res;
         console.log(res);
-
+ 
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        this.loading = false;
+         ErrorHandler.handle(error);
       }
     })
   }
-
-  //delete contract 
+ 
+  //delete contract
   deleteContract(id: number) {
     let empCode =DecodeToken.ECode;
     // let askFirst:boolean = confirm("Are you sure you want to delete this Contract?");
@@ -143,17 +141,16 @@ export class ContractTypeMasterComponent implements OnInit {
               // Alert.toast(TYPE.SUCCESS, true, "Deleted successfully");
               this.getContract(1, 10);
             }
-
+ 
           },
           error: (error) => {
-            console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            this.loading = false;
+         ErrorHandler.handle(error);
           }
         });
       });
   }
-
+ 
   //add contract
   addCompany(contractForm: NgForm) {
     this.cont = contractForm.value;
@@ -166,11 +163,13 @@ let empCode =DecodeToken.ECode;
       },
       error: (error) => {
         console.error('Error adding Contract:', error);
-        Alert.bigToast('Error!', 'There was an error adding the Contract.', TYPE.ERROR, 'Try Again');
+        // Alert.bigToast('Error!', 'There was an error adding the Contract.', TYPE.ERROR, 'Try Again');
+        this.loading = false;
+         ErrorHandler.handle(error);
       }
     });
   }
-
+ 
   contractTypeMasterAddForm = new FormGroup({
     contractTypeName: new FormControl('', [Validators.required,Validators.maxLength(30),Validators.pattern('^[a-zA-Z ]+$')]),
     status: new FormControl('', [Validators.required])
@@ -178,7 +177,7 @@ let empCode =DecodeToken.ECode;
   onAddFormSubmitContract() {
     let empCode =DecodeToken.ECode;
     console.log(this.contractTypeMasterAddForm.value);
-    
+   
     if (this.contractTypeMasterAddForm.invalid) {
       this.contractTypeMasterAddForm.markAllAsTouched();
       return;
@@ -206,9 +205,8 @@ let empCode =DecodeToken.ECode;
             }
           },
           error: (error) => {
-            console.error('Error :(', error);
-            this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.message : error.message);
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+            this.loading = false;
+         ErrorHandler.handle(error);
           }
         });
     }
@@ -219,7 +217,7 @@ let empCode =DecodeToken.ECode;
   get status(){
     return this.contractTypeMasterAddForm.get('status');
   }
-
+ 
   contID:number = 0
     fetchContractData(contractID:number) {
       this.contID = contractID;
@@ -264,11 +262,12 @@ let empCode =DecodeToken.ECode;
               })
             }
           }, error: (error) => {
-            Alert.toast(TYPE.ERROR, true, error.error.message)
-            console.error(error.error);
+           this.loading = false;
+         ErrorHandler.handle(error);
           }
         })
       }
-
+ 
     }
   }
+ 

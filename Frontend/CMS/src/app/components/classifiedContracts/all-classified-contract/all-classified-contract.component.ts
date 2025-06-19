@@ -35,8 +35,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { ContractTypeMasterDTO } from '../../../models/contract-type-master';
 import {
@@ -49,8 +47,6 @@ import { MasterEmployee } from '../../../models/master-employee';
 import { Title } from '@angular/platform-browser';
 import { MasterApostilleService } from '../../../services/master-apostille.service';
 import { PostTerminationNoticeUploadDTO } from '../../../models/post-termination-notice';
-// import { AddAddendumContract } from '../../../models/add-addendum-contract';
-import { AddAddendumContractsService } from '../../../services/add-addendum-contracts.service';
 import { PDFExport } from '../../../utils/pdfExport';
 import { ClassifiedPostTermination } from '../../../models/post-termination';
 import {
@@ -67,6 +63,7 @@ import { AllClassifiedContractViewAddModalComponent } from '../all-classified-co
 import { DecodeToken } from '../../../utils/decodeToken';
 import { ContractStatus, Location } from '../../../utils/constants';
 import { AllClassifiedContractPostTerminationModalComponent } from '../all-classified-contract-post-termination-modal/all-classified-contract-post-termination-modal.component';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-all-classified-contract',
@@ -80,8 +77,6 @@ import { AllClassifiedContractPostTerminationModalComponent } from '../all-class
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    MatTableModule,
-    MatSortModule,
     MatFormFieldModule,
     AllClassifiedContractPostTerminationModalComponent,
     MatInputModule,
@@ -90,6 +85,7 @@ import { AllClassifiedContractPostTerminationModalComponent } from '../all-class
   styleUrl: './all-classified-contract.component.css',
 })
 export class AllClassifiedContractComponent implements OnInit {
+  loading2 = false;
   currentPgNumber: number = 1;
   isCreate: boolean = false;
   contractStatus = ContractStatus;
@@ -118,8 +114,6 @@ export class AllClassifiedContractComponent implements OnInit {
     'expiryDate',
     'toBeRenewedOn',
     'status',
-    // 'approvalPendingFrom',
-    // 'renewalContractPerson',
     'renewalDueIn',
     'location',
     'action',
@@ -322,11 +316,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -358,17 +348,14 @@ export class AllClassifiedContractComponent implements OnInit {
 
   getAllDepartments() {
     const eCode = DecodeToken.ECode;
-    if(eCode){
+    if (eCode) {
       this.contractsService.GetDepartments(eCode).subscribe({
         next: (response: GetAllDepartmentsDto[]) => {
           this.departments = response;
         },
         error: (error) => {
           console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          ErrorHandler.handle(error);
         },
       });
     }
@@ -380,10 +367,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -394,10 +378,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -408,10 +389,7 @@ export class AllClassifiedContractComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -488,15 +466,9 @@ export class AllClassifiedContractComponent implements OnInit {
         }
         this.isCreate = false;
       },
-      error: (error: { message: undefined; error: { message: any } }) => {
+      error: (error) => {
         console.error('Error :(', error);
-        if (error.message !== undefined) {
-          this.errorMsg = JSON.stringify(error.error.message);
-          console.log(this.errorMsg);
-        } else {
-          this.errorMsg = JSON.stringify(error.message);
-          console.log(this.errorMsg);
-        }
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -537,10 +509,9 @@ export class AllClassifiedContractComponent implements OnInit {
                 Location: location == '' ? null : location,
               });
             },
-            error: (error: { error: { message: any } }) => {
+            error: (error) => {
               console.error('Deletion Failed', error);
-              this.errorMsg = JSON.stringify(error.error.message);
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
+              ErrorHandler.handle(error);
             },
           });
         }
@@ -612,96 +583,10 @@ export class AllClassifiedContractComponent implements OnInit {
 
   contID: number = 0;
 
-  fetchContractData(classifiedContractID: any) {
-    this.contID = classifiedContractID;
-    this.contractsService.fetchContractData(classifiedContractID).subscribe({
-      next: (response) => {
-        this.masterContractAddForm.patchValue({
-          classifiedContractName: response.classifiedContractName,
-          departmentId: String(response.departmentId),
-          contractWithCompanyId: String(response.contractWithCompanyId),
-          contractTypeId: String(response.contractTypeId),
-          apostilleTypeId: String(response.apostilleTypeId),
-          actualDocRefNo: String(response.actualDocRefNo),
-          retainerContract: String(response.retainerContract),
-          termsAndConditions: response.termsAndConditions,
-          validFrom: this.formatDate(String(response.validFrom)),
-          // validTill: this.formatDate(response.validTill),
-          validTill: this.formatDate(String(response.validTill)),
-          renewalFrom: this.formatDate(String(response.renewalFrom)),
-          renewalTill: this.formatDate(String(response.renewalTill)),
-          addendumDate: this.formatDate(String(response.addendumDate)),
-          empCustodianId: String(response.empCustodianId),
-          location: response.location,
-          approver1Status: String(response.approver1Status),
-          approver2Status: String(response.approver2Status),
-          approver3Status: String(response.approver3Status),
-        });
-        this.editEmpCustodianId.nativeElement.value = response.empCustodianId;
-        this.editEmpCustodianName.nativeElement.value = response.empCustodianId;
-        return true;
-      },
-      error: (err) => {
-        console.error('No Contract with this id exist', err);
-        this.errorMsg = JSON.stringify(
-          err.message !== undefined ? err.error.message : err.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-        return false;
-      },
-    });
-    return false;
-  }
-  private formatDate(date: string) {
-    const d = new Date(date);
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    const year = d.getFullYear();
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-    return [year, month, day].join('-');
-  }
-
   checkContractId = new FormGroup({
     contractId: new FormControl('', [Validators.required]),
   });
 
-  onSubmitCheck() {
-    const enteredValue = this.checkContractId.value.contractId;
-    this.contractsService
-      .getContracts({
-        PageNumber: 1,
-        PageSize: 100,
-        SearchTerm: null,
-        FromDate: null,
-        ToDate: null,
-        ContractType: null,
-        RenewalDueIn: null,
-        ContractStatus: null,
-        Department: null,
-        Location: null,
-      })
-      .subscribe({
-        next: (res: ClassifiedContracts[]) => {
-          this.allContracts = res;
-          if (this.checkContractId.valid) {
-            const foundContract = this.allContracts.find(
-              (contract) =>
-                contract.classifiedContractID.toString() === enteredValue ||
-                contract.classifiedContractName === enteredValue
-            );
-
-            if (foundContract) {
-              console.log('Contract Found: ', foundContract);
-            } else {
-              console.error('Contract not found');
-            }
-          } else {
-            console.error('Form is invalid');
-          }
-        },
-      });
-  }
   uploadFile(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -783,8 +668,7 @@ export class AllClassifiedContractComponent implements OnInit {
           });
         }
       } catch (error) {
-        this.errorMsg = JSON.stringify(error);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       } finally {
         this.loading = false;
       }
@@ -794,91 +678,6 @@ export class AllClassifiedContractComponent implements OnInit {
     this.loading = false;
   }
   //uploading the Post Termination Notice
-  OnSavePostTermination(documentForm: NgForm) {
-    // console.log(documentForm.value);
-    // console.log(this.file);
-
-    if (!this.file || !documentForm.valid) {
-      this.addFile.nativeElement.value = '';
-      this.postTerm.file = null;
-      this.postTerm.notice_Duration = 1;
-      this.postTerm.end_Date = new Date();
-      this.postTerm.Remark = '';
-      Alert.toast(
-        TYPE.WARNING,
-        true,
-        'Please select a file and fill the Form Correctly'
-      );
-      return;
-    }
-    const allowedExtensions = ['.pdf', '.doc', '.docx'];
-    const fileExtension = this.file.name
-      .substring(this.file.name.lastIndexOf('.'))
-      .toLowerCase();
-
-    if (!allowedExtensions.includes(fileExtension)) {
-      this.addFile.nativeElement.value = '';
-      this.postTerm.file = null;
-      this.postTerm.notice_Duration = 1;
-      this.postTerm.end_Date = new Date();
-      this.postTerm.Remark = '';
-      Alert.toast(
-        TYPE.WARNING,
-        true,
-        'Unsupported file format. Allowed formats: .pdf, .doc, .docx '
-      );
-      return;
-    }
-    if (this.file.size > 25 * 1048576) {
-      this.addFile.nativeElement.value = '';
-      this.postTerm.file = null;
-      Alert.toast(TYPE.WARNING, true, 'File too large. Max 25MB allowed.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', this.file);
-    formData.append('contractId', String(this.contIdForPostTerm));
-    formData.append('notice_Duration', String(this.postTerm.notice_Duration));
-    formData.append('end_Date', String(this.postTerm.end_Date));
-    formData.append('Remark', String(this.postTerm.Remark));
-    this.postTermService.UploadClassifiedDoc(formData).subscribe({
-      next: (res) => {
-        this.file = null;
-        documentForm.reset();
-        // this.addFile.nativeElement.value = "";
-        //      this.postTerm.file=null;
-
-        Alert.bigToast(
-          'Success!',
-          'Posted Termination successfully.',
-          TYPE.SUCCESS,
-          'Ok'
-        );
-        this.GetPage(this.maxPage);
-      },
-      error: (error) => {
-        console.error('Error in creating Notice:', error);
-        Alert.bigToast(
-          'Error!',
-          'There was an error posting termination notice. ' +
-            error.error.message,
-          TYPE.ERROR,
-          'Try Again'
-        );
-        // this.file = null;
-        // documentForm.reset();
-        // this.addFile.nativeElement.value = "";
-        // this.postTerm.file = null;
-        // this.document.status = 1;
-      },
-    });
-    // this.file = null;
-    // documentForm.reset();
-    // this.addFile.nativeElement.value = "";
-    // this.document.file = null;
-    // this.document.status = 1;
-  }
 
   // Post Termination Notice
   postTermination: ClassifiedPostTermination = new ClassifiedPostTermination();
@@ -943,9 +742,7 @@ export class AllClassifiedContractComponent implements OnInit {
             });
           }
         } catch (error) {
-          this.errorMsg = JSON.stringify(error);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          console.error(error);
+          ErrorHandler.handle(error);
         } finally {
           this.loading = false;
         }
@@ -1018,25 +815,9 @@ export class AllClassifiedContractComponent implements OnInit {
           this.GetPage(this.maxPage);
         },
         error: (error) => {
-          console.error('Error in adding notice withdrawal:', error);
-          Alert.bigToast(
-            'Error!',
-            'There was an error adding notice withdrawal.',
-            TYPE.ERROR,
-            'Try Again'
-          );
-          // this.file = null;
-          // documentForm.reset();
-          // this.addFile.nativeElement.value = "";
-          // this.postTerm.file = null;
-          // this.document.status = 1;
+          ErrorHandler.handle(error);
         },
       });
-    // this.file = null;
-    // documentForm.reset();
-    // this.addFile.nativeElement.value = "";
-    // this.document.file = null;
-    // this.document.status = 1;
   }
 
   withdrawalNoticeEmailForm = new FormGroup({
@@ -1094,9 +875,7 @@ export class AllClassifiedContractComponent implements OnInit {
             });
           }
         } catch (error) {
-          this.errorMsg = JSON.stringify(error);
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
-          console.error(error);
+          ErrorHandler.handle(error);
         } finally {
           this.loading = false;
         }
@@ -1107,34 +886,46 @@ export class AllClassifiedContractComponent implements OnInit {
     this.loading = false;
   }
 
-  // printToPDF(tableID: string, fileName: string) {
   printToPDF() {
-    // PDFExport.printToPDF(tableID, fileName);
-const selectedColumns = ['Contract Name', 'Contract Type','Department Name','Effective Date','Expiry Date','To be renewed on','Status','Renewal Due In','Location']; // Put the exact header text here
-  PDFExport.printToPDF('table', 'CMS-ClassifiedContracts.pdf', selectedColumns);
+    const selectedColumns = [
+      'Contract Name',
+      'Contract Type',
+      'Department Name',
+      'Effective Date',
+      'Expiry Date',
+      'To be renewed on',
+      'Status',
+      'Renewal Due In',
+      'Location',
+    ]; // Put the exact header text here
+    PDFExport.printToPDF(
+      'table',
+      'CMS-ClassifiedContracts.pdf',
+      selectedColumns
+    );
   }
 
   exportToExcel(): void {
-      const selectedColumns = [
-        'Contract Name',
-        'Contract Type',
-        'Department Name',
-        'Effective Date',
-        'Expiry Date',
-        'To Be Renewed On',
-        'Status',
-        'Renewal Due In',
-        'Location',
-      ];
-  
-      ExcelExport.printToExcel(
-        'table',
-        'CMS-ClassifeidContracts.xlsx',
-        selectedColumns
-      );
-    }
+    const selectedColumns = [
+      'Contract Name',
+      'Contract Type',
+      'Department Name',
+      'Effective Date',
+      'Expiry Date',
+      'To Be Renewed On',
+      'Status',
+      'Renewal Due In',
+      'Location',
+    ];
+
+    ExcelExport.printToExcel(
+      'table',
+      'CMS-ClassifeidContracts.xlsx',
+      selectedColumns
+    );
+  }
   setLoader(data: boolean) {
-    this.loading = data;
+    this.loading2 = data;
   }
 
   onFilterSubmit() {

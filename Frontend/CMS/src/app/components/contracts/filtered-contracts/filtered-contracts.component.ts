@@ -279,7 +279,7 @@ export class FilteredContractsComponent implements OnInit {
     }
     else{
       DecodeToken.clearUserCredentials();
-      localStorage.clear()
+      sessionStorage.clear()
       this.router.navigate(['/'])
     }
   }

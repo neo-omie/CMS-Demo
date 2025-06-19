@@ -9,7 +9,8 @@ import { CommonModule } from '@angular/common';
 import { EscalationMatrixMouModalComponent } from '../escalation-matrix-mou-modal/escalation-matrix-mou-modal.component';
 import { LoaderComponent } from '../../UtilComponents/loader/loader.component';
 import { TableComponent } from '../../UtilComponents/table/table.component';
-import { PaginationComponent } from "../../UtilComponents/pagination/pagination.component";
+import { PaginationComponent } from '../../UtilComponents/pagination/pagination.component';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-escalation-matrix-mou-screen',
@@ -19,63 +20,73 @@ import { PaginationComponent } from "../../UtilComponents/pagination/pagination.
     LoaderComponent,
     CommonModule,
     EscalationMatrixMouModalComponent,
-    PaginationComponent
+    PaginationComponent,
   ],
   templateUrl: './escalation-matrix-mou-screen.component.html',
-  styleUrl: './escalation-matrix-mou-screen.component.css'
+  styleUrl: './escalation-matrix-mou-screen.component.css',
 })
 export class EscalationMatrixMouScreenComponent {
   loading: boolean = true;
   isEdit: boolean = false;
   maxPage: number = 1;
-  errorMsg: string = "";
+  errorMsg: string = '';
   escalationMatrixMou?: MasterEscalationMatrixMouDto;
   pageNumbers: number[] = [];
   matrixMous: MasterEscalationMatrixMouDto[] = [];
-  displayedColumns: string[] = ['departmentName', 'escalation1', 'escalation2', 'escalation3', 'action'];
+  displayedColumns: string[] = [
+    'departmentName',
+    'escalation1',
+    'escalation2',
+    'escalation3',
+    'action',
+  ];
   columnsInfo: {
     [key: string]: {
-      'title'?: string,
-      'isSort'?: boolean,
-      'templateRef': TemplateRef<any> | null,
-    }
+      title?: string;
+      isSort?: boolean;
+      templateRef: TemplateRef<any> | null;
+    };
   } = {};
 
-  @ViewChild('actionTemplateRef', { static: true }) actionTemplateRef!: TemplateRef<any>;
+  @ViewChild('actionTemplateRef', { static: true })
+  actionTemplateRef!: TemplateRef<any>;
 
-  constructor(private escalationService: EscalationMatrixMouService, private title: Title) {
-    this.title.setTitle("Escalation Matrix (MOU) - CMS");
+  constructor(
+    private escalationService: EscalationMatrixMouService,
+    private title: Title
+  ) {
+    this.title.setTitle('Escalation Matrix (MOU) - CMS');
   }
 
   ngOnInit() {
     this.getMatrixMous(1, 10);
     this.columnsInfo = {
-      'departmentName': {
+      departmentName: {
         title: 'Department',
         isSort: true,
-        templateRef: null
+        templateRef: null,
       },
-      'escalation1': {
+      escalation1: {
         title: 'Escalator 1',
         isSort: true,
-        templateRef: null
+        templateRef: null,
       },
-      'escalation2': {
+      escalation2: {
         title: 'Escalator 2',
         isSort: true,
-        templateRef: null
+        templateRef: null,
       },
-      'escalation3': {
+      escalation3: {
         title: 'Escalator 3',
         isSort: true,
-        templateRef: null
+        templateRef: null,
       },
-      'action': {
+      action: {
         title: 'Action',
         isSort: false,
-        templateRef: this.actionTemplateRef
-      }
-    }
+        templateRef: this.actionTemplateRef,
+      },
+    };
   }
 
   getMatrixMous(pageNumber: number, pageSize: number) {
@@ -85,7 +96,11 @@ export class EscalationMatrixMouScreenComponent {
         this.loading = false;
         this.matrixMous = res;
         if (this.matrixMous != undefined && this.matrixMous.length > 0) {
-          let result = Pagination.paginator(pageNumber, this.matrixMous[0].totalRecords, pageSize)
+          let result = Pagination.paginator(
+            pageNumber,
+            this.matrixMous[0].totalRecords,
+            pageSize
+          );
           this.maxPage = result.maxPage;
           this.pageNumbers = result.pageNumbers;
         }
@@ -106,9 +121,9 @@ export class EscalationMatrixMouScreenComponent {
       },
       error: (error) => {
         console.error('Error :(', error);
-        this.errorMsg = JSON.stringify((error.message !== undefined) ? error.error.title : error.message);
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
+       ErrorHandler.handle(error);
+       
+      },
     });
   }
 }

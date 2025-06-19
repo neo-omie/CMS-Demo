@@ -33,6 +33,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 import { Title } from '@angular/platform-browser';
+import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
   selector: 'app-master-company',
@@ -134,54 +135,27 @@ export class MasterCompanyComponent implements OnInit {
         console.log(this.countryList);
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+       ErrorHandler.handle(error);
       },
     });
   }
-  getStateCascade(input:string) {
-    this.stateList = [];
-  this.cityList = [];
-  
-  // Clear selected state and city in form
-  this.masterCompanyAddForm.patchValue({
-    stateId: '',
-    cityId: ''
-  });
+  getStateCascade(input: string) {
     this.companyCascadeService.getStates(+input).subscribe({
       next: (response: States[]) => {
         this.stateList = response;
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
-      }
-    })
+        ErrorHandler.handle(error);
+      },
+    });
   }
-  
-  getCityCascade(input:string) {
-
-  //   this.cityList = [];
-  
-  // this.masterCompanyAddForm.patchValue({
-  //   cityId: ''
-  // });
+  getCityCascade(input: string) {
     this.companyCascadeService.getCities(+input).subscribe({
       next: (response: Cities[]) => {
         this.cityList = response;
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
@@ -212,11 +186,7 @@ export class MasterCompanyComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error :(', error);
-          this.errorMsg = JSON.stringify(
-            error.message !== undefined ? error.error.title : error.message
-          );
-          Alert.toast(TYPE.ERROR, true, this.errorMsg);
+         ErrorHandler.handle(error);
         },
       });
   }
@@ -255,72 +225,21 @@ export class MasterCompanyComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error :(', error);
-        this.errorMsg = JSON.stringify(
-          error.message !== undefined ? error.error.title : error.message
-        );
-        Alert.toast(TYPE.ERROR, true, this.errorMsg);
+        ErrorHandler.handle(error);
       },
     });
   }
 
-  // editCompany(id:number){
-  //   let compName=this.editCompanyName.nativeElement.value;
-  //   if (compName !=="") {
-  //     console.log(compName);
-  //     this.companyService.updateCompany(id,compName).subscribe({
-  //       next:(res:boolean)=>{
-  //         if (res) {
-  //           Alert.toast(TYPE.SUCCESS,true,"Updated Successfully")
-  //           this.getCompanies();
-  //         }
-  //       },
-  //       error:(error)=>{
-  //         console.error('Error :(', error);
-  //             this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-  //             Alert.toast(TYPE.ERROR,true,this.errorMsg);
-  //       }
-  //     })
-
-  //   }
-  // }
-
-  // addCompany(companyForm: NgForm) {
-  //   this.company = companyForm.value;
-  //   let empCode = DecodeToken.ECode;
-
-  //   this.companyService.addCompany(this.company, empCode).subscribe({
-  //     next: (response) => {
-  //       Alert.bigToast('Success!', 'Company added successfully.', TYPE.SUCCESS, 'Ok');
-        
-  //       companyForm.resetForm();
-  //       this.GetPage(this.maxPage);
-  //       const modalElement = document.getElementById('company-add');
-  //       if (modalElement) {
-  //         const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-  //         modalInstance.hide();
-  //       }
-  //     },
-
-  //     error: (error) => {
-  //       console.error('Error adding Company:', error);
-  //       Alert.bigToast('Error!', 'There was an error adding the Company.', TYPE.ERROR, 'Try Again');
-  //     }
-  //   });
-  // }
 
   ResettingonCacelButton() {
     this.masterCompanyAddForm.reset({
       stateId: '',
       countryId: '',
       cityId: '',
-      
-
-      
     });
-    this.stateList.length=0;
-    this.cityList.length=0;
-}
+    this.stateList.length = 0;
+    this.cityList.length = 0;
+  }
 
   deleteCompany(id: number) {
     let empCode = DecodeToken.ECode;
@@ -345,12 +264,7 @@ export class MasterCompanyComponent implements OnInit {
               this.getCompanies(this.currentPage);
             }
           },
-          error: (error) => {
-            console.error('Error :(', error);
-            this.errorMsg = JSON.stringify(
-              error.message !== undefined ? error.error.title : error.message
-            );
-            Alert.toast(TYPE.ERROR, true, this.errorMsg);
+          error: (error) => {ErrorHandler.handle(error);
           },
         });
       }
@@ -452,9 +366,8 @@ export class MasterCompanyComponent implements OnInit {
               }
             }, 
             error:(error) => {
-              console.error('Error :(', error);
-              this.errorMsg = JSON.stringify((error.message !== undefined)?error.error.title: error.message);
-              Alert.toast(TYPE.ERROR,true,this.errorMsg);
+              this.loading = false;
+         ErrorHandler.handle(error);
             }
           });
         }
@@ -637,10 +550,8 @@ export class MasterCompanyComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error :(', error);
-              this.errorMsg = JSON.stringify(
-                error.message !== undefined ? error.error.title : error.message
-              );
-              Alert.toast(TYPE.ERROR, true, this.errorMsg);
+             ErrorHandler.handle(error);
+             
             },
           });
       } else {
@@ -653,6 +564,10 @@ export class MasterCompanyComponent implements OnInit {
 
     // PDFExport.printToPDF(tableID, fileName);
     const selectedColumns = ['Company Name', 'Company Location', 'Status']; // Put the exact header text here
-    PDFExport.printToPDF('companies-table', 'CMS-companies.pdf', selectedColumns);
+    PDFExport.printToPDF(
+      'companies-table',
+      'CMS-companies.pdf',
+      selectedColumns
+    );
   }
 }

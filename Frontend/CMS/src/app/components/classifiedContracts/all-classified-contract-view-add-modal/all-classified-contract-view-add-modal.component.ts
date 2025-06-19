@@ -39,8 +39,9 @@ import {
   dateRangeValidator,
   dateValidator,
 } from '../../../utils/dateValidator';
-import { ProgressBarComponent } from "../../UtilComponents/progress-bar/progress-bar.component";
+import { ProgressBarComponent } from '../../UtilComponents/progress-bar/progress-bar.component';
 import { Location } from '../../../utils/constants';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 @Component({
   selector: 'app-all-classified-contract-view-add-modal',
@@ -61,7 +62,6 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
   @Input() approveRejectContract!: (id?: string, status?: number) => void;
   @Input() GetAllContracts!: (filter: any) => void;
 
-  
   approverStatusColor: string[] = [
     '',
     '#ffc107',
@@ -92,15 +92,21 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
 
   @ViewChild('addEmpCustodianCollapse') addEmpCustodianCollapse!: ElementRef;
 
-  dummyForm:FormGroup = new FormGroup({});
-  masterContractAddForm:FormGroup = new FormGroup(
+  dummyForm: FormGroup = new FormGroup({});
+  masterContractAddForm: FormGroup = new FormGroup(
     {
-      classifiedContractName: new FormControl('', [Validators.required,Validators.maxLength(20)]),
+      classifiedContractName: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(20),
+      ]),
       departmentId: new FormControl('', [Validators.required]),
       contractWithCompanyId: new FormControl('', [Validators.required]),
       contractTypeId: new FormControl('', [Validators.required]),
       apostilleTypeId: new FormControl('', [Validators.required]),
-      actualDocRefNo: new FormControl('', [Validators.required,Validators.pattern('^[0-9]{1,10}$')]),
+      actualDocRefNo: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]{1,10}$'),
+      ]),
       retainerContract: new FormControl('', [Validators.required]),
       termsAndConditions: new FormControl('', [Validators.required]),
       validFrom: new FormControl('', [Validators.required, dateValidator()]),
@@ -135,21 +141,18 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
   Location = Location; // Makes the enum accessible in template
   locationOptions: string[];
 
-
   constructor(
     private contractsService: ClassifiedContractsService,
     private renderer: Renderer2,
     private masterApostilleService: MasterApostilleService
-    
   ) {
-        this.locationOptions = Object.values(Location);
-
+    this.locationOptions = Object.values(Location);
   }
 
   ngOnInit(): void {
-    this.initialRequirementLoad(); 
+    this.initialRequirementLoad();
   }
-  
+
   formfield(name: string) {
     if (name === 'reset') {
       this.masterContractAddForm?.reset({
@@ -180,10 +183,8 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
 
   error(error: any) {
     console.error('Error :(', error);
-    let errorMsg = JSON.stringify(
-      error.message !== undefined ? error.error.title : error.message
-    );
-    Alert.toast(TYPE.ERROR, true, errorMsg);
+            ErrorHandler.handle(error);
+
   }
 
   initialRequirementLoad() {
@@ -219,29 +220,38 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
     }
   }
 
-   getProgressType(status:number|undefined):string{
-    if(status===undefined || status===null){
+  getProgressType(status: number | undefined): string {
+    if (status === undefined || status === null) {
       return '';
     }
 
-    switch(status){
-      case 1: return 'Approval for'; 
-      case 2: return 'Active'; 
-      case 3: return 'Rejection for';
-      case 4: return 'Termination of';
-      case 5: return 'Expiration of';
-      case 6: return 'Termination in progress for';
-      case 7: return 'Termination approved for';
-      case 8: return 'Notice withdrawal pending for';
-      default: return 'Progress for ';
+    switch (status) {
+      case 1:
+        return 'Approval for';
+      case 2:
+        return 'Active';
+      case 3:
+        return 'Rejection for';
+      case 4:
+        return 'Termination of';
+      case 5:
+        return 'Expiration of';
+      case 6:
+        return 'Termination in progress for';
+      case 7:
+        return 'Termination approved for';
+      case 8:
+        return 'Notice withdrawal pending for';
+      default:
+        return 'Progress for ';
     }
   }
-  phases=[
-    'Contract Created',
+  phases = [
+    'Contract Initial State',
     'L1 Approver Approval',
     'L2 Approver Approval',
     'L3 Approver Approval',
-    'Contract Active',
+    'Contract Final State',
   ];
 
   textChangeEmployeeCustodian(departmentId: number, event: Event) {
@@ -252,7 +262,10 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
         next: (response: MasterEmployee[]) => {
           this.employeeCustodians = response;
         },
-        error: (error) => this.error(error),
+        error: (error) => {
+                  ErrorHandler.handle(error);
+
+        }
       });
   }
 
@@ -329,10 +342,6 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
           this.masterContractAddForm.value.renewalTill != ''
             ? String(this.masterContractAddForm.value.renewalTill)
             : null;
-        // addFormValues.addendumDate =
-        //   this.masterContractAddForm.value.addendumDate != ''
-        //     ? String(this.masterContractAddForm.value.addendumDate)
-        //     : null;
         addFormValues.skipApproval =
           this.masterContractAddForm.value.skipApproval;
         addFormValues.empCustodianId = Number(empCustodianId);
@@ -362,8 +371,10 @@ export class AllClassifiedContractViewAddModalComponent implements OnInit {
             }
           }
         } catch (error) {
-          console.error('Error :(', error);
-          Alert.toast(TYPE.ERROR, true, JSON.stringify(error));
+          
+          this.loaderEmit.emit(false);
+                 ErrorHandler.handle(error);
+
         } finally {
           this.loaderEmit.emit(false);
         }
