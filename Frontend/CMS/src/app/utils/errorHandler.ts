@@ -7,6 +7,9 @@ export class ErrorHandler {
         if (error.status == 401) {
             errorMessage = error.error;
         }
+         else if (error.error !== undefined && error.error.message !== undefined) {
+            errorMessage = error.error.message;
+        }
         else if (error.title !== undefined) {
             errorMessage = error.title;
         }
@@ -15,9 +18,6 @@ export class ErrorHandler {
         }
         else if (error.message !== undefined) {
             errorMessage = error.message;
-        }
-        else if (error.error !== undefined && error.error.message !== undefined) {
-            errorMessage = error.error.message;
         }
         else {
             errorMessage = "Something went wrong."

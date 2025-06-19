@@ -18,6 +18,7 @@ import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-employee',

@@ -11,8 +11,8 @@
     color: whitesmoke;
 }
 .modal-header{
-    border-color: #5f5fee;
-    background-color: #5f5fee;
+ border: 2px solid var(--table-side-border-color);
+    background-color: var(--btn-theme-toggle-color);
 }
 .modal-title{
     color: #5f5fee;
