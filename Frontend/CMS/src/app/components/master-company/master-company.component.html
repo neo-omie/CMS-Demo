@@ -157,11 +157,25 @@
                     <span *ngIf="cityId?.hasError('required') && (cityId?.dirty || cityId?.touched)"
                       style="color: red;">Required</span>
                     <!-- <input class="form-control" type="text" id="cityId" formControlName="cityId"> -->
-                    <select class="form-select" name="cityId" id="cityId" formControlName="cityId">
+                    <select #cityCascadingId class="form-select" name="cityId" id="cityId" formControlName="cityId" (change)="getLocationCascade(cityCascadingId.value)">
                       <option value="" disabled selected>--Select City--</option>
                       <option *ngFor="let cit of cityList" value="{{cit.cityId}}">{{cit.city}}</option>
                     </select>
                   </div>
+<div class="mb-4">
+  <label for="locationId" class="form-label fw-semibold">
+    Location <span class="text-danger">*</span>
+  </label>
+  <ng-multiselect-dropdown [placeholder]="'Select one or more branches'" formControlName="locationId"
+    [settings]="dropdownSettings" [data]="locationList">
+  </ng-multiselect-dropdown>
+  <div class="invalid-feedback d-block"
+    *ngIf="locationId?.hasError('required') && (locationId?.touched || locationId?.dirty)">
+    Please select at least one location.
+  </div>
+</div>
+
+
                   <div class="m-3">
                     <label for="Zipcode" class="form-label">Zipcode<span style="color: red;">*</span></label>
                     <span *ngIf="zipcode?.hasError('required') && (zipcode?.dirty || zipcode?.touched)"
@@ -197,8 +211,6 @@
                       *ngIf="companyEmailId?.hasError('email') && (companyEmailId?.dirty || companyEmailId?.touched)"
                       style="color: red;">Invalid email</span>
 
-                    <!-- <span *ngIf="companyEmailId?.hasError('maxLength') && (companyEmailId?.dirty || companyEmailId?.touched)"
-                      style="color: red;">Only 50 characters are allowed</span> -->
                     <input class="form-control" type="text" id="companyEmailId" placeholder="Enter company emailId"
                       formControlName="companyEmailId">
                   </div>

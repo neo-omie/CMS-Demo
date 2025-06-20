@@ -1,12 +1,12 @@
 export enum ContractStatus {
-    PendingApproval = 1, 
+    Pending_Approval = 1, 
     Active, 
     Rejected, 
     Terminated, 
     Expired, 
-    PendingTermination, 
-    ApprovedForTermination, 
-    PendingNoticeWithdrawn
+    Pending_Termination, 
+    Approved_For_Termination, 
+    Pending_Notice_Withdrawn
 }
 
 export enum Location {

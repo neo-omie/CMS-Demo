@@ -64,7 +64,7 @@ export class TerminationWithdrawNoticeComponent {
         Alert.toast(TYPE.SUCCESS, true, 'Withdrawal Notice Added Successfully!');
         this.resetForm()
         this.loaderEmit.emit(false);
-        const modalElement = document.getElementById('Termination-Notice-Detail');
+        const modalElement = document.getElementById('Notice-Withdrawal-Detail');
         if (modalElement) {
           const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
           modalInstance.hide();

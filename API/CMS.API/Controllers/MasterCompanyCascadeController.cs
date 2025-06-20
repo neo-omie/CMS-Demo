@@ -2,12 +2,12 @@
 using CMS.Application.Features.MasterCompanyCascade.Queries.GetCityById;
 using CMS.Application.Features.MasterCompanyCascade.Queries.GetCountries;
 using CMS.Application.Features.MasterCompanyCascade.Queries.GetCountryById;
+using CMS.Application.Features.MasterCompanyCascade.Queries.GetLocationById;
+using CMS.Application.Features.MasterCompanyCascade.Queries.GetLocations;
 using CMS.Application.Features.MasterCompanyCascade.Queries.GetStateById;
 using CMS.Application.Features.MasterCompanyCascade.Queries.GetStates;
-using CMS.Domain.Entities.CompanyMaster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
@@ -44,6 +44,12 @@ namespace CMS.API.Controllers
             var cities = await _mediator.Send(new GetCitiesQuery(stateId));
             return Ok(cities);
         }
+        [HttpGet("GetLocations")]
+        public async Task<IActionResult> GetLocations(int cityId)
+        {
+            var locations = await _mediator.Send(new GetLocationsQuery(cityId));
+            return Ok(locations);
+        }
         [HttpGet("GetCountryById")]
         public async Task<IActionResult> GetCountryById(int id)
         {
@@ -61,6 +67,12 @@ namespace CMS.API.Controllers
         {
             var city = await _mediator.Send(new GetCityByIdQuery(id));
             return Ok(city);
+        }
+        [HttpGet("GetLocationById")]
+        public async Task<IActionResult> GetLocationById(int id)
+        {
+            var location = await _mediator.Send(new GetLocationByIdQuery(id));
+            return Ok(location);
         }
     }
 }

@@ -45,6 +45,7 @@ namespace CMS.Persistence.Context
         public DbSet<MasterDocument> MasterDocuments { get; set; }
         public DbSet<MasterCompany> MasterCompanies { get; set; }
         public DbSet<GetMastersDTO> GetCompanyDtos { get; set; }
+        public DbSet<CompanyBranch> CompanyBranch { get; set; }
         public DbSet<MasterApostille> MasterApostilles { get; set; }
         public DbSet<GetAllApostilleDto> GetApostillesDtos { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -52,6 +53,7 @@ namespace CMS.Persistence.Context
         public DbSet<ListOfCountries> Countries { get; set; }
         public DbSet<ListOfStates> States { get; set; }
         public DbSet<ListofCity> Cities { get; set; }
+        public DbSet<ListOfLocation> Locations { get; set; }
         public DbSet<ContractTypeMasters> contracts { get; set; }
         public DbSet<Contract> ContractsEntity { get; set; }
         public DbSet<GetAllContractsDto> GetContractsDtos { get; set; }
@@ -75,7 +77,7 @@ namespace CMS.Persistence.Context
         public DbSet<GetAllAuditDto> GetAllAudits { get; set; }
         public DbSet<ContractsCount> ContractsCounter { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
+        public DbSet<UserRoleMapping> UserRoleMappings { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -121,7 +123,7 @@ namespace CMS.Persistence.Context
             //modelBuilder.Entity<Notification>().HasAlternateKey(n => n.EmployeeCode);
             modelBuilder.Entity<Notification>().HasAlternateKey(n => n.ValueId);
 
-            modelBuilder.Entity<UserRoleMapping>().HasKey(urm => new { urm.RoleId, urm.EmployeeCode });
+            //modelBuilder.Entity<UserRoleMapping>().HasKey(urm => new { urm.RoleId, urm.EmployeeCode });
 
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver1).WithMany().HasForeignKey(mamc => mamc.ApproverId1).HasPrincipalKey(me => me.EmployeeCode);
             modelBuilder.Entity<MasterApprovalMatrixContract>().HasOne(mamc => mamc.Approver2).WithMany().HasForeignKey(mamc => mamc.ApproverId2).HasPrincipalKey(me => me.EmployeeCode);
@@ -145,6 +147,7 @@ namespace CMS.Persistence.Context
             //mastercompany location
             modelBuilder.Entity<ListOfStates>().HasOne(st => st.listofcountries).WithMany().HasForeignKey(st => st.CountryId);
             modelBuilder.Entity<ListofCity>().HasOne(ct => ct.listofStates).WithMany().HasForeignKey(ct=> ct.StateId);
+            modelBuilder.Entity<ListOfLocation>().HasOne(ct => ct.ListOfCities).WithMany().HasForeignKey(ct=> ct.CityId);
             modelBuilder.Entity<MasterCompany>().HasOne(mc => mc.city).WithMany().HasForeignKey(mc => mc.CityId);
             //Company Cascading 
 

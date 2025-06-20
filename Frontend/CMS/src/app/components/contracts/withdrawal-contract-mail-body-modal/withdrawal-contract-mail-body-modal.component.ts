@@ -1,3 +1,4 @@
+declare var bootstrap :any
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,7 +25,7 @@ export class WithdrawalContractMailBodyModalComponent {
   @Input() mailType ?: string
   @Input() statusTermOrReject?: number; 
   @Input() currentPage: number = 1;
-  @Input() contractId: string = '0';
+  @Input() contractId?: string = '0';
 
   constructor(
     private postTermService: PostTerminationService,
@@ -62,19 +63,28 @@ export class WithdrawalContractMailBodyModalComponent {
           postTermination.emailBody = emailBody;
           postTermination.employeeEmail = email;
   
-          this.postTermService.ApproveTerminationContract(postTermination).subscribe({
-            next: (res) => {
-              if (res) {
-                this.loaderEmit.emit(false)
-                Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
-                this.GetPage(this.currentPage);
-              }
-            },
-            error: (err) => {
-              this.loaderEmit.emit(false)
-              ErrorHandler.handle(err)
-            }
-          });
+          this.postTermService
+            .ApproveTerminationContract(postTermination)
+            .subscribe({
+              next: (res) => {
+                if (res) {
+                  this.loaderEmit.emit(false);
+                  Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
+                  this.GetPage(this.currentPage);
+                }
+                const modalElement = document.getElementById('postTerm-mail');
+                if (modalElement) {
+                  const modalInstance =
+                    bootstrap.Modal.getInstance(modalElement) ||
+                    new bootstrap.Modal(modalElement);
+                  modalInstance.hide();
+                }
+              },
+              error: (err) => {
+                this.loaderEmit.emit(false);
+                ErrorHandler.handle(err);
+              },
+            });
         }
         else if(this.mailType == 'withdrawal'){
           this.loaderEmit.emit(true);
@@ -90,7 +100,15 @@ export class WithdrawalContractMailBodyModalComponent {
                 this.loaderEmit.emit(false)
                 Alert.toast(TYPE.SUCCESS, true, 'Updated successfully');
                 this.GetPage(this.currentPage);
+
               }
+              const modalElement = document.getElementById('postTerm-mail');
+            if (modalElement) {
+              const modalInstance =
+                bootstrap.Modal.getInstance(modalElement) ||
+                new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
             },
             error: (err) => {
               this.loaderEmit.emit(false)

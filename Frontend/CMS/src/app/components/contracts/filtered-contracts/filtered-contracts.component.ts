@@ -26,23 +26,38 @@ import { ContractAddModalComponent } from "../contract-add-modal/contract-add-mo
 import { ContractAddAddendumContractModalComponent } from "../contract-add-addendum-contract-modal/contract-add-addendum-contract-modal.component";
 import { PostTerminationNoticeModalComponent } from "../post-termination-notice-modal/post-termination-notice-modal.component";
 import { TerminationWithdrawNoticeComponent } from "../termination-withdraw-notice/termination-withdraw-notice.component";
+import { WithdrawalContractMailBodyModalComponent } from "../withdrawal-contract-mail-body-modal/withdrawal-contract-mail-body-modal.component";
+import { dateRangeValidator } from '../../../utils/dateValidator';
 
 @Component({
   selector: 'app-filtered-contracts',
   standalone: true,
-  imports: [TableComponent, RouterModule, CommonModule, ReactiveFormsModule, PaginationComponent, LoaderComponent, ContractViewModalComponent, ContractAddModalComponent, ContractAddAddendumContractModalComponent, PostTerminationNoticeModalComponent, TerminationWithdrawNoticeComponent],
+  imports: [
+    TableComponent,
+    RouterModule,
+    CommonModule,
+    ReactiveFormsModule,
+    PaginationComponent,
+    LoaderComponent,
+    ContractViewModalComponent,
+    ContractAddModalComponent,
+    ContractAddAddendumContractModalComponent,
+    PostTerminationNoticeModalComponent,
+    TerminationWithdrawNoticeComponent,
+    WithdrawalContractMailBodyModalComponent,
+  ],
   templateUrl: './filtered-contracts.component.html',
-  styleUrl: './filtered-contracts.component.css'
+  styleUrl: './filtered-contracts.component.css',
 })
 export class FilteredContractsComponent implements OnInit {
   loading: boolean = true;
   approverCheck: boolean = false;
   terminationCheck: boolean = false;
   withdrawCheck: boolean = false;
-  currentPage: number = 1
+  currentPage: number = 1;
   maxPage: number = 1;
   statusTermOrReject: number = 0;
-  mailType: string = ''
+  mailType: string = '';
   contractStatus = ContractStatus;
   statusKeys = Object.keys(ContractStatus);
   locationSelectKeys = Object.keys(Location);
@@ -54,30 +69,30 @@ export class FilteredContractsComponent implements OnInit {
   companies: CompanyMasterDto[] = [];
   contractDetails: GetContractByIdDto = new GetContractByIdDto();
   filter: {
-    PageNumber: number,
-    PageSize: number,
-    SearchTerm: string | null,
-    FromDate: string | null,
-    ToDate: string | null,
-    ContractType: string | null,
-    RenewalDueIn: string | null,
-    ContractStatus: string | null,
-    Department: string | null,
-    Location: string | null,
-    HasAddendum: boolean | null,
+    PageNumber: number;
+    PageSize: number;
+    SearchTerm: string | null;
+    FromDate: string | null;
+    ToDate: string | null;
+    ContractType: string | null;
+    RenewalDueIn: string | null;
+    ContractStatus: string | null;
+    Department: string | null;
+    Location: string | null;
+    HasAddendum: boolean | null;
   } = {
-      PageNumber: 1,
-      PageSize: 10,
-      SearchTerm: null,
-      FromDate: null,
-      ToDate: null,
-      ContractType: null,
-      RenewalDueIn: null,
-      ContractStatus: null,
-      Department: null,
-      Location: null,
-      HasAddendum: null,
-    }
+    PageNumber: 1,
+    PageSize: 10,
+    SearchTerm: null,
+    FromDate: null,
+    ToDate: null,
+    ContractType: null,
+    RenewalDueIn: null,
+    ContractStatus: null,
+    Department: null,
+    Location: null,
+    HasAddendum: null,
+  };
   columnsInfo: {
     [key: string]: {
       title?: string;
@@ -94,7 +109,7 @@ export class FilteredContractsComponent implements OnInit {
     'secondary',
     'warning',
     'warning',
-    'primary'
+    'primary',
   ];
   statusText: string[] = [
     '',
@@ -105,8 +120,8 @@ export class FilteredContractsComponent implements OnInit {
     'Expired',
     'Pending Termination',
     'Approved for Termination',
-    'Pending Notice Withdrawal'
-  ]
+    'Pending Notice Withdrawal',
+  ];
   displayedColumns: string[] = [
     'contractName',
     'contractType',
@@ -121,25 +136,33 @@ export class FilteredContractsComponent implements OnInit {
     'action',
   ];
 
-  @ViewChild('effectiveDateRef', { static: true }) effectiveDateRef!: TemplateRef<any>;
-  @ViewChild('expiryDateRef', { static: true }) expiryDateRef!: TemplateRef<any>;
-  @ViewChild('toBeRenewedOnRef', { static: true }) toBeRenewedOnRef!: TemplateRef<any>;
-  @ViewChild('addendumDateRef', { static: true }) addendumDateRef!: TemplateRef<any>;
+  @ViewChild('effectiveDateRef', { static: true })
+  effectiveDateRef!: TemplateRef<any>;
+  @ViewChild('expiryDateRef', { static: true })
+  expiryDateRef!: TemplateRef<any>;
+  @ViewChild('toBeRenewedOnRef', { static: true })
+  toBeRenewedOnRef!: TemplateRef<any>;
+  @ViewChild('addendumDateRef', { static: true })
+  addendumDateRef!: TemplateRef<any>;
   @ViewChild('statusRef', { static: true }) statusRef!: TemplateRef<any>;
-  @ViewChild('renewalDueInRef', { static: true }) renewalDueInRef!: TemplateRef<any>;
+  @ViewChild('renewalDueInRef', { static: true })
+  renewalDueInRef!: TemplateRef<any>;
   @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
 
-  filterForm: FormGroup = new FormGroup({
-    SearchTerm: new FormControl(null),
-    FromDate: new FormControl(null),
-    ToDate: new FormControl(null),
-    ContractType: new FormControl(0),
-    RenewalDueIn: new FormControl(-1),
-    ContractStatus: new FormControl(0),
-    Department: new FormControl(0),
-    Location: new FormControl(''),
-    HasAddendum: new FormControl(-1),
-  });
+  filterForm: FormGroup = new FormGroup(
+    {
+      SearchTerm: new FormControl(null),
+      FromDate: new FormControl(null),
+      ToDate: new FormControl(null),
+      ContractType: new FormControl(0),
+      RenewalDueIn: new FormControl(-1),
+      ContractStatus: new FormControl(0),
+      Department: new FormControl(0),
+      Location: new FormControl(''),
+      HasAddendum: new FormControl(-1),
+    },
+    [dateRangeValidator('FromDate', 'ToDate')]
+  );
 
   constructor(
     private contractsService: ContractsService,
@@ -177,7 +200,7 @@ export class FilteredContractsComponent implements OnInit {
           Department: null,
           Location: null,
           HasAddendum: null,
-        }
+        };
         this.GetAllContracts();
         if (status) {
           this.filterForm.patchValue({ ContractStatus: status });
@@ -249,46 +272,64 @@ export class FilteredContractsComponent implements OnInit {
         this.router.navigate(['/pageNotFound']);
       }
     });
-
   }
 
   initialLoad() {
-    const ECode = DecodeToken.ECode
-    if(ECode){
+    const ECode = DecodeToken.ECode;
+    if (ECode) {
       this.contractsService.GetDepartments(ECode).subscribe({
-        next: (res: GetAllDepartmentsDto[]) => { this.departments = res; },
-        error: (err) => { ErrorHandler.handle(err) }
+        next: (res: GetAllDepartmentsDto[]) => {
+          this.departments = res;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
       });
-  
+
       this.contractsService.GetContractTypes().subscribe({
-        next: (res: ContractTypeMasterDTO[]) => { this.contractTypes = res; },
-        error: (err) => { ErrorHandler.handle(err) },
+        next: (res: ContractTypeMasterDTO[]) => {
+          this.contractTypes = res;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
       });
-  
+
       this.masterApostilleService.getApostilles(1, 100).subscribe({
         next: (res: MasterApostilleDto) => {
           this.apostilleTypes = res.data;
         },
-        error: (err) => { ErrorHandler.handle(err) },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
       });
-  
+
       this.contractsService.GetCompanies().subscribe({
-        next: (res: CompanyMasterDto[]) => { this.companies = res; },
-        error: (err) => { ErrorHandler.handle(err) }
+        next: (res: CompanyMasterDto[]) => {
+          this.companies = res;
+        },
+        error: (err) => {
+          ErrorHandler.handle(err);
+        },
       });
-    }
-    else{
+    } else {
       DecodeToken.clearUserCredentials();
-      sessionStorage.clear()
-      this.router.navigate(['/'])
+      sessionStorage.clear();
+      this.router.navigate(['/']);
     }
   }
 
-  getEnum = (key: string) => (Location[key as keyof typeof Location]);
-  checkNotNaN = (number: string): boolean => (!isNaN(Number(number)));
-  setLoader = (data: boolean) => { this.loading = data };
-  setStatusTermOrReject = (data: number) => {this.statusTermOrReject = data};
-  setMailType = (data: string) => {this.mailType = data};
+  getEnum = (key: string) => Location[key as keyof typeof Location];
+  checkNotNaN = (number: string): boolean => !isNaN(Number(number));
+  setLoader = (data: boolean) => {
+    this.loading = data;
+  };
+  setStatusTermOrReject = (data: number) => {
+    this.statusTermOrReject = data;
+  };
+  setMailType = (data: string) => {
+    this.mailType = data;
+  };
 
   filterfield(name: string) {
     if (name === 'reset') {
@@ -311,8 +352,8 @@ export class FilteredContractsComponent implements OnInit {
 
   GetAllContracts() {
     const eCode = DecodeToken.ECode;
-    if(eCode){
-      this.contractsService.getContracts(this.filter,eCode).subscribe({
+    if (eCode) {
+      this.contractsService.getContracts(this.filter, eCode).subscribe({
         next: (res: ContractsEntity[]) => {
           this.loading = false;
           this.contracts = res;
@@ -330,10 +371,10 @@ export class FilteredContractsComponent implements OnInit {
         error: (error) => {
           this.loading = false;
           ErrorHandler.handle(error);
-        }
-      })
+        },
+      });
     }
-  };
+  }
 
   GetPage(pgNumber: number) {
     if (this.maxPage >= pgNumber && pgNumber >= 1) {
@@ -392,7 +433,9 @@ export class FilteredContractsComponent implements OnInit {
           this.withdrawCheck = false;
         }
       },
-      error: (err) => { ErrorHandler.handle(err) }
+      error: (err) => {
+        ErrorHandler.handle(err);
+      },
     });
   }
 
@@ -410,12 +453,14 @@ export class FilteredContractsComponent implements OnInit {
         if (id !== undefined) {
           this.contractsService.deleteContract(id, empName).subscribe({
             next: () => {
-              if(this.contracts.length == 1 && this.currentPage > 1){
+              if (this.contracts.length == 1 && this.currentPage > 1) {
                 this.currentPage--;
               }
               this.GetPage(this.currentPage);
             },
-            error: (err) => { ErrorHandler.handle(err) }
+            error: (err) => {
+              ErrorHandler.handle(err);
+            },
           });
         }
       }
@@ -428,29 +473,31 @@ export class FilteredContractsComponent implements OnInit {
   }
 
   onFilterSubmit() {
-    const searchTerm = this.filterfield('SearchTerm');
-    const fromDate = this.filterfield('FromDate');
-    const toDate = this.filterfield('ToDate');
-    const contractType = this.filterfield('ContractType');
-    const renewalDueIn = this.filterfield('RenewalDueIn');
-    const contractStatus = this.filterfield('ContractStatus');
-    const department = this.filterfield('Department');
-    const location = this.filterfield('Location');
-    const hasAddendum = this.filterfield('HasAddendum');
-    this.filter = {
-      PageNumber: 1,
-      PageSize: 10,
-      SearchTerm: searchTerm == '' ? null : searchTerm,
-      FromDate: fromDate == '' ? null : fromDate,
-      ToDate: toDate == '' ? null : toDate,
-      ContractType: contractType == 0 ? null : contractType,
-      RenewalDueIn: renewalDueIn == -1 ? null : renewalDueIn,
-      ContractStatus: contractStatus == 0 ? null : contractStatus,
-      Department: department == 0 ? null : department,
-      Location: location == '' ? null : location,
-      HasAddendum: hasAddendum == -1 ? null : hasAddendum == 1 ? true : false,
+    if (!this.filterForm.invalid) {
+      const searchTerm = this.filterfield('SearchTerm');
+      const fromDate = this.filterfield('FromDate');
+      const toDate = this.filterfield('ToDate');
+      const contractType = this.filterfield('ContractType');
+      const renewalDueIn = this.filterfield('RenewalDueIn');
+      const contractStatus = this.filterfield('ContractStatus');
+      const department = this.filterfield('Department');
+      const location = this.filterfield('Location');
+      const hasAddendum = this.filterfield('HasAddendum');
+      this.filter = {
+        PageNumber: 1,
+        PageSize: 10,
+        SearchTerm: searchTerm == '' ? null : searchTerm,
+        FromDate: fromDate == '' ? null : fromDate,
+        ToDate: toDate == '' ? null : toDate,
+        ContractType: contractType == 0 ? null : contractType,
+        RenewalDueIn: renewalDueIn == -1 ? null : renewalDueIn,
+        ContractStatus: contractStatus == 0 ? null : contractStatus,
+        Department: department == 0 ? null : department,
+        Location: location == '' ? null : location,
+        HasAddendum: hasAddendum == -1 ? null : hasAddendum == 1 ? true : false,
+      };
+      this.GetAllContracts();
     }
-    this.GetAllContracts();
   }
 
   printToPDF() {
@@ -465,13 +512,9 @@ export class FilteredContractsComponent implements OnInit {
       'Renewal Due In',
       'Location',
     ];
-    PDFExport.printToPDF(
-      'table',
-      'CMS-Contracts.pdf',
-      selectedColumns
-    );
+    PDFExport.printToPDF('table', 'CMS-Contracts.pdf', selectedColumns);
   }
-  
+
   exportToExcel(): void {
     const selectedColumns = [
       'Contract Name',
@@ -484,10 +527,6 @@ export class FilteredContractsComponent implements OnInit {
       'Renewal Due In',
       'Location',
     ];
-    ExcelExport.printToExcel(
-      'table',
-      'CMS-Contracts.xlsx',
-      selectedColumns
-    );
+    ExcelExport.printToExcel('table', 'CMS-Contracts.xlsx', selectedColumns);
   }
 }

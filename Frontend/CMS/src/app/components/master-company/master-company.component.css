@@ -95,3 +95,46 @@ h2 {
     width: 50%;
     align-items: center;
 } */
+.ng-select.custom {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid #eeeeee;
+  border-radius: 26px;
+  height: auto;
+  min-height: 40px;
+  width: 632px;
+  max-width: 100%;
+  background-color: #ffffff;
+  color: #888888;
+  outline: none;
+  font-weight: 300;
+  
+  padding: 0px 0px;
+  text-align: left;
+}
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    background-color: #5f5fee;
+    /* border-radius: 26px; */
+    padding: 5px 15px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon {
+    color: #ffffff;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+    display: none;
+}
+
+.ng-select span.ng-arrow-wrapper:before {
+    content: "\f0ab";
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+}

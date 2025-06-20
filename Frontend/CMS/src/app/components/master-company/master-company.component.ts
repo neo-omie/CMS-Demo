@@ -21,7 +21,7 @@ import { Router, RouterModule } from '@angular/router';
 import { TYPE } from '../auth/login/values.constants';
 import { CommonModule } from '@angular/common';
 import { Pagination } from '../../utils/pagination';
-import { Cities, Countriess, States } from '../../models/company-cascade';
+import { Cities, Countriess, Locations, States } from '../../models/company-cascade';
 import { CompanyCascadeService } from '../../services/company-cascade.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -33,11 +33,13 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
 import { ErrorHandler } from '../../utils/errorHandler';
+import { NgMultiSelectDropDownModule,IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-master-company',
   standalone: true,
   imports: [
+    NgMultiSelectDropDownModule,
     CommonModule,
     LoaderComponent,
     FormsModule,
@@ -87,6 +89,7 @@ export class MasterCompanyComponent implements OnInit {
   countryList: Countriess[] = [];
   stateList: States[] = [];
   cityList: Cities[] = [];
+  locationList:Locations []=[];
   selectedCountryId: number = 0;
   selectedStateId: number = 0;
   company: AddCompanyDto = new AddCompanyDto();
@@ -97,7 +100,6 @@ export class MasterCompanyComponent implements OnInit {
 
   constructor(
     private companyService: CompanyMasterService,
-    private router: Router,
     private companyCascadeService: CompanyCascadeService
   ) {}
 
@@ -158,6 +160,29 @@ export class MasterCompanyComponent implements OnInit {
     });
   }
 
+  dropdownSettings:IDropdownSettings = {
+      singleSelection: false,
+      idField: 'locationId',
+      textField: 'locationName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: false,
+    };
+
+  getLocationCascade(input: string) {
+    this.companyCascadeService.getLocations(+input).subscribe({
+      next: (response: Locations[]) => {
+        console.log('location ');
+        this.locationList = response;
+        
+      },
+      error: (error) => {
+        ErrorHandler.handle(error);
+      },
+    });
+  }
+
   getCompanies(pageNumber: number): void {
     this.companyService
       .getCompany(this?.searchTerm, pageNumber, this.pageSize)
@@ -203,6 +228,7 @@ export class MasterCompanyComponent implements OnInit {
   countryName?: string;
   stateName?: string;
   cityName?: string;
+  locationName?:string[]=[]
   GetCompany(id: number) {
     console.log('ftech id', id);
     this.companyService.getCompanyById(id).subscribe({
@@ -221,6 +247,9 @@ export class MasterCompanyComponent implements OnInit {
         this.companyCascadeService.getCityById(res.cityId).subscribe((resp) => {
           this.cityName = resp.city;
         });
+        // this.companyCascadeService.getLocationById(res.cityId).subscribe((resp) => {
+        //   this.locationName = resp.locationName;
+        // });
       },
       error: (error) => {
         ErrorHandler.handle(error);
@@ -268,10 +297,7 @@ export class MasterCompanyComponent implements OnInit {
       }
     );
   }
-  // editCompany(comp:CompanyMasterDto){
-  //   console.log('Navigating to editContract with valueId:', comp.valueId);
-  //   this.router.navigate(['masters/companyMasters/updateCompany', comp.valueId]);
-  // }
+
 
     masterCompanyAddForm = new FormGroup({
       companyName : new FormControl('',[Validators.required,Validators.maxLength(30),Validators.pattern('^[A-Za-z0-9 ]+$')]),
@@ -286,6 +312,7 @@ export class MasterCompanyComponent implements OnInit {
       countryId : new FormControl('',[Validators.required]),
       stateId : new FormControl('',[Validators.required]),
       cityId : new FormControl('',[Validators.required]),
+      locationId : new FormControl([],[Validators.required]),
       zipcode : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{6}$')]),
       companyContactNo : new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
       companyEmailId : new FormControl('',[Validators.required,Validators.email,Validators.maxLength(50)]),
@@ -310,7 +337,9 @@ export class MasterCompanyComponent implements OnInit {
         const companyStatus = this.masterCompanyAddForm.value.companyStatus;
         const countryId = this.masterCompanyAddForm.value.countryId;
         const stateId = this.masterCompanyAddForm.value.stateId;
-        const cityId = this.masterCompanyAddForm.value.cityId;
+        const cityId = this.masterCompanyAddForm.value.cityId; 
+        const locationIds = this.masterCompanyAddForm.value.locationId
+        const locationList = locationIds?.map(l => l['locationId']) 
         const zipcode = this.masterCompanyAddForm.value.zipcode;
         const companyContactNo = this.masterCompanyAddForm.value.companyContactNo;
         const gSTno = this.masterCompanyAddForm.value.gSTno;
@@ -339,6 +368,7 @@ export class MasterCompanyComponent implements OnInit {
           addFormValues.countryId = Number(countryId);
           addFormValues.stateId = Number(stateId);
           addFormValues.cityId = Number(cityId)
+          addFormValues.locationList = locationList;
           addFormValues.zipcode = Number(zipcode)
           addFormValues.companyContactNo = Number(companyContactNo)
           addFormValues.companyEmailId =this.masterCompanyAddForm.value.companyEmailId;
@@ -406,6 +436,9 @@ export class MasterCompanyComponent implements OnInit {
     }
     get cityId(){
       return this.masterCompanyAddForm.get('cityId');
+    }
+    get locationId(){
+      return this.masterCompanyAddForm.get('locationId');
     }
     get zipcode(){
       return this.masterCompanyAddForm.get('zipcode');

@@ -21,6 +21,7 @@ export class MasterCompany {
     countryId?:number;
     stateId?:number;
     cityId?:number;
+    locationId?:number;
 }
 
 export class CompanyMasterDto{
@@ -45,7 +46,7 @@ export class AddCompanyDto{
     //without constructor initializing values using nullable type
     companyName?:string | null;
     valueId?:number | null;
-    pompanyName?:string | null;
+    // pompanyName?:string | null;
     pocName?:string | null;
     companyStatus?:boolean | null;
     pocContactNumber?:number | null;
@@ -66,6 +67,7 @@ export class AddCompanyDto{
     countryId?:number | null;
     stateId?:number | null;
     cityId?:number | null;
+    locationList?:number[] | null; 
 }
 
 export class CompanyListResponse {
