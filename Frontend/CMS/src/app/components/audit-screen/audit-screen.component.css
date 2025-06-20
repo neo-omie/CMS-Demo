@@ -15,3 +15,6 @@ h2 {
     color: whitesmoke;
     border-radius: 5px;
 }
+.no-records {
+    color: var(--heading-font-color);
+}

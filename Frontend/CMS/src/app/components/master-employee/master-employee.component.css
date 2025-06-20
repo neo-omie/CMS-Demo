@@ -62,3 +62,6 @@ h2 {
     background-color: whitesmoke;
     color: #5f5fee;
 }
+.no-records {
+    color: var(--heading-font-color);
+}

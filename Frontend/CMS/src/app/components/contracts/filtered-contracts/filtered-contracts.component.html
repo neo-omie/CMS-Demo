@@ -124,7 +124,7 @@
 
 <app-pagination [maxPage]="maxPage" [records]="contracts.length" [pageNumbers]="pageNumbers"
     [GetPage]="GetPage.bind(this)"></app-pagination>
-<p class="fs-4 text-center" *ngIf="contracts.length == 0">No Records</p>
+<p class="no-records fs-4 text-center" *ngIf="contracts.length == 0">No Records</p>
 
 <app-contract-view-modal [GetPage]="GetPage.bind(this)" [contractDetails]="contractDetails"
     [approverCheck]="approverCheck" [terminationCheck]="terminationCheck" [withdrawCheck]="withdrawCheck"

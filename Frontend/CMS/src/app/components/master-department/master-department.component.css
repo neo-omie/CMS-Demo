@@ -85,3 +85,6 @@ h2 {
 .error{
     color: red;
 }
+.no-records {
+    color: var(--heading-font-color);
+}

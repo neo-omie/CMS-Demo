@@ -94,3 +94,6 @@ td{
     display: flex;
     justify-content: flex-end; 
 }
+.no-records {
+    color: var(--heading-font-color);
+}

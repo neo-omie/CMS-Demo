@@ -138,3 +138,6 @@ h2 {
     font-size: inherit;
     text-rendering: auto;
 }
+.no-records {
+    color: var(--heading-font-color);
+}

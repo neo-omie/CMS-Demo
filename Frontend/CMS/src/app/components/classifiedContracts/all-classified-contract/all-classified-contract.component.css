@@ -87,3 +87,6 @@ h2 {
     background-color: var(--filter-theme-toggle-color);
     border-width: 0px;
 }
+.no-records {
+    color: var(--heading-font-color);
+}
