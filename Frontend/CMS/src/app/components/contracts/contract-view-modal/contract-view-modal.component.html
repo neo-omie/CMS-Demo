@@ -218,9 +218,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail"
+                <button class="btn btn-primary" *ngIf="withdrawCheck" data-bs-target="#postTerm-mail"
                     data-bs-toggle="modal" (click)="termStatus(2,'withdrawal')">Approve Notice Withdrawal</button>
-                <button class="btn btn-danger" *ngIf="withdrawCheck" data-bs-target="#withdrawal-mail"
+                <button class="btn btn-danger" *ngIf="withdrawCheck" data-bs-target="#postTerm-mail"
                     data-bs-toggle="modal" (click)="termStatus(7,'withdrawal')">Reject Notice Withdrawal</button>
     
                 <button class="btn btn-primary" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
@@ -228,9 +228,9 @@
                 <button class="btn btn-danger" *ngIf="terminationCheck" data-bs-target="#postTerm-mail"
                     data-bs-toggle="modal" (click)="termStatus(2,'postTerm')">Reject Termination</button>
     
-                <button class="btn btn-primary" data-bs-dismiss="modal" *ngIf="approverCheck"
+                <button class="btn btn-primary" *ngIf="approverCheck"
                     (click)="approveRejectContract(contractDetails?.contractId,2)">Approve</button>
-                <button class="btn btn-danger" data-bs-dismiss="modal" *ngIf="approverCheck"
+                <button class="btn btn-danger"  *ngIf="approverCheck"
                     (click)="approveRejectContract(contractDetails?.contractId,3)">Reject</button>
     
                 <button data-bs-dismiss="modal" class="btn btn-outline-danger" id="btncancel" style="max-width: 300px;"

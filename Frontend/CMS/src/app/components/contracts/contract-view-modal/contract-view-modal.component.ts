@@ -1,3 +1,5 @@
+declare var bootstrap: any;
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProgressBarComponent } from "../../UtilComponents/progress-bar/progress-bar.component";
 import { CommonModule } from '@angular/common';
@@ -6,6 +8,8 @@ import { DecodeToken } from '../../../utils/decodeToken';
 import { ContractsService } from '../../../services/contracts.service';
 import { ErrorHandler } from '../../../utils/errorHandler';
 import { Router } from '@angular/router';
+import { Alert } from '../../../utils/alert';
+import { TYPE } from '../../auth/login/values.constants';
 
 @Component({
   selector: 'app-contract-view-modal',
@@ -26,11 +30,11 @@ export class ContractViewModalComponent {
   @Input() withdrawCheck: boolean = false;
   contIdForPostTerm: number = 0;
   phases = [
-    'Contract Created',
+    'Contract Initial State',
     'L1 Approver Approval',
     'L2 Approver Approval',
     'L3 Approver Approval',
-    'Contract Active',
+    'Contract Final State',
   ];
 
   constructor(
@@ -81,11 +85,20 @@ export class ContractViewModalComponent {
 
   approveRejectContract(id?: string, status?: number) {
     this.loaderEmit.emit(true)
+    
     let email = DecodeToken.email;
     if (email) {
       this.contractsService.approveRejectContract(Number(id), email, status).subscribe({
         next: (res) => {
           this.loaderEmit.emit(false)
+          Alert.toast(TYPE.SUCCESS,true,status==2? 'Approved Successfully':'Rejected Successfully' )
+          const modalElement = document.getElementById('contract-detail');
+            if (modalElement) {
+              const modalInstance =
+                bootstrap.Modal.getInstance(modalElement) ||
+                new bootstrap.Modal(modalElement);
+              modalInstance.hide();
+            }
           if (res === true && this.currentPage != undefined) {
             this.GetPage(this.currentPage);
           }

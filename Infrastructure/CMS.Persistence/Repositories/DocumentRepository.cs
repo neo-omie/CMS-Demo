@@ -248,12 +248,6 @@ namespace CMS.Persistence.Repositories
                 } });
 
                 
-                //_context.Master();
-                //existingDocument.status = (Status)model.Status;
-                //existingDocument.DocumentPath = newFilePath;
-                //existingDocument.DisplayDocumentName = originalFileName;
-                //existingDocument.IsDeleted = false;
-
                 var document = new MasterDocument
                 {
                     DocumentPath = newFilePath,

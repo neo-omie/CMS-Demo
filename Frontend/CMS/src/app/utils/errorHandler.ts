@@ -5,7 +5,11 @@ export class ErrorHandler {
     static handle(error: any) {
         let errorMessage;
         console.error('Error :(', error);
-        if (error.status == 401) {
+        if(error.status == 0){
+            
+            errorMessage = JSON.stringify("Unable to connect with the Server.");
+        }
+        else if (error.status == 401) {
             errorMessage = JSON.stringify(error.error);
         }
          else if (error.error !== undefined && error.error.message !== undefined) {

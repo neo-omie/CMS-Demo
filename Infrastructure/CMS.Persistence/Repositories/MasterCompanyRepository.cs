@@ -27,6 +27,7 @@ namespace CMS.Persistence.Repositories
 
         public async Task<MasterCompany> AddCompanyAsync(MasterCompany masterCompany,string empCode)
         {
+
             string sql = "EXEC SP_AddCompany @CompanyName={0},@PocName ={1}, @CompanyStatus ={2},@PocContactNumber={3},@PocEmailId={4},@CompanyAddressLine1={5}, @CompanyAddressLine2 ={6},@CompanyAddressLine3 ={7}, @Zipcode={8},@CompanyContactNo={9}, @CompanyEmailId ={10},@CompanyWebsiteUrl ={11}, @CompanyBankName ={12},@GSTno={13}, @BankAccNo={14},@MSMERegistrationNo={15}, @IFSCCode={16}, @PanNo ={17}, @CountryId={18}, @StateId= {19}, @CityId={20}, @IsDeleted={21}";
             int result = await _context.Database.ExecuteSqlRawAsync(sql, masterCompany.CompanyName, masterCompany.PocName, masterCompany.CompanyStatus, masterCompany.PocContactNumber, masterCompany.PocEmailId, masterCompany.CompanyAddressLine1, masterCompany.CompanyAddressLine2, masterCompany.CompanyAddressLine3, masterCompany.Zipcode, masterCompany.CompanyContactNo, masterCompany.CompanyEmailId, masterCompany.CompanyWebsiteUrl, masterCompany.CompanyBankName, masterCompany.GSTno, masterCompany.BankAccNo, masterCompany.MSMERegistrationNo, masterCompany.IFSCCode, masterCompany.PanNo, masterCompany.CountryId, masterCompany.StateId, masterCompany.CityId, 0);
 
@@ -34,6 +35,8 @@ namespace CMS.Persistence.Repositories
 
             if (result > 0)
             {
+
+
                 string query = "EXEC SP_InsertAudit @TableId = {0}, @ForTable = {1}, @ActionDescription = {2}, @LoggedBy = {3}, @Status = {4}";
                 await _context.Database.ExecuteSqlRawAsync(query, company.ValueId, TableList.MasterCompany, $"New Company '{company.CompanyName}' has been Added by '{empCode}'", empCode, LogStatus.Created);
 

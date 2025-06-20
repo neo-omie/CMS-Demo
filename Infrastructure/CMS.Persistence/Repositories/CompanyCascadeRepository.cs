@@ -40,6 +40,14 @@ namespace CMS.Persistence.Repositories
                 throw new NotFoundException($"Cities with State Id {stateId} not found.");
             return cities;
         }
+        public async Task<IEnumerable<ListOfLocation>> GetLocations(int cityId)
+        {
+            string sql = "EXEC SP_GetLocations @CityId = {0}";
+            var locations = _context.Locations.FromSqlRaw(sql, cityId).ToList();
+            if (locations == null)
+                throw new NotFoundException($"locations with City Id {cityId} not found.");
+            return locations;
+        }
         public async Task<ListOfCountries> GetCountryById(int id)
         {
             var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryId == id);
@@ -59,6 +67,13 @@ namespace CMS.Persistence.Repositories
             var foundCity = await _context.Cities.FirstOrDefaultAsync(c => c.CityId == id);
             if (foundCity == null)
                 throw new NotFoundException($"City not found.");
+            return foundCity;
+        }
+        public async Task<ListOfLocation> GetLocationById(int id)
+        {
+            var foundCity = await _context.Locations.FirstOrDefaultAsync(c => c.LocationId == id);
+            if (foundCity == null)
+                throw new NotFoundException($"Location not found.");
             return foundCity;
         }
     }

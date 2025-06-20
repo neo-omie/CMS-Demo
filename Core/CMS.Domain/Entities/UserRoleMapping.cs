@@ -6,7 +6,7 @@ namespace CMS.Domain.Entities
     {
         [Key]
         public int UserRoleId { get; set; }
-        public int RoleId { get; set; }
         public string EmployeeCode { get; set; }
+        public int RoleId { get; set; }
     }
 }

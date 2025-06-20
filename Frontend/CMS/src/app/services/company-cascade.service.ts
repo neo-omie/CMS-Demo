@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Cities, Countriess, States } from '../models/company-cascade';
+import { Cities, Countriess, Locations, States } from '../models/company-cascade';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -24,6 +24,9 @@ export class CompanyCascadeService {
  getCities(stateId:number):Observable<Cities[]>{
   return this.http.get<Cities[]>(`${this.apiUrl}/GetCities?stateId=${stateId}`);
 }
+ getLocations(cityId:number):Observable<Locations[]>{
+  return this.http.get<Locations[]>(`${this.apiUrl}/GetLocations?cityId=${cityId}`);
+}
 
 // Get By ID
 getCountryById(id?:number):Observable<Countriess> {
@@ -34,6 +37,9 @@ getStateById(id?:number):Observable<States> {
 }
 getCityById(id?:number):Observable<Cities> {
   return this.http.get<Cities>(`${this.apiUrl}/GetCityById?id=${id}`);
+}
+getLocationById(id?:number):Observable<Locations> {
+  return this.http.get<Locations>(`${this.apiUrl}/GetLocationById?id=${id}`);
 }
 
 }

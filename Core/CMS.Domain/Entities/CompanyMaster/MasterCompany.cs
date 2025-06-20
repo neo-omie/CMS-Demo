@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace CMS.Domain.Entities.CompanyMaster
 
         public string PocName { get; set; }
 
-        
+
         public bool CompanyStatus { get; set; } = true;
 
         public long PocContactNumber { get; set; }
@@ -59,16 +60,16 @@ namespace CMS.Domain.Entities.CompanyMaster
         public ListOfCountries country;
         public int CountryId { get; set; }
 
-       
+
         public ListOfStates state;
         public int StateId { get; set; }
-   
+
 
         public ListofCity city;
         public int CityId { get; set; }
 
-      
-
+        [NotMapped]
+        public List<int> LocationList { get; set; }
 
     }
 }

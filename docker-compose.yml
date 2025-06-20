@@ -1,0 +1,6 @@
+services:
+  cms.api:
+    image: ${DOCKER_REGISTRY-}cmsapi
+    build:
+      context: .
+      dockerfile: API/CMS.API/Dockerfile

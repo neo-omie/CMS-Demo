@@ -25,7 +25,7 @@
 
 <ng-template #statusTemplateRef let-row>
     @if(row.approver3Status == 1){ <button class="btn btn-warning" disabled><b>Pending Approval</b></button> }
-    @if(row.approver3Status == 2){ <button class="btn btn-success" disabled><b>Asctive</b></button> }
+    @if(row.approver3Status == 2){ <button class="btn btn-success" disabled><b>Active</b></button> }
     @if(row.approver3Status == 3){ <button class="btn btn-danger" disabled><b>Rejected</b></button> }
     @if(row.approver3Status == 4){ <button class="btn btn-dark" disabled><b>Terminated</b></button> }
     @if(row.approver3Status == 5){ <button class="btn btn-secondary" disabled><b>Expired</b></button> }

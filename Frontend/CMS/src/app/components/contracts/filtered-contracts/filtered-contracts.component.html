@@ -23,14 +23,18 @@
                 </div>
                 <div class="mb-3">
                     <p class="mb-1">To date</p>
-                    <input class="form-control" type="date" formControlName="ToDate" />
+                    <span
+                        *ngIf="filterForm?.errors?.['invalidDateRange'] && (filterForm?.get('ToDate')?.dirty || filterForm?.get('ToDate')?.touched)"
+                        style="color: red">
+                        Till date must be greater than from date.
+                    </span><input class="form-control" type="date" formControlName="ToDate" />
                 </div>
                 <div class="mb-3">
                     <p class="mb-1">Contract type</p>
                     <select class="form-select" name="contract-type" id="filter-contract-type"
                         formControlName="ContractType">
                         <option value="0">--Select--</option>
-                        <option *ngFor="let cont of contractTypes" value="{{cont.valueId}}">{{cont.contractTypeName}}
+                        <option *ngFor="let cont of contractTypes" value="{{cont.valueId}}">{{ cont.contractTypeName }}
                         </option>
                     </select>
                 </div>
@@ -51,7 +55,7 @@
                         formControlName="ContractStatus">
                         <option value="0">--Select--</option>
                         @for (key of statusKeys; track $index) {
-                        <option *ngIf="checkNotNaN(key)" value="{{key}}">{{contractStatus[+key]}}</option>
+                        <option *ngIf="checkNotNaN(key)" value="{{key}}">{{ (contractStatus[+key]).split('_').join(" ")}}</option>
                         }
                     </select>
                 </div>
@@ -107,7 +111,7 @@
     <button class="{{'btn btn-'+statusClass[row.status]}}" disabled><b>{{statusText[row.status]}}</b></button>
 </ng-template>
 <ng-template #renewalDueInRef let-row>
-    {{ row.status == 2 && row.renewalDueIn > 0 ? row.renewalDueIn : "-" }}
+    {{ row.status == 2 && row.renewalDueIn > 0 ? row.renewalDueIn + " Days" : "-" }}
 </ng-template>
 <ng-template #actionRef let-row>
     <i class="fa-regular fa-eye icon" data-bs-toggle="modal" data-bs-target="#contract-detail"
@@ -143,3 +147,7 @@
 <app-termination-withdraw-notice [GetPage]="GetPage.bind(this)" [currentPage]="currentPage"
     [contractId]="contractDetails.contractId" (loaderEmit)="setLoader($event)">
 </app-termination-withdraw-notice>
+
+<app-withdrawal-contract-mail-body-modal (loaderEmit)="setLoader($event)" [GetPage]="GetPage.bind(this)"
+[mailType]="mailType" [statusTermOrReject]="statusTermOrReject" [currentPage]="currentPage"
+[contractId]="contractDetails.contractId"></app-withdrawal-contract-mail-body-modal>
