@@ -33,3 +33,7 @@ h2 {
     box-shadow: none;
     border-color: #dee2e6;
 }
+
+.no-records {
+    color: var(--heading-font-color);
+}

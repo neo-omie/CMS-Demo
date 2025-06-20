@@ -2,7 +2,7 @@
 <h2 class="pt-3 fs-1">All Notifications</h2>
 
 <app-table [data]="notifications" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo"></app-table>
-<p class="fs-5" *ngIf="notifications.length == 0" style="text-align: center;">No records</p>
+<p class="no-records fs-5" *ngIf="notifications.length == 0" style="text-align: center;">No records</p>
 <app-pagination [maxPage]="maxPage" [records]="this.notifications.length" [pageNumbers]="pageNumbers"
 [GetPage]="GetPage.bind(this)"></app-pagination>
 
