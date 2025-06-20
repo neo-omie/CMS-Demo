@@ -55,6 +55,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
       document.documentElement.style.setProperty('--table-strip-odd-color', '#ffffff');
       document.documentElement.style.setProperty('--table-strip-even-color', '#f2f2f2');
       document.documentElement.style.setProperty('--table-font-color', '#000000');
+      document.documentElement.style.setProperty('--heading-font-color', '#5f5fee');
       document.documentElement.style.setProperty('--nav-footer-bg-color', '#f8f9fa');
       document.documentElement.style.setProperty('--bg-color', '#e9e7e5');
     }
@@ -68,6 +69,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
       document.documentElement.style.setProperty('--table-strip-odd-color', '#3d3c3a');
       document.documentElement.style.setProperty('--table-strip-even-color', '#222024');
       document.documentElement.style.setProperty('--table-font-color', '#ffffff');
+      document.documentElement.style.setProperty('--heading-font-color', '#ffffff');
       document.documentElement.style.setProperty('--nav-footer-bg-color', '#222024');//010127
       document.documentElement.style.setProperty('--bg-color', '#424242');
     }
