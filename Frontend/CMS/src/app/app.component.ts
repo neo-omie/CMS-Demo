@@ -5,11 +5,12 @@ import { DecodeToken } from './utils/decodeToken';
 import { TYPE } from './components/auth/login/values.constants';
 import { Alert } from './utils/alert';
 import { RouterService } from './services/router.service';
+import { CommonModule } from '@angular/common';
  
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SideBarComponent],
+  imports: [RouterOutlet, SideBarComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -21,7 +22,16 @@ export class AppComponent implements AfterViewInit {
  
   @ViewChild('footer', { static: false }) footer!: ElementRef;
   @ViewChild('navbar', { static: false }) navbar!: ElementRef;
- 
+
+  showScrollTopBtn:boolean = false;
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    this.showScrollTopBtn = scrollY > 100;  // Toggle at 100px scroll
+  }
+  scrollToSection() {
+    this.navbar.nativeElement.scrollIntoView({behaviour: 'smooth'});
+  }
  
   constructor(private route: RouterService) { }
  
