@@ -31,12 +31,12 @@ h2 {
     border-color: #dee2e6;
 }
 .add-btn {
-    color: #5f5fee;
+   color: var(--btn-theme-toggle-color);
     background-color: whitesmoke;
-    border-color: #5f5fee;
+    border-color: var(--btn-theme-toggle-color);
 }
 .add-btn:hover{
-    background-color: #5f5fee;
+     background-color: var(--btn-theme-toggle-color);
     border-color: whitesmoke;
     color: whitesmoke;
     border-radius: 5px;
