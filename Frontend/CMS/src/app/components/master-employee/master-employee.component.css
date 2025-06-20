@@ -10,7 +10,7 @@
 
 
 h2 {
-    color: #5f5fee;
+    color: var(--heading-font-color);
     font-weight: 600;
     text-align: center;
 }
