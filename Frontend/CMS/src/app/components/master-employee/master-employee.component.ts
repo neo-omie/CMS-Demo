@@ -30,7 +30,7 @@ import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from '../UtilComponents/table/table.component';
 import { PaginationComponent } from '../UtilComponents/pagination/pagination.component';
 import { ErrorHandler } from '../../utils/errorHandler';
-
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-master-employee',
   standalone: true,
@@ -77,12 +77,13 @@ export class MasterEmployeeComponent implements OnInit {
   @ViewChild('actionRef', { static: true }) actionRef!: TemplateRef<any>;
   // constructor(private router: Router){}
 
-  constructor(
-    private employeeService: MasterEmployeeService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private departmentService: MasterDepartmentService
-  ) {}
+constructor(
+  private employeeService: MasterEmployeeService,
+  private route:ActivatedRoute,
+  private router:Router, 
+  private departmentService:MasterDepartmentService,
+  private title:Title
+){this.title.setTitle("Employee Type Master - CMS");}
 
   ngOnInit(): void {
     this.columnsInfo = {

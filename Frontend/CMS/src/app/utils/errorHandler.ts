@@ -12,6 +12,9 @@ export class ErrorHandler {
         else if (error.status == 401) {
             errorMessage = JSON.stringify(error.error);
         }
+         else if (error.error !== undefined && error.error.message !== undefined) {
+            errorMessage = error.error.message;
+        }
         else if (error.title !== undefined) {
             errorMessage = JSON.stringify(error.title);
         }

@@ -32,6 +32,7 @@ import { PDFExport } from '../../utils/pdfExport';
 import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
+import { Title } from '@angular/platform-browser';
 import { ErrorHandler } from '../../utils/errorHandler';
 import { NgMultiSelectDropDownModule,IDropdownSettings } from 'ng-multiselect-dropdown';
 
@@ -100,8 +101,10 @@ export class MasterCompanyComponent implements OnInit {
 
   constructor(
     private companyService: CompanyMasterService,
-    private companyCascadeService: CompanyCascadeService
-  ) {}
+    private router: Router,
+    private companyCascadeService: CompanyCascadeService,
+    private title:Title
+  ) {this.title.setTitle("Company Type Master - CMS");}
 
   ngOnInit(): void {
     this.columnsInfo = {

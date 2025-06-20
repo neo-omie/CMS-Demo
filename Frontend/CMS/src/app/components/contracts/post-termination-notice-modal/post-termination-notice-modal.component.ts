@@ -13,6 +13,7 @@ import { ErrorHandler } from '../../../utils/errorHandler';
   selector: 'app-post-termination-notice-modal',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  
   templateUrl: './post-termination-notice-modal.component.html',
   styleUrl: './post-termination-notice-modal.component.css'
 })
@@ -76,6 +77,7 @@ export class PostTerminationNoticeModalComponent {
         }
       },
       error: (err) => {
+        
         this.loaderEmit.emit(false);
         ErrorHandler.handle(err);
       },

@@ -34,17 +34,31 @@ namespace CMS.Persistence.Repositories
         }
         public async Task<bool> AddTerminationDetailsAsync(int contractId, TerminationDocumentUploadDto _terminationDocumentUploadDto)
         {
-            if (_terminationDocumentUploadDto.End_Date<DateTime.Now)
+            if (_terminationDocumentUploadDto.End_Date<DateTime.Now.Date)
             {
-                throw new Exception($"End date cant be smaller than current date !");
+                throw new NotFoundException($"End date cant be smaller than current date !");
             }
             var checkContract = await _context.ContractsEntity.FirstOrDefaultAsync(c => c.ContractId == contractId);
             if (checkContract == null)
                 throw new NotFoundException($"Contract with id {contractId} not found");
+
+            //preventing user from selecting a termination EndDate after contract Expiry
+            if (_terminationDocumentUploadDto.End_Date > checkContract.ValidTill)
+            {
+                throw new Exception("Selected termination date cannot be after the contract's actual expiry date");
+            }
+            //for contract less then 2 days from expiry
+            var daysRemaining = (checkContract.ValidTill - _terminationDocumentUploadDto.End_Date).TotalDays;
+            if (daysRemaining <=2)
+            {
+                throw new Exception("Cannot post termination notice when 2 or fewer days are left before contract expiry ");
+            }
             if (checkContract.Approver3Status != ContractStatus.Active)
             {
-                throw new Exception("Cannot terminate the contract as the contract has not been active.");
+                throw new NotFoundException("Cannot terminate the contract as the contract has not been active.");
             }
+
+           
             var allowedExtesnisons = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
             var fileExtension = Path.GetExtension(_terminationDocumentUploadDto.File.FileName).ToLowerInvariant();
 

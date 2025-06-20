@@ -135,8 +135,14 @@ namespace CMS.Persistence.Repositories
                     status = model.Status
                 };
                 await _context.MasterDocuments.AddAsync(document);
+                var totalCount = await _context.MasterDocuments.CountAsync();
+                if(totalCount > 0)
+                {
+
                  gotDocument =await _context.MasterDocuments.OrderBy(x => x.ValueId).LastAsync();
                 id = gotDocument.ValueId;
+                }
+                id = 1;
             }
                 res=  await _context.SaveChangesAsync();
 

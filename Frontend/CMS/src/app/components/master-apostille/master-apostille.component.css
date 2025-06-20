@@ -109,8 +109,8 @@ h2 {
     font-weight: 600;
 }
 .modal-header{
-    background-color: #5f5fee;
-    color: white;
+    border: 2px solid var(--table-side-border-color);
+    background-color: var(--btn-theme-toggle-color);
 }
 .close-btn{
     border-color: whitesmoke;

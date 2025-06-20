@@ -30,6 +30,7 @@ import { LoaderComponent } from '../UtilComponents/loader/loader.component';
 import { DecodeToken } from '../../utils/decodeToken';
 import { TableComponent } from "../UtilComponents/table/table.component";
 import { PaginationComponent } from "../UtilComponents/pagination/pagination.component";
+import { Title } from '@angular/platform-browser';
 import { ErrorHandler } from '../../utils/errorHandler';
 
 @Component({
@@ -104,8 +105,9 @@ export class MasterDocumentComponent implements OnInit {
   constructor(
     private documentService: MasterDocumentService,
     private router: Router,
-    private renderer: Renderer2
-  ) {}
+    private renderer: Renderer2,
+     private title:Title
+  ) {this.title.setTitle("Document Type Master - CMS");}
   closeEditApproverCollapses() {
     // this.renderer.removeClass(this.editDocumentName.nativeElement, 'show');
     // this.renderer.removeClass(this.editDocumentStatus.nativeElement, 'show');
