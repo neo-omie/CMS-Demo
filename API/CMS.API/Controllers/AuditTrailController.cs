@@ -12,6 +12,7 @@ namespace CMS.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin , Super_Admin")]
+    
     public class AuditTrailController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -10,6 +10,7 @@ import { AddApostilleDto, EditApostilleDto, MasterApostille, MasterApostilleDto 
 export class MasterApostilleService {
 
   private apiUrl=`${environment.apiUrl}/Apostille`;
+  
   constructor(private http: HttpClient) { }
 
   getApostilles(

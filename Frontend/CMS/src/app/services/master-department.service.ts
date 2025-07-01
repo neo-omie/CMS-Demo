@@ -18,17 +18,15 @@ export class MasterDepartmentService {
     return this.http.get<MasterDepartment>(`${this.apiUrl}/${departmentId}`);
   }
   
-  //https://localhost:7041/api/Department/NEO1?departmentName=check
   addDepartment(departmentName:string,empCode:string |null):Observable<MasterDepartment>{
     return this.http.post<MasterDepartment>(`${this.apiUrl}/${empCode}?departmentName=${departmentName}`, null);
   }
 
-  //https://localhost:7041/api/Department/8/d?departmentName=d
+
   updateDepartment(departmentId:number, departmentName:string,empCode:string|null):Observable<boolean>{
     return this.http.put<boolean>(`${this.apiUrl}/${departmentId}/${empCode}?departmentName=${departmentName}`, null);
   }
 
-  //https://localhost:7041/api/Department/8/NEO1
   deleteDepartment(departmentId:number,empCode:string |null):Observable<boolean>{
     return this.http.delete<boolean>(`${this.apiUrl}/${departmentId}/${empCode}`);
   }

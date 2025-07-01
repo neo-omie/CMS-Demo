@@ -58,7 +58,7 @@ export class ClassifiedContractsService {
         return this.http.get<CompanyMasterDto[]>(`${environment.apiUrl}/MasterCompany/1/100`);
       }
       GetApostilleTypes() : Observable<MasterApostilleDto> {
-        return this.http.get<MasterApostilleDto>(`https://localhost:7041/api/Apostille/1/100`);
+        return this.http.get<MasterApostilleDto>(`${environment.apiUrl}/Apostille/1/100`);
       }
 
 }
