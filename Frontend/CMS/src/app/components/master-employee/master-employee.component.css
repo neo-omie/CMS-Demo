@@ -10,7 +10,7 @@
 
 
 h2 {
-    color: #5f5fee;
+    color: var(--heading-font-color);
     font-weight: 600;
     text-align: center;
 }
@@ -36,12 +36,12 @@ h2 {
     color: whitesmoke;
 }
 .add-btn {
-    color: rgba(95, 95, 238);
+     color: var(--btn-theme-toggle-color);
     background-color: whitesmoke;
-    border-color: #5f5fee;
+    border-color: var(--btn-theme-toggle-color);
 }
 .add-btn:hover{
-    background-color: #5f5fee;
+     background-color: var(--btn-theme-toggle-color);
     border-color: whitesmoke;
     color: whitesmoke;
     border-radius: 5px;
@@ -61,4 +61,7 @@ h2 {
 .close-btn:hover{
     background-color: whitesmoke;
     color: #5f5fee;
+}
+.no-records {
+    color: var(--heading-font-color);
 }

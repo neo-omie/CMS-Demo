@@ -37,15 +37,15 @@
   border-color: #dee2e6;
 }
 .add-btn {
-  color: var(--btn-theme-toggle-color);
-  background-color: whitesmoke;
-  border-color: var(--btn-theme-toggle-color);
+ color: var(--btn-theme-toggle-color);
+    background-color: whitesmoke;
+    border-color: var(--btn-theme-toggle-color);
 }
 .add-btn:hover {
-  background-color: var(--btn-theme-toggle-color);
-  border-color: whitesmoke;
-  color: whitesmoke;
-  border-radius: 5px;
+background-color: var(--btn-theme-toggle-color);
+    border-color: whitesmoke;
+    color: whitesmoke;
+    border-radius: 5px;
 }
 .add-header {
   color: whitesmoke;

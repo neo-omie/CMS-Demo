@@ -337,7 +337,7 @@
 <app-table [data]="showCompanies" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
 </app-table>
 
-<p class="fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
+<p class="no-records fs-5" *ngIf="showCompanies.length == 0" style="text-align: center;">No records</p>
 
 <app-pagination [maxPage]="maxPage" [records]="showCompanies.length" [pageNumbers]="pageNumbers"
   [GetPage]="GetPage.bind(this)"></app-pagination>

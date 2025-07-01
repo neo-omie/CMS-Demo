@@ -13,7 +13,7 @@
 </div>
 
 <app-table [columnsInfo]="columnsInfo" [data]="allAudit" [displayedColumns]="displayedColumns"></app-table>
-<p *ngIf="allAudit.length == 0" class="fs-5">No records</p>
+<p *ngIf="allAudit.length == 0" class="no-records fs-4 text-center">No records</p>
 <ng-template #logTime let-row>
   {{row.logTime | date :'dd-MM-yyyy hh:mm:ss a'}}
 </ng-template>

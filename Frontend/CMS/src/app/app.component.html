@@ -1,5 +1,5 @@
 @if(checkLogin()){
-<nav #navbar class="navbar">
+<nav #navbar class="navbar" id="goToTop">
   <div class="container-fluid">
     <a
       class="navbar-brand btn btn-primary sidebar-toggle-btn"
@@ -10,7 +10,7 @@
     >
       <i class="fa-solid fa-bars-staggered"></i> Menu
     </a>
-    <!-- <h3 class="headingg fs-4 d-none d-sm-block" routerLink="/dashboard">Contract Management System</h3> -->
+    <h3 class="headingg fs-4 d-none d-sm-block"><a class="headingg" href="/dashboard">Contract Management System</a></h3>
     <a class="btn btn-outline-danger" (click)="logoutUser()"
       ><i class="fa-solid fa-power-off"></i> Logout</a
     >
@@ -20,8 +20,10 @@
 }
 <div class="mainContainer" [style.minHeight.px]="mainContainerMinHeight()">
   <router-outlet />
+  <br><br>
 </div>
 @if(checkLogin()){
+<span class="scrollTopBtn" *ngIf="showScrollTopBtn"><button (click)="scrollToSection()"><i class="fa-solid fa-angle-up"></i></button></span>
 <footer #footer class="footer">
   <p class="fs-6">
     All right are reserved by <span class="team-name">TrailBlazers</span> ©

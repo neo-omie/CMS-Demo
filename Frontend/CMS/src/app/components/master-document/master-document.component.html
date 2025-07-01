@@ -49,7 +49,7 @@
 <app-table [data]="masterDocuments.documents" [displayedColumns]="displayedColumns" [columnsInfo]="columnsInfo">
 </app-table>
 
-<p class="fs-5" *ngIf="masterDocuments.documents.length == 0" style="text-align: center;">No records</p>
+<p class="no-records fs-5" *ngIf="masterDocuments.documents.length == 0" style="text-align: center;">No records</p>
 
 <app-pagination [maxPage]="maxPage" [records]="masterDocuments.documents.length" [pageNumbers]="pageNumbers"
   [GetPage]="GetPage.bind(this)"></app-pagination>
